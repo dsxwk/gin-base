@@ -2,7 +2,7 @@ package v1
 
 import (
 	"fmt"
-	v1 "gin-base/app/service/v1"
+	"gin-base/app/service"
 	"gin-base/common"
 	"github.com/gin-gonic/gin"
 )
@@ -14,7 +14,7 @@ type LoginController struct {
 // 登录
 func (this *LoginController) Login(c *gin.Context) {
 	var (
-		loginService = v1.LoginService{}
+		loginService = service.LoginService{}
 	)
 
 	err := loginService.Login(0, 0)

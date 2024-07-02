@@ -1,0 +1,11 @@
+# 日志配置
+log:
+  max-size: 10 # 单个日志文件大小（MB）
+  max-backups: 3  # 最多保留的旧日志文件数
+  max-day: 28 # 保留的最大天数
+# 数据库配置
+mysql:
+  host: "root:root@tcp(127.0.0.1:3306)/gin?charset=utf8mb4&parseTime=True&loc=Asia%2FShanghai"
+  # host: "username:password@tcp(127.0.0.1:3306)/databaseName?charset=utf8mb4&parseTime=True&loc=Asia%2FShanghai"
+  # 慢查询的时间(ms) 超过这个时间会记录到日志中
+  slow-query-seconds: 3s

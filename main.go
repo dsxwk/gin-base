@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"gin-base/routers"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 //go:generate go env -w GO111MODULE=on
@@ -27,11 +29,13 @@ func main() {
 		})
 	})
 
+	// 静态文件
+	router.StaticFS("/resource", http.Dir("./resource"))
 	// 设置 HTTP 请求处理文件上传时可以使用的最大内存为 90MB
 	router.MaxMultipartMemory = 90 << 20
 
 	// 加载路由
-	router.LoadRouters(router)
+	routers.LoadRouters(router)
 
 	err := router.Run(":8080")
 	if err != nil {

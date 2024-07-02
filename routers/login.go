@@ -1,4 +1,4 @@
-package router
+package routers
 
 import (
 	v1 "gin-base/app/controller/v1"

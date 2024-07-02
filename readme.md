@@ -17,6 +17,16 @@ Gin框架的特性包括：
 
 Golang Gin 是一个轻量级且高效的 Golang Web 框架。它具有高性能、易用性和灵活性等特点，被广泛应用于各种 Web 应用程序的开发。
 
+## 使用
+### 命令行生成模型 --path参数默认就行无需修改
+
+```bash
+go run ./cli/main.go --tableName=user --path=app/temp
+go run ./cli/main.go --tableName=article --path=app/temp
+go run ./cli/main.go --tableName=category --path=app/temp
+go run ./cli/main.go --tableName=system_config --path=app/temp
+```
+
 ## 安装
 
 使用 Golang 的包管理工具 `go get` 安装 Gin 框架：

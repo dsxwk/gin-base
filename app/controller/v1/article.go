@@ -6,31 +6,30 @@ import (
 	"gin-base/common"
 	"gin-base/common/global"
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
 )
 
-type UserController struct {
+type ArticleController struct {
 	common.BaseController
 }
 
-// @Tags    用户
+// @Tags    文章
 // @Summary 列表
 // @Router  /v1/user [get]
-func (this *UserController) List(c *gin.Context) {
+func (this *ArticleController) List(c *gin.Context) {
 	var (
-		userService service.UserService
-		requestData validate.ListValidate
+		articleService service.ArticleService
+		requestData    validate.ArticleListValidate
 	)
 
 	err := c.ShouldBindQuery(&requestData)
 	if err != nil {
-		// 验证1
-		msg := requestData.GetError(err.(validator.ValidationErrors))
-		this.ApiResponse(c, global.Error, msg, nil)
+		// 验证2
+		msg := validate.GetArticleListValidate(requestData)
+		this.ApiResponse(c, global.Error, msg.Error(), nil)
 		return
 	}
 
-	pageData, err := userService.List(requestData)
+	pageData, err := articleService.List(requestData)
 	if err != nil {
 		global.Log.Error(err.Error())
 		this.ApiResponse(c, global.SystemError, err.Error(), nil)

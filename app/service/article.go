@@ -8,52 +8,52 @@ import (
 	"gin-base/helper/utils"
 )
 
-type UserService struct {
+type ArticleService struct {
 	common.BaseService
 }
 
 // 列表
-func (this *UserService) List(requestData validate.ListValidate) (global.PageData, error) {
+func (this *ArticleService) List(requestData validate.ArticleListValidate) (global.PageData, error) {
 	var (
-		userModel []model.User
-		pageData  global.PageData
+		articleModel []model.Article
+		pageData     global.PageData
 	)
 
 	// 获取分页默认为第一页，每页10条记录
 	offset, limit := utils.Pagination(requestData.Page, requestData.PageSize)
 
-	db := global.DB.Find(&userModel)
+	db := global.DB.Find(&articleModel)
 
 	err := db.Count(&pageData.Total).Error
 	if err != nil {
 		return pageData, err
 	}
-	err = db.Offset(offset).Limit(limit).Find(&userModel).Error
+	err = db.Offset(offset).Limit(limit).Find(&articleModel).Error
 	if err != nil {
 		return pageData, err
 	}
 
 	// 处理时间
-	for key, value := range userModel {
+	for key, value := range articleModel {
 		if value.CreatedAt != nil {
 			createdAt := utils.FormatTime(*value.CreatedAt)
-			userModel[key].CreatedAt = &createdAt
+			articleModel[key].CreatedAt = &createdAt
 		}
 
 		if value.UpdatedAt != nil {
 			updatedAt := utils.FormatTime(*value.UpdatedAt)
-			userModel[key].UpdatedAt = &updatedAt
+			articleModel[key].UpdatedAt = &updatedAt
 		}
 
 		if value.DeletedAt != nil {
 			deletedAt := utils.FormatTime(*value.DeletedAt)
-			userModel[key].DeletedAt = &deletedAt
+			articleModel[key].DeletedAt = &deletedAt
 		}
 	}
 
 	pageData.Page = requestData.Page
 	pageData.PageSize = requestData.PageSize
-	pageData.List = userModel
+	pageData.List = articleModel
 
 	return pageData, nil
 }

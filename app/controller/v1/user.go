@@ -19,7 +19,7 @@ type UserController struct {
 func (this *UserController) List(c *gin.Context) {
 	var (
 		userService service.LoginService
-		requestData validate.UserListRequest
+		requestData validate.ListValidate
 	)
 
 	err := c.ShouldBindQuery(&requestData)

@@ -24,7 +24,7 @@ func (this *UserController) List(c *gin.Context) {
 
 	err := c.ShouldBindQuery(&requestData)
 	if err != nil {
-		// 验证
+		// 验证1
 		msg := requestData.GetError(err.(validator.ValidationErrors))
 		this.ApiResponse(c, global.Error, msg, nil)
 		return

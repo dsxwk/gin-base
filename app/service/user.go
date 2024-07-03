@@ -13,7 +13,7 @@ type UserService struct {
 }
 
 // 列表
-func (this *LoginService) List(requestData validate.UserListRequest) (global.PageData, error) {
+func (this *LoginService) List(requestData validate.ListValidate) (global.PageData, error) {
 	var (
 		userModel []model.User
 		pageData  global.PageData

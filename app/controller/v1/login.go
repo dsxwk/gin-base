@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gin-base/app/service"
 	"gin-base/common"
+	"gin-base/common/global"
 	"github.com/gin-gonic/gin"
 )
 
@@ -25,5 +26,5 @@ func (this *LoginController) Login(c *gin.Context) {
 	res := make(map[string]interface{})
 	res["token"] = "token"
 	res["exp"] = 60 * 60 * 2
-	this.ApiResponse(c, 200, "登录成功", res)
+	this.ApiResponse(c, global.Success, "登录成功", res)
 }

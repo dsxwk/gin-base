@@ -77,6 +77,9 @@ func CreateTableStruct(tableName string, path string) {
 		"mediumint": func(detailType gorm.ColumnType) (dataType string) { return "int64" },
 		"bigint":    func(detailType gorm.ColumnType) (dataType string) { return "int64" },
 		"int":       func(detailType gorm.ColumnType) (dataType string) { return "int64" },
+		"datetime":  func(detailType gorm.ColumnType) (dataType string) { return "string" }, // 添加此行将 datetime 转换为 string
+		//"timestamp":  func(detailType gorm.ColumnType) (dataType string) { return "string" }, // 添加此行将 timestamp 转换为 string
+		//"date":       func(detailType gorm.ColumnType) (dataType string) { return "string" }, // 添加此行将 date 转换为 string
 	}
 
 	// 要先于`ApplyBasic`执行

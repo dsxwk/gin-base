@@ -20,11 +20,31 @@ var (
 	Config = config.InitConfig()
 )
 
+// 公共响应
 type Response struct {
 	Code    int64       `json:"code"`
 	Message string      `json:"msg"`
 	Data    interface{} `json:"data"`
 }
+
+// 公共分页数据返回
+type PageData struct {
+	//  总条数
+	Total int64 `json:"total"`
+	// 当前页
+	Page int `json:"page"`
+	// 每页条数
+	PageSize int `json:"page_size"`
+	// 数据列表
+	List interface{} `json:"list"`
+}
+
+// 错误码
+const (
+	Success     = 0
+	Error       = 1
+	SystemError = 500
+)
 
 func init() {
 	InitLogger()
@@ -57,7 +77,7 @@ func init() {
 // 初始化日志
 func InitLogger() {
 	// 设置日志文件输出路径和文件年月日
-	logPath := "log/" + time.Now().Format("20060102") + ".log"
+	logPath := "log/" + time.Now().Format("2006-01-02") + ".log"
 
 	// 配置 Lumberjack 日志轮转
 	lumberJackLogger := &lumberjack.Logger{
@@ -68,7 +88,7 @@ func InitLogger() {
 		Compress:   true,
 	}
 
-	// 创建一个 Zap 配置
+	// 创建一个Zap配置
 	encoderConfig := zap.NewProductionEncoderConfig()
 	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
 

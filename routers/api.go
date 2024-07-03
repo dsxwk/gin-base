@@ -16,8 +16,13 @@ func LoadRouters(router *gin.Engine) {
 
 	// 登录
 	login_controller := controller.LoginController{}
+
+	// 用户
+	user_controller := controller.UserController{}
+
 	v1 := router.Group("api/v1")
 	{
 		v1.GET("/login", login_controller.Login)
+		v1.GET("/user", user_controller.List)
 	}
 }

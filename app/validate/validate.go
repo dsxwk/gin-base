@@ -5,13 +5,13 @@ import (
 )
 
 // 列表请求验证
-type UserListRequest struct {
+type ListValidate struct {
 	Page     int `form:"page" binding:"required" comment:"页码"`
 	PageSize int `form:"pageSize" binding:"required" comment:"每页数量"`
 }
 
 // 错误提示
-func (this *UserListRequest) GetError(errs validator.ValidationErrors) string {
+func (this *ListValidate) GetError(errs validator.ValidationErrors) string {
 	for _, e := range errs {
 		if e.Field() == "Page" {
 			switch e.Tag() {

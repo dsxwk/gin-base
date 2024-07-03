@@ -20,7 +20,6 @@ func (this *UserController) List(c *gin.Context) {
 	var (
 		userService service.LoginService
 		requestData validate.UserListRequest
-		pageData    global.PageData
 	)
 
 	err := c.ShouldBindQuery(&requestData)
@@ -31,7 +30,7 @@ func (this *UserController) List(c *gin.Context) {
 		return
 	}
 
-	pageData, err = userService.List(requestData)
+	pageData, err := userService.List(requestData)
 	if err != nil {
 		global.Log.Error(err.Error())
 		this.ApiResponse(c, global.SystemError, err.Error(), nil)

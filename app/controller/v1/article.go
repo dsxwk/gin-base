@@ -23,9 +23,14 @@ func (this *ArticleController) List(c *gin.Context) {
 
 	err := c.ShouldBindQuery(&requestData)
 	if err != nil {
-		// 验证2
-		msg := validate.GetArticleListValidate(requestData)
-		this.ApiResponse(c, global.Error, msg.Error(), nil)
+		global.Log.Error(err.Error())
+		return
+	}
+
+	// 验证2
+	err = validate.GetArticleListValidate(requestData)
+	if err != nil {
+		this.ApiResponse(c, global.Error, err.Error(), nil)
 		return
 	}
 

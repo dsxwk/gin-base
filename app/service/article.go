@@ -6,6 +6,7 @@ import (
 	"gin-base/common"
 	"gin-base/common/global"
 	"gin-base/helper/utils"
+	"gorm.io/gorm"
 )
 
 type ArticleService struct {
@@ -22,7 +23,11 @@ func (this *ArticleService) List(requestData validate.ArticleListValidate) (glob
 	// 获取分页默认为第一页，每页10条记录
 	offset, limit := utils.Pagination(requestData.Page, requestData.PageSize)
 
-	db := global.DB.Find(&articleModel)
+	db := global.DB.Preload("User", func(db *gorm.DB) *gorm.DB {
+		return db.Select("id, username, full_name, nickname, email, gender, age")
+	}).Preload("Category", func(db *gorm.DB) *gorm.DB {
+		return db.Select("id, name")
+	}).Find(&articleModel)
 
 	err := db.Count(&pageData.Total).Error
 	if err != nil {

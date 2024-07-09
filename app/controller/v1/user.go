@@ -6,7 +6,6 @@ import (
 	"gin-base/common"
 	"gin-base/common/global"
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
 )
 
 type UserController struct {
@@ -16,26 +15,31 @@ type UserController struct {
 // @Tags    用户
 // @Summary 列表
 // @Router  /v1/user [get]
-func (this *UserController) List(c *gin.Context) {
+func (s *UserController) List(c *gin.Context) {
 	var (
 		userService service.UserService
-		requestData validate.ListValidate
+		req         validate.UserValidate
 	)
 
-	err := c.ShouldBindQuery(&requestData)
-	if err != nil {
-		// 验证1
-		msg := requestData.GetError(err.(validator.ValidationErrors))
-		this.ApiResponse(c, global.Error, msg, nil)
-		return
-	}
-
-	pageData, err := userService.List(requestData)
+	err := c.ShouldBindQuery(&req)
 	if err != nil {
 		global.Log.Error(err.Error())
-		this.ApiResponse(c, global.SystemError, err.Error(), nil)
 		return
 	}
 
-	this.ApiResponse(c, global.Success, "获取成功", pageData)
+	// 验证
+	err = validate.GetUserValidate(req, "list")
+	if err != nil {
+		s.ApiResponse(c, global.Error, err.Error(), nil)
+		return
+	}
+
+	pageData, err := userService.List(req)
+	if err != nil {
+		global.Log.Error(err.Error())
+		s.ApiResponse(c, global.SystemError, err.Error(), nil)
+		return
+	}
+
+	s.ApiResponse(c, global.Success, "获取成功", pageData)
 }

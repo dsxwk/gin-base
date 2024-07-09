@@ -13,7 +13,7 @@ type LoginController struct {
 }
 
 // 登录
-func (this *LoginController) Login(c *gin.Context) {
+func (s *LoginController) Login(c *gin.Context) {
 	var (
 		loginService = service.LoginService{}
 	)
@@ -26,5 +26,5 @@ func (this *LoginController) Login(c *gin.Context) {
 	res := make(map[string]interface{})
 	res["token"] = "token"
 	res["exp"] = 60 * 60 * 2
-	this.ApiResponse(c, global.Success, "登录成功", res)
+	s.ApiResponse(c, global.Success, "登录成功", res)
 }

@@ -4,6 +4,11 @@
 
 package model
 
+import (
+	"gorm.io/gorm"
+	"time"
+)
+
 const TableNameCategory = "category"
 
 // Category mapped from table <category>
@@ -18,4 +23,59 @@ type Category struct {
 // TableName Category's table name
 func (*Category) TableName() string {
 	return TableNameCategory
+}
+
+// 创建之前
+func (s *Category) BeforeCreate(tx *gorm.DB) (err error) {
+	if s.CreatedAt == nil {
+		createdAt := time.Now().Format("2006-01-02 15:04:05")
+		s.CreatedAt = &createdAt
+	}
+
+	if s.UpdatedAt == nil {
+		updatedAt := time.Now().Format("2006-01-02 15:04:05")
+		s.UpdatedAt = &updatedAt
+	}
+
+	return
+}
+
+// 更新之前
+func (s *Category) BeforeUpdate(tx *gorm.DB) (err error) {
+	if s.UpdatedAt == nil {
+		updatedAt := time.Now().Format("2006-01-02 15:04:05")
+		s.UpdatedAt = &updatedAt
+	}
+
+	return
+}
+
+// 查询之后
+func (s *Category) AfterFind(tx *gorm.DB) (err error) {
+	if s.CreatedAt != nil {
+		createdAt := time.Now().Format("2006-01-02 15:04:05")
+		s.CreatedAt = &createdAt
+	}
+
+	if s.UpdatedAt != nil {
+		updatedAt := time.Now().Format("2006-01-02 15:04:05")
+		s.UpdatedAt = &updatedAt
+	}
+
+	if s.DeletedAt != nil {
+		deletedAt := time.Now().Format("2006-01-02 15:04:05")
+		s.DeletedAt = &deletedAt
+	}
+
+	return
+}
+
+// 删除之前
+func (s *Category) BeforeDelete(tx *gorm.DB) (err error) {
+	if s.DeletedAt == nil {
+		deletedAt := time.Now().Format("2006-01-02 15:04:05")
+		s.DeletedAt = &deletedAt
+	}
+
+	return
 }

@@ -2,21 +2,22 @@ package validate
 
 import (
 	"errors"
-	Validator "github.com/gookit/validate"
+	validator "github.com/gookit/validate"
 )
 
-// 文章列表请求验证
-type ArticleListValidate struct {
-	Page     int `form:"page" validate:"required|min:1" label:"页码"`
-	PageSize int `form:"pageSize" validate:"required|min:1" label:"每页数量"`
+// 文章请求验证
+type ArticleValidate struct {
+	Page     int    `form:"page" validate:"required|min:1" label:"页码"`
+	PageSize int    `form:"pageSize" validate:"required|min:1" label:"每页数量"`
+	ID       int64  `json:"id" validate:"required" label:"ID"`
+	Title    string `json:"title" validate:"required" label:"标题"`
+	Content  string `json:"content" validate:"required" label:"内容"`
 }
 
-// 获取文章列表请求验证
-func GetArticleListValidate(data ArticleListValidate) error {
-	v := Validator.Struct(data)
-	// 或者使用
-	// v := validates.New(u)
-	if !v.Validate() {
+// 请求验证
+func GetArticleValidate(data ArticleValidate, scene string) error {
+	v := validator.Struct(data, scene)
+	if !v.Validate(scene) {
 		return errors.New(v.Errors.One())
 	}
 
@@ -26,19 +27,19 @@ func GetArticleListValidate(data ArticleListValidate) error {
 // ConfigValidation 配置验证
 // - 定义验证场景
 // - 也可以添加验证设置
-/*func (a ArticleListValidate) ConfigValidation(v *Validator.Validation) {
-	// v.StringRule()
-
-	v.WithScenes(Validator.SValues{
-		//"list": []string{"Page", "PageSize"},
-		//"create":    []string{"ExtInfo.Homepage", "Name", "Code"},
-		//"update": []string{"ExtInfo.CityName", "Name"},
+func (a ArticleValidate) ConfigValidation(v *validator.Validation) {
+	v.WithScenes(validator.SValues{
+		"list":   []string{"Page", "PageSize"},
+		"create": []string{"Title", "Content"}, // []string{"User.FullName", "Title"}
+		"update": []string{"ID", "Title", "Content"},
+		"detail": []string{"ID"},
+		"delete": []string{"ID"},
 	})
-}*/
+}
 
 // Messages 您可以自定义验证器错误消息
-func (a ArticleListValidate) Messages() map[string]string {
-	return Validator.MS{
+func (s ArticleValidate) Messages() map[string]string {
+	return validator.MS{
 		"required":     "字段 {field} 必填",
 		"Page.min":     "页码最小为 1",
 		"PageSize.min": "每页数量最小为 1",
@@ -46,9 +47,12 @@ func (a ArticleListValidate) Messages() map[string]string {
 }
 
 // Translates 你可以自定义字段翻译
-func (a ArticleListValidate) Translates() map[string]string {
-	return Validator.MS{
+func (s ArticleValidate) Translates() map[string]string {
+	return validator.MS{
 		"Page":     "页码",
 		"PageSize": "每页数量",
+		"ID":       "ID",
+		"Title":    "标题",
+		"Content":  "内容",
 	}
 }

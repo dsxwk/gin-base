@@ -10,7 +10,7 @@ type LoginService struct {
 }
 
 // 登录
-func (this *LoginService) Login(id int64, exp int64) error {
+func (s *LoginService) Login(id int64, exp int64) error {
 	fmt.Println("id:", id, "exp:", exp)
 	return nil
 }

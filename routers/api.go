@@ -28,5 +28,9 @@ func LoadRouters(router *gin.Engine) {
 		v1.GET("/login", login_controller.Login)
 		v1.GET("/user", user_controller.List)
 		v1.GET("/article", article_controller.List)
+		v1.POST("/article", article_controller.Create)
+		v1.PUT("/article/:id", article_controller.Update)
+		v1.GET("/article/:id", article_controller.Detail)
+		v1.DELETE("/article/:id", article_controller.Delete)
 	}
 }

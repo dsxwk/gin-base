@@ -13,14 +13,14 @@ type UserService struct {
 }
 
 // 列表
-func (this *UserService) List(requestData validate.ListValidate) (global.PageData, error) {
+func (s *UserService) List(req validate.UserValidate) (global.PageData, error) {
 	var (
 		userModel []model.User
 		pageData  global.PageData
 	)
 
 	// 获取分页默认为第一页，每页10条记录
-	offset, limit := utils.Pagination(requestData.Page, requestData.PageSize)
+	offset, limit := utils.Pagination(req.Page, req.PageSize)
 
 	db := global.DB.Find(&userModel)
 
@@ -28,7 +28,7 @@ func (this *UserService) List(requestData validate.ListValidate) (global.PageDat
 	if err != nil {
 		return pageData, err
 	}
-	err = db.Offset(offset).Limit(limit).Find(&userModel).Error
+	err = db.Offset(offset).Limit(limit).Error
 	if err != nil {
 		return pageData, err
 	}
@@ -51,8 +51,8 @@ func (this *UserService) List(requestData validate.ListValidate) (global.PageDat
 		}
 	}
 
-	pageData.Page = requestData.Page
-	pageData.PageSize = requestData.PageSize
+	pageData.Page = req.Page
+	pageData.PageSize = req.PageSize
 	pageData.List = userModel
 
 	return pageData, nil

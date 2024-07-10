@@ -40,6 +40,21 @@ Golang Gin 是一个轻量级且高效的 Golang Web 框架。它具有高性能
 ├── vendor                              # 依赖包
 ```
 
+## web目录结构
+## 目录结构
+
+```bash
+├── app                                 # 应用
+│   ├── modules                         # 模块
+├── components                          # 组件
+├── node_modules                        # npm包
+├── public                              # 静态资源
+├── docs                                # 文档
+├── routers                             # 路由
+├── src                                 # 核心js源码
+├── views                               # 视图文件
+```
+
 ## 使用
 ### 命令行生成模型 --path参数默认就行无需修改
 

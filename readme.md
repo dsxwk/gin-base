@@ -25,9 +25,9 @@ Golang Gin 是一个轻量级且高效的 Golang Web 框架。它具有高性能
 - Mysql
 - Validator
 
-## 前端使用技术vue + vite
+## 前端使用技术vue3 + vite
 
-- Vue
+- Vue3
 - Vite
 
 ## go-base目录结构

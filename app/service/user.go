@@ -12,7 +12,10 @@ type UserService struct {
 	common.BaseService
 }
 
-// 列表
+// @function: List
+// @description: 列表
+// @param: req validate.UserValidate
+// @return: global.PageData, error
 func (s *UserService) List(req validate.UserValidate) (global.PageData, error) {
 	var (
 		userModel []model.User

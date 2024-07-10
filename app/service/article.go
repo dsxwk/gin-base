@@ -13,7 +13,10 @@ type ArticleService struct {
 	common.BaseService
 }
 
-// 列表
+// @function: List
+// @description: 列表
+// @param: req validate.ArticleValidate
+// @return: global.PageData, error
 func (s *ArticleService) List(req validate.ArticleValidate) (global.PageData, error) {
 	// scan
 	/*type field struct {
@@ -64,7 +67,10 @@ func (s *ArticleService) List(req validate.ArticleValidate) (global.PageData, er
 	return pageData, nil
 }
 
-// 创建
+// @function: Create
+// @description: 创建
+// @param: req model.Article
+// @return: model.Article, error
 func (s *ArticleService) Create(req model.Article) (model.Article, error) {
 	err := global.DB.Create(&req).Error
 	if err != nil {
@@ -74,7 +80,10 @@ func (s *ArticleService) Create(req model.Article) (model.Article, error) {
 	return req, nil
 }
 
-// 更新
+// @function: Update
+// @description: 更新
+// @param: req model.Article
+// @return: model.Article, error
 func (this *ArticleService) Update(req model.Article) (model.Article, error) {
 	err := global.DB.Updates(&req).Error
 	if err != nil {
@@ -84,7 +93,10 @@ func (this *ArticleService) Update(req model.Article) (model.Article, error) {
 	return req, nil
 }
 
-// 详情
+// @function: Detail
+// @description: 详情
+// @param: id int64
+// @return: model.Article, error
 func (s *ArticleService) Detail(id int64) (model.Article, error) {
 	var (
 		articleModel model.Article
@@ -103,7 +115,10 @@ func (s *ArticleService) Detail(id int64) (model.Article, error) {
 	return articleModel, nil
 }
 
-// 删除
+// @function: Delete
+// @description: 删除
+// @param: id int64
+// @return: model.Article, error
 func (s *ArticleService) Delete(id int64) (model.Article, error) {
 	var (
 		articleModel model.Article

@@ -1,0 +1,26 @@
+{
+  "name": "vue-vite",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host --port 3000 --mode development",
+    "production": "vite --host --port 3001 --mode production",
+    "build": "vite build --mode development",
+    "build-production": "vite build --mode production",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@wangeditor/editor": "^5.1.23",
+    "dotenv": "^16.4.5",
+    "lbl-toast": "^1.3.3",
+    "less": "^4.2.0",
+    "pnotify": "^5.2.0",
+    "vue": "^3.4.29",
+    "vue-router": "^4.4.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.5",
+    "vite": "^5.3.1"
+  }
+}

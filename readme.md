@@ -49,6 +49,17 @@ go run ./cli/main.go --tableName=article --path=app/temp
 go run ./cli/main.go --tableName=category --path=app/temp
 go run ./cli/main.go --tableName=system_config --path=app/temp
 ```
+## 登录接口
+
+```bash
+curl -X POST -H "Content-Type: application/json" -d '{"username":"admin","password":"123456"}' http://localhost:8080/api/v1/login
+```
+
+## jwt验证 header
+
+```bash
+curl -X GET -H "token: login-token -> eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6IkFkbWluIiwiaWF0IjoxNjc0NjYzMjM5LCJleHAiOjE2NzQ2NjYzMzl9.8W45GJQqV656
+```
 
 ## 安装
 

@@ -52,6 +52,7 @@ Golang Gin 是一个轻量级且高效的 Golang Web 框架。它具有高性能
 ├── docs                                # 文档
 ├── routers                             # 路由
 ├── src                                 # 核心js源码
+├── utils                               # 工具助手类
 ├── views                               # 视图文件
 ```
 

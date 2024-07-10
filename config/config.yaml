@@ -9,3 +9,6 @@ mysql:
   # host: "username:password@tcp(127.0.0.1:3306)/databaseName?charset=utf8mb4&parseTime=True&loc=Asia%2FShanghai"
   # 慢查询的时间(ms) 超过这个时间会记录到日志中
   slow-query-seconds: 3s
+jwt:
+  key: 123456789!@# # 加解密秘钥key
+  exp: 7200 # 过期时间（单位秒）

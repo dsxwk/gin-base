@@ -7,8 +7,8 @@ import (
 
 // 用户请求验证
 type UserValidate struct {
-	Page     int `form:"page" validate:"required|min:1" label:"页码"`
-	PageSize int `form:"pageSize" validate:"required|min:1" label:"每页数量"`
+	Page     int `form:"page" validate:"required|int|gt:0" label:"页码"`
+	PageSize int `form:"pageSize" validate:"required|int|gt:0" label:"每页数量"`
 }
 
 // 请求验证
@@ -33,9 +33,10 @@ func (a UserValidate) ConfigValidation(v *validator.Validation) {
 // Messages 您可以自定义验证器错误消息
 func (s UserValidate) Messages() map[string]string {
 	return validator.MS{
-		"required":     "字段 {field} 必填",
-		"Page.min":     "页码最小为 1",
-		"PageSize.min": "每页数量最小为 1",
+		"required":    "字段 {field} 必填",
+		"int":         "字段 {field} 必须为整数",
+		"Page.gt":     "字段 {field} 需大于 0",
+		"PageSize.gt": "字段 {field} 需大于 0",
 	}
 }
 

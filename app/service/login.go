@@ -1,8 +1,12 @@
 package service
 
 import (
-	"fmt"
+	"errors"
+	"gin-base/app/model"
 	"gin-base/common"
+	"gin-base/common/global"
+	"gin-base/helper/utils"
+	"gorm.io/gorm"
 )
 
 type LoginService struct {
@@ -10,7 +14,21 @@ type LoginService struct {
 }
 
 // 登录
-func (s *LoginService) Login(id int64, exp int64) error {
-	fmt.Println("id:", id, "exp:", exp)
-	return nil
+func (s *LoginService) Login(username string, password string) (model.User, error) {
+	var (
+		userModel model.User
+	)
+
+	if err := global.DB.Where("username = ?", username).First(&userModel).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return userModel, errors.New("登录账号错误")
+		}
+	}
+
+	check := utils.BcryptCheck(password, userModel.Password)
+	if !check {
+		return userModel, errors.New("登录密码错误")
+	}
+
+	return userModel, nil
 }

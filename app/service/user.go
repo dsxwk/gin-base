@@ -33,24 +33,6 @@ func (s *UserService) List(req validate.UserValidate) (global.PageData, error) {
 		return pageData, err
 	}
 
-	// 处理时间
-	for key, value := range userModel {
-		if value.CreatedAt != nil {
-			createdAt := utils.FormatTime(*value.CreatedAt)
-			userModel[key].CreatedAt = &createdAt
-		}
-
-		if value.UpdatedAt != nil {
-			updatedAt := utils.FormatTime(*value.UpdatedAt)
-			userModel[key].UpdatedAt = &updatedAt
-		}
-
-		if value.DeletedAt != nil {
-			deletedAt := utils.FormatTime(*value.DeletedAt)
-			userModel[key].DeletedAt = &deletedAt
-		}
-	}
-
 	pageData.Page = req.Page
 	pageData.PageSize = req.PageSize
 	pageData.List = userModel

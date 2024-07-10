@@ -27,10 +27,17 @@ type Log struct {
 	MaxDay     int `yaml:"max-day"`     // 保留的最大天数
 }
 
+// Jwt token
+type Jwt struct {
+	Key string `yaml:"key"`
+	Exp int64  `yaml:"exp"`
+}
+
 // 配置
 type config struct {
 	Mysql
 	Log
+	Jwt
 }
 
 // 初始化配置

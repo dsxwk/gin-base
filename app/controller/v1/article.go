@@ -56,12 +56,13 @@ func (s *ArticleController) Create(c *gin.Context) {
 		req             model.Article
 	)
 
-	err := c.ShouldBindJSON(&req)
+	err := c.ShouldBind(&req)
 	if err != nil {
 		global.Log.Error(err.Error())
 		return
 	}
 
+	req.UID = s.GetUserId(c)
 	articleValidate.Title = req.Title
 	articleValidate.Content = req.Content
 
@@ -104,7 +105,7 @@ func (s *ArticleController) Update(c *gin.Context) {
 		return
 	}
 
-	err = c.ShouldBindJSON(&req)
+	err = c.ShouldBind(&req)
 	if err != nil {
 		global.Log.Error(err.Error())
 		return

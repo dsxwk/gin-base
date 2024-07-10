@@ -11,7 +11,7 @@
  Target Server Version : 80012
  File Encoding         : 65001
 
- Date: 02/07/2024 16:47:26
+ Date: 10/07/2024 10:56:54
 */
 
 SET NAMES utf8mb4;
@@ -36,7 +36,7 @@ CREATE TABLE `article`  (
 -- ----------------------------
 -- Records of article
 -- ----------------------------
-INSERT INTO `article` VALUES (1, 1, '标题', '内容', 1, '2023-09-19 11:43:58', '2023-09-19 11:43:58', NULL);
+INSERT INTO `article` VALUES (1, 1, '标题1', '内容1', 1, '2023-09-19 11:43:58', '2024-07-10 10:51:50', NULL);
 
 -- ----------------------------
 -- Table structure for category
@@ -73,7 +73,7 @@ CREATE TABLE `system_config`  (
   `deleted_at` datetime NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uni_en_name`(`en_name`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '系统配置' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '系统配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of system_config
@@ -114,13 +114,13 @@ CREATE TABLE `user`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uniq_idx_username`(`username`) USING BTREE,
   UNIQUE INDEX `uniq_idx_email`(`email`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
 INSERT INTO `user` VALUES (1, 'admin', '张三', 'zs@qq.com', '$2a$10$OcSkSCBe8D5tGL2ulmJhTe0Xboy/fzwS1H7AdmkJjpQZfeGUHr5S6', 'dsx', 1, 28, '2023-09-05 17:29:36', '2023-09-12 14:47:48', NULL);
 INSERT INTO `user` VALUES (2, 'test2', '李四', 'ls@qq.com', '$2a$10$kycb2DM8CnubeoWABNPA1O2b0MrQQDqGsEZg8EuqK4G0a63EYDr.2', '昵称', 1, 1, '2023-09-06 11:38:50', '2023-09-13 09:29:27', NULL);
-INSERT INTO `user` VALUES (4, 'test1', '测试1', 'test1@qq.com', '123456', '昵称', 1, 22, '2023-09-07 17:48:39', '2023-09-12 09:52:47', '2023-09-12 09:53:12');
+INSERT INTO `user` VALUES (4, 'test1', '测试1', 'test1@qq.com', '$2a$10$Ww.IvYhlDpNt6Uq07X5W0OswksocMpae9dmaE2TaHclINQoBUF3Fq', '昵称', 1, 22, '2023-09-07 17:48:39', '2023-09-12 09:52:47', '2023-09-12 09:53:12');
 
 SET FOREIGN_KEY_CHECKS = 1;

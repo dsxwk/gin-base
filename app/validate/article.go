@@ -7,8 +7,8 @@ import (
 
 // 文章请求验证
 type ArticleValidate struct {
-	Page     int    `form:"page" validate:"required|min:1" label:"页码"`
-	PageSize int    `form:"pageSize" validate:"required|min:1" label:"每页数量"`
+	Page     int    `form:"page" validate:"required|int|gt:0" label:"页码"`
+	PageSize int    `form:"pageSize" validate:"required|int|gt:0" label:"每页数量"`
 	ID       int64  `json:"id" validate:"required" label:"ID"`
 	Title    string `json:"title" validate:"required" label:"标题"`
 	Content  string `json:"content" validate:"required" label:"内容"`
@@ -40,9 +40,10 @@ func (a ArticleValidate) ConfigValidation(v *validator.Validation) {
 // Messages 您可以自定义验证器错误消息
 func (s ArticleValidate) Messages() map[string]string {
 	return validator.MS{
-		"required":     "字段 {field} 必填",
-		"Page.min":     "页码最小为 1",
-		"PageSize.min": "每页数量最小为 1",
+		"required":    "字段 {field} 必填",
+		"int":         "字段 {field} 必须为整数",
+		"Page.gt":     "字段 {field} 需大于 0",
+		"PageSize.gt": "字段 {field} 需大于 0",
 	}
 }
 

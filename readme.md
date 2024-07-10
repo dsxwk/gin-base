@@ -17,6 +17,19 @@ Gin框架的特性包括：
 
 Golang Gin 是一个轻量级且高效的 Golang Web 框架。它具有高性能、易用性和灵活性等特点，被广泛应用于各种 Web 应用程序的开发。
 
+## 后端使用技术golang + gin 
+
+- Gin
+- Gorm
+- Jwt
+- Mysql
+- Validator
+
+## 前端使用技术vue + vite
+
+- Vue
+- Vite
+
 ## go-base目录结构
 
 ```bash

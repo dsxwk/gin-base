@@ -1,0 +1,290 @@
+{
+  "Chinese": {
+    "en-us": "Chinese",
+    "zh-cn": "中文"
+  },
+  "English": {
+    "en-us": "English",
+    "zh-cn": "英文"
+  },
+  "Dashboard": {
+    "en-us": "Dashboard",
+    "zh-cn": "仪表盘"
+  },
+  "Manage Backend": {
+    "en-us": "Manage Backend",
+    "zh-cn": "管理后台"
+  },
+  "Administrator": {
+    "en-us": "Administrator",
+    "zh-cn": "管理员"
+  },
+  "Home": {
+    "en-us": "Home",
+    "zh-cn": "首页"
+  },
+  "Login": {
+    "en-us": "Login",
+    "zh-cn": "登录"
+  },
+  "Login account cannot be empty": {
+    "en-us": "Login account cannot be empty",
+    "zh-cn": "登录账号不能为空"
+  },
+  "Successfully logged in": {
+    "en-us": "Successfully logged in",
+    "zh-cn": "登录成功"
+  },
+  "Please Login": {
+    "en-us": "Please Login",
+    "zh-cn": "请登录"
+  },
+  "User Login": {
+    "en-us": "User Login",
+    "zh-cn": "用户登录"
+  },
+  "Logout": {
+    "en-us": "Logout",
+    "zh-cn": "退出"
+  },
+  "Reminder Information": {
+    "en-us": "Reminder Information",
+    "zh-cn": "提示信息"
+  },
+  "We are different, we make you different": {
+    "en-us": "We are different, we make you different",
+    "zh-cn": "我们与众不同，我们让你与众不同"
+  },
+  "Remember Password": {
+    "en-us": "Remember Password",
+    "zh-cn": "记住密码"
+  },
+  "Reset Password": {
+    "en-us": "Reset Password",
+    "zh-cn": "重置密码"
+  },
+  "Entry Your Email To Reset Password": {
+    "en-us": "Entry Your Email To Reset Password",
+    "zh-cn": "输入你的邮箱去重置密码"
+  },
+  "Password reset": {
+    "en-us": "Password reset",
+    "zh-cn": "密码已重置"
+  },
+  "No Account": {
+    "en-us": "No Account",
+    "zh-cn": "没有账号"
+  },
+  "Register Now": {
+    "en-us": "Register Now",
+    "zh-cn": "立即注册"
+  },
+  "Please Entry Username": {
+    "en-us": "Please Entry Username",
+    "zh-cn": "请输入用户名"
+  },
+  "Username": {
+    "en-us": "Username",
+    "zh-cn": "用户名"
+  },
+  "Username Is Required": {
+    "en-us": "Username Is Required",
+    "zh-cn": "用户名不能为空"
+  },
+  "User name can only be lowercase English or numbers! And the length is 3-10 digits": {
+    "en-us": "User name can only be lowercase English or numbers! And the length is 3-10 digits",
+    "zh-cn": "用户名只能是小写英文或数字！且长度为3-10位"
+  },
+  "Email": {
+    "en-us": "Email",
+    "zh-cn": "邮箱"
+  },
+  "Email Is Required": {
+    "en-us": "Email Is Required",
+    "zh-cn": "邮箱不能为空"
+  },
+  "Email format is incorrect": {
+    "en-us": "Email format is incorrect",
+    "zh-cn": "邮箱格式不正确"
+  },
+  "Code": {
+    "en-us": "Code",
+    "zh-cn": "验证码"
+  },
+  "Verification code sent": {
+    "en-us": "Verification code sent",
+    "zh-cn": "验证码已发送"
+  },
+  "Code Is Required": {
+    "en-us": "Code Is Required",
+    "zh-cn": "验证码不能为空"
+  },
+  "Password": {
+    "en-us": "Password",
+    "zh-cn": "密码"
+  },
+  "Password Is Required": {
+    "en-us": "Password Is Required",
+    "zh-cn": "密码不能为空"
+  },
+  "Mobile": {
+    "en-us": "Mobile",
+    "zh-cn": "手机号"
+  },
+  "Please Entry Password": {
+    "en-us": "Please Entry Password",
+    "zh-cn": "请输入密码"
+  },
+  "Please Entry Code": {
+    "en-us": "Please Entry Code",
+    "zh-cn": "请输入验证码"
+  },
+  "Enter your email to reset your password": {
+    "en-us": "Enter your email to reset your password",
+    "zh-cn": "输入你的邮箱去重置密码"
+  },
+  "Please Entry Email": {
+    "en-us": "Please Entry Email",
+    "zh-cn": "请输入邮箱"
+  },
+  "Already Account": {
+    "en-us": "Already Account",
+    "zh-cn": "已有账号"
+  },
+  "Login Now": {
+    "en-us": "Login Now",
+    "zh-cn": "马上登录"
+  },
+  "Send Code": {
+    "en-us": "Send Code",
+    "zh-cn": "发送验证码"
+  },
+  "Seconds Resend": {
+    "en-us": "Seconds Resend",
+    "zh-cn": "秒后重新获取"
+  },
+  "Confirm Reset": {
+    "en-us": "Confirm Reset",
+    "zh-cn": "确认重置"
+  },
+  "Register": {
+    "en-us": "Register",
+    "zh-cn": "注册"
+  },
+  "successfully registered": {
+    "en-us": "successfully registered",
+    "zh-cn": "注册成功"
+  },
+  "User Register": {
+    "en-us": "User Register",
+    "zh-cn": "用户注册"
+  },
+  "Please Entry Username, It Can Login Your Account": {
+    "en-us": "Please Entry Username, It Can Login Your Account",
+    "zh-cn": "请输入用户名,可用于登录"
+  },
+  "Nickname": {
+    "en-us": "Nickname",
+    "zh-cn": "昵称"
+  },
+  "Nickname Is Required": {
+    "en-us": "Nickname Is Required",
+    "zh-cn": "昵称不能为空"
+  },
+  "Please Entry Nickname": {
+    "en-us": "Please Entry Nickname",
+    "zh-cn": "请输入昵称"
+  },
+  "Avatar": {
+    "en-us": "Avatar",
+    "zh-cn": "头像"
+  },
+  "Age": {
+    "en-us": "Age",
+    "zh-cn": "年龄"
+  },
+  "Please entry keyword to search": {
+    "en-us": "Please entry keyword to search",
+    "zh-cn": "请输入关键字搜索"
+  },
+  "Search": {
+    "en-us": "Search",
+    "zh-cn": "搜索"
+  },
+  "Add User": {
+    "en-us": "Add User",
+    "zh-cn": "添加用户"
+  },
+  "Modify User": {
+    "en-us": "Modify User",
+    "zh-cn": "修改用户"
+  },
+  "User List": {
+    "en-us": "User List",
+    "zh-cn": "用户列表"
+  },
+  "User Manage": {
+    "en-us": "User Manage",
+    "zh-cn": "用户管理"
+  },
+  "Modify": {
+    "en-us": "Modify",
+    "zh-cn": "修改"
+  },
+  "Delete": {
+    "en-us": "Delete",
+    "zh-cn": "删除"
+  },
+  "Action": {
+    "en-us": "Action",
+    "zh-cn": "操作"
+  },
+  "The length exceeds the length limit of the string itself": {
+    "en-us": "The length exceeds the length limit of the string itself",
+    "zh-cn": "长度超出字符串本身长度限制"
+  },
+  "Close": {
+    "en-us": "Close",
+    "zh-cn": "关闭"
+  },
+  "Create": {
+    "en-us": "Create",
+    "zh-cn": "创建"
+  },
+  "Save": {
+    "en-us": "Save",
+    "zh-cn": "保存"
+  },
+  "Male": {
+    "en-us": "Male",
+    "zh-cn": "男"
+  },
+  "Female": {
+    "en-us": "Female",
+    "zh-cn": "女"
+  },
+  "Gender": {
+    "en-us": "Gender",
+    "zh-cn": "性别"
+  },
+  "UserInfo": {
+    "en-us": "UserInfo",
+    "zh-cn": "用户信息"
+  },
+  "More Info": {
+    "en-us": "More Info",
+    "zh-cn": "更多信息"
+  },
+  "Article List": {
+    "en-us": "Article List",
+    "zh-cn": "文章列表"
+  },
+  "User Registrations": {
+    "en-us": "User Registrations",
+    "zh-cn": "用户注册"
+  },
+  "Latest Article": {
+    "en-us": "Latest Article",
+    "zh-cn": "最新文章"
+  }
+}

@@ -1,6 +1,7 @@
 // 导入需要的组件
+import Index from '@views/index.vue';
 import Login from '@views/login/login.vue';
-import ArticleIndex from '@views/article/index.vue';
+import UserIndex from '@views/user/index.vue';
 
 import NotFound from '@views/errPage/404.vue'
 
@@ -21,10 +22,10 @@ const routers = [
         } 
     },
     {
-        path: '/article',
-        component: ArticleIndex,
+        path: '/user',
+        component: UserIndex,
         meta: {
-            title: '文章列表'
+            title: '用户列表'
         }
     },
 

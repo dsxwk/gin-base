@@ -1,7 +1,7 @@
 <script setup>
-
+document.title = '后台管理';
 </script>
 
 <template>
-  <title>Vue 3 + Vite</title>
+  <router-view></router-view>
 </template>

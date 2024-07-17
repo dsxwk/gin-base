@@ -1,4 +1,19 @@
+<script setup>
+import Nav from '@views/layouts/nav.vue';
+import Main from '@components/user/index.vue';
+import Sidebar from '@views/layouts/sidebar.vue';
+import Footer from '@views/layouts/footer.vue';
+</script>
 <template>
-  <title>用户列表</title>
-  <h1>用户列表</h1>
+  <!-- Site wrapper -->
+  <div class="wrapper">
+    <Nav/>
+
+    <Sidebar/>
+
+    <Main/>
+
+    <Footer/>
+  </div>
+  <!-- ./wrapper -->
 </template>

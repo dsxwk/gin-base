@@ -95,8 +95,7 @@ export class Functions {
      * @returns {string|null}
      */
     getUrlParam(key) {
-        let url = window.location.hash;
-
+        let url = window.location.search;
         if (url.indexOf('?') > -1) {
             var query = url.substring(url.indexOf('?') + 1);
             var vars = query.split("&");

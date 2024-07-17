@@ -9,4 +9,7 @@ const routes = createRouter({
     routes: routers
 });
 
-createApp(App).use(routes).mount('#app');
+const app = createApp(App);
+
+app.use(routes);
+app.mount('#app');

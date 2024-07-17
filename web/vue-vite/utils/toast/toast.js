@@ -11,4 +11,4 @@ const toast = {
         return Toast.clear();
     }
 };
-export default toast
+export default toast;

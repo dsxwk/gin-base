@@ -34,11 +34,33 @@ func main() {
 	// 设置 HTTP 请求处理文件上传时可以使用的最大内存为 90MB
 	router.MaxMultipartMemory = 90 << 20
 
+	// 设置跨域
+	router.Use(Cors())
+
 	// 加载路由
 	routers.LoadRouters(router)
 
 	err := router.Run(":8080")
 	if err != nil {
 		fmt.Println("启动服务失败，错误信息为：", err)
+	}
+}
+
+// 跨域请求
+func Cors() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Header("Access-Control-Allow-Origin", c.Request.Header.Get("Origin"))
+		c.Header("Access-Control-Allow-Headers", "*")
+		c.Header("Access-Control-Expose-Headers", "*")
+		c.Header("Access-Control-Allow-Methods", "*")
+		c.Header("Access-Control-Allow-Credentials", "true")
+
+		// 放行所有OPTIONS方法
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(http.StatusNoContent)
+		}
+
+		// 处理请求
+		c.Next()
 	}
 }

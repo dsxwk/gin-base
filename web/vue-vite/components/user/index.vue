@@ -1,8 +1,20 @@
 <script setup>
-import { Functions } from '@utils/functions/functions';
-import { onMounted, reactive, ref } from 'vue';
+import {Functions} from '@utils/functions/functions';
+import {onMounted, reactive, ref} from 'vue';
 import 'element-plus/theme-chalk/index.css';
-import { ElConfigProvider, ElTable, ElTableColumn, ElPagination, ElButton } from 'element-plus';
+import {
+  ElConfigProvider,
+  ElTable,
+  ElTableColumn,
+  ElPagination,
+  ElButton,
+  ElDialog,
+  ElForm,
+  ElFormItem,
+  ElInput,
+  ElRadioGroup,
+  ElRadio
+} from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 import en from 'element-plus/es/locale/lang/en';
 import confs from "@config/configs";
@@ -25,12 +37,22 @@ const handleCurrentChange = (val) => {
   currentPage4.value = val;
 };
 
+const searchForm = ref();
+const addForm = ref();
+const updateForm = ref();
+const addFormVisible = ref(false);
+const updateFormVisible = ref(false);
+
 const data = reactive({
   funcs: new Functions(),
   apiUrl: confs.apiUrl,
   cdnUrl: confs.cdnUrl,
   userData: [],
-  user: {},
+  user: {
+    username: '',
+    nickname: '',
+    sex: 0
+  },
 });
 
 document.title = data.funcs.lang('User List');
@@ -40,13 +62,34 @@ onMounted(async () => {
   data.userData = await userService.list({page: 1, pageSize: 10});
 });
 
-function update(id) {
+function showForm(func) {
+  console.log(func, func === 'add');
+  if (func === 'add') {
+    addFormVisible.value = true;
+  } else {
+    updateFormVisible.value = true;
+  }
+}
 
+function submitAdd() {
+  console.log('submitAdd', addForm.value);
+}
+
+function update(id) {
+  showForm('update');
   console.log(id);
+}
+
+function submitUpdate() {
+  console.log('submitUpdate', updateForm.value);
 }
 
 function del(id) {
   console.log(id);
+}
+
+function search() {
+  console.log(searchForm.value);
 }
 </script>
 <template>
@@ -57,12 +100,12 @@ function del(id) {
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>{{funcs.lang('User List')}}</h1>
+            <h1>{{ funcs.lang('User List') }}</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item active">{{funcs.lang('User Manage')}}</li>
-              <li class="breadcrumb-item active">{{funcs.lang('User List')}}</li>
+              <li class="breadcrumb-item active">{{ funcs.lang('User Manage') }}</li>
+              <li class="breadcrumb-item active">{{ funcs.lang('User List') }}</li>
             </ol>
           </div>
         </div>
@@ -75,42 +118,41 @@ function del(id) {
       <!-- Default box -->
       <div class="card">
         <div class="card-header">
-          <form id="search" class="form-inline">
-            <div class="form-group mx-sm-3 mb-2">
-              <label class="font-weight-normal" for="username">{{funcs.lang('Username')}}&nbsp;</label>
-              <input type="text" class="form-control" name="username" id="username" :placeholder="funcs.lang('Please Entry Username')">
-            </div>
-            <div class="form-group mx-sm-3 mb-2">
-              <label class="font-weight-normal" for="nickname">{{funcs.lang('Nickname')}}&nbsp;</label>
-              <input type="text" class="form-control" name="nickname" id="nickname"
-                     :placeholder="funcs.lang('Please Entry Nickname')">
-            </div>
-            <div class="form-group mx-sm-3 mb-2">
-              <button @click="search" class="btn btn-primary" type="button">{{funcs.lang('Search')}}</button>
-            </div>
-          </form>
+          <ElForm :inline="true" ref="searchForm" class="demo-form-inline">
+            <ElFormItem :label="funcs.lang('Username')">
+              <ElInput :placeholder="funcs.lang('Please Entry Username')"/>
+            </ElFormItem>
+            <ElFormItem :label="funcs.lang('Nickname')">
+              <ElInput :placeholder="funcs.lang('Please Entry Nickname')"/>
+            </ElFormItem>
+            <ElFormItem>
+              <ElButton type="primary" @click="search">{{ funcs.lang('Query') }}</ElButton>
+            </ElFormItem>
+          </ElForm>
         </div>
         <!-- /.card-header -->
         <div class="card-body">
-          <button @click="showModal('addModal')" class="btn btn-primary mb-2" type="button">{{funcs.lang('Add User')}}</button>
+          <ElButton @click="showForm('add')" type="primary" class="mb-2">{{ funcs.lang('Add User') }}</ElButton>
           <!-- 表格 -->
-          <el-table :data="data.userData?.data?.list" border style="width: 100%">
-            <el-table-column type="selection" width="55" />
-            <el-table-column prop="id" label="ID" sortable width="100"></el-table-column>
-            <el-table-column prop="username" :label="funcs.lang('Username')" width="180"></el-table-column>
-            <el-table-column prop="nickname" :label="funcs.lang('Nickname')"></el-table-column>
-            <el-table-column prop="age" :label="funcs.lang('Age')"></el-table-column>
-            <el-table-column prop="image" :label="funcs.lang('Avatar')"></el-table-column>
-            <el-table-column prop="email" :label="funcs.lang('Email')"></el-table-column>
-            <el-table-column prop="action" :label="funcs.lang('Action')">
-              <el-button type="primary">修改</el-button>
-              <el-button type="danger">删除</el-button>
-            </el-table-column>
-          </el-table>
+          <ElTable :data="data.userData?.data?.list" border>
+            <ElTableColumn type="selection" width="55"/>
+            <ElTableColumn prop="id" label="ID" sortable width="100"></ElTableColumn>
+            <ElTableColumn prop="username" :label="funcs.lang('Username')" width="180"></ElTableColumn>
+            <ElTableColumn prop="nickname" :label="funcs.lang('Nickname')"></ElTableColumn>
+            <ElTableColumn prop="age" :label="funcs.lang('Age')"></ElTableColumn>
+            <ElTableColumn prop="image" :label="funcs.lang('Avatar')"></ElTableColumn>
+            <ElTableColumn prop="email" :label="funcs.lang('Email')"></ElTableColumn>
+            <ElTableColumn prop="action" :label="funcs.lang('Action')">
+              <template #default="scope">
+                <ElButton @click="update(scope.row.id)" type="primary">{{funcs.lang('Modify')}}</ElButton>
+                <ElButton @click="del(scope.row.id)" type="danger">{{funcs.lang('Delete')}}</ElButton>
+              </template>
+            </ElTableColumn>
+          </ElTable>
 
           <!-- 分页 -->
-          <el-config-provider :locale="funcs.getLang() !== 'zh-cn' ? en : zhCn">
-            <el-pagination
+          <ElConfigProvider :locale="funcs.getLang() !== 'zh-cn' ? en : zhCn">
+            <ElPagination
                 :current-page="currentPage4"
                 :page-size="pageSize4"
                 :page-sizes="[10, 20, 30, 40, 50, 100]"
@@ -124,68 +166,58 @@ function del(id) {
                 @current-change="handleCurrentChange"
                 style="margin-top: 20px;"
             />
-          </el-config-provider>
+          </ElConfigProvider>
         </div>
         <!-- /.card-body -->
       </div>
       <!-- /.card -->
 
-      <div id="addModal" class="modal fade" tabindex="-1">
-        <div class="modal-dialog modal-lg" style="width: 85%;">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 v-if="JSON.stringify(data.user) !== '{}'" class="modal-title">{{funcs.lang('Modify User')}}</h5>
-              <h5 v-else class="modal-title">{{funcs.lang('Add User')}}</h5>
-              <button @click="clear" type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+      <div class="card">
+        <ElDialog v-model="updateFormVisible" :title="funcs.lang('Modify User')"
+                  width="500">
+          <ElForm ref="updateForm" label-width="auto" :model="data.user">
+            <ElFormItem :label="funcs.lang('Username')" prop="username">
+              <ElInput v-model="data.user.username" autocomplete="off"/>
+            </ElFormItem>
+            <ElFormItem :label="funcs.lang('Nickname')" prop="nickname">
+              <ElInput v-model="data.user.nickname" autocomplete="off"/>
+            </ElFormItem>
+            <ElFormItem :label="funcs.lang('Gender')" prop="sex">
+              <ElRadioGroup v-model="data.user.sex">
+                <ElRadio value="0">{{ funcs.lang('Male') }}</ElRadio>
+                <el-radio value="1">{{ funcs.lang('Female') }}</el-radio>
+              </ElRadioGroup>
+            </ElFormItem>
+          </ElForm>
+          <template #footer>
+            <div class="dialog-footer">
+              <ElButton type="primary" @click="submitUpdate()">{{funcs.lang('Modify')}}</ElButton>
+              <ElButton @click="updateFormVisible = false">{{funcs.lang('Cancel')}}</ElButton>
             </div>
-            <div class="modal-body">
-              <form id="my-form" class="form-horizontal">
-                <input v-if="JSON.stringify(data.user) !== '{}'" type="hidden" name="id" :value="data.user?.id">
-                <div class="form-group">
-                  <label for="username" class="col-sm-2 control-label font-weight-normal">{{funcs.lang('Username')}}</label>
-                  <div class="col-sm-10">
-                    <input name="username" type="text" class="form-control" id="username" :placeholder="funcs.lang('Please Entry Username')" disabled :value="data.user?.username">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="nickname" class="col-sm-2 control-label font-weight-normal">{{funcs.lang('Nickname')}}</label>
-                  <div class="col-sm-10">
-                    <input name="nickname" type="text" class="form-control" id="nickname" :placeholder="funcs.lang('Please Entry Nickname')" :value="data.user?.nickname">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="avatar" class="col-sm-2 control-label font-weight-normal">{{funcs.lang('Avatar')}}</label>
-                  <div class="col-sm-10">
-                    <input type="file" class="input-file form-control" id="avatar">
-                    <input name="image" type="hidden" :value="data.user?.image" id="image">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-sm-2 control-label font-weight-normal">{{funcs.lang('Gender')}}</label>
-                  <div class="icheck-primary col-sm-10">
-                    <div class="icheck-primary icheck-inline">
-                      <input v-if="data.user?.sex === 0" name="sex" type="radio" id="sex1" checked value="0"/>
-                      <input v-else name="sex" type="radio" id="sex1" value="0"/>
-                      <label class="font-weight-normal" for="sex1">{{funcs.lang('Male')}}</label>
-                    </div>
-                    <div class="icheck-primary icheck-inline">
-                      <input v-if="data.user?.sex === 1" name="sex" type="radio" id="sex2" checked value="1"/>
-                      <input v-else name="sex" type="radio" id="sex2" value="1"/>
-                      <label class="font-weight-normal" for="sex2">{{funcs.lang('Female')}}</label>
-                    </div>
-                  </div>
-                </div>
-              </form>
+          </template>
+        </ElDialog>
+        <ElDialog v-model="addFormVisible" :title="funcs.lang('Add User')" width="500">
+          <ElForm ref="addForm" label-width="auto" :model="data.user">
+            <ElFormItem :label="funcs.lang('Username')" prop="username">
+              <ElInput v-model="data.user.username" autocomplete="off"/>
+            </ElFormItem>
+            <ElFormItem :label="funcs.lang('Nickname')" prop="nickname">
+              <ElInput v-model="data.user.nickname" autocomplete="off"/>
+            </ElFormItem>
+            <ElFormItem :label="funcs.lang('Gender')" prop="sex">
+              <ElRadioGroup v-model="data.user.sex">
+                <ElRadio value="0">{{ funcs.lang('Male') }}</ElRadio>
+                <el-radio value="1">{{ funcs.lang('Female') }}</el-radio>
+              </ElRadioGroup>
+            </ElFormItem>
+          </ElForm>
+          <template #footer>
+            <div class="dialog-footer">
+              <ElButton type="primary" @click="submitAdd()">{{ funcs.lang('Create') }}</ElButton>
+              <ElButton @click="addFormVisible = false">{{ funcs.lang('Cancel') }}</ElButton>
             </div>
-            <div class="modal-footer">
-              <button type="button" @click="clear" class="btn btn-secondary" data-dismiss="modal">{{funcs.lang('Close')}}</button>
-              <button v-if="JSON.stringify(data.user) !== '{}'" type="button" class="btn btn-primary">{{funcs.lang('Modify')}}</button>
-              <button v-else type="button" class="btn btn-primary">{{funcs.lang('Create')}}</button>
-            </div>
-          </div>
-        </div>
+          </template>
+        </ElDialog>
       </div>
 
     </section>

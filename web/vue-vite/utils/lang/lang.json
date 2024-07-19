@@ -286,5 +286,13 @@
   "Latest Article": {
     "en-us": "Latest Article",
     "zh-cn": "最新文章"
+  },
+  "Query": {
+    "en-us": "Query",
+    "zh-cn": "查询"
+  },
+  "Cancel": {
+    "en-us": "Cancel",
+    "zh-cn": "取消"
   }
 }

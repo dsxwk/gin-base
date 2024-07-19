@@ -41,6 +41,9 @@ func LoadRouters(router *gin.Engine) {
 			// 用户列表
 			v1.GET("/user", user_controller.List)
 
+			// 用户详情
+			v1.GET("/user/:id", user_controller.Detail)
+
 			// 文章列表
 			v1.GET("/article", article_controller.List)
 

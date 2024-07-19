@@ -7,8 +7,9 @@ import (
 
 // 用户请求验证
 type UserValidate struct {
-	Page     int `form:"page" validate:"required|int|gt:0" label:"页码"`
-	PageSize int `form:"pageSize" validate:"required|int|gt:0" label:"每页数量"`
+	ID       int64 `json:"id" validate:"required|int|gt:0" label:"ID"`
+	Page     int   `form:"page" validate:"required|int|gt:0" label:"页码"`
+	PageSize int   `form:"pageSize" validate:"required|int|gt:0" label:"每页数量"`
 }
 
 // 请求验证
@@ -26,7 +27,8 @@ func GetUserValidate(data UserValidate, scene string) error {
 // - 也可以添加验证设置
 func (a UserValidate) ConfigValidation(v *validator.Validation) {
 	v.WithScenes(validator.SValues{
-		"list": []string{"Page", "PageSize"},
+		"list":   []string{"Page", "PageSize"},
+		"detail": []string{"ID"},
 	})
 }
 

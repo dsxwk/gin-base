@@ -42,3 +42,20 @@ func (s *UserService) List(req validate.UserValidate) (global.PageData, error) {
 
 	return pageData, nil
 }
+
+// @function: Detail
+// @description: 详情
+// @param: id int64
+// @return: model.User, error
+func (s *UserService) Detail(id int64) (model.User, error) {
+	var (
+		userModel model.User
+	)
+
+	err := global.DB.Find(&userModel, id).Error
+	if err != nil {
+		return userModel, err
+	}
+
+	return userModel, nil
+}

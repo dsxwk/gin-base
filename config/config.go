@@ -33,11 +33,21 @@ type Jwt struct {
 	Exp int64  `yaml:"exp"`
 }
 
+// 跨域
+type Cors struct {
+	AllowOrigin      string `yaml:"allow-origin"`
+	AllowHeaders     string `yaml:"allow-headers"`
+	ExposeHeaders    string `yaml:"expose-headers"`
+	AllowMethods     string `yaml:"allow-methods"`
+	AllowCredentials string `yaml:"allow-credentials"`
+}
+
 // 配置
 type config struct {
 	Mysql
 	Log
 	Jwt
+	Cors
 }
 
 // 初始化配置

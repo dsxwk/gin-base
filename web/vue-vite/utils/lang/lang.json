@@ -294,5 +294,9 @@
   "Cancel": {
     "en-us": "Cancel",
     "zh-cn": "取消"
+  },
+  "Please Select Gender": {
+    "en-us": "Please Select Gender",
+    "zh-cn": "请选择性别"
   }
 }

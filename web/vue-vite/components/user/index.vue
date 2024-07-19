@@ -37,9 +37,9 @@ const handleCurrentChange = (val) => {
   currentPage4.value = val;
 };
 
-const searchForm = ref();
-const addForm = ref();
-const updateForm = ref();
+const addForm = ref(null);
+const updateForm = ref(null);
+const searchForm = ref(null);
 const addFormVisible = ref(false);
 const updateFormVisible = ref(false);
 
@@ -49,10 +49,15 @@ const data = reactive({
   cdnUrl: confs.cdnUrl,
   userData: [],
   user: {
+    id: 0,
     username: '',
     nickname: '',
-    sex: 0
+    gender: 0
   },
+  userSearch: {
+    username: '',
+    nickname: '',
+  }
 });
 
 document.title = data.funcs.lang('User List');
@@ -72,16 +77,28 @@ function showForm(func) {
 }
 
 function submitAdd() {
-  console.log('submitAdd', addForm.value);
+  addForm.value.validate(function (valid) {
+    console.log(valid);
+  });
+  console.log('submitAdd', data.user);
 }
 
 function update(id) {
   showForm('update');
   console.log(id);
+  getUserInfo(id);
+}
+
+async function getUserInfo(id) {
+  const result = await userService.detail({id: id});
+  data.user = result.data;
 }
 
 function submitUpdate() {
-  console.log('submitUpdate', updateForm.value);
+  updateForm.value.validate(function (valid) {
+    console.log(valid);
+  });
+  console.log('submitUpdate', data.user);
 }
 
 function del(id) {
@@ -89,7 +106,7 @@ function del(id) {
 }
 
 function search() {
-  console.log(searchForm.value);
+  console.log(data.userSearch);
 }
 </script>
 <template>
@@ -118,11 +135,11 @@ function search() {
       <!-- Default box -->
       <div class="card">
         <div class="card-header">
-          <ElForm :inline="true" ref="searchForm" class="demo-form-inline">
-            <ElFormItem :label="funcs.lang('Username')">
+          <ElForm ref="searchForm" :inline="true" class="demo-form-inline" :model="data.userSearch">
+            <ElFormItem v-model="data.userSearch.username" :label="funcs.lang('Username')" pop="username">
               <ElInput :placeholder="funcs.lang('Please Entry Username')"/>
             </ElFormItem>
-            <ElFormItem :label="funcs.lang('Nickname')">
+            <ElFormItem v-model="data.userSearch.nickname" :label="funcs.lang('Nickname')" pop="nickname">
               <ElInput :placeholder="funcs.lang('Please Entry Nickname')"/>
             </ElFormItem>
             <ElFormItem>
@@ -140,12 +157,13 @@ function search() {
             <ElTableColumn prop="username" :label="funcs.lang('Username')" width="180"></ElTableColumn>
             <ElTableColumn prop="nickname" :label="funcs.lang('Nickname')"></ElTableColumn>
             <ElTableColumn prop="age" :label="funcs.lang('Age')"></ElTableColumn>
+            <ElTableColumn prop="gender" :label="funcs.lang('Gender')"></ElTableColumn>
             <ElTableColumn prop="image" :label="funcs.lang('Avatar')"></ElTableColumn>
             <ElTableColumn prop="email" :label="funcs.lang('Email')"></ElTableColumn>
             <ElTableColumn prop="action" :label="funcs.lang('Action')">
               <template #default="scope">
-                <ElButton @click="update(scope.row.id)" type="primary">{{funcs.lang('Modify')}}</ElButton>
-                <ElButton @click="del(scope.row.id)" type="danger">{{funcs.lang('Delete')}}</ElButton>
+                <ElButton @click="update(scope.row.id)" type="primary">{{ funcs.lang('Modify') }}</ElButton>
+                <ElButton @click="del(scope.row.id)" type="danger">{{ funcs.lang('Delete') }}</ElButton>
               </template>
             </ElTableColumn>
           </ElTable>
@@ -176,14 +194,38 @@ function search() {
         <ElDialog v-model="updateFormVisible" :title="funcs.lang('Modify User')"
                   width="500">
           <ElForm ref="updateForm" label-width="auto" :model="data.user">
-            <ElFormItem :label="funcs.lang('Username')" prop="username">
+            <ElFormItem :label="funcs.lang('Username')" prop="username"
+                        :rules="[
+                {
+                  required: true,
+                  message: funcs.lang('Please Entry Username'),
+                  trigger: 'blur',
+                }
+              ]"
+            >
               <ElInput v-model="data.user.username" autocomplete="off"/>
             </ElFormItem>
-            <ElFormItem :label="funcs.lang('Nickname')" prop="nickname">
+            <ElFormItem :label="funcs.lang('Nickname')" prop="nickname"
+                        :rules="[
+                {
+                  required: true,
+                  message: funcs.lang('Please Entry Nickname'),
+                  trigger: 'blur',
+                }
+              ]"
+            >
               <ElInput v-model="data.user.nickname" autocomplete="off"/>
             </ElFormItem>
-            <ElFormItem :label="funcs.lang('Gender')" prop="sex">
-              <ElRadioGroup v-model="data.user.sex">
+            <ElFormItem :label="funcs.lang('Gender')" prop="gender"
+                        :rules="[
+                {
+                  required: true,
+                  message: funcs.lang('Please Select Gender'),
+                  trigger: 'blur',
+                }
+              ]"
+            >
+              <ElRadioGroup v-model="data.user.gender">
                 <ElRadio value="0">{{ funcs.lang('Male') }}</ElRadio>
                 <el-radio value="1">{{ funcs.lang('Female') }}</el-radio>
               </ElRadioGroup>
@@ -191,21 +233,45 @@ function search() {
           </ElForm>
           <template #footer>
             <div class="dialog-footer">
-              <ElButton type="primary" @click="submitUpdate()">{{funcs.lang('Modify')}}</ElButton>
-              <ElButton @click="updateFormVisible = false">{{funcs.lang('Cancel')}}</ElButton>
+              <ElButton type="primary" @click="submitUpdate()">{{ funcs.lang('Modify') }}</ElButton>
+              <ElButton @click="updateFormVisible = false">{{ funcs.lang('Cancel') }}</ElButton>
             </div>
           </template>
         </ElDialog>
         <ElDialog v-model="addFormVisible" :title="funcs.lang('Add User')" width="500">
           <ElForm ref="addForm" label-width="auto" :model="data.user">
-            <ElFormItem :label="funcs.lang('Username')" prop="username">
+            <ElFormItem :label="funcs.lang('Username')" prop="username"
+                        :rules="[
+                {
+                  required: true,
+                  message: funcs.lang('Please Entry Username'),
+                  trigger: 'blur',
+                }
+              ]"
+            >
               <ElInput v-model="data.user.username" autocomplete="off"/>
             </ElFormItem>
-            <ElFormItem :label="funcs.lang('Nickname')" prop="nickname">
+            <ElFormItem :label="funcs.lang('Nickname')" prop="nickname"
+                        :rules="[
+                {
+                  required: true,
+                  message: funcs.lang('Please Entry Nickname'),
+                  trigger: 'blur',
+                }
+              ]"
+            >
               <ElInput v-model="data.user.nickname" autocomplete="off"/>
             </ElFormItem>
-            <ElFormItem :label="funcs.lang('Gender')" prop="sex">
-              <ElRadioGroup v-model="data.user.sex">
+            <ElFormItem :label="funcs.lang('Gender')" prop="gender"
+                        :rules="[
+                {
+                  required: true,
+                  message: funcs.lang('Please Select Gender'),
+                  trigger: 'blur',
+                }
+              ]"
+            >
+              <ElRadioGroup v-model="data.user.gender">
                 <ElRadio value="0">{{ funcs.lang('Male') }}</ElRadio>
                 <el-radio value="1">{{ funcs.lang('Female') }}</el-radio>
               </ElRadioGroup>

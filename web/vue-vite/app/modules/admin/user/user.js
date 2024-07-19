@@ -6,6 +6,13 @@ const userModule = {
         params: {},
         token: {name: 'token', value: true}
     },
+    detail: {
+        name: '用户详情',
+        url: '/user/:id',
+        method: 'GET',
+        params: {},
+        token: {name: 'token', value: true}
+    },
     create: {
         name: '新增用户',
         url: '/user',

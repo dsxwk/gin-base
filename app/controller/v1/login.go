@@ -48,7 +48,7 @@ func (s *LoginController) Login(c *gin.Context) {
 		return
 	}
 
-	token, exp, err := jwt.Encode(userModel.ID, 0)
+	token, exp, err := jwt.Encode(userModel.ID, 4*60*60)
 	if err != nil {
 		s.ApiResponse(c, global.Error, err.Error(), nil)
 		return

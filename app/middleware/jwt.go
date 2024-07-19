@@ -41,6 +41,8 @@ func (s Jwt) JwtMiddleware() gin.HandlerFunc {
 func (s Jwt) Encode(id int64, exp int64) (string, int64, error) {
 	if exp == 0 {
 		exp = time.Now().Add(time.Duration(Config.Jwt.Exp) * time.Second).Unix()
+	} else {
+		exp = time.Now().Add(time.Duration(exp) * time.Second).Unix()
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{

@@ -182,7 +182,7 @@ function search() {
                 :total="data.userData?.data?.total"
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                style="margin-top: 20px;"
+                class="mt-3"
             />
           </ElConfigProvider>
         </div>

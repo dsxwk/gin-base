@@ -1,5 +1,6 @@
 import Cookies from 'js-cookie';
 import data from '@utils/lang/lang.json';
+// import {useRoute} from "vue-router";
 
 export class Functions {
     /**
@@ -193,8 +194,9 @@ export class Functions {
      *
      * @param lang
      */
-    switchLang(lang)
+    /*switchLang(lang)
     {
+        let route = useRoute();
         funcs.setCookie('lang', lang);
 
         // 获取当前路由地址和查询参数
@@ -210,7 +212,7 @@ export class Functions {
 
         // 构造新的 URI 地址
         location.href = `${currentPath}?${query.toString()}`;
-    }
+    }*/
 
     /**
      *

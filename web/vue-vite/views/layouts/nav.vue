@@ -3,6 +3,34 @@ import {Functions} from '@utils/functions/functions';
 
 let funcs = new Functions();
 
+function switchLang(lang)
+{
+  let urlString = window.location.href;
+  // 创建一个 URL 对象
+  let url = new URL(urlString);
+
+  // 获取 URL 的查询参数
+  let params = new URLSearchParams(url.search);
+
+  // 检查参数是否存在并替换
+  const paramToCheck = 'lang';
+  const newValue = lang;
+
+  // 检查参数是否存在
+  if (params.has(paramToCheck)) {
+    // 替换参数的值
+    params.set(paramToCheck, newValue);
+  } else {
+    // 如果参数不存在，可以选择添加新的参数
+    params.append(paramToCheck, newValue);
+  }
+
+  // 更新 URL 的查询部分
+  url.search = params.toString();
+
+  // 构造新的 URI 地址
+  location.href = url.toString();
+}
 </script>
 <template>
   <!-- Navbar -->
@@ -75,10 +103,10 @@ let funcs = new Functions();
           <i class="flag-icon flag-icon-cn"></i>
         </a>
         <div class="dropdown-menu dropdown-menu-right p-0">
-          <a @click="funcs.switchLang('zh-cn')" href="javascript:void(0);" class="dropdown-item active">
+          <a @click="switchLang('zh-cn')" href="javascript:void(0);" class="dropdown-item active">
             <i class="flag-icon flag-icon-cn mr-2"></i> {{ funcs.lang('Chinese') }}
           </a>
-          <a @click="funcs.switchLang('en-us')" href="javascript:void(0);" class="dropdown-item">
+          <a @click="switchLang('en-us')" href="javascript:void(0);" class="dropdown-item">
             <i class="flag-icon flag-icon-us mr-2"></i> {{ funcs.lang('English') }}
           </a>
         </div>

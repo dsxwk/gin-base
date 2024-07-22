@@ -7,9 +7,14 @@ import (
 
 // 用户请求验证
 type UserValidate struct {
-	ID       int64 `json:"id" validate:"required|int|gt:0" label:"ID"`
-	Page     int   `form:"page" validate:"required|int|gt:0" label:"页码"`
-	PageSize int   `form:"pageSize" validate:"required|int|gt:0" label:"每页数量"`
+	ID       int64  `json:"id" validate:"required|int|gt:0" label:"ID"`
+	Page     int    `form:"page" validate:"required|int|gt:0" label:"页码"`
+	PageSize int    `form:"pageSize" validate:"required|int|gt:0" label:"每页数量"`
+	Username string `json:"username" validate:"required" label:"用户名"`
+	FullName string `json:"full_name" validate:"required" label:"姓名"`
+	Nickname string `json:"nickname" validate:"required" label:"昵称"`
+	Gender   int    `json:"gender" validate:"required|int" label:"性别"`
+	Password string `json:"password" validate:"required" label:"密码"`
 }
 
 // 请求验证
@@ -29,6 +34,9 @@ func (a UserValidate) ConfigValidation(v *validator.Validation) {
 	v.WithScenes(validator.SValues{
 		"list":   []string{"Page", "PageSize"},
 		"detail": []string{"ID"},
+		"create": []string{"Username", "FullName", "Nickname", "Gender", "Password"},
+		"update": []string{"ID"},
+		"delete": []string{"ID"},
 	})
 }
 

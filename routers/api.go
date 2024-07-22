@@ -41,8 +41,17 @@ func LoadRouters(router *gin.Engine) {
 			// 用户列表
 			v1.GET("/user", user_controller.List)
 
+			// 创建用户
+			v1.POST("/user", user_controller.Create)
+
+			// 更新用户
+			v1.PUT("/user/:id", user_controller.Update)
+
 			// 用户详情
 			v1.GET("/user/:id", user_controller.Detail)
+
+			// 删除用户
+			v1.DELETE("/user/:id", user_controller.Delete)
 
 			// 文章列表
 			v1.GET("/article", article_controller.List)

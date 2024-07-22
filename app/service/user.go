@@ -43,6 +43,35 @@ func (s *UserService) List(req validate.UserValidate) (global.PageData, error) {
 	return pageData, nil
 }
 
+// @function: Create
+// @description: 创建
+// @param: req model.User
+// @return: model.User, error
+func (s *UserService) Create(req model.User) (model.User, error) {
+	// 处理密码
+	req.Password = utils.BcryptHash(req.Password)
+
+	err := global.DB.Create(&req).Error
+	if err != nil {
+		return req, err
+	}
+
+	return req, nil
+}
+
+// @function: Update
+// @description: 更新
+// @param: req model.User
+// @return: model.User, error
+func (this *UserService) Update(req model.User) (model.User, error) {
+	err := global.DB.Updates(&req).Error
+	if err != nil {
+		return req, err
+	}
+
+	return req, nil
+}
+
 // @function: Detail
 // @description: 详情
 // @param: id int64
@@ -53,6 +82,23 @@ func (s *UserService) Detail(id int64) (model.User, error) {
 	)
 
 	err := global.DB.Find(&userModel, id).Error
+	if err != nil {
+		return userModel, err
+	}
+
+	return userModel, nil
+}
+
+// @function: Delete
+// @description: 删除
+// @param: id int64
+// @return: model.User, error
+func (s *UserService) Delete(id int64) (model.User, error) {
+	var (
+		userModel model.User
+	)
+
+	err := global.DB.Delete(&userModel, id).Error
 	if err != nil {
 		return userModel, err
 	}

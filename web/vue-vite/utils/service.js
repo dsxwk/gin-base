@@ -17,7 +17,7 @@ export default function createService(module, requestFunc, headers = {}) {
                 method,
                 headers: hds,
             };
-            if (method.toUpperCase() === 'POST') {
+            if (method.toUpperCase() === 'POST' || method.toUpperCase() === 'PUT') {
                 config.body = JSON.stringify(params);
             }
 

@@ -1,6 +1,7 @@
 <script setup>
 import {Functions} from '@utils/functions/functions';
 import {onMounted, reactive, ref} from 'vue';
+import pnotify from '@utils/pnotify/pnotify';
 import 'element-plus/theme-chalk/index.css';
 import {
   ElConfigProvider,
@@ -51,8 +52,11 @@ const data = reactive({
   user: {
     id: 0,
     username: '',
+    full_name: '',
     nickname: '',
-    gender: 0
+    gender: 1,
+    password: '',
+    age: 0,
   },
   userSearch: {
     username: '',
@@ -64,29 +68,33 @@ document.title = data.funcs.lang('User List');
 const userService = createService(userModule, request);
 
 onMounted(async () => {
-  data.userData = await userService.list({page: 1, pageSize: 10});
+  await getUserList();
 });
 
-function showForm(func) {
-  console.log(func, func === 'add');
+async function getUserList() {
+  data.userData = await userService.list({page: 1, pageSize: 10});
+}
+
+async function showForm(func) {
   if (func === 'add') {
     addFormVisible.value = true;
+    addForm.value?.resetFields();
   } else {
     updateFormVisible.value = true;
   }
 }
 
-function submitAdd() {
-  addForm.value.validate(function (valid) {
-    console.log(valid);
-  });
-  console.log('submitAdd', data.user);
+async function submitAdd() {
+  await addForm.value.validate();
+  await userService.create(data.user);
+  pnotify(funcs.lang('Created Successfully'));
+  addFormVisible.value = false;
+  await getUserList();
 }
 
-function update(id) {
-  showForm('update');
-  console.log(id);
-  getUserInfo(id);
+async function update(id) {
+  await showForm('update');
+  await getUserInfo(id);
 }
 
 async function getUserInfo(id) {
@@ -94,19 +102,26 @@ async function getUserInfo(id) {
   data.user = result.data;
 }
 
-function submitUpdate() {
-  updateForm.value.validate(function (valid) {
-    console.log(valid);
-  });
-  console.log('submitUpdate', data.user);
+async function submitUpdate() {
+  await updateForm.value.validate();
+  await userService.update(data.user);
+  pnotify(funcs.lang('Updated Successfully'));
+  updateFormVisible.value = false;
+  await getUserList();
 }
 
-function del(id) {
-  console.log(id);
+async function del(id) {
+  await userService.delete({id: id});
+  pnotify(funcs.lang('Deleted Successfully'));
+  await getUserList();
 }
 
-function search() {
+async function search() {
   console.log(data.userSearch);
+}
+
+function getGender(gender) {
+  return gender === 1 ? '男' : gender === 2 ? '女' : '未知';
 }
 </script>
 <template>
@@ -143,27 +158,31 @@ function search() {
               <ElInput :placeholder="funcs.lang('Please Entry Nickname')"/>
             </ElFormItem>
             <ElFormItem>
-              <ElButton type="primary" @click="search">{{ funcs.lang('Query') }}</ElButton>
+              <ElButton type="primary" @click="search">{{funcs.lang('Query')}}</ElButton>
             </ElFormItem>
           </ElForm>
         </div>
         <!-- /.card-header -->
         <div class="card-body">
-          <ElButton @click="showForm('add')" type="primary" class="mb-2">{{ funcs.lang('Add User') }}</ElButton>
+          <ElButton @click="showForm('add')" type="primary" class="mb-2">{{funcs.lang('Add User')}}</ElButton>
           <!-- 表格 -->
           <ElTable :data="data.userData?.data?.list" border>
             <ElTableColumn type="selection" width="55"/>
             <ElTableColumn prop="id" label="ID" sortable width="100"></ElTableColumn>
             <ElTableColumn prop="username" :label="funcs.lang('Username')" width="180"></ElTableColumn>
+            <ElTableColumn prop="full_name" :label="funcs.lang('FullName')"></ElTableColumn>
             <ElTableColumn prop="nickname" :label="funcs.lang('Nickname')"></ElTableColumn>
             <ElTableColumn prop="age" :label="funcs.lang('Age')"></ElTableColumn>
-            <ElTableColumn prop="gender" :label="funcs.lang('Gender')"></ElTableColumn>
-            <ElTableColumn prop="image" :label="funcs.lang('Avatar')"></ElTableColumn>
+            <ElTableColumn prop="gender" :label="funcs.lang('Gender')">
+              <template #default="scope">
+                {{ getGender(scope.row.gender) }}
+              </template>
+            </ElTableColumn>
             <ElTableColumn prop="email" :label="funcs.lang('Email')"></ElTableColumn>
             <ElTableColumn prop="action" :label="funcs.lang('Action')">
               <template #default="scope">
                 <ElButton @click="update(scope.row.id)" type="primary">{{ funcs.lang('Modify') }}</ElButton>
-                <ElButton @click="del(scope.row.id)" type="danger">{{ funcs.lang('Delete') }}</ElButton>
+                <ElButton @click="del(scope.row.id)" type="danger">{{funcs.lang('Delete')}}</ElButton>
               </template>
             </ElTableColumn>
           </ElTable>
@@ -205,6 +224,17 @@ function search() {
             >
               <ElInput v-model="data.user.username" autocomplete="off"/>
             </ElFormItem>
+            <ElFormItem :label="funcs.lang('FullName')" prop="full_name"
+                        :rules="[
+                {
+                  required: true,
+                  message: funcs.lang('Please Entry FullName'),
+                  trigger: 'blur',
+                }
+              ]"
+            >
+              <ElInput v-model="data.user.full_name" autocomplete="off"/>
+            </ElFormItem>
             <ElFormItem :label="funcs.lang('Nickname')" prop="nickname"
                         :rules="[
                 {
@@ -226,8 +256,8 @@ function search() {
               ]"
             >
               <ElRadioGroup v-model="data.user.gender">
-                <ElRadio value="0">{{ funcs.lang('Male') }}</ElRadio>
-                <el-radio value="1">{{ funcs.lang('Female') }}</el-radio>
+                <ElRadio :value="1">{{ funcs.lang('Male') }}</ElRadio>
+                <ElRadio :value="2">{{ funcs.lang('Female') }}</ElRadio>
               </ElRadioGroup>
             </ElFormItem>
           </ElForm>
@@ -251,6 +281,17 @@ function search() {
             >
               <ElInput v-model="data.user.username" autocomplete="off"/>
             </ElFormItem>
+            <ElFormItem :label="funcs.lang('Password')" prop="password"
+                        :rules="[
+                {
+                  required: true,
+                  message: funcs.lang('Please Entry Password'),
+                  trigger: 'blur',
+                }
+              ]"
+            >
+              <ElInput v-model="data.user.password" autocomplete="off"/>
+            </ElFormItem>
             <ElFormItem :label="funcs.lang('Nickname')" prop="nickname"
                         :rules="[
                 {
@@ -262,6 +303,17 @@ function search() {
             >
               <ElInput v-model="data.user.nickname" autocomplete="off"/>
             </ElFormItem>
+            <ElFormItem :label="funcs.lang('FullName')" prop="full_name"
+                        :rules="[
+                {
+                  required: true,
+                  message: funcs.lang('Please Entry FullName'),
+                  trigger: 'blur',
+                }
+              ]"
+            >
+              <ElInput v-model="data.user.full_name" autocomplete="off"/>
+            </ElFormItem>
             <ElFormItem :label="funcs.lang('Gender')" prop="gender"
                         :rules="[
                 {
@@ -272,15 +324,15 @@ function search() {
               ]"
             >
               <ElRadioGroup v-model="data.user.gender">
-                <ElRadio value="0">{{ funcs.lang('Male') }}</ElRadio>
-                <el-radio value="1">{{ funcs.lang('Female') }}</el-radio>
+                <ElRadio :value="1">{{ funcs.lang('Male') }}</ElRadio>
+                <ElRadio :value="2">{{ funcs.lang('Female') }}</ElRadio>
               </ElRadioGroup>
             </ElFormItem>
           </ElForm>
           <template #footer>
             <div class="dialog-footer">
-              <ElButton type="primary" @click="submitAdd()">{{ funcs.lang('Create') }}</ElButton>
-              <ElButton @click="addFormVisible = false">{{ funcs.lang('Cancel') }}</ElButton>
+              <ElButton type="primary" @click="submitAdd()">{{funcs.lang('Create')}}</ElButton>
+              <ElButton @click="addFormVisible = false">{{funcs.lang('Cancel')}}</ElButton>
             </div>
           </template>
         </ElDialog>

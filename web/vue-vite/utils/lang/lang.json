@@ -172,7 +172,7 @@
     "zh-cn": "注册"
   },
   "successfully registered": {
-    "en-us": "successfully registered",
+    "en-us": "Successfully Registered",
     "zh-cn": "注册成功"
   },
   "User Register": {
@@ -255,6 +255,14 @@
     "en-us": "Save",
     "zh-cn": "保存"
   },
+  "FullName": {
+    "en-us": "FullName",
+     "zh-cn": "姓名"
+  },
+  "Please Entry FullName": {
+    "en-us": "Please Entry FullName",
+     "zh-cn": "请输入姓名"
+  },
   "Male": {
     "en-us": "Male",
     "zh-cn": "男"
@@ -298,5 +306,17 @@
   "Please Select Gender": {
     "en-us": "Please Select Gender",
     "zh-cn": "请选择性别"
+  },
+  "Created Successfully":{
+    "en-us": "Created Successfully",
+    "zh-cn": "创建成功"
+  },
+  "Updated Successfully": {
+    "en-us": "Updated Successfully",
+    "zh-cn": "更新成功"
+  },
+  "Deleted Successfully": {
+    "en-us": "Deleted Successfully",
+    "zh-cn": "删除成功"
   }
 }

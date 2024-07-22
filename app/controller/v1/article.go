@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"encoding/json"
 	"gin-base/app/model"
 	"gin-base/app/service"
 	"gin-base/app/validate"
@@ -63,8 +64,19 @@ func (s *ArticleController) Create(c *gin.Context) {
 	}
 
 	req.UID = s.GetUserId(c)
-	articleValidate.Title = req.Title
-	articleValidate.Content = req.Content
+	// 序列化为 JSON
+	jsonData, err := json.Marshal(req)
+	if err != nil {
+		global.Log.Error(err.Error())
+		return
+	}
+
+	// 反序列化到响应结构体
+	err = json.Unmarshal(jsonData, &articleValidate)
+	if err != nil {
+		global.Log.Error(err.Error())
+		return
+	}
 
 	// 验证
 	err = validate.GetArticleValidate(articleValidate, "create")
@@ -112,9 +124,19 @@ func (s *ArticleController) Update(c *gin.Context) {
 	}
 
 	req.ID = id
-	articleValidate.ID = id
-	articleValidate.Title = req.Title
-	articleValidate.Content = req.Content
+	// 序列化为 JSON
+	jsonData, err := json.Marshal(req)
+	if err != nil {
+		global.Log.Error(err.Error())
+		return
+	}
+
+	// 反序列化到响应结构体
+	err = json.Unmarshal(jsonData, &articleValidate)
+	if err != nil {
+		global.Log.Error(err.Error())
+		return
+	}
 
 	// 验证
 	err = validate.GetArticleValidate(articleValidate, "create")

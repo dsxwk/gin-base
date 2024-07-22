@@ -18,7 +18,7 @@ cors:
   allow-origin: "*" # 允许访问的域名列表
   allow-headers: "*" # 允许的请求头列表
   expose-headers: "*" # 允许返回的响应头列表
-  allow-methods: GET,POST,PUT,DELETE,OPTIONS # 允许的请求方法列表
-  allow-credentials: true # 是否允许发送cookie
+  allow-methods: GET, POST, PUT, DELETE, OPTIONS # 允许的请求方法列表
+  allow-credentials: "true" # 是否允许发送cookie
 
 

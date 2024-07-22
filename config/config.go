@@ -43,7 +43,7 @@ type Cors struct {
 }
 
 // 配置
-type config struct {
+type Config struct {
 	Mysql
 	Log
 	Jwt
@@ -51,7 +51,7 @@ type config struct {
 }
 
 // 初始化配置
-func InitConfig() config { // 初始化数据
+func InitConfig() Config { // 初始化数据
 	pwd, err := os.Getwd()
 	if err != nil {
 		panic(err)
@@ -63,7 +63,7 @@ func InitConfig() config { // 初始化数据
 	if err != nil {
 		log.Fatal(err)
 	}
-	c := config{}
+	c := Config{}
 	if err := yaml.Unmarshal(yamlFile, &c); err != nil {
 		log.Fatal(err)
 	}

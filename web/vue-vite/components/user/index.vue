@@ -117,7 +117,8 @@ async function del(id) {
 }
 
 async function search() {
-  console.log(data.userSearch);
+  // 参数合并
+  data.userData = await userService.list({ ...data.userSearch, page: 1, pageSize: 10 });
 }
 
 function getGender(gender) {

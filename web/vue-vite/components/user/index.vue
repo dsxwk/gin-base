@@ -58,7 +58,7 @@ const data = reactive({
     password: '',
     age: 0,
   },
-  userSearch: {
+  search: {
     username: '',
     nickname: '',
   }
@@ -118,7 +118,7 @@ async function del(id) {
 
 async function search() {
   // 参数合并
-  data.userData = await userService.list({ ...data.userSearch, page: 1, pageSize: 10 });
+  data.userData = await userService.list({ page: 1, pageSize: 10, ...data.search });
 }
 
 function getGender(gender) {
@@ -151,12 +151,12 @@ function getGender(gender) {
       <!-- Default box -->
       <div class="card">
         <div class="card-header">
-          <ElForm ref="searchForm" :inline="true" class="demo-form-inline" :model="data.userSearch">
-            <ElFormItem v-model="data.userSearch.username" :label="funcs.lang('Username')" pop="username">
-              <ElInput :placeholder="funcs.lang('Please Entry Username')"/>
+          <ElForm ref="searchForm" :inline="true" class="demo-form-inline" :model="data.search">
+            <ElFormItem :label="funcs.lang('Username')" pop="username">
+              <ElInput v-model="data.search.username" :placeholder="funcs.lang('Please Entry Username')" autocomplete="off"/>
             </ElFormItem>
-            <ElFormItem v-model="data.userSearch.nickname" :label="funcs.lang('Nickname')" pop="nickname">
-              <ElInput :placeholder="funcs.lang('Please Entry Nickname')"/>
+            <ElFormItem :label="funcs.lang('Nickname')" pop="nickname">
+              <ElInput v-model="data.search.nickname" :placeholder="funcs.lang('Please Entry Nickname')" autocomplete="off"/>
             </ElFormItem>
             <ElFormItem>
               <ElButton type="primary" @click="search">{{funcs.lang('Query')}}</ElButton>

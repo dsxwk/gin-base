@@ -70,6 +70,17 @@ Golang Gin 是一个轻量级且高效的 Golang Web 框架。它具有高性能
 ```
 
 ## 使用
+### 运行前后端
+
+```bash
+# 后端运行 端口8080 接口地址:127.0.0.1:8080/api/v1/...
+go run main.go
+```
+
+```bash
+# 前端运行 端口3000 访问地址:127.0.0.1:3000
+npm run dev
+```
 ### 命令行生成模型 --path参数默认就行无需修改
 
 ```bash
@@ -88,14 +99,6 @@ curl -X POST -H "Content-Type: application/json" -d '{"username":"admin","passwo
 
 ```bash
 curl -X GET -H "token: login-token -> eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6IkFkbWluIiwiaWF0IjoxNjc0NjYzMjM5LCJleHAiOjE2NzQ2NjYzMzl9.8W45GJQqV656
-```
-
-## 安装
-
-使用 Golang 的包管理工具 `go get` 安装 Gin 框架：
-
-```bash
-go get -u github.com/gin-gonic/gin
 ```
 
 ## 基本用法

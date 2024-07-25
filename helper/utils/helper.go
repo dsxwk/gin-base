@@ -3,7 +3,9 @@ package utils
 import (
 	"crypto/md5"
 	"encoding/hex"
+	"fmt"
 	"golang.org/x/crypto/bcrypt"
+	"log"
 	"reflect"
 	"regexp"
 	"strings"
@@ -138,4 +140,52 @@ func FilterStructToMap(req map[string]interface{}, filterStruct interface{}) (re
 	}
 
 	return result
+}
+
+// @function: BuildWhereClause
+// @description: 构建查询条件
+// @param: filters interface{}
+// @param: tag 获取的标签 json、form 等
+// @return: string, []interface{}
+func BuildWhereClause(filters interface{}, tag string) (string, []interface{}) {
+	var (
+		clauses []string
+		args    []interface{}
+		clause  string
+	)
+
+	val := reflect.ValueOf(filters)
+	if val.Kind() != reflect.Struct {
+		log.Fatalf("filters should be a struct, got %s", val.Kind())
+	}
+
+	typ := val.Type()
+	for i := 0; i < val.NumField(); i++ {
+		field := typ.Field(i)
+		value := val.Field(i)
+
+		// 忽略零值字段
+		if !value.IsZero() {
+			// 使用 json 标签作为列名
+			columnName := field.Tag.Get(tag)
+			if columnName == "" {
+				columnName = field.Name
+			}
+
+			// 根据字段类型构建查询条件
+			switch value.Kind() {
+			case reflect.String:
+				clause = fmt.Sprintf("%s LIKE ?", columnName)
+				args = append(args, "%"+value.String()+"%")
+			default:
+				clause = fmt.Sprintf("%s = ?", columnName)
+				args = append(args, value.Interface())
+			}
+
+			clauses = append(clauses, clause)
+		}
+	}
+
+	whereClause := strings.Join(clauses, " AND ")
+	return whereClause, args
 }

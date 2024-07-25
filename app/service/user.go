@@ -16,22 +16,32 @@ type UserService struct {
 // @description: 列表
 // @param: req validate.UserValidate
 // @return: global.PageData, error
-func (s *UserService) List(req validate.UserValidate) (global.PageData, error) {
+func (s *UserService) List(req validate.UserValidate, search validate.UserSearch) (global.PageData, error) {
 	var (
 		userModel []model.User
 		pageData  global.PageData
 	)
 
+	// 获取where条件和参数
+	where, args := utils.BuildWhereClause(search, "form")
+
 	// 获取分页默认为第一页，每页10条记录
 	offset, limit := utils.Pagination(req.Page, req.PageSize)
 
 	db := global.DB.Find(&userModel)
+	// 根据 where 子句添加条件
+	if where != "" {
+		db = db.Where(where, args...)
+	}
 
+	// 获取总记录数
 	err := db.Count(&pageData.Total).Error
 	if err != nil {
 		return pageData, err
 	}
-	err = db.Offset(offset).Limit(limit).Error
+
+	// 执行分页查询
+	err = db.Offset(offset).Limit(limit).Find(&userModel).Error
 	if err != nil {
 		return pageData, err
 	}

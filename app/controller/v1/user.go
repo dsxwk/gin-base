@@ -22,9 +22,17 @@ func (s *UserController) List(c *gin.Context) {
 	var (
 		userService service.UserService
 		req         validate.UserValidate
+		search      validate.UserSearch
 	)
 
 	err := c.ShouldBindQuery(&req)
+	if err != nil {
+		global.Log.Error(err.Error())
+		return
+	}
+
+	// 搜索
+	err = c.ShouldBindQuery(&search)
 	if err != nil {
 		global.Log.Error(err.Error())
 		return
@@ -37,7 +45,7 @@ func (s *UserController) List(c *gin.Context) {
 		return
 	}
 
-	pageData, err := userService.List(req)
+	pageData, err := userService.List(req, search)
 	if err != nil {
 		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error(), nil)

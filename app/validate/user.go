@@ -17,6 +17,22 @@ type UserValidate struct {
 	Password string `json:"password" validate:"required" label:"密码"`
 }
 
+// 用户搜索
+type UserSearch struct {
+	Username string `form:"username" validate:"required" label:"用户名"`
+	FullName string `form:"full_name" validate:"required" label:"姓名"`
+	Nickname string `form:"nickname" validate:"required" label:"昵称"`
+	Gender   int    `form:"gender" validate:"required|int" label:"性别"`
+}
+
+// 用户搜索验证
+type UserSearchValidate struct {
+	Username string `form:"username" validate:"required" label:"用户名"`
+	FullName string `form:"full_name" validate:"required" label:"姓名"`
+	Nickname string `form:"nickname" validate:"required" label:"昵称"`
+	Gender   int    `form:"gender" validate:"required|int" label:"性别"`
+}
+
 // 请求验证
 func GetUserValidate(data UserValidate, scene string) error {
 	v := validator.Struct(data, scene)

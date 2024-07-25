@@ -50,12 +50,14 @@ func (s *ArticleService) List(req validate.ArticleValidate) (global.PageData, er
 		return db.Select("id, name")
 	}).Find(&articleModel)
 
+	// 获取总记录数
 	err := db.Count(&pageData.Total).Error
 	if err != nil {
 		return pageData, err
 	}
 
-	err = db.Offset(offset).Limit(limit).Error
+	// 执行分页查询
+	err = db.Offset(offset).Limit(limit).Find(&articleModel).Error
 	if err != nil {
 		return pageData, err
 	}

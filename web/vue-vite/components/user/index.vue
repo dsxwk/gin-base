@@ -24,18 +24,19 @@ import request from "@utils/request";
 import userModule from "@modules/admin/user/user";
 
 let funcs = new Functions();
-const currentPage4 = ref(1);
-const pageSize4 = ref(10); // 正确定义 pageSize4 变量
 const size = 'small'; // 根据需要设置大小
 const disabled = false; // 根据需要设置禁用状态
 const background = true; // 根据需要设置背景色
+
 // 正确定义 handleSizeChange 方法
-const handleSizeChange = (val) => {
-  pageSize4.value = val;
+const handleSizeChange = (pageSize) => {
+  data.pageSize = pageSize;
+  getUserList();
 };
 
-const handleCurrentChange = (val) => {
-  currentPage4.value = val;
+const handleCurrentChange = (page) => {
+  data.page = page;
+  getUserList();
 };
 
 const addForm = ref(null);
@@ -49,6 +50,8 @@ const data = reactive({
   apiUrl: confs.apiUrl,
   cdnUrl: confs.cdnUrl,
   userData: [],
+  page: 1,
+  pageSize: 1,
   user: {
     id: 0,
     username: '',
@@ -72,7 +75,7 @@ onMounted(async () => {
 });
 
 async function getUserList() {
-  data.userData = await userService.list({page: 1, pageSize: 10});
+  data.userData = await userService.list({page: data.page, pageSize: data.pageSize});
 }
 
 async function showForm(func) {
@@ -191,9 +194,9 @@ function getGender(gender) {
           <!-- 分页 -->
           <ElConfigProvider :locale="funcs.getLang() !== 'zh-cn' ? en : zhCn">
             <ElPagination
-                :current-page="currentPage4"
-                :page-size="pageSize4"
-                :page-sizes="[10, 20, 30, 40, 50, 100]"
+                :current-page="data.page"
+                :page-size="data.pageSize"
+                :page-sizes="[1, 10, 20, 30, 40, 50, 100]"
                 :size="size"
                 :disabled="disabled"
                 :background="background"

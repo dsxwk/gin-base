@@ -1030,4 +1030,7 @@ const menuList = computed(() => {
 </script>
 <style scoped lang="scss">
 @import "./index.scss";
+.layout {
+  min-width: 600px;
+}
 </style>

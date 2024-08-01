@@ -1,19 +1,15 @@
-<script setup>
-import Nav from '@views/layouts/nav.vue';
-import Main from '@components/user/index.vue';
-import Sidebar from '@views/layouts/sidebar.vue';
-import Footer from '@views/layouts/footer.vue';
-</script>
 <template>
-  <!-- Site wrapper -->
-  <div class="wrapper">
-    <Nav/>
+  <Nav/>
 
-    <Sidebar/>
+  <Sidebar/>
 
-    <Main/>
+  <Main/>
 
-    <Footer/>
-  </div>
-  <!-- ./wrapper -->
+  <Footer/>
 </template>
+<script setup>
+import Nav from '@views/layouts/nav/index.vue';
+import Main from '@views/user/index.vue';
+import Sidebar from '@views/layouts/sidebar/SubMenu.vue';
+import Footer from '@views/layouts/footer/index.vue';
+</script>

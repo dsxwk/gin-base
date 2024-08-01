@@ -1,5 +1,5 @@
 // 导入需要的组件
-import Index from '@views/index.vue';
+import Index from '@views/layouts/index.vue';
 import Login from '@views/login/login.vue';
 import UserIndex from '@views/user/index.vue';
 

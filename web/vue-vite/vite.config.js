@@ -19,7 +19,6 @@ export default defineConfig(({mode}) => {
         // 设置路径别名
         '@app': '/app',
         '@views': '/views',
-        '@public': '/public',
         '@routers': '/routers',
         '@modules': '/app/modules',
         '@services': '/app/services',
@@ -27,6 +26,8 @@ export default defineConfig(({mode}) => {
         '@layouts': '/views/layouts',
         '@utils': '/utils',
         '@config': '/config',
+        '@assets': '/src/assets',
+        '@styles': '/src/styles',
       }
     },
   }

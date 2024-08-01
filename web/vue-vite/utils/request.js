@@ -1,6 +1,6 @@
-import toast from "@utils/toast/toast";
+import toast from "@utils/toast";
 import confs from "@config/configs";
-import pnotify from "@utils/pnotify/pnotify";
+import pnotify from "@utils/pnotify/alert";
 
 let apiUrl = confs.apiUrl;
 let data = null;

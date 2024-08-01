@@ -7,8 +7,9 @@
       <ThemeSetting id="themeSetting" />
       <Message id="message" />
       -->
-      <Fullscreen id="fullscreen" />
+      <FontSet/>
       <Language id="language" />
+      <Fullscreen id="fullscreen" />
     </div>
     <span class="username">超级管理员</span>
     <el-dropdown trigger="click">
@@ -34,6 +35,7 @@
 <script setup>
 import Fullscreen from '@views/layouts/nav/right/fullScreen/index.vue';
 import Language from '@views/layouts/nav/right/language/index.vue';
+import FontSet from '@views/layouts/nav/right/fontSet/index.vue';
 const openDialog = (name) => {
 
 }

@@ -1,5 +1,5 @@
 import {fileURLToPath, URL} from 'node:url';
-
+// import { resolve } from "path";
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 
@@ -28,6 +28,7 @@ export default defineConfig(({mode}) => {
         '@config': '/config',
         '@assets': '/src/assets',
         '@styles': '/src/styles',
+        // "@": resolve(__dirname, "./"),
       }
     },
   }

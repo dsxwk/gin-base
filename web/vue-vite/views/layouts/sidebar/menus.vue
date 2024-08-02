@@ -7,7 +7,8 @@
         </el-icon>
         <span class="sle">{{ items.meta.title }}</span>
       </template>
-      <SubMenu :menuList="items.children" />
+      <!-- 递归组件名需与文件名一致 -->
+      <Menus :menuList="items.children" />
     </el-sub-menu>
     <el-menu-item v-else :index="items.path" @click="handleClickMenu(items)">
       <el-icon v-if="items.meta?.icon">
@@ -31,12 +32,14 @@ defineProps({
 
 const router = useRouter();
 const handleClickMenu = (items) => {
-  if (items.meta.isLink) return window.open(items.meta.isLink, "_blank");
-  router.push(items.path);
+  if (items.meta.isLink) {
+    return window.open(items.meta.isLink, "_blank");
+  } else {
+    router.push(items.path);
+  }
 };
 </script>
 <style lang="scss">
-@import "./index.scss";
 .el-sub-menu .el-sub-menu__title:hover {
   color: var(--el-menu-hover-text-color) !important;
   background-color: transparent !important;
@@ -54,8 +57,10 @@ const handleClickMenu = (items) => {
     color: var(--el-menu-hover-text-color);
   }
   &.is-active {
-    color: var(--el-menu-active-color) !important;
-    background-color: var(--el-menu-active-bg-color) !important;
+    /*color: var(--el-menu-active-color) !important;*/
+    color: #009688 !important;
+    /*background-color: var(--el-menu-active-bg-color) !important;*/
+    background-color: #e6f5f3 !important;
     &::before {
       position: absolute;
       top: 0;

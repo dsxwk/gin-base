@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/node": "^22.0.2",
     "@wangeditor/editor": "^5.1.23",
     "dotenv": "^16.4.5",
     "element-plus": "^2.7.7",

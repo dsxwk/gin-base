@@ -6,7 +6,7 @@
           <img class="logo-img" src="/public/favicon.ico" alt="logo"/>
           <span class="logo-text">后台管理</span>
         </div>
-        <NavLeft :isCollapse="isCollapse"/>
+        <NavLeft :isCollapse="isCollapse" @toggle-collapse="handleToggleCollapse"/>
       </div>
       <div class="header-ri">
         <NavRight/>
@@ -18,9 +18,9 @@
           <el-scrollbar>
             <el-menu
                 :router="false"
-                :default-active="activeMenu"
+                :default-active="'/'"
                 :collapse="isCollapse"
-                :unique-opened="accordion"
+                :unique-opened="false"
                 :collapse-transition="false"
             >
               <Sidebar :menuList="menuList"/>
@@ -35,16 +35,14 @@
   </el-container>
 </template>
 <script setup>
-import NavLeft from '@views/layouts/nav/left/index.vue';
-import NavRight from '@views/layouts/nav/right/index.vue';
-import Main from '@views/layouts/main/index.vue';
-import Sidebar from '@views/layouts/sidebar/SubMenu.vue';
+import NavLeft from '@layouts/nav/left/index.vue';
+import NavRight from '@layouts/nav/right/index.vue';
+import Main from '@layouts/main/index.vue';
+import Sidebar from '@layouts/sidebar/SubMenu.vue';
 
 import {computed, ref} from 'vue';
 
-const activeMenu = ref('/');
 const isCollapse = ref(false);
-const accordion = ref(false);
 const menuList = computed(() => {
   return [
     {
@@ -1027,6 +1025,9 @@ const menuList = computed(() => {
     }
   ];
 });
+function handleToggleCollapse() {
+  isCollapse.value = !isCollapse.value;
+}
 </script>
 <style scoped lang="scss">
 @import "./index.scss";

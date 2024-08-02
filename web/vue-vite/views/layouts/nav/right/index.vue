@@ -33,9 +33,9 @@
   </div>
 </template>
 <script setup>
-import Fullscreen from '@views/layouts/nav/right/fullScreen/index.vue';
-import Language from '@views/layouts/nav/right/language/index.vue';
-import FontSet from '@views/layouts/nav/right/fontSet/index.vue';
+import Fullscreen from '@layouts/nav/right/fullScreen/index.vue';
+import Language from '@layouts/nav/right/language/index.vue';
+import FontSet from '@layouts/nav/right/fontSet/index.vue';
 const openDialog = (name) => {
 
 }

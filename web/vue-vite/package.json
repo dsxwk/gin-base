@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --host --port 3001 --mode development",
-    "production": "vite --host --port 3001 --mode production",
+    "dev": "vite --host --port 3000 --mode development",
+    "production": "vite --host --port 3000 --mode production",
     "build": "vite build --mode development",
     "build-production": "vite build --mode production",
     "preview": "vite preview"

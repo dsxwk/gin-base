@@ -6,23 +6,16 @@
   </div>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { defineProps, defineEmits } from 'vue';
 
-const data = defineProps({
-  isCollapse: {
-    type: Boolean,
-    default: false,
-  },
-})
+defineProps({
+  isCollapse: Boolean
+});
 
-const isCollapse = ref(data.isCollapse);
+const emit = defineEmits(['toggle-collapse']);
 
 function changeCollapse() {
-  if (isCollapse.value) {
-    isCollapse.value = false;
-  } else {
-    isCollapse.value = true;
-  }
+  emit('toggle-collapse');
 }
 </script>
 <style scoped lang="scss">

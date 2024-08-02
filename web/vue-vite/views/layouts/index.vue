@@ -1,41 +1,39 @@
 <template>
   <el-container class="layout">
-    <el-header>
-      <div class="header-lf mask-image">
+    <el-aside>
+      <div class="aside-box" :style="{ width: isCollapse ? '65px' : '210px' }">
         <div class="logo flx-center">
-          <img class="logo-img" src="/public/favicon.ico" alt="logo"/>
-          <span class="logo-text">后台管理</span>
+          <img class="logo-img" src="/favicon.ico" alt="logo"/>
+          <span v-show="!isCollapse" @show-span="showSpan" class="logo-text">后台管理</span>
         </div>
-        <NavLeft :isCollapse="isCollapse" @toggle-collapse="handleToggleCollapse"/>
+        <el-scrollbar>
+          <el-menu
+              :router="false"
+              :default-active="activeMenu"
+              :collapse="isCollapse"
+              :unique-opened="false"
+              :collapse-transition="false"
+          >
+            <Sidebar :menuList="menuList"/>
+          </el-menu>
+        </el-scrollbar>
       </div>
-      <div class="header-ri">
-        <NavRight/>
-      </div>
-    </el-header>
-    <el-container class="classic-content">
-      <el-aside>
-        <div class="aside-box" :style="{ width: isCollapse ? '65px' : '210px' }">
-          <el-scrollbar>
-            <el-menu
-                :router="false"
-                :default-active="activeMenu"
-                :collapse="isCollapse"
-                :unique-opened="false"
-                :collapse-transition="false"
-            >
-              <Sidebar :menuList="menuList"/>
-            </el-menu>
-          </el-scrollbar>
+    </el-aside>
+    <el-container>
+      <el-header>
+        <div class="header-lf mask-image">
+          <NavLeft :isCollapse="isCollapse" @toggle-collapse="handleToggleCollapse"/>
         </div>
-      </el-aside>
-      <el-container class="classic-main">
-        <slot name="main">
-          <Main/>
-        </slot>
-        <el-footer>
-          <Footer />
-        </el-footer>
-      </el-container>
+        <div class="header-ri">
+          <NavRight/>
+        </div>
+      </el-header>
+      <slot name="main">
+        <Main/>
+      </slot>
+      <el-footer>
+        <Footer />
+      </el-footer>
     </el-container>
   </el-container>
 </template>
@@ -59,16 +57,10 @@ const activeMenu = computed(() => {
 function handleToggleCollapse() {
   isCollapse.value = !isCollapse.value;
 }
+function showSpan() {
+  isCollapse.value = !isCollapse.value;
+}
 </script>
 <style scoped lang="scss">
 @import "./index.scss";
-.layout {
-  min-width: 600px;
-}
-.el-main {
-  box-sizing: border-box;
-  padding: 10px 12px;
-  overflow-x: hidden;
-  background-color: var(--el-bg-color-page);
-}
 </style>

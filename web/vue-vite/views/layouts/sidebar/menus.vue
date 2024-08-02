@@ -41,7 +41,7 @@ const handleClickMenu = (items) => {
 </script>
 <style lang="scss">
 .el-sub-menu .el-sub-menu__title:hover {
-  color: var(--el-menu-hover-text-color) !important;
+  /*color: var(--el-menu-hover-text-color) !important;*/
   background-color: transparent !important;
 }
 .el-menu--collapse {
@@ -55,7 +55,8 @@ const handleClickMenu = (items) => {
 }
 .el-menu-item {
   &:hover {
-    color: var(--el-menu-hover-text-color);
+    /*color: var(--el-menu-hover-text-color);*/
+    color: #909399;
   }
   &.is-active {
     /*color: var(--el-menu-active-color) !important;*/

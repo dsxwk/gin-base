@@ -6,16 +6,15 @@
   </div>
 </template>
 <script setup>
-import { defineProps, defineEmits } from 'vue';
-
 defineProps({
   isCollapse: Boolean
 });
 
-const emit = defineEmits(['toggle-collapse']);
+const emit = defineEmits(['toggle-collapse', 'show-span']);
 
 function changeCollapse() {
   emit('toggle-collapse');
+  emit('show-span');
 }
 </script>
 <style scoped lang="scss">

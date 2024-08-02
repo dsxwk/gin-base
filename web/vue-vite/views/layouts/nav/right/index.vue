@@ -14,7 +14,7 @@
     <span class="username">超级管理员</span>
     <el-dropdown trigger="click">
       <div class="avatar">
-        <img src="/public/images/avatar.jpg" alt="avatar" />
+        <img src="/images/avatar.jpg" alt="avatar" />
       </div>
       <template #dropdown>
         <el-dropdown-menu>

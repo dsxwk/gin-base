@@ -67,7 +67,10 @@ const handleClickMenu = (items) => {
       bottom: 0;
       width: 4px;
       content: "";
-      background-color: var(--el-color-primary);
+      /*background-color: var(--el-color-primary);*/
+      background-color: #009688;
+      /* 新增 */
+      left: 0;
     }
   }
 }

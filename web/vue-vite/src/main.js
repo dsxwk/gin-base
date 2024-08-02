@@ -31,6 +31,12 @@ const routes = createRouter({
     routes: routers
 });
 
+routes.beforeEach((to, from, next) => {
+    // 动态标题
+    document.title = to.meta.title || '后台管理';
+    next();
+});
+
 const app = createApp(App);
 
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {

@@ -22,6 +22,7 @@ import "@styles/element.scss";
 import ElementPlus from 'element-plus';
 // element icons
 import * as ElementPlusIconsVue from '@element-plus/icons-vue';
+import NProgress from '@utils/nprogress';
 
 import routers from '@routers/router';
 import {createRouter, createWebHistory} from "vue-router";
@@ -32,9 +33,25 @@ const routes = createRouter({
 });
 
 routes.beforeEach((to, from, next) => {
+    NProgress.start();
     // 动态标题
     document.title = to.meta.title || '后台管理';
     next();
+});
+
+/**
+ * @description 路由跳转错误
+ * */
+routes.onError(error => {
+    NProgress.done();
+    console.warn("路由错误", error.message);
+});
+
+/**
+ * @description 路由跳转结束
+ * */
+routes.afterEach(() => {
+    NProgress.done();
 });
 
 const app = createApp(App);

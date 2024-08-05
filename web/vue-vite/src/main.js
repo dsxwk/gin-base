@@ -60,7 +60,7 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
 }
 
-if (import.meta.env.VITE_V_CONSOLE === "true" && screen.width <= 768) {
+if (import.meta.env.VITE_V_CONSOLE === "true" && /Mobi|Android/i.test(navigator.userAgent)) {
     import("vconsole").then((module) => {
         new module.default();
     });

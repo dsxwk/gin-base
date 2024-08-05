@@ -28,6 +28,11 @@
           <NavRight/>
         </div>
       </el-header>
+      <el-breadcrumb :separator-icon="ArrowRight">
+        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>用户管理</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/user' }">用户列表</el-breadcrumb-item>
+      </el-breadcrumb>
       <slot name="main">
         <Main/>
       </slot>
@@ -45,6 +50,7 @@ import Main from '@layouts/main/index.vue';
 import Sidebar from '@layouts/sidebar/menus.vue';
 import Footer from '@views/layouts/footer/index.vue';
 import menuJson from '@utils/data/menu/index.json';
+import { ArrowRight } from '@element-plus/icons-vue';
 
 import {computed, ref} from 'vue';
 
@@ -63,4 +69,12 @@ function showSpan() {
 </script>
 <style scoped lang="scss">
 @import "./index.scss";
+@import '@layouts/main/index.scss';
+.el-breadcrumb {
+  height: 55px;
+  line-height: 55px;
+  padding-left: 12px;
+  font-size: 15px;
+  border-bottom: 1px solid #e6e6e6;
+}
 </style>

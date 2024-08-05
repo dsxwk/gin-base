@@ -2,12 +2,12 @@
   <Layout>
     <template v-slot:main>
       <el-main>
-        <UserList/>
+        <Home/>
       </el-main>
     </template>
   </Layout>
 </template>
 <script setup>
 import Layout from '@layouts/index.vue';
-import UserList from '@components/user/index.vue';
+import Home from '@components/home/index.vue';
 </script>

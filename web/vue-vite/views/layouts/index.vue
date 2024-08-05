@@ -49,7 +49,7 @@ import NavRight from '@layouts/nav/right/index.vue';
 import Main from '@layouts/main/index.vue';
 import Sidebar from '@layouts/sidebar/menus.vue';
 import Footer from '@views/layouts/footer/index.vue';
-import menuJson from '@utils/data/menu/index.json';
+import { menuJson } from '@utils/data/menu';
 import { ArrowRight } from '@element-plus/icons-vue';
 
 import {computed, ref} from 'vue';

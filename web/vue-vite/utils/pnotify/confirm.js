@@ -5,7 +5,7 @@ import '@pnotify/countdown/dist/PNotifyCountdown.css';
 
 defaultModules.set(PNotifyConfirm, {});
 
-export default function pnotifyConfirm(text = 'Are you sure?') {
+const pnotifyConfirm = function pnotifyConfirm(text = 'Are you sure?') {
     return new Promise((resolve, reject) => {
         alert({
             text: text,
@@ -44,4 +44,6 @@ export default function pnotifyConfirm(text = 'Are you sure?') {
             ])
         });
     });
-}
+};
+
+export default pnotifyConfirm;

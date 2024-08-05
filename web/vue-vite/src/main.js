@@ -60,6 +60,12 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
 }
 
+if (import.meta.env.VITE_V_CONSOLE === "true" && screen.width <= 768) {
+    import("vconsole").then((module) => {
+        new module.default();
+    });
+}
+
 app.use(routes);
 app.use(ElementPlus);
 app.mount('#app');

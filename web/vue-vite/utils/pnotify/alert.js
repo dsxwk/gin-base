@@ -6,7 +6,7 @@ import '@pnotify/core/dist/BrightTheme.css';
 defaultModules.set(PNotifyCountdown, {});
 
 // pnotify 弹窗插件
-export default function pnotify(text, type, title, delay) {
+const pnotify = function pnotify(text, type, title, delay) {
     let opts = {
         text: text ? text : '',
         type: type ? type : 'success',
@@ -25,4 +25,6 @@ export default function pnotify(text, type, title, delay) {
     };
 
     return alert(opts);
-}
+};
+
+export default pnotify;

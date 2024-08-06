@@ -28,7 +28,7 @@ import NProgress from '@utils/nprogress';
 import errorHandler from '@utils/errorHandler';
 
 import routers from '@routers/router';
-import {createRouter, createWebHistory} from "vue-router";
+import {createRouter, createWebHistory} from 'vue-router';
 
 const routes = createRouter({
     history: createWebHistory(),

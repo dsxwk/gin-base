@@ -2,7 +2,7 @@ import Cookies from 'js-cookie';
 import data from '@utils/lang/lang.json';
 // import {useRoute} from "vue-router";
 
-export class Functions {
+export default class Functions {
     /**
      * 设置cookie
      *

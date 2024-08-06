@@ -28,11 +28,8 @@
           <NavRight/>
         </div>
       </el-header>
-      <el-breadcrumb :separator-icon="ArrowRight">
-        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>用户管理</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/user' }">用户列表</el-breadcrumb-item>
-      </el-breadcrumb>
+      <Breadcrumb/>
+      <Tab/>
       <slot name="main">
         <Main/>
       </slot>
@@ -47,10 +44,11 @@ import { useRoute } from 'vue-router';
 import NavLeft from '@layouts/nav/left/index.vue';
 import NavRight from '@layouts/nav/right/index.vue';
 import Main from '@layouts/main/index.vue';
+import Breadcrumb from '@layouts/main/breadcrumb/index.vue';
+import Tab from '@layouts/main/tab/index.vue';
 import Sidebar from '@layouts/sidebar/menus.vue';
 import Footer from '@views/layouts/footer/index.vue';
 import { menuJson } from '@utils/data/menu';
-import { ArrowRight } from '@element-plus/icons-vue';
 
 import {computed, ref} from 'vue';
 

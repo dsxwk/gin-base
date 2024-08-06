@@ -21,14 +21,14 @@ func (s Jwt) JwtMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.Request.Header.Get("token")
 		if token == "" || token == "null" {
-			c.JSON(http.StatusOK, global.Response{global.Error, "请求未授权！", []string{}})
+			c.JSON(http.StatusOK, global.Response{global.Unauthorized, "请求未授权！", []string{}})
 			c.Abort()
 			return
 		}
 
 		data, err := s.Decode(token)
 		if err != nil {
-			c.JSON(http.StatusOK, global.Response{global.Error, err.Error(), []string{}})
+			c.JSON(http.StatusOK, global.Response{global.Unauthorized, err.Error(), []string{}})
 			c.Abort()
 			return
 		}

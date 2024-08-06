@@ -41,8 +41,13 @@ type PageData struct {
 
 // 错误码
 const (
-	Success     = 0
-	Error       = 1
+	// 成功
+	Success = 0
+	// 参数错误
+	ArgsError = 400
+	// 请求未授权
+	Unauthorized = 401
+	// 系统错误
 	SystemError = 500
 )
 

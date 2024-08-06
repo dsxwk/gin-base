@@ -21,7 +21,6 @@ const errorHandler = (error) => {
     };
     let errorName = errorMap[error.name] || "未知错误";
 
-    console.log(error, errorName);
     /*ElNotification({
         title: errorName,
         message: error,
@@ -29,7 +28,7 @@ const errorHandler = (error) => {
         duration: 3000
     });*/
 
-    // pnotify(errorName, 'error');
+    // pnotify(error, 'error');
 };
 
 export default errorHandler;

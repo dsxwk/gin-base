@@ -37,20 +37,20 @@ func (s *LoginController) Login(c *gin.Context) {
 	// 验证
 	err = validate.GetLoginValidate(loginValidate, "delete")
 	if err != nil {
-		s.ApiResponse(c, global.Error, err.Error(), nil)
+		s.ApiResponse(c, global.ArgsError, err.Error(), nil)
 		return
 	}
 
 	userModel, err := loginService.Login(req.Username, req.Password)
 	if err != nil {
 		global.Log.Error(err.Error())
-		s.ApiResponse(c, global.Error, err.Error(), nil)
+		s.ApiResponse(c, global.ArgsError, err.Error(), nil)
 		return
 	}
 
 	token, exp, err := jwt.Encode(userModel.ID, 4*60*60)
 	if err != nil {
-		s.ApiResponse(c, global.Error, err.Error(), nil)
+		s.ApiResponse(c, global.ArgsError, err.Error(), nil)
 		return
 	}
 

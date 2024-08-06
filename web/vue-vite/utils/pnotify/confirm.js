@@ -5,11 +5,15 @@ import '@pnotify/countdown/dist/PNotifyCountdown.css';
 
 defaultModules.set(PNotifyConfirm, {});
 
-const pnotifyConfirm = function pnotifyConfirm(text = 'Are you sure?') {
+const pnotifyConfirm = function pnotifyConfirm(text = 'Are you sure?', type, title, delay) {
     return new Promise((resolve, reject) => {
         alert({
             text: text,
             // icon: 'fas fa-question-circle',
+            type: type ? type : 'notice',
+            title: title ? title : '提示信息',
+            // 时间
+            delay: delay ? delay : 2000,
             hide: false,
             closer: false,
             sticker: false,

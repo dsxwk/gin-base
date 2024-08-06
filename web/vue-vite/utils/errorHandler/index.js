@@ -1,5 +1,5 @@
 import { ElNotification } from 'element-plus';
-import pnotify from '@utils/pnotify/alert';
+// import pnotify from '@utils/pnotify/alert';
 
 /**
  * @description 全局代码错误捕捉
@@ -21,12 +21,12 @@ const errorHandler = (error) => {
     };
     let errorName = errorMap[error.name] || "未知错误";
 
-    /*ElNotification({
+    ElNotification({
         title: errorName,
         message: error,
         type: "error",
         duration: 3000
-    });*/
+    });
 
     // pnotify(error, 'error');
 };

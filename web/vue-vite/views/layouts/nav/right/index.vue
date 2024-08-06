@@ -1,7 +1,6 @@
 <template>
   <div class="tool-bar-ri">
     <div class="header-icon">
-      <FontSet/>
       <Language id="language" />
       <SearchMenu id="searchMenu" />
       <Fullscreen id="fullscreen" />
@@ -31,7 +30,6 @@
 import Fullscreen from '@layouts/nav/right/fullScreen/index.vue';
 import Language from '@layouts/nav/right/language/index.vue';
 import SearchMenu from '@layouts/nav/right/searchMenu/index.vue';
-import FontSet from '@layouts/nav/right/fontSet/index.vue';
 const openDialog = (name) => {
 
 }

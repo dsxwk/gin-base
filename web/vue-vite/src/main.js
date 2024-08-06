@@ -22,7 +22,10 @@ import "@styles/element.scss";
 import ElementPlus from 'element-plus';
 // element icons
 import * as ElementPlusIconsVue from '@element-plus/icons-vue';
+// nprogress
 import NProgress from '@utils/nprogress';
+// errorHandler
+import errorHandler from '@utils/errorHandler';
 
 import routers from '@routers/router';
 import {createRouter, createWebHistory} from "vue-router";
@@ -55,6 +58,8 @@ routes.afterEach(() => {
 });
 
 const app = createApp(App);
+
+app.config.errorHandler = errorHandler;
 
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)

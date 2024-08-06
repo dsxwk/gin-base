@@ -48,7 +48,7 @@ routes.beforeEach((to, from, next) => {
  * */
 routes.onError(error => {
     NProgress.done();
-    console.warn("路由错误", error.message);
+    console.warn('路由错误', error.message);
 });
 
 /**
@@ -66,7 +66,7 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
 }
 
-if (import.meta.env.VITE_V_CONSOLE === "true" && /Mobi|Android/i.test(navigator.userAgent)) {
+if (import.meta.env.VITE_V_CONSOLE === 'true' && /Mobi|Android/i.test(navigator.userAgent)) {
     import("vconsole").then((module) => {
         new module.default();
     });

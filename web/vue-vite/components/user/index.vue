@@ -1,7 +1,8 @@
 <template>
-  用户数据
+  <Table/>
 </template>
 <script setup>
+import Table from '@/components/table/index.vue';
 import {onMounted} from 'vue';
 import userModule from '@/app/modules/admin/user';
 import createService from '@/utils/service';

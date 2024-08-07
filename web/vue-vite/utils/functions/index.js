@@ -1,36 +1,35 @@
 import Cookies from 'js-cookie';
 import data from '@utils/lang/lang.json';
-// import {useRoute} from "vue-router";
 
 export default class Functions {
     /**
      * 设置cookie
      *
-     * @param name
+     * @param key
      * @param value
      * @param expires
      */
-    setCookie(name, value, expires = 1) {
-        Cookies.set(name, value, {expires: expires, path: '/'})
+    setCookie(key, value, expires = 1) {
+        Cookies.set(key, value, {expires: expires, path: '/'})
     };
 
     /**
      * 获取cookie
      *
-     * @param name
+     * @param key
      * @returns {*}
      */
-    getCookie(name) {
-        return Cookies.get(name)
+    getCookie(key) {
+        return Cookies.get(key)
     };
 
     /**
      * 删除cookie
      *
-     * @param name
+     * @param key
      */
-    delCookie(name) {
-        Cookies.remove(name, {path: '/'})
+    delCookie(key) {
+        Cookies.remove(key, {path: '/'})
     };
 
     /**
@@ -43,30 +42,35 @@ export default class Functions {
     /**
      * 删除本地存储
      *
-     * @param name
+     * @param key
      */
-    removeLocalStorage(name) {
-        localStorage.removeItem(name)
+    removeLocalStorage(key) {
+        localStorage.removeItem(key)
     };
 
     /**
      * 获取本地存储
      *
-     * @param name
+     * @param key
      * @returns {string}
      */
-    getLocalStorage(name) {
-        return localStorage.getItem(name)
+    getLocalStorage(key) {
+        const value = localStorage.getItem(key);
+        try {
+            return JSON.parse(localStorage.getItem(key));
+        } catch (error) {
+            return value;
+        }
     };
 
     /**
      * 设置本地存储
      *
-     * @param name
+     * @param key
      * @param value
      */
-    setLocalStorage(name, value) {
-        localStorage.setItem(name, value)
+    setLocalStorage(key, value) {
+        localStorage.setItem(key, JSON.stringify(value));
     };
 
     /**
@@ -90,6 +94,76 @@ export default class Functions {
     }
 
     /**
+     * @description 判断数据类型
+     * @param {*} val 需要判断类型的数据
+     * @returns {String}
+     */
+    isType(val) {
+        if (val === null) {
+            return 'null'
+        }
+        if (typeof val !== 'object') {
+            return typeof val
+        } else {
+            return Object.prototype.toString.call(val).slice(8, -1).toLocaleLowerCase()
+        }
+    }
+
+    /**
+     * @description 生成唯一 uuid
+     * @returns {String}
+     */
+    generateUUID() {
+        let uuid = '';
+        for (let i = 0; i < 32; i++) {
+            let random = (Math.random() * 16) | 0;
+            if (i === 8 || i === 12 || i === 16 || i === 20) uuid += '-';
+            uuid += (i === 12 ? 4 : i === 16 ? (random & 3) | 8 : random).toString(16);
+        }
+        return uuid;
+    }
+
+    /**
+     * 判断两个对象是否相同
+     * @param {Object} a 要比较的对象一
+     * @param {Object} b 要比较的对象二
+     * @returns {Boolean} 相同返回 true，反之 false
+     */
+    isObjectValueEqual(a, b) {
+        if (!a || !b) return false;
+        let aProps = Object.getOwnPropertyNames(a);
+        let bProps = Object.getOwnPropertyNames(b);
+        if (aProps.length != bProps.length) return false;
+        for (let i = 0; i < aProps.length; i++) {
+            let propName = aProps[i];
+            let propA = a[propName];
+            let propB = b[propName];
+            if (!b.hasOwnProperty(propName)) return false;
+            if (propA instanceof Object) {
+                if (!isObjectValueEqual(propA, propB)) return false;
+            } else if (propA !== propB) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @description 获取浏览器默认语言
+     * @returns {String}
+     */
+    getBrowserLang() {
+        let browserLang = navigator.language ? navigator.language : navigator.browserLanguage;
+        let defaultBrowserLang = '';
+        if (['cn', 'zh', 'zh-cn'].includes(browserLang.toLowerCase())) {
+            defaultBrowserLang = 'zh-cn';
+        } else {
+            defaultBrowserLang = 'en-us';
+        }
+        return defaultBrowserLang;
+    }
+
+    /**
      * 获取url参数
      *
      * @param key
@@ -99,9 +173,9 @@ export default class Functions {
         let url = window.location.search;
         if (url.indexOf('?') > -1) {
             var query = url.substring(url.indexOf('?') + 1);
-            var vars = query.split("&");
+            var vars = query.split('&');
             for (var i = 0; i < vars.length; i++) {
-                var name = vars[i].split("=");
+                var name = vars[i].split('=');
                 if (name[0] == key) {
                     return name[1]
                 }

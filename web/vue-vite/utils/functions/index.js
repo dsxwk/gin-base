@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import data from '@utils/lang/lang.json';
+import data from '@/utils/lang/lang.json';
 
 export default class Functions {
     /**

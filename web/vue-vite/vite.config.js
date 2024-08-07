@@ -39,5 +39,9 @@ export default defineConfig(({mode}) => {
       // 配置代理
       // proxy: proxy
     },
+    // plus
+    optimizeDeps: {
+      include: []
+    }
   }
 });

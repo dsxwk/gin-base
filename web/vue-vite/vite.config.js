@@ -1,4 +1,4 @@
-import { resolve } from "path";
+import { resolve } from 'path';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 // import { createProxy } from './utils/proxy';
@@ -20,18 +20,18 @@ export default defineConfig(({mode}) => {
     ],
     resolve: {
       alias: {
-        "@": resolve(__dirname, "./"),
+        '@': resolve(__dirname, './'),
       }
     },
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: `@import "@/styles/var.scss";`
+          additionalData: `@import '@/styles/var.scss';`
         }
       }
     },
     server: {
-      host: "0.0.0.0",
+      host: '0.0.0.0',
       port: port,
       open: open,
       // 启用cros

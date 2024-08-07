@@ -2,13 +2,13 @@ import { createApp } from 'vue';
 import App from '../App.vue';
 import {useRouter, useRoute} from 'vue-router';
 // reset style sheet
-import "@styles/reset.scss";
+import "@/src/styles/reset.scss";
 // CSS common style sheet
-import "@styles/common.scss";
+import "@/src/styles/common.scss";
 // iconfont css
-import "@assets/iconfont/iconfont.scss";
+import "@/src/assets/iconfont/iconfont.scss";
 // font css
-import "@assets/fonts/font.scss";
+import "@/src/assets/fonts/font.scss";
 // element css
 import 'element-plus/dist/index.css';
 // element dark css
@@ -16,19 +16,19 @@ import "element-plus/theme-chalk/dark/css-vars.css";
 // element dark css
 import "element-plus/theme-chalk/dark/css-vars.css";
 // custom element dark css
-import "@styles/element-dark.scss";
+import "@/src/styles/element-dark.scss";
 // custom element css
-import "@styles/element.scss";
+import "@/src/styles/element.scss";
 // element plus
 import ElementPlus from 'element-plus';
 // element icons
 import * as ElementPlusIconsVue from '@element-plus/icons-vue';
 // nprogress
-import NProgress from '@utils/nprogress';
+import NProgress from '@/utils/nprogress';
 // errorHandler
-import errorHandler from '@utils/errorHandler';
+import errorHandler from '@/utils/errorHandler';
 
-import routers from '@routers/router';
+import routers from '@/routers/router';
 import {createRouter, createWebHistory} from 'vue-router';
 
 const routes = createRouter({

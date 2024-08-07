@@ -37,7 +37,7 @@ import { ref, computed, nextTick, watch, onMounted, onUnmounted } from 'vue';
 import { Search } from '@element-plus/icons-vue';
 import { useRouter } from 'vue-router';
 import { useDebounceFn } from '@vueuse/core';
-import { menuJson } from '@utils/data/menu';
+import { menuJson } from '@/utils/data/menu';
 
 const router = useRouter();
 const menuList = computed(() => (menuJson));

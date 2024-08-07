@@ -6,7 +6,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import screenfull from 'screenfull';
-import pnotify from '@utils/pnotify/alert';
+import pnotify from '@/utils/pnotify/alert';
 const isFullscreen = ref(screenfull.isFullscreen);
 const isMobile = ref(false);
 

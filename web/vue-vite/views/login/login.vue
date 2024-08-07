@@ -44,11 +44,11 @@
 import { ref, reactive, onBeforeUnmount } from 'vue';
 import { CircleClose, UserFilled, Sunny, Moon } from '@element-plus/icons-vue';
 import { useRouter } from 'vue-router';
-import loginModule from '@modules/admin/login';
-import createService from '@utils/service';
-import request from '@utils/request';
-import Funcs from '@utils/functions';
-import pnotify from '@utils/pnotify/alert';
+import loginModule from '@/app/modules/admin/login';
+import createService from '@/utils/service';
+import request from '@/utils/request';
+import Funcs from '@/utils/functions';
+import pnotify from '@/utils/pnotify/alert';
 
 const funcs = new Funcs();
 const router = useRouter();

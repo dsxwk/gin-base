@@ -8,6 +8,6 @@
   </Layout>
 </template>
 <script setup>
-import Layout from '@layouts/index.vue';
-import UserList from '@components/user/index.vue';
+import Layout from '@/views/layouts/index.vue';
+import UserList from '@/components/user/index.vue';
 </script>

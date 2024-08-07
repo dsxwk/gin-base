@@ -1,5 +1,5 @@
-import {fileURLToPath, URL} from 'node:url';
-// import { resolve } from "path";
+// import {fileURLToPath, URL} from 'node:url';
+import { resolve } from "path";
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 
@@ -15,7 +15,7 @@ export default defineConfig(({mode}) => {
     ],
     resolve: {
       alias: {
-        '@': fileURLToPath(new URL('./src', import.meta.url)),
+        /*'@': fileURLToPath(new URL('./src', import.meta.url)),
         // 设置路径别名
         '@app': '/app',
         '@views': '/views',
@@ -27,8 +27,8 @@ export default defineConfig(({mode}) => {
         '@utils': '/utils',
         '@config': '/config',
         '@assets': '/src/assets',
-        '@styles': '/src/styles',
-        // "@": resolve(__dirname, "./"),
+        '@styles': '/src/styles',*/
+        "@": resolve(__dirname, "./"),
       }
     },
   }

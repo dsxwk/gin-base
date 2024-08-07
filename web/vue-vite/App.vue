@@ -2,7 +2,7 @@
   <router-view></router-view>
 </template>
 <script setup>
-import toast from "@utils/toast";
+import toast from "@/utils/toast";
 toast.loading();
 setTimeout(() => {
   toast.clear();

@@ -1,7 +1,7 @@
-import toast from '@utils/toast';
-import confs from '@config/configs';
-import pnotify from '@utils/pnotify/alert';
-import pnotifyConfirm from '@utils/pnotify/confirm';
+import toast from '@/utils/toast';
+import confs from '@/config/configs';
+import pnotify from '@/utils/pnotify/alert';
+import pnotifyConfirm from '@/utils/pnotify/confirm';
 
 const apiUrl = confs.apiUrl;
 

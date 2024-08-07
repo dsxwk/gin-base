@@ -41,14 +41,14 @@
 </template>
 <script setup>
 import { useRoute } from 'vue-router';
-import NavLeft from '@layouts/nav/left/index.vue';
-import NavRight from '@layouts/nav/right/index.vue';
-import Main from '@layouts/main/index.vue';
-import Breadcrumb from '@layouts/main/breadcrumb/index.vue';
-import Tab from '@layouts/main/tab/index.vue';
-import Sidebar from '@layouts/sidebar/menus.vue';
-import Footer from '@views/layouts/footer/index.vue';
-import { menuJson } from '@utils/data/menu';
+import NavLeft from '@/views/layouts/nav/left/index.vue';
+import NavRight from '@/views/layouts/nav/right/index.vue';
+import Main from '@/views/layouts/main/index.vue';
+import Breadcrumb from '@/views/layouts/main/breadcrumb/index.vue';
+import Tab from '@/views/layouts/main/tab/index.vue';
+import Sidebar from '@/views/layouts/sidebar/menus.vue';
+import Footer from '@/views/layouts/footer/index.vue';
+import { menuJson } from '@/utils/data/menu';
 
 import {computed, ref} from 'vue';
 
@@ -67,7 +67,7 @@ function showSpan() {
 </script>
 <style scoped lang="scss">
 @import "./index.scss";
-@import '@layouts/main/index.scss';
+@import '@/views/layouts/main/index.scss';
 .el-breadcrumb {
   height: 55px;
   line-height: 55px;

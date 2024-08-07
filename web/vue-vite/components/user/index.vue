@@ -3,9 +3,9 @@
 </template>
 <script setup>
 import {onMounted} from 'vue';
-import userModule from '@modules/admin/user';
-import createService from '@utils/service';
-import request from '@utils/request';
+import userModule from '@/app/modules/admin/user';
+import createService from '@/utils/service';
+import request from '@/utils/request';
 
 const userService = createService(userModule, request);
 

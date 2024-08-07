@@ -1,13 +1,18 @@
-// import {fileURLToPath, URL} from 'node:url';
 import { resolve } from "path";
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
+import { createProxy } from './utils/proxy';
 
 import dotenv from 'dotenv';
 
 // https://vitejs.dev/config/
 export default defineConfig(({mode}) => {
-  dotenv.config({path: `.env.${mode}`}) // 加载对应环境的配置文件
+  // 加载对应环境的配置文件
+  const { parsed: env } = dotenv.config({ path: `.env.${mode}` }) || {};
+
+  const port = env?.VITE_PORT ? parseInt(env.VITE_PORT, 10) : 3000;
+  const open = env?.VITE_OPEN === 'true';
+  // const proxy = env?.VITE_PROXY ? createProxy(env.VITE_PROXY) : {};
 
   return {
     plugins: [
@@ -15,21 +20,24 @@ export default defineConfig(({mode}) => {
     ],
     resolve: {
       alias: {
-        /*'@': fileURLToPath(new URL('./src', import.meta.url)),
-        // 设置路径别名
-        '@app': '/app',
-        '@views': '/views',
-        '@routers': '/routers',
-        '@modules': '/app/modules',
-        '@services': '/app/services',
-        '@components': '/components',
-        '@layouts': '/views/layouts',
-        '@utils': '/utils',
-        '@config': '/config',
-        '@assets': '/src/assets',
-        '@styles': '/src/styles',*/
         "@": resolve(__dirname, "./"),
       }
+    },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `@import "@/styles/var.scss";`
+        }
+      }
+    },
+    server: {
+      host: "0.0.0.0",
+      port: port,
+      open: open,
+      // 启用cros
+      cors: true,
+      // 配置代理
+      // proxy: proxy
     },
   }
 });

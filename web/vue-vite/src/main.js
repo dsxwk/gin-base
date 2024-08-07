@@ -2,13 +2,13 @@ import { createApp } from 'vue';
 import App from '../App.vue';
 import {useRouter, useRoute} from 'vue-router';
 // reset style sheet
-import "@/src/styles/reset.scss";
+import "@/styles/reset.scss";
 // CSS common style sheet
-import "@/src/styles/common.scss";
+import "@/styles/common.scss";
 // iconfont css
-import "@/src/assets/iconfont/iconfont.scss";
+import "@/styles/assets/iconfont/iconfont.scss";
 // font css
-import "@/src/assets/fonts/font.scss";
+import "@/styles/assets/fonts/font.scss";
 // element css
 import 'element-plus/dist/index.css';
 // element dark css
@@ -16,9 +16,9 @@ import "element-plus/theme-chalk/dark/css-vars.css";
 // element dark css
 import "element-plus/theme-chalk/dark/css-vars.css";
 // custom element dark css
-import "@/src/styles/element-dark.scss";
+import "@/styles/element-dark.scss";
 // custom element css
-import "@/src/styles/element.scss";
+import "@/styles/element.scss";
 // element plus
 import ElementPlus from 'element-plus';
 // element icons

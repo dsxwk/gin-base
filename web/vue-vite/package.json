@@ -15,6 +15,7 @@
     "@wangeditor/editor": "^5.1.23",
     "dotenv": "^16.4.5",
     "element-plus": "^2.7.7",
+    "element-plus-table": "^1.0.7",
     "gridmanager": "^3.2.1",
     "jquery": "^3.7.1",
     "js-cookie": "^3.0.5",

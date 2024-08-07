@@ -1,7 +1,7 @@
 import { resolve } from "path";
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import { createProxy } from './utils/proxy';
+// import { createProxy } from './utils/proxy';
 
 import dotenv from 'dotenv';
 

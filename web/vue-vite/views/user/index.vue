@@ -48,7 +48,7 @@
   </TablePlus>
 </template>
 <script setup lang="tsx">
-import Layout from '@/views/layouts/index.vue';
+import Layout from '@/layouts/index.vue';
 import {onMounted, ref, reactive} from 'vue';
 import {CirclePlus, Delete, EditPen} from '@element-plus/icons-vue';
 import createService from '@/utils/service';

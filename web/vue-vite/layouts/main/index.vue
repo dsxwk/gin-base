@@ -5,7 +5,7 @@
     <router-view v-slot="{ Component, route }">
       <transition appear name="fade-transform" mode="out-in">
         <keep-alive :include="keepAliveName">
-          <component :is="createComponentWrapper(Component, route)" v-if="isRouterShow" :key="route.fullPath"/>
+          <component v-if="isRouterShow" :is="createComponentWrapper(Component, route)" :key="route.fullPath"/>
         </keep-alive>
       </transition>
     </router-view>
@@ -16,9 +16,9 @@
 </template>
 <script setup>
 import {ref, provide, h} from 'vue';
-import Breadcrumb from '@/views/layouts/main/breadcrumb/index.vue';
-import Tab from '@/views/layouts/main/tab/index.vue';
-import Footer from '@/views/layouts/footer/index.vue';
+import Breadcrumb from '@/layouts/main/breadcrumb/index.vue';
+import Tab from '@/layouts/main/tab/index.vue';
+import Footer from '@/layouts/footer/index.vue';
 import Home from '@/views/home/index.vue';
 import UserIndex from '@/views/user/index.vue';
 

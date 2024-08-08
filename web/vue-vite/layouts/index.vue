@@ -30,10 +30,10 @@
 </template>
 <script setup>
 import { useRoute } from 'vue-router';
-import NavLeft from '@/views/layouts/nav/left/index.vue';
-import NavRight from '@/views/layouts/nav/right/index.vue';
-import Main from '@/views/layouts/main/index.vue';
-import Sidebar from '@/views/layouts/sidebar/menus.vue';
+import NavLeft from '@/layouts/nav/left/index.vue';
+import NavRight from '@/layouts/nav/right/index.vue';
+import Main from '@/layouts/main/index.vue';
+import Sidebar from '@/layouts/sidebar/menus.vue';
 import { menuJson } from '@/utils/data/menu';
 
 import {computed, ref} from 'vue';

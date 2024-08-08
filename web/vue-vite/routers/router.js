@@ -9,7 +9,7 @@ const routers = [
     },
     { 
         path: '/', 
-        component: () => import('@/views/layouts/index.vue'),
+        component: () => import('@/layouts/index.vue'),
         meta: { 
             title: '首页' 
         } 
@@ -25,7 +25,7 @@ const routers = [
     // 可以继续添加其他路由配置
     { 
         path: '/:catchAll(.*)', 
-        component: import('@/views/errPage/404.vue'),
+        component: import('@/layouts/errPage/404.vue'),
         meta: { 
             title: '404 Not Found' 
         } 

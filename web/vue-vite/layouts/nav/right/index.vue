@@ -29,9 +29,9 @@
   </div>
 </template>
 <script setup>
-import Fullscreen from '@/views/layouts/nav/right/fullScreen/index.vue';
-import Language from '@/views/layouts/nav/right/language/index.vue';
-import SearchMenu from '@/views/layouts/nav/right/searchMenu/index.vue';
+import Fullscreen from '@/layouts/nav/right/fullScreen/index.vue';
+import Language from '@/layouts/nav/right/language/index.vue';
+import SearchMenu from '@/layouts/nav/right/searchMenu/index.vue';
 const openDialog = (name) => {
 
 }

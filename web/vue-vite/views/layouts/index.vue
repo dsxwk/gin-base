@@ -33,9 +33,6 @@
       <slot name="main">
         <Main/>
       </slot>
-      <el-footer>
-        <Footer />
-      </el-footer>
     </el-container>
   </el-container>
 </template>
@@ -47,7 +44,6 @@ import Main from '@/views/layouts/main/index.vue';
 import Breadcrumb from '@/views/layouts/main/breadcrumb/index.vue';
 import Tab from '@/views/layouts/main/tab/index.vue';
 import Sidebar from '@/views/layouts/sidebar/menus.vue';
-import Footer from '@/views/layouts/footer/index.vue';
 import { menuJson } from '@/utils/data/menu';
 
 import {computed, ref} from 'vue';

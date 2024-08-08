@@ -16,7 +16,7 @@
  * */
 export const menuJson = [
   {
-    "path": "/",
+    "path": "/home",
     "name": "home",
     "component": "@/views/user/index.vue",
     "meta": {
@@ -30,9 +30,9 @@ export const menuJson = [
     }
   },
   {
-    "path": "/user",
+    "path": "",
     "name": "user",
-    "redirect": "/user",
+    "redirect": "/user/list",
     "meta": {
       "icon": "User",
       "title": "用户管理",

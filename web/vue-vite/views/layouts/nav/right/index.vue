@@ -1,29 +1,31 @@
 <template>
-  <div class="tool-bar-ri">
-    <div class="header-icon">
-      <Language id="language" />
-      <SearchMenu id="searchMenu" />
-      <Fullscreen id="fullscreen" />
-    </div>
-    <span class="username">超级管理员</span>
-    <el-dropdown trigger="click">
-      <div class="avatar">
-        <img src="/images/avatar.jpg" alt="avatar" />
+  <div class="header-ri">
+    <div class="tool-bar-ri">
+      <div class="header-icon">
+        <Language id="language" />
+        <SearchMenu id="searchMenu" />
+        <Fullscreen id="fullscreen" />
       </div>
-      <template #dropdown>
-        <el-dropdown-menu>
-          <el-dropdown-item @click="openDialog('infoRef')">
-            <el-icon><User /></el-icon>个人信息
-          </el-dropdown-item>
-          <el-dropdown-item @click="openDialog('passwordRef')">
-            <el-icon><Edit /></el-icon>修改密码
-          </el-dropdown-item>
-          <el-dropdown-item divided @click="logout">
-            <el-icon><SwitchButton /></el-icon>退出登录
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </el-dropdown>
+      <span class="username">超级管理员</span>
+      <el-dropdown trigger="click">
+        <div class="avatar">
+          <img src="/images/avatar.jpg" alt="avatar" />
+        </div>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item @click="openDialog('infoRef')">
+              <el-icon><User /></el-icon>个人信息
+            </el-dropdown-item>
+            <el-dropdown-item @click="openDialog('passwordRef')">
+              <el-icon><Edit /></el-icon>修改密码
+            </el-dropdown-item>
+            <el-dropdown-item divided @click="logout">
+              <el-icon><SwitchButton /></el-icon>退出登录
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+    </div>
   </div>
 </template>
 <script setup>

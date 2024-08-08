@@ -1,8 +1,10 @@
 <template>
-  <div class="tool-bar-lf">
-    <el-icon class="collapse-icon" @click="changeCollapse">
-      <component :is="isCollapse ? 'expand' : 'fold'"></component>
-    </el-icon>
+  <div class="header-lf mask-image">
+    <div class="tool-bar-lf">
+      <el-icon class="collapse-icon" @click="changeCollapse">
+        <component :is="isCollapse ? 'expand' : 'fold'"></component>
+      </el-icon>
+    </div>
   </div>
 </template>
 <script setup>

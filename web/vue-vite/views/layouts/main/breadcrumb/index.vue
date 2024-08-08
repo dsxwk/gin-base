@@ -8,3 +8,6 @@
 <script setup>
 import { ArrowRight } from '@element-plus/icons-vue';
 </script>
+<style lang="scss" scoped>
+@import './index.scss';
+</style>

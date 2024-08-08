@@ -1,5 +1,5 @@
-import "lbl-toast/dist/index.css";
-import Toast from "lbl-toast";
+import 'lbl-toast/dist/index.css';
+import Toast from 'lbl-toast';
 
 let body = document.querySelector('body');
 

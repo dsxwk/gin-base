@@ -21,18 +21,10 @@
     </el-aside>
     <el-container>
       <el-header>
-        <div class="header-lf mask-image">
-          <NavLeft :isCollapse="isCollapse" @toggle-collapse="handleToggleCollapse"/>
-        </div>
-        <div class="header-ri">
-          <NavRight/>
-        </div>
+        <NavLeft :isCollapse="isCollapse" @toggle-collapse="handleToggleCollapse"/>
+        <NavRight/>
       </el-header>
-      <Breadcrumb/>
-      <Tab/>
-      <slot name="main">
-        <Main/>
-      </slot>
+      <Main/>
     </el-container>
   </el-container>
 </template>
@@ -41,8 +33,6 @@ import { useRoute } from 'vue-router';
 import NavLeft from '@/views/layouts/nav/left/index.vue';
 import NavRight from '@/views/layouts/nav/right/index.vue';
 import Main from '@/views/layouts/main/index.vue';
-import Breadcrumb from '@/views/layouts/main/breadcrumb/index.vue';
-import Tab from '@/views/layouts/main/tab/index.vue';
 import Sidebar from '@/views/layouts/sidebar/menus.vue';
 import { menuJson } from '@/utils/data/menu';
 
@@ -63,12 +53,4 @@ function showSpan() {
 </script>
 <style scoped lang="scss">
 @import "./index.scss";
-@import '@/views/layouts/main/index.scss';
-.el-breadcrumb {
-  height: 55px;
-  line-height: 55px;
-  padding-left: 12px;
-  font-size: 15px;
-  border-bottom: 1px solid #e6e6e6;
-}
 </style>

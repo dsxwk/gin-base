@@ -15,3 +15,6 @@ import Layout from '@/views/layouts/index.vue';
 import UserList from '@/components/user/index.vue';
 import Footer from '@/views/layouts/footer/index.vue';
 </script>
+<style lang="scss" scoped>
+@import '@/views/layouts/main/index.scss';
+</style>

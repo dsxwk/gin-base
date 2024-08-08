@@ -21,7 +21,7 @@
   </template>
 </template>
 <script setup>
-import { useRouter } from "vue-router";
+import { useRouter } from 'vue-router';
 
 defineProps({
   menuList: {
@@ -33,12 +33,12 @@ defineProps({
 const router = useRouter();
 const handleClickMenu = (items) => {
   if (items.meta.isLink) {
-    return window.open(items.meta.isLink, "_blank");
+    return window.open(items.meta.isLink, '_blank');
   } else {
     router.push(items.path);
   }
 };
 </script>
 <style lang="scss" scoped>
-@import "./index.scss";
+@import './index.scss';
 </style>

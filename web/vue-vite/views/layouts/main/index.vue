@@ -2,10 +2,10 @@
   <Breadcrumb/>
   <Tab/>
   <el-main>
-    <router-view v-slot="{ component, route }">
+    <router-view v-slot="{ Component, route }">
       <transition appear name="fade-transform" mode="out-in">
         <keep-alive :include="keepAliveName">
-          <component :is="createComponentWrapper(component, route)" v-if="isRouterShow" :key="route.fullPath"/>
+          <component :is="createComponentWrapper(Component, route)" v-if="isRouterShow" :key="route.fullPath"/>
         </keep-alive>
       </transition>
     </router-view>
@@ -19,10 +19,13 @@ import {ref, provide, h} from 'vue';
 import Breadcrumb from '@/views/layouts/main/breadcrumb/index.vue';
 import Tab from '@/views/layouts/main/tab/index.vue';
 import Footer from '@/views/layouts/footer/index.vue';
+import Home from '@/views/home/index.vue';
+import UserIndex from '@/views/user/index.vue';
 
+// const currentComponent = ref(Home);
 const keepAliveName = ref([
-  '/',
-  '/user'
+  Home,
+  UserIndex
 ]);
 // 注入刷新页面方法
 const isRouterShow = ref(true);

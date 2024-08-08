@@ -27,6 +27,7 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue';
 import NProgress from '@/utils/nprogress';
 // errorHandler
 import errorHandler from '@/utils/errorHandler';
+// element plus table
 import TablePlus from 'element-plus-table';
 
 import routers from '@/routers/router';

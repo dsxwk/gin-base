@@ -18,7 +18,7 @@ export const menuJson = [
   {
     "path": "/",
     "name": "home",
-    "component": "@/components/home/index.vue",
+    "component": "@/views/user/index.vue",
     "meta": {
       "icon": "HomeFilled",
       "title": "首页",
@@ -31,15 +31,15 @@ export const menuJson = [
   },
   {
     "path": "/user",
-    "name": "home",
-    "component": "@/views/user/index.vue",
+    "name": "user",
+    "redirect": "/user",
     "meta": {
       "icon": "User",
       "title": "用户管理",
       "isLink": "",
       "isHide": false,
       "isFull": false,
-      "isAffix": true,
+      "isAffix": false,
       "isKeepAlive": true
     },
     "children": [

@@ -56,7 +56,7 @@ const tabsMenuList = ref([
   {
     "icon": "HomeFilled",
     "title": "首页",
-    "path": "/",
+    "path": "/dashboard",
     "name": "home",
     "close": false,
     "isKeepAlive": true

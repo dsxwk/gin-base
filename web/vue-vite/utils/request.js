@@ -1,17 +1,15 @@
 import toast from '@/utils/toast';
-import confs from '@/config/configs';
+import {API_URL} from '@/config/configs';
 import pnotify from '@/utils/pnotify/alert';
 import pnotifyConfirm from '@/utils/pnotify/confirm';
 
-const apiUrl = confs.apiUrl;
-
 // golang 测试地址
-// apiUrl = 'http://127.0.0.1:8080/api/v1';
+// API_URL = 'http://127.0.0.1:8080/api/v1';
 
 export default async function request(path, config) {
     toast.loading();
 
-    const response = await fetch(apiUrl + path, config);
+    const response = await fetch(API_URL + path, config);
 
     const data = await response.json();
 

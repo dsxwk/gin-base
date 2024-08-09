@@ -1,5 +1,11 @@
 // 定义路由配置
+import {HOME_URL} from "@/config/configs.js";
+
 const routers = [
+    {
+        path: '/',
+        redirect: HOME_URL
+    },
     {
         path: '/login',
         component: () => import('@/views/login/login.vue'),
@@ -8,20 +14,22 @@ const routers = [
         }
     },
     {
-        path: '/',
+        path: '/layouts',
+        redirect: HOME_URL,
         component: () => import('@/layouts/index.vue'),
         meta: {
             title: '首页'
         },
         children: [
             {
-                path: '/home',
+                path: '/dashboard',
                 component: () => import('@/views/home/index.vue'),
             }
         ]
     },
     {
-        path: '',
+        path: '/layouts',
+        redirect: '/user',
         component: () => import('@/layouts/index.vue'),
         meta: {
             title: '用户列表'

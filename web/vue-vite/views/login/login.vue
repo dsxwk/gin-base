@@ -49,6 +49,7 @@ import createService from '@/utils/service';
 import request from '@/utils/request';
 import Funcs from '@/utils/functions';
 import pnotify from '@/utils/pnotify/alert';
+import {HOME_URL} from "@/config/configs.js";
 
 const funcs = new Funcs();
 const router = useRouter();
@@ -101,7 +102,7 @@ const login = async (formEl) => {
   pnotify('登录成功');
 
   setTimeout(function () {
-    router.push('/');
+    router.push(HOME_URL);
     return;
   }, 100);
 }

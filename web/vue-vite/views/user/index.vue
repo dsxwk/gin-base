@@ -14,15 +14,6 @@
     <template #tableHeader="scope">
       <el-button type="primary" :icon="CirclePlus" class="mb10">新建</el-button>
       <el-button
-          type="primary"
-          plain
-          :disabled="!scope.isSelected"
-          class="mb10"
-          @click="batchPublish(scope.selectedListIds, 2)"
-      >
-        批量发布
-      </el-button>
-      <el-button
           type="danger"
           :icon="Delete"
           plain
@@ -48,26 +39,11 @@
   </TablePlus>
 </template>
 <script setup lang="tsx">
-import {onMounted, ref, reactive} from 'vue';
+import {ref, reactive} from 'vue';
 import {CirclePlus, Delete, EditPen} from '@element-plus/icons-vue';
 import createService from '@/utils/service';
 import request from '@/utils/request';
 import userModule from '@/app/modules/admin/user';
-
-const userService = createService(userModule, request);
-onMounted(async () => {
-  await userService.list({page: 1, pageSize: 10});
-});
-
-const rowItem = {
-  articleId: 0,
-  title: '文章标题',
-  origin: 1,
-  publishTime: '2024-09-01 12:00:00',
-  publishStatus: 2
-};
-
-type rowItemType = typeof rowItem;
 
 interface paramsReq {
   pageSize: number
@@ -80,45 +56,23 @@ const initParam = reactive({
   pageSize: 10,
   hotWordList: []
 });
-// 模拟获取列表接口
-const articleList = (params: paramsReq) => {
-  return new Promise((resolve) => {
-    const entities: rowItemType[] = []
-    for (let i = 0; i < 100; i++) {
-      entities.push({
-        articleId: i,
-        title: '文章标题' + i,
-        origin: 1,
-        publishTime: '2024-09-01 12:00:00',
-        publishStatus: 2
-      })
-    }
-    const ressult = {
-      total: 100,
-      pageNo: params.pageNum,
-      pageSize: params.pageSize,
-      entities
-    }
-    setTimeout(() => {
-      resolve(ressult)
-    }, 1500)
-  })
-};
+
 const dataCallback = (data: any) => {
   data?.entities.forEach((item: any) => {
     item.mechanismValue = [item.category, item.column]
   })
   return {
-    list: data?.entities,
+    list: data?.list,
     total: data.total,
-    pageNum: data.pageNo,
+    pageNum: data.page,
     pageSize: data.pageSize
   }
 };
-const getTableList = (params: paramsReq) => {
+const userService = createService(userModule, request);
+const getTableList = async (params: paramsReq) => {
   const newParams = JSON.parse(JSON.stringify(params))
   // 请求前参数可以在这里处理
-  return articleList(newParams)
+  return await userService.list(newParams)
 };
 // 批量删除用户信息
 const batchDelete = async (articleIds: string[]) => {
@@ -127,58 +81,57 @@ const batchDelete = async (articleIds: string[]) => {
   tablePlus.value?.clearSelection()
   tablePlus.value?.getTableList()
 };
-const batchPublish = async (articleIds: string[], status: number) => {
-  console.log("articleIds: string[], status: number", articleIds, status)
-  // await fetchAPI()
-  tablePlus.value?.clearSelection()
-  tablePlus.value?.getTableList()
-};
 // 表格配置项
 const columns = [
   {type: "selection", fixed: "left", width: 80},
-  {type: "index", label: "序号", width: 80},
+  {type: "index", label: "ID", width: 80},
   {
-    prop: "title",
-    label: "文章标题0"
+    prop: "username",
+    label: "用户名",
+    width: 200,
+    props: {maxlength: 30, placeholder: "请输入用户名"}
   },
   {
-    prop: "title",
-    label: "文章标题",
+    prop: "full_name",
+    label: "姓名",
+    width: 200,
     search: {
       el: "input",
-      props: {maxlength: 30, placeholder: "请输入文章标题"}
+      props: {maxlength: 30, placeholder: "请输入姓名"}
     }
   },
   {
-    prop: "title",
-    label: "文章标题2",
+    prop: "nickname",
+    label: "昵称",
+    width: 200,
     search: {
       el: "input",
       order: 10,
-      props: {maxlength: 30, placeholder: "请输入文章标题2"}
+      props: {maxlength: 30, placeholder: "请输入昵称"}
     }
   },
   {
-    prop: "title",
-    label: "文章标题3",
+    prop: "email",
+    label: "邮箱",
+    width: 200,
     isShow: false,
     search: {
       el: "input",
       order: 1,
-      props: {placeholder: "请输入文章标题3"}
+      props: {placeholder: "请输入邮箱"}
     }
   },
   {
-    prop: "origin",
-    label: "数据来源",
+    prop: "gender",
+    label: "性别",
     width: 160,
     enum: [
       {
-        label: "文章库",
+        label: "男",
         value: 1
       },
       {
-        label: "自建新增 ",
+        label: "女",
         value: 2
       }
     ],
@@ -193,37 +146,12 @@ const columns = [
       return <div>{scope.row.publishTime || "- -"}</div>
     }
   },
-
   {
-    prop: "publishStatus",
-    label: "是否发布",
-    width: 160,
-    enum: [
-      {
-        label: "已发布",
-        value: 2
-      },
-      {
-        label: "未发布",
-        value: 1
-      }
-    ],
-    search: {el: "tree-select", props: {filterable: true}},
-    render: (scope) => {
-      return (
-          <>
-            <el-switch
-                model-value={scope.row.publishStatus}
-                active-text={scope.row.publishStatus === 2 ? '已发布' : '未发布'}
-                active-value={2}
-                inactive-value={1}
-                onClick={doPublish}
-            />
-          </>
-      )
-    }
-  },
-  {prop: "operation", label: '操作', fixed: 'right', width: 200}
+    prop: "operation",
+    label: '操作',
+    fixed: 'right',
+    width: 200
+  }
 ];
 const resetCallback = () => {
   console.log("resetCallBack")

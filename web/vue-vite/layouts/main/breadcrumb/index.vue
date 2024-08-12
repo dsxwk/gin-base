@@ -1,8 +1,8 @@
 <template>
   <el-breadcrumb :separator-icon="ArrowRight">
-<!--    <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+<!-- <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
     <el-breadcrumb-item>用户管理</el-breadcrumb-item>
-    <el-breadcrumb-item :to="{ path: '/user' }">用户列表</el-breadcrumb-item>-->
+    <el-breadcrumb-item :to="{ path: '/user' }">用户列表</el-breadcrumb-item> -->
     <el-breadcrumb-item v-for="(item, index) in breadcrumbList" :key="index" :to="item.path">
       {{ item.name }}
     </el-breadcrumb-item>
@@ -13,6 +13,7 @@ import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import {menuJson} from '@/utils/data/menu/index.js';
 import { ArrowRight } from '@element-plus/icons-vue';
+import {HOME_URL} from '@/config/configs.js';
 
 // 获取当前路由信息
 const route = useRoute();
@@ -44,6 +45,21 @@ const breadcrumbList = computed(() => {
   const matchedRoutes = route.matched;
   const breadcrumbs = [];
 
+  // 如果当前路径是首页
+  if (route.path === HOME_URL) {
+    return [{
+      name: '首页',
+      path: HOME_URL
+    }];
+  }
+
+  // 始终有首页
+  breadcrumbs.push({
+    name: '首页',
+    path: HOME_URL
+  });
+
+  // 从匹配的路由中生成面包屑
   for (const route of matchedRoutes) {
     const breadcrumb = findBreadcrumb(menuJson, route.path);
     if (breadcrumb) {

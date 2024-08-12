@@ -30,7 +30,7 @@ export const menuJson = [
     }
   },
   {
-    "path": "/",
+    "path": "",
     "name": "user",
     "redirect": "/user",
     "meta": {

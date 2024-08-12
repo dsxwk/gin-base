@@ -11,7 +11,7 @@
  Target Server Version : 80012
  File Encoding         : 65001
 
- Date: 10/07/2024 10:56:54
+ Date: 12/08/2024 17:08:22
 */
 
 SET NAMES utf8mb4;
@@ -31,12 +31,13 @@ CREATE TABLE `article`  (
   `updated_at` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `deleted_at` datetime NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of article
 -- ----------------------------
 INSERT INTO `article` VALUES (1, 1, '标题1', '内容1', 1, '2023-09-19 11:43:58', '2024-07-10 10:51:50', NULL);
+INSERT INTO `article` VALUES (13, 1, '测试7', '测试内容7', 0, '2024-07-22 11:21:18', '2024-07-22 11:21:18', NULL);
 
 -- ----------------------------
 -- Table structure for category
@@ -114,7 +115,7 @@ CREATE TABLE `user`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uniq_idx_username`(`username`) USING BTREE,
   UNIQUE INDEX `uniq_idx_email`(`email`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user
@@ -122,5 +123,32 @@ CREATE TABLE `user`  (
 INSERT INTO `user` VALUES (1, 'admin', '张三', 'zs@qq.com', '$2a$10$OcSkSCBe8D5tGL2ulmJhTe0Xboy/fzwS1H7AdmkJjpQZfeGUHr5S6', 'dsx', 1, 28, '2023-09-05 17:29:36', '2023-09-12 14:47:48', NULL);
 INSERT INTO `user` VALUES (2, 'test2', '李四', 'ls@qq.com', '$2a$10$kycb2DM8CnubeoWABNPA1O2b0MrQQDqGsEZg8EuqK4G0a63EYDr.2', '昵称', 1, 1, '2023-09-06 11:38:50', '2023-09-13 09:29:27', NULL);
 INSERT INTO `user` VALUES (4, 'test1', '测试1', 'test1@qq.com', '$2a$10$Ww.IvYhlDpNt6Uq07X5W0OswksocMpae9dmaE2TaHclINQoBUF3Fq', '昵称', 1, 22, '2023-09-07 17:48:39', '2023-09-12 09:52:47', '2023-09-12 09:53:12');
+INSERT INTO `user` VALUES (10, 'dsx', '大师兄', 'dsx@qq.com', '$2a$10$Y2FUvgUMpMlJ5h/oooH7OOdInCZgheFQaiVkKu0Wx6YcXhiylAT3a', '大师兄1', 1, 0, '2024-07-22 17:34:36', '2024-07-22 17:34:36', NULL);
+INSERT INTO `user` VALUES (11, 'admin1', '张三1', 'zs1@qq.com', '$2a$10$OcSkSCBe8D5tGL2ulmJhTe0Xboy/fzwS1H7AdmkJjpQZfeGUHr5S6', 'dsx', 1, 28, '2023-09-05 17:29:36', '2023-09-12 14:47:48', NULL);
+INSERT INTO `user` VALUES (12, 'test3', '李四1', 'ls3@qq.com', '$2a$10$kycb2DM8CnubeoWABNPA1O2b0MrQQDqGsEZg8EuqK4G0a63EYDr.2', '昵称', 1, 1, '2023-09-06 11:38:50', '2023-09-13 09:29:27', NULL);
+INSERT INTO `user` VALUES (13, 'test4', '测试2', 'test4@qq.com', '$2a$10$Ww.IvYhlDpNt6Uq07X5W0OswksocMpae9dmaE2TaHclINQoBUF3Fq', '昵称', 1, 22, '2023-09-07 17:48:39', '2023-09-12 09:52:47', '2023-09-12 09:53:12');
+INSERT INTO `user` VALUES (14, 'dsx1', '大师兄1', 'dsx1@qq.com', '$2a$10$Y2FUvgUMpMlJ5h/oooH7OOdInCZgheFQaiVkKu0Wx6YcXhiylAT3a', '大师兄1', 1, 0, '2024-07-22 17:34:36', '2024-07-22 17:34:36', NULL);
+INSERT INTO `user` VALUES (15, 'admin2', '张三2', 'zs2@qq.com', '$2a$10$OcSkSCBe8D5tGL2ulmJhTe0Xboy/fzwS1H7AdmkJjpQZfeGUHr5S6', 'dsx', 1, 28, '2023-09-05 17:29:36', '2023-09-12 14:47:48', NULL);
+INSERT INTO `user` VALUES (16, 'test5', '李四5', 'ls5@qq.com', '$2a$10$kycb2DM8CnubeoWABNPA1O2b0MrQQDqGsEZg8EuqK4G0a63EYDr.2', '昵称', 1, 1, '2023-09-06 11:38:50', '2023-09-13 09:29:27', NULL);
+INSERT INTO `user` VALUES (17, 'test6', '测试6', 'test6@qq.com', '$2a$10$Ww.IvYhlDpNt6Uq07X5W0OswksocMpae9dmaE2TaHclINQoBUF3Fq', '昵称', 1, 22, '2023-09-07 17:48:39', '2023-09-12 09:52:47', '2023-09-12 09:53:12');
+INSERT INTO `user` VALUES (18, 'dsx2', '大师兄2', 'dsx2@qq.com', '$2a$10$Y2FUvgUMpMlJ5h/oooH7OOdInCZgheFQaiVkKu0Wx6YcXhiylAT3a', '大师兄1', 1, 0, '2024-07-22 17:34:36', '2024-07-22 17:34:36', NULL);
+INSERT INTO `user` VALUES (19, 'admin3', '张三3', 'zs3@qq.com', '$2a$10$OcSkSCBe8D5tGL2ulmJhTe0Xboy/fzwS1H7AdmkJjpQZfeGUHr5S6', 'dsx', 1, 28, '2023-09-05 17:29:36', '2023-09-12 14:47:48', NULL);
+INSERT INTO `user` VALUES (20, 'test7', '李四7', 'ls7@qq.com', '$2a$10$kycb2DM8CnubeoWABNPA1O2b0MrQQDqGsEZg8EuqK4G0a63EYDr.2', '昵称', 1, 1, '2023-09-06 11:38:50', '2023-09-13 09:29:27', NULL);
+INSERT INTO `user` VALUES (21, 'test8', '测试8', 'test8@qq.com', '$2a$10$Ww.IvYhlDpNt6Uq07X5W0OswksocMpae9dmaE2TaHclINQoBUF3Fq', '昵称', 1, 22, '2023-09-07 17:48:39', '2023-09-12 09:52:47', '2023-09-12 09:53:12');
+INSERT INTO `user` VALUES (22, 'admin4', '张三4', 'zs4@qq.com', '$2a$10$OcSkSCBe8D5tGL2ulmJhTe0Xboy/fzwS1H7AdmkJjpQZfeGUHr5S6', 'dsx', 1, 28, '2023-09-05 17:29:36', '2023-09-12 14:47:48', NULL);
+INSERT INTO `user` VALUES (23, 'test9', '李四9', 'ls9@qq.com', '$2a$10$kycb2DM8CnubeoWABNPA1O2b0MrQQDqGsEZg8EuqK4G0a63EYDr.2', '昵称', 1, 1, '2023-09-06 11:38:50', '2023-09-13 09:29:27', NULL);
+INSERT INTO `user` VALUES (24, 'test10', '测试10', 'test10@qq.com', '$2a$10$Ww.IvYhlDpNt6Uq07X5W0OswksocMpae9dmaE2TaHclINQoBUF3Fq', '昵称', 1, 22, '2023-09-07 17:48:39', '2023-09-12 09:52:47', '2023-09-12 09:53:12');
+INSERT INTO `user` VALUES (25, 'dsx3', '大师兄3', 'dsx3@qq.com', '$2a$10$Y2FUvgUMpMlJ5h/oooH7OOdInCZgheFQaiVkKu0Wx6YcXhiylAT3a', '大师兄1', 1, 0, '2024-07-22 17:34:36', '2024-07-22 17:34:36', NULL);
+INSERT INTO `user` VALUES (26, 'admin5', '张三5', 'zs5@qq.com', '$2a$10$OcSkSCBe8D5tGL2ulmJhTe0Xboy/fzwS1H7AdmkJjpQZfeGUHr5S6', 'dsx', 1, 28, '2023-09-05 17:29:36', '2023-09-12 14:47:48', NULL);
+INSERT INTO `user` VALUES (27, 'test11', '李四11', 'ls11@qq.com', '$2a$10$kycb2DM8CnubeoWABNPA1O2b0MrQQDqGsEZg8EuqK4G0a63EYDr.2', '昵称', 1, 1, '2023-09-06 11:38:50', '2023-09-13 09:29:27', NULL);
+INSERT INTO `user` VALUES (28, 'test12', '测试12', 'test12@qq.com', '$2a$10$Ww.IvYhlDpNt6Uq07X5W0OswksocMpae9dmaE2TaHclINQoBUF3Fq', '昵称', 1, 22, '2023-09-07 17:48:39', '2023-09-12 09:52:47', '2023-09-12 09:53:12');
+INSERT INTO `user` VALUES (29, 'dsx4', '大师兄4', 'dsx4@qq.com', '$2a$10$Y2FUvgUMpMlJ5h/oooH7OOdInCZgheFQaiVkKu0Wx6YcXhiylAT3a', '大师兄1', 1, 0, '2024-07-22 17:34:36', '2024-07-22 17:34:36', NULL);
+INSERT INTO `user` VALUES (30, 'admin6', '张三6', 'zs6@qq.com', '$2a$10$OcSkSCBe8D5tGL2ulmJhTe0Xboy/fzwS1H7AdmkJjpQZfeGUHr5S6', 'dsx', 1, 28, '2023-09-05 17:29:36', '2023-09-12 14:47:48', NULL);
+INSERT INTO `user` VALUES (31, 'test13', '李四13', 'ls13@qq.com', '$2a$10$kycb2DM8CnubeoWABNPA1O2b0MrQQDqGsEZg8EuqK4G0a63EYDr.2', '昵称', 1, 1, '2023-09-06 11:38:50', '2023-09-13 09:29:27', NULL);
+INSERT INTO `user` VALUES (32, 'test14', '测试14', 'test14@qq.com', '$2a$10$Ww.IvYhlDpNt6Uq07X5W0OswksocMpae9dmaE2TaHclINQoBUF3Fq', '昵称', 1, 22, '2023-09-07 17:48:39', '2023-09-12 09:52:47', '2023-09-12 09:53:12');
+INSERT INTO `user` VALUES (33, 'dsx5', '大师兄5', 'dsx5@qq.com', '$2a$10$Y2FUvgUMpMlJ5h/oooH7OOdInCZgheFQaiVkKu0Wx6YcXhiylAT3a', '大师兄1', 1, 0, '2024-07-22 17:34:36', '2024-07-22 17:34:36', NULL);
+INSERT INTO `user` VALUES (34, 'admin7', '张三7', 'zs7@qq.com', '$2a$10$OcSkSCBe8D5tGL2ulmJhTe0Xboy/fzwS1H7AdmkJjpQZfeGUHr5S6', 'dsx', 1, 28, '2023-09-05 17:29:36', '2023-09-12 14:47:48', NULL);
+INSERT INTO `user` VALUES (35, 'test15', '李四15', 'ls15@qq.com', '$2a$10$kycb2DM8CnubeoWABNPA1O2b0MrQQDqGsEZg8EuqK4G0a63EYDr.2', '昵称', 1, 1, '2023-09-06 11:38:50', '2023-09-13 09:29:27', NULL);
+INSERT INTO `user` VALUES (36, 'test16', '测试16', 'test16@qq.com', '$2a$10$Ww.IvYhlDpNt6Uq07X5W0OswksocMpae9dmaE2TaHclINQoBUF3Fq', '昵称', 1, 22, '2023-09-07 17:48:39', '2023-09-12 09:52:47', '2023-09-12 09:53:12');
 
 SET FOREIGN_KEY_CHECKS = 1;

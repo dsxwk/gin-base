@@ -20,7 +20,8 @@
         >
           <div class="menu-lf">
             <el-icon class="menu-icon">
-              <component :is="item.meta.icon"></component>
+              <!-- 动态解析图标组件 -->
+              <component :is="resolveIconComponent(item.meta.icon)"></component>
             </el-icon>
             <span class="menu-title">{{ item.meta.title }}</span>
           </div>
@@ -33,14 +34,19 @@
 </template>
 
 <script setup>
-import { ref, computed, nextTick, watch, onMounted, onUnmounted } from 'vue';
+import { ref, computed, nextTick, watch, onMounted, onUnmounted, resolveComponent } from 'vue';
 import { Search } from '@element-plus/icons-vue';
 import { useRouter } from 'vue-router';
 import { useDebounceFn } from '@vueuse/core';
 import { menuJson } from '@/utils/data/menu';
 
 const router = useRouter();
-const menuList = computed(() => (menuJson));
+const menuList = computed(() => (menuJson.filter(item => !item.meta.isHide)));
+
+// 动态解析图标组件
+const resolveIconComponent = (iconName) => {
+  return iconName ? resolveComponent(iconName) : null;
+};
 
 onMounted(() => {
   document.addEventListener('keydown', keyboardOperation);
@@ -68,15 +74,32 @@ const handleOpen = () => {
 };
 
 const searchList = ref([]);
+const filterMenu = (menu, searchValue) => {
+  const filteredMenu = [];
+
+  menu.forEach(item => {
+    // 检查当前菜单项是否匹配搜索条件
+    const isMatch = item.path.toLowerCase().includes(searchValue.toLowerCase()) || item.meta.title.toLowerCase().includes(searchValue.toLowerCase());
+
+    // 如果当前菜单项匹配，或者其子菜单中有匹配项，则将其加入结果列表
+    if (isMatch) {
+      filteredMenu.push(item);
+    }
+
+    // 递归检查子菜单
+    if (item.children && item.children.length > 0) {
+      const filteredChildren = filterMenu(item.children, searchValue);
+      if (filteredChildren.length > 0) {
+        filteredMenu.push(...filteredChildren);
+      }
+    }
+  });
+
+  return filteredMenu;
+};
+
 const updateSearchList = () => {
-  searchList.value = searchMenu.value
-    ? menuList.value.filter(
-        item =>
-          (item.path.toLowerCase().includes(searchMenu.value.toLowerCase()) ||
-            item.meta.title.toLowerCase().includes(searchMenu.value.toLowerCase())) &&
-          !item.meta?.isHide
-      )
-    : [];
+  searchList.value = searchMenu.value ? filterMenu(menuList.value, searchMenu.value) : [];
   activePath.value = searchList.value.length ? searchList.value[0].path : '';
 };
 
@@ -92,7 +115,9 @@ const keyPressUpOrDown = (direction) => {
   const newIndex = (index + direction + length) % length;
   activePath.value = searchList.value[newIndex].path;
   nextTick(() => {
-    if (!menuListRef.value?.firstElementChild) return;
+    if (!menuListRef.value?.firstElementChild) {
+      return;
+    }
     const menuItemHeight = menuListRef.value.firstElementChild.clientHeight + 12 || 0;
     menuListRef.value.scrollTop = newIndex * menuItemHeight;
   });
@@ -113,11 +138,16 @@ const keyboardOperation = (event) => {
 
 const handleClickMenu = () => {
   const menu = searchList.value.find(item => item.path === activePath.value);
-  if (!menu) return;
-  if (menu.meta?.isLink) window.open(menu.meta.isLink, '_blank');
-  else router.push(menu.path);
-  searchMenu.value = '';
-  isShowSearch.value = false;
+  if (!menu) {
+    return;
+  }
+  if (menu.meta?.isLink) {
+    window.open(menu.meta.isLink, '_blank');
+  } else {
+    router.push(menu.path);
+    searchMenu.value = '';
+    isShowSearch.value = false;
+  }
 };
 </script>
 

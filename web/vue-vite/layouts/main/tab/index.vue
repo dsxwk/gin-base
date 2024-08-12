@@ -45,7 +45,7 @@
   </div>
 </template>
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import {HOME_URL} from '@/config/configs.js';
 
@@ -73,17 +73,43 @@ const tabsIcon = ref(true);
 ]);*/
 const tabsMenuList = ref([]);
 
+// 初始设置首页tab
+const initializeHomeTab = () => {
+  const homeRoute = {
+    title: '首页',
+    path: '/dashboard',
+    // 首页不可关闭
+    close: false,
+    icon: 'HomeFilled'
+  };
+  const homeTabExists = tabsMenuList.value.some(tab => tab.path === homeRoute.path);
+  if (!homeTabExists) {
+    tabsMenuList.value.unshift(homeRoute);
+  }
+};
+
+onMounted(() => {
+  initializeHomeTab();
+});
+
 watch(route, (newRoute) => {
   const exists = tabsMenuList.value.some(tab => tab.path === newRoute.fullPath);
   if (!exists) {
     tabsMenuList.value.push({
       title: newRoute.meta.title || newRoute.name,
       path: newRoute.fullPath,
-      close: newRoute.meta.close || true,
+      close: newRoute.meta.close !== false,  // 控制标签页是否可以关闭
       icon: newRoute.meta.icon || ''
     });
   }
   tabsMenuValue.value = newRoute.fullPath;
+
+  // 确保首页tab始终在最左边
+  const homeTabIndex = tabsMenuList.value.findIndex(tab => tab.path === HOME_URL);
+  if (homeTabIndex > 0) {
+    const homeTab = tabsMenuList.value.splice(homeTabIndex, 1)[0];
+    tabsMenuList.value.unshift(homeTab);
+  }
 }, { immediate: true });
 const tabClick = (tabItem) => {
   const fullPath = tabItem.props.name;
@@ -104,22 +130,41 @@ const tabRemove = (removedPath) => {
   }
 }
 const refresh = () => {
-
+  location.reload();
 };
 const maximize = () => {
-  
+  const elem = document.querySelector('main');
+  if (!document.fullscreenElement) {
+    elem.requestFullscreen().catch(err => console.error(`Error attempting to enable full-screen mode: ${err.message}`));
+  } else {
+    document.exitFullscreen();
+  }
 }
 const closeCurrentTab = () => {
-
+  tabRemove(tabsMenuValue.value);
 };
-const closeTabsOnSide = () => {
-  
-}
+const closeTabsOnSide = (side) => {
+  const index = tabsMenuList.value.findIndex(tab => tab.path === tabsMenuValue.value);
+  if (index !== -1) {
+    if (side === 'left') {
+      tabsMenuList.value.splice(0, index);
+    } else if (side === 'right') {
+      tabsMenuList.value.splice(index + 1);
+    }
+  }
+};
 const closeMultipleTab = () => {
-  
+  const currentTab = tabsMenuList.value.find(tab => tab.path === tabsMenuValue.value);
+  const homeTab = tabsMenuList.value.find(tab => tab.path === HOME_URL);
+
+  if (currentTab) {
+    // 保留首页和当前选中的标签页
+    tabsMenuList.value = homeTab ? [homeTab, currentTab] : [currentTab];
+  }
 }
 const closeAllTab = () => {
-
+  tabsMenuList.value = tabsMenuList.value.filter(tab => tab.path === HOME_URL);
+  router.push(HOME_URL);
 };
 </script>
 <style lang="scss" scoped>

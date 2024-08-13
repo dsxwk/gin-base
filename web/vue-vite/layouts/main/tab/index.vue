@@ -26,13 +26,13 @@
             <el-dropdown-item divided @click="closeCurrentTab">
               <el-icon><Remove /></el-icon>关闭当前
             </el-dropdown-item>
-            <el-dropdown-item @click="closeTabsOnSide(route.fullPath, 'left')">
+            <el-dropdown-item @click="closeTabsOnSide('left')">
               <el-icon><DArrowLeft /></el-icon>关闭左侧
             </el-dropdown-item>
-            <el-dropdown-item @click="closeTabsOnSide(route.fullPath, 'right')">
+            <el-dropdown-item @click="closeTabsOnSide('right')">
               <el-icon><DArrowRight /></el-icon>关闭右侧
             </el-dropdown-item>
-            <el-dropdown-item divided @click="closeMultipleTab(route.fullPath)">
+            <el-dropdown-item divided @click="closeOthersTab(route.fullPath)">
               <el-icon><CircleClose /></el-icon>关闭其他
             </el-dropdown-item>
             <el-dropdown-item @click="closeAllTab">
@@ -116,6 +116,9 @@ const tabClick = (tabItem) => {
   router.push(fullPath);
 };
 const tabRemove = (removedPath) => {
+  if (removedPath === HOME_URL) {
+    return;
+  }
   // 查找被关闭的标签页在 tabsMenuList 中的位置
   const index = tabsMenuList.value.findIndex(tab => tab.path === removedPath);
   if (index !== -1) {
@@ -147,19 +150,25 @@ const closeTabsOnSide = (side) => {
   const index = tabsMenuList.value.findIndex(tab => tab.path === tabsMenuValue.value);
   if (index !== -1) {
     if (side === 'left') {
-      tabsMenuList.value.splice(0, index);
+      // 保留当前标签页及其右侧标签页，确保首页不会被删除
+      tabsMenuList.value = tabsMenuList.value.filter((_, i) => i >= index || tabsMenuList.value[i].path === HOME_URL);
     } else if (side === 'right') {
-      tabsMenuList.value.splice(index + 1);
+      // 保留当前标签页及其左侧标签页，确保首页不会被删除
+      tabsMenuList.value = tabsMenuList.value.filter((_, i) => i <= index || tabsMenuList.value[i].path === HOME_URL);
     }
   }
 };
-const closeMultipleTab = () => {
+const closeOthersTab = () => {
   const currentTab = tabsMenuList.value.find(tab => tab.path === tabsMenuValue.value);
   const homeTab = tabsMenuList.value.find(tab => tab.path === HOME_URL);
 
   if (currentTab) {
-    // 保留首页和当前选中的标签页
-    tabsMenuList.value = homeTab ? [homeTab, currentTab] : [currentTab];
+    // 保证首页在第一个位置，然后保留当前选中的标签页
+    if (homeTab) {
+      tabsMenuList.value = [homeTab, currentTab].filter((v, i, a) => a.findIndex(t => t.path === v.path) === i);
+    } else {
+      tabsMenuList.value = [currentTab];
+    }
   }
 }
 const closeAllTab = () => {

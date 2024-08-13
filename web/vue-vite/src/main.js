@@ -27,8 +27,6 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue';
 import NProgress from '@/utils/nprogress';
 // errorHandler
 import errorHandler from '@/utils/errorHandler';
-// element plus table
-import TablePlus from 'element-plus-table';
 
 import routers from '@/routers/router';
 import {createRouter, createWebHistory} from 'vue-router';
@@ -76,5 +74,4 @@ if (import.meta.env.VITE_V_CONSOLE === 'true' && /Mobi|Android/i.test(navigator.
 
 app.use(routes);
 app.use(ElementPlus);
-app.use(TablePlus);
 app.mount('#app');

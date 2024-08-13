@@ -1,4 +1,6 @@
-export default function createService(module, requestFunc, headers = {}) {
+import request from '@/utils/request.js';
+
+export default function createService(module, headers = {}) {
     const service = {};
     let hds = {
         'Accept': 'application/json',
@@ -51,7 +53,7 @@ export default function createService(module, requestFunc, headers = {}) {
                 }
             }
 
-            return requestFunc(finalUrl, config);
+            return request(finalUrl, config);
         };
     });
 

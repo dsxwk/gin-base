@@ -41,19 +41,18 @@
   </div>
 </template>
 <script setup>
-import { ref, reactive, onBeforeUnmount } from 'vue';
+import { ref, onMounted, reactive, onBeforeUnmount } from 'vue';
 import { CircleClose, UserFilled, Sunny, Moon } from '@element-plus/icons-vue';
 import { useRouter } from 'vue-router';
 import loginModule from '@/app/modules/admin/login';
 import createService from '@/utils/service';
-import request from '@/utils/request';
 import Funcs from '@/utils/functions';
 import pnotify from '@/utils/pnotify/alert';
 import {HOME_URL} from "@/config/configs.js";
 
 const funcs = new Funcs();
 const router = useRouter();
-const loginService = createService(loginModule, request);
+const loginService = createService(loginModule);
 const isDark = ref(false);
 const loginForm = reactive({
   username: "",
@@ -81,6 +80,14 @@ const resetForm = (formEl) => {
 
   formEl.resetFields();
 };
+onMounted(() => {
+  // 监听enter事件调用登录
+  document.onkeydown = (e) => {
+    if (e.code.toLowerCase() === 'enter' || e.code === 'NumpadEnter') {
+      login(loginFormRef.value);
+    }
+  };
+});
 onBeforeUnmount(() => {
   document.onkeydown = null;
 });

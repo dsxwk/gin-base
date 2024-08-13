@@ -49,6 +49,20 @@ export default class Functions {
     };
 
     /**
+     * 设置本地存储
+     *
+     * @param key
+     * @param value
+     */
+    setLocalStorage(key, value) {
+        if (typeof value === 'string') {
+            localStorage.setItem(key, value);
+        } else {
+            localStorage.setItem(key, JSON.stringify(value));
+        }
+    };
+
+    /**
      * 获取本地存储
      *
      * @param key
@@ -57,20 +71,10 @@ export default class Functions {
     getLocalStorage(key) {
         const value = localStorage.getItem(key);
         try {
-            return JSON.parse(localStorage.getItem(key));
+            return JSON.parse(value);
         } catch (error) {
             return value;
         }
-    };
-
-    /**
-     * 设置本地存储
-     *
-     * @param key
-     * @param value
-     */
-    setLocalStorage(key, value) {
-        localStorage.setItem(key, JSON.stringify(value));
     };
 
     /**

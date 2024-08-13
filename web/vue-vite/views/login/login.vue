@@ -48,7 +48,7 @@ import loginModule from '@/app/modules/admin/login';
 import createService from '@/utils/service';
 import Funcs from '@/utils/functions';
 import pnotify from '@/utils/pnotify/alert';
-import {HOME_URL} from "@/config/configs.js";
+import {HOME_URL} from "@/config/configs";
 
 const funcs = new Funcs();
 const router = useRouter();

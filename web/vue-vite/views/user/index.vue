@@ -3,8 +3,8 @@
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
-import userModule from '@/app/modules/admin/user/index.js';
-import createService from '@/utils/service.js';
+import userModule from '@/app/modules/admin/user';
+import createService from '@/utils/service';
 
 const data = ref([]);
 const userService = createService(userModule);

@@ -1,3 +1,80 @@
 <template>
-  首页数据
+  <div class="dataVisualize-box">
+    <div class="card top-box">
+      <div class="top-title">用户数据</div>
+      <el-tabs v-model="tabActive" class="demo-tabs">
+        <el-tab-pane v-for="item in tab" :key="item.name" :label="item.label" :name="item.name"></el-tab-pane>
+      </el-tabs>
+      <div class="top-content">
+        <el-row :gutter="40">
+          <el-col class="mb40" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+            <div class="item-left sle">
+              <span class="left-title">访问总数</span>
+              <div class="img-box">
+                <img src="./images/book-sum.png" alt="" />
+              </div>
+              <span class="left-number">800.132w</span>
+            </div>
+          </el-col>
+          <el-col class="mb40" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+            <div class="item-center">
+              <div class="gitee-traffic traffic-box">
+                <div class="traffic-img">
+                  <img src="./images/add_person.png" alt="" />
+                </div>
+                <span class="item-value">{{ userCount }}</span>
+                <span class="traffic-name sle">总用户数</span>
+              </div>
+              <div class="gitHub-traffic traffic-box">
+                <div class="traffic-img">
+                  <img src="./images/add_team.png" alt="" />
+                </div>
+                <span class="item-value">222</span>
+                <span class="traffic-name sle">今日注册</span>
+              </div>
+              <div class="today-traffic traffic-box">
+                <div class="traffic-img">
+                  <img src="./images/today.png" alt="" />
+                </div>
+                <span class="item-value">333</span>
+                <span class="traffic-name sle">今日访问量</span>
+              </div>
+              <div class="yesterday-traffic traffic-box">
+                <div class="traffic-img">
+                  <img src="./images/book_sum.png" alt="" />
+                </div>
+                <span class="item-value">444</span>
+                <span class="traffic-name sle">昨日访问量</span>
+              </div>
+            </div>
+          </el-col>
+        </el-row>
+      </div>
+    </div>
+  </div>
 </template>
+<script setup>
+import { ref, onMounted } from 'vue';
+import userModule from '@/app/modules/admin/user';
+import createService from '@/utils/service';
+
+const userService = createService(userModule);
+const userCount = ref(0);
+const tabActive = ref(1);
+const tab = [
+  { label: '未来7日', name: 1 },
+  { label: '近七日', name: 2 },
+  { label: '近一月', name: 3 },
+  { label: '近三月', name: 4 },
+  { label: '近半年', name: 5 },
+  { label: '近一年', name: 6 }
+];
+
+onMounted(async () => {
+  const result = await userService.list({page: 1, pageSize: 10});
+  userCount.value = result.data.total;
+});
+</script>
+<style scoped lang="scss">
+@import './index.scss';
+</style>

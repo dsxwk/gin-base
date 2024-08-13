@@ -48,13 +48,34 @@
               </div>
             </div>
           </el-col>
+          <el-col class="mb40" :xs="24" :sm="24" :md="24" :lg="10" :xl="10">
+            <div class="item-right">
+              <div class="echarts-title">Gitee / GitHub 访问量占比</div>
+              <div class="book-echarts">
+                <Pie ref="pieRef" />
+              </div>
+            </div>
+          </el-col>
         </el-row>
+      </div>
+    </div>
+    <div class="card bottom-box">
+      <div class="bottom-title">数据来源</div>
+      <div class="bottom-tabs">
+        <el-tabs v-model="tabActive" class="demo-tabs">
+          <el-tab-pane v-for="item in tab" :key="item.name" :label="item.label" :name="item.name"></el-tab-pane>
+        </el-tabs>
+      </div>
+      <div class="curve-echarts">
+        <Curve ref="curveRef" />
       </div>
     </div>
   </div>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
+import Pie from '@/views/home/components/pie.vue';
+import Curve from '@/views/home/components/curve.vue';
 import userModule from '@/app/modules/admin/user';
 import createService from '@/utils/service';
 

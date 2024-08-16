@@ -1,5 +1,5 @@
 import toast from '@/utils/toast';
-import {API_URL} from '@/config/configs';
+import {API_URL} from '@/config';
 import pnotify from '@/utils/pnotify/alert';
 import pnotifyConfirm from '@/utils/pnotify/confirm';
 

@@ -1,5 +1,5 @@
 // 定义路由配置
-import {HOME_URL} from "@/config/configs.js";
+import {HOME_URL} from '@/config';
 
 const routers = [
     {
@@ -29,6 +29,20 @@ const routers = [
     },
     {
         path: '/layouts',
+        redirect: '/article',
+        component: () => import('@/layouts/index.vue'),
+        meta: {
+            title: '文章列表'
+        },
+        children: [
+            {
+                path: '/article',
+                component: () => import('@/views/article/index.vue'),
+            }
+        ]
+    },
+    {
+        path: '/layouts',
         redirect: '/user',
         component: () => import('@/layouts/index.vue'),
         meta: {
@@ -41,7 +55,6 @@ const routers = [
             }
         ]
     },
-
     // 可以继续添加其他路由配置
     {
         path: '/:catchAll(.*)',

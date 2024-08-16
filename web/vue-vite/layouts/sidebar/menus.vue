@@ -1,6 +1,6 @@
 <template>
-  <template v-for="items in menuList" :key="items.path">
-    <el-sub-menu v-if="items.children?.length" :index="items.path">
+  <template v-for="items in menuList" :key="items.name">
+    <el-sub-menu v-if="items.children?.length" :index="items.name">
       <template #title>
         <el-icon v-if="items.meta.icon">
           <component :is="items.meta.icon"></component>

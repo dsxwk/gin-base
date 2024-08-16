@@ -47,7 +47,7 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import {HOME_URL} from '@/config/configs.js';
+import {HOME_URL} from '@/config';
 
 const route = useRoute();
 const router = useRouter();

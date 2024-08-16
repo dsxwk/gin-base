@@ -13,7 +13,7 @@ import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import {menuJson} from '@/utils/data/menu/index.js';
 import { ArrowRight } from '@element-plus/icons-vue';
-import {HOME_URL} from '@/config/configs.js';
+import {HOME_URL} from '@/config';
 
 // 获取当前路由信息
 const route = useRoute();

@@ -61,6 +61,37 @@ export const menuJson = [
     ]
   },
   {
+    "path": "",
+    "name": "article",
+    "redirect": "/article",
+    "meta": {
+      "icon": "Document",
+      "title": "文章管理",
+      "isLink": "",
+      "isHide": false,
+      "isFull": false,
+      "isAffix": false,
+      "isKeepAlive": true
+    },
+    "children": [
+      {
+        "path": "/article",
+        "name": "articleList",
+        "component": "@/views/article/index.vue",
+        "meta": {
+          "icon": "",
+          "title": "文章列表",
+          "isLink": "",
+          "isHide": false,
+          "isFull": false,
+          "isAffix": false,
+          "isKeepAlive": true
+        },
+        "children": []
+      }
+    ]
+  },
+  {
     "path": "/dataScreen",
     "name": "dataScreen",
     "component": "/dataScreen/index",

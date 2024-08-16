@@ -48,7 +48,7 @@
   </TablePlus>
 </template>
 <script setup lang="tsx">
-import { ref, reactive } from 'vue';
+import { ref, reactive, h } from 'vue';
 import { CirclePlus, Delete, EditPen } from '@element-plus/icons-vue';
 import articleModule from '@/app/modules/admin/article';
 import createService from '@/utils/service';
@@ -108,7 +108,7 @@ const columns = [
       props: { maxlength: 30, placeholder: "请输入文章内容" }
     }
   },
-  /*{
+  {
     prop: "origin",
     label: "数据来源",
     width: 160,
@@ -118,23 +118,22 @@ const columns = [
         value: 1
       },
       {
-        label: "自建新增 ",
+        label: "自建新增",
         value: 2
       }
     ],
     search: { el: "tree-select", props: { filterable: true } }
-  },*/
+  },
   {
-    prop: "publishTime",
-    label: "发布时间",
+    prop: "created_at",
+    label: "创建时间",
     width: 180,
     render: (scope) => {
-      return <div>{scope.row.publishTime || "- -"}</div>
+      return h('div', scope.row.created_at || '-');
     }
   },
-
   {
-    prop: "publishStatus",
+    prop: "publish_status",
     label: "是否发布",
     width: 160,
     enum: [
@@ -149,17 +148,17 @@ const columns = [
     ],
     search: { el: "tree-select", props: { filterable: true } },
     render: (scope) => {
-      return (
-          <>
-            <el-switch
-                model-value={scope.row.publishStatus}
-                active-text={scope.row.publishStatus === 2 ? "已发布" : "未发布"}
-                active-value={2}
-                inactive-value={1}
-                onClick={doPublish}
-            />
-          </>
-      )
+      console.log("scope", scope)
+      return h(
+          'el-switch',
+          {
+            modelValue: scope.row.publishStatus,
+            'active-text': scope.row.publishStatus === 2 ? '已发布' : '未发布',
+            'active-value': 2,
+            'inactive-value': 1,
+            onClick: () => doPublish(scope.row)
+          }
+      );
     }
   },
   { prop: "operation", label: "操作", fixed: "right", width: 200 }

@@ -93,7 +93,7 @@ const tab = [
 
 onMounted(async () => {
   const result = await userService.list({page: 1, pageSize: 10});
-  userCount.value = result.data.total;
+  userCount.value = result?.data?.total;
 });
 </script>
 <style scoped lang="scss">

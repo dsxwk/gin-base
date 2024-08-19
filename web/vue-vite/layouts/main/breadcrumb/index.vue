@@ -1,10 +1,9 @@
 <template>
   <el-breadcrumb :separator-icon="ArrowRight">
-<!-- <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-    <el-breadcrumb-item>用户管理</el-breadcrumb-item>
-    <el-breadcrumb-item :to="{ path: '/user' }">用户列表</el-breadcrumb-item> -->
     <el-breadcrumb-item v-for="(item, index) in breadcrumbList" :key="index" :to="item.path">
-      {{ item.name }}
+<!-- <el-icon v-if="item?.meta?.icon" class="breadcrumb-icon">
+        <component :is="item?.meta?.icon"></component>
+      </el-icon> -->{{ item.name }}
     </el-breadcrumb-item>
   </el-breadcrumb>
 </template>
@@ -49,14 +48,20 @@ const breadcrumbList = computed(() => {
   if (route.path === HOME_URL) {
     return [{
       name: '首页',
-      path: HOME_URL
+      path: HOME_URL,
+      meta: {
+        icon: 'HomeFilled'
+      }
     }];
   }
 
   // 始终有首页
   breadcrumbs.push({
     name: '首页',
-    path: HOME_URL
+    path: HOME_URL,
+    meta: {
+      icon: 'HomeFilled'
+    }
   });
 
   // 从匹配的路由中生成面包屑

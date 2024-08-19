@@ -41,9 +41,9 @@
   </div>
 </template>
 <script setup>
-import { ref, onMounted, reactive, onBeforeUnmount } from 'vue';
+import { ref, onBeforeMount, onMounted, reactive, onBeforeUnmount } from 'vue';
 import { CircleClose, UserFilled, Sunny, Moon } from '@element-plus/icons-vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import loginModule from '@/app/modules/admin/login';
 import createService from '@/utils/service';
 import Funcs from '@/utils/functions';
@@ -51,6 +51,7 @@ import pnotify from '@/utils/pnotify/alert';
 import {HOME_URL} from "@/config";
 
 const funcs = new Funcs();
+const route = useRoute();
 const router = useRouter();
 const loginService = createService(loginModule);
 const isDark = ref(false);
@@ -80,6 +81,12 @@ const resetForm = (formEl) => {
 
   formEl.resetFields();
 };
+onBeforeMount(() => {
+  if (funcs.checkLogin()) {
+    router.push(HOME_URL + '?lang=' + funcs.getLang());
+    return;
+  }
+});
 onMounted(() => {
   // 监听enter事件调用登录
   document.onkeydown = (e) => {
@@ -104,20 +111,21 @@ const login = async (formEl) => {
 
   const result = await loginService.login(loginForm);
 
-  setLogin(result.data);
+  funcs.setLogin(result.data);
 
   pnotify('登录成功');
 
   setTimeout(function () {
-    router.push(HOME_URL);
+    // 验证路径是否有redirect
+    if (route.query.redirect) {
+      router.push(route.query.redirect);
+    } else {
+      router.push(HOME_URL + '?lang=' + funcs.getLang());
+    }
+
     return;
   }, 100);
 }
-const setLogin = (data) => {
-  console.log(data);
-  funcs.setLocalStorage('isLogin', true);
-  funcs.setLocalStorage('token', data.token);
-};
 </script>
 <style lang="scss" scoped>
 @import "./index.scss";

@@ -81,8 +81,8 @@ export default class Functions {
      * 清空所有缓存
      */
     clearAllCache() {
-        clearLocalStorage();
-        delCookie('loginInfo');
+        this.clearLocalStorage();
+        this.delCookie('loginInfo');
     };
 
     /**
@@ -308,4 +308,38 @@ export default class Functions {
             return key;
         }
     };
+
+    /**
+     * 设置登录
+     * @param data
+     */
+    setLogin(data) {
+        this.setLocalStorage('isLogin', true);
+        this.setLocalStorage('token', data.token);
+    }
+
+    /**
+     * 验证登录
+     * @returns {false|string}
+     */
+    checkLogin() {
+        return this.getLocalStorage('isLogin') && this.getLocalStorage('token');
+    }
+
+    /**
+     * 退出登录
+     */
+    logout() {
+        this.clearAllCache();
+        location.href = '/login?lang=' + this.getLang();
+    }
+
+    /**
+     * 获取?前真实路径
+     * @param path
+     * @returns {*}
+     */
+    getRealPath(path) {
+        return path.replace(/\?.*/, '');
+    }
 }

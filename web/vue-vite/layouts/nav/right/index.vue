@@ -32,11 +32,14 @@
 import Fullscreen from '@/layouts/nav/right/fullScreen/index.vue';
 import Language from '@/layouts/nav/right/language/index.vue';
 import SearchMenu from '@/layouts/nav/right/searchMenu/index.vue';
+import Functions from '@/utils/functions';
+
+const funcs = new Functions();
 const openDialog = (name) => {
 
 }
 const logout = () => {
-
+  funcs.logout();
 }
 </script>
 <style scoped lang="scss">

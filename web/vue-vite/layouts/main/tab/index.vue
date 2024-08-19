@@ -48,7 +48,9 @@
 import { ref, watch, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import {HOME_URL} from '@/config';
+import Functions from '@/utils/functions';
 
+const funcs = new Functions();
 const route = useRoute();
 const router = useRouter();
 const tabsMenuValue = ref(route.fullPath);
@@ -82,7 +84,9 @@ const initializeHomeTab = () => {
     close: false,
     icon: 'HomeFilled'
   };
-  const homeTabExists = tabsMenuList.value.some(tab => tab.path === homeRoute.path);
+  const homeTabExists = tabsMenuList.value.some((tab) => {
+    return funcs.getRealPath(tab.path) === homeRoute.path;
+  });
   if (!homeTabExists) {
     tabsMenuList.value.unshift(homeRoute);
   }
@@ -93,19 +97,24 @@ onMounted(() => {
 });
 
 watch(route, (newRoute) => {
-  const exists = tabsMenuList.value.some(tab => tab.path === newRoute.fullPath);
+  const exists = tabsMenuList.value.some((tab) => {
+    return funcs.getRealPath(tab.path) === newRoute.fullPath;
+  });
   if (!exists) {
     tabsMenuList.value.push({
       title: newRoute.meta.title || newRoute.name,
       path: newRoute.fullPath,
-      close: newRoute.meta.close !== false,  // 控制标签页是否可以关闭
+      // 控制标签页是否可以关闭
+      close: newRoute.meta.close !== false,
       icon: newRoute.meta.icon || ''
     });
   }
   tabsMenuValue.value = newRoute.fullPath;
 
   // 确保首页tab始终在最左边
-  const homeTabIndex = tabsMenuList.value.findIndex(tab => tab.path === HOME_URL);
+  const homeTabIndex = tabsMenuList.value.findIndex((tab) => {
+    return funcs.getRealPath(tab.path) === HOME_URL;
+  });
   if (homeTabIndex > 0) {
     const homeTab = tabsMenuList.value.splice(homeTabIndex, 1)[0];
     tabsMenuList.value.unshift(homeTab);
@@ -113,14 +122,20 @@ watch(route, (newRoute) => {
 }, { immediate: true });
 const tabClick = (tabItem) => {
   const fullPath = tabItem.props.name;
-  router.push(fullPath);
+  if (funcs.getUrlParam('lang', fullPath)) {
+    router.push(fullPath + '?lang=' + funcs.getLang());
+  } else {
+    router.push(fullPath);
+  }
 };
 const tabRemove = (removedPath) => {
-  if (removedPath === HOME_URL) {
+  if (funcs.getRealPath(removedPath) === HOME_URL) {
     return;
   }
   // 查找被关闭的标签页在 tabsMenuList 中的位置
-  const index = tabsMenuList.value.findIndex(tab => tab.path === removedPath);
+  const index = tabsMenuList.value.findIndex((tab) => {
+    return funcs.getRealPath(tab.path) === removedPath;
+  });
   if (index !== -1) {
     // 从 tabsMenuList 中移除被关闭的标签页
     tabsMenuList.value.splice(index, 1);
@@ -147,7 +162,9 @@ const closeCurrentTab = () => {
   tabRemove(tabsMenuValue.value);
 };
 const closeTabsOnSide = (side) => {
-  const index = tabsMenuList.value.findIndex(tab => tab.path === tabsMenuValue.value);
+  const index = tabsMenuList.value.findIndex((tab) => {
+    return funcs.getRealPath(tab.path) === tabsMenuValue.value;
+  });
   if (index !== -1) {
     if (side === 'left') {
       // 保留当前标签页及其右侧标签页，确保首页不会被删除
@@ -159,20 +176,28 @@ const closeTabsOnSide = (side) => {
   }
 };
 const closeOthersTab = () => {
-  const currentTab = tabsMenuList.value.find(tab => tab.path === tabsMenuValue.value);
-  const homeTab = tabsMenuList.value.find(tab => tab.path === HOME_URL);
+  const currentTab = tabsMenuList.value.find((tab) => {
+    return funcs.getRealPath(tab.path) === tabsMenuValue.value;
+  });
+  const homeTab = tabsMenuList.value.find((tab) => {
+    return funcs.getRealPath(tab.path) === HOME_URL;
+  });
 
   if (currentTab) {
     // 保证首页在第一个位置，然后保留当前选中的标签页
     if (homeTab) {
-      tabsMenuList.value = [homeTab, currentTab].filter((v, i, a) => a.findIndex(t => t.path === v.path) === i);
+      tabsMenuList.value = [homeTab, currentTab].filter((v, i, a) => a.findIndex((t) => {
+        return funcs.getRealPath(t.path) === funcs.getRealPath(v.path);
+      }) === i);
     } else {
       tabsMenuList.value = [currentTab];
     }
   }
 }
 const closeAllTab = () => {
-  tabsMenuList.value = tabsMenuList.value.filter(tab => tab.path === HOME_URL);
+  tabsMenuList.value = tabsMenuList.value.filter((tab) => {
+    return funcs.getRealPath(tab.path) === HOME_URL;
+  });
   router.push(HOME_URL);
 };
 </script>

@@ -78,14 +78,14 @@ const tabsMenuList = ref([]);
 // 初始设置首页tab
 const initializeHomeTab = () => {
   const homeRoute = {
-    title: '首页',
-    path: '/dashboard',
+    title: funcs.lang('Home'),
+    path: '/dashboard?lang=' + funcs.getLang(),
     // 首页不可关闭
     close: false,
     icon: 'HomeFilled'
   };
   const homeTabExists = tabsMenuList.value.some((tab) => {
-    return funcs.getRealPath(tab.path) === homeRoute.path;
+    return tab.path === homeRoute.path;
   });
   if (!homeTabExists) {
     tabsMenuList.value.unshift(homeRoute);
@@ -98,7 +98,7 @@ onMounted(() => {
 
 watch(route, (newRoute) => {
   const exists = tabsMenuList.value.some((tab) => {
-    return funcs.getRealPath(tab.path) === newRoute.fullPath;
+    return tab.path === newRoute.fullPath;
   });
   if (!exists) {
     tabsMenuList.value.push({
@@ -113,7 +113,7 @@ watch(route, (newRoute) => {
 
   // 确保首页tab始终在最左边
   const homeTabIndex = tabsMenuList.value.findIndex((tab) => {
-    return funcs.getRealPath(tab.path) === HOME_URL;
+    return tab.path === HOME_URL;
   });
   if (homeTabIndex > 0) {
     const homeTab = tabsMenuList.value.splice(homeTabIndex, 1)[0];
@@ -122,19 +122,15 @@ watch(route, (newRoute) => {
 }, { immediate: true });
 const tabClick = (tabItem) => {
   const fullPath = tabItem.props.name;
-  if (funcs.getUrlParam('lang', fullPath)) {
-    router.push(fullPath + '?lang=' + funcs.getLang());
-  } else {
-    router.push(fullPath);
-  }
+  router.push(fullPath);
 };
 const tabRemove = (removedPath) => {
-  if (funcs.getRealPath(removedPath) === HOME_URL) {
+  if (removedPath === HOME_URL) {
     return;
   }
   // 查找被关闭的标签页在 tabsMenuList 中的位置
   const index = tabsMenuList.value.findIndex((tab) => {
-    return funcs.getRealPath(tab.path) === removedPath;
+    return tab.path === removedPath;
   });
   if (index !== -1) {
     // 从 tabsMenuList 中移除被关闭的标签页
@@ -163,7 +159,7 @@ const closeCurrentTab = () => {
 };
 const closeTabsOnSide = (side) => {
   const index = tabsMenuList.value.findIndex((tab) => {
-    return funcs.getRealPath(tab.path) === tabsMenuValue.value;
+    return tab.path === tabsMenuValue.value;
   });
   if (index !== -1) {
     if (side === 'left') {
@@ -177,17 +173,17 @@ const closeTabsOnSide = (side) => {
 };
 const closeOthersTab = () => {
   const currentTab = tabsMenuList.value.find((tab) => {
-    return funcs.getRealPath(tab.path) === tabsMenuValue.value;
+    return tab.path === tabsMenuValue.value;
   });
   const homeTab = tabsMenuList.value.find((tab) => {
-    return funcs.getRealPath(tab.path) === HOME_URL;
+    return tab.path === HOME_URL;
   });
 
   if (currentTab) {
     // 保证首页在第一个位置，然后保留当前选中的标签页
     if (homeTab) {
       tabsMenuList.value = [homeTab, currentTab].filter((v, i, a) => a.findIndex((t) => {
-        return funcs.getRealPath(t.path) === funcs.getRealPath(v.path);
+        return t.path === v.path;
       }) === i);
     } else {
       tabsMenuList.value = [currentTab];
@@ -196,7 +192,7 @@ const closeOthersTab = () => {
 }
 const closeAllTab = () => {
   tabsMenuList.value = tabsMenuList.value.filter((tab) => {
-    return funcs.getRealPath(tab.path) === HOME_URL;
+    return tab.path === HOME_URL;
   });
   router.push(HOME_URL);
 };

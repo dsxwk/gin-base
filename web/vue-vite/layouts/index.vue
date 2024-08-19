@@ -4,7 +4,7 @@
       <div class="aside-box" :style="{ width: isCollapse ? '65px' : '210px' }">
         <div class="logo flx-center">
           <img class="logo-img" src="/favicon.ico" alt="logo"/>
-          <span v-show="!isCollapse" @show-span="showSpan" class="logo-text">后台管理</span>
+          <span v-show="!isCollapse" @show-span="showSpan" class="logo-text">{{ funcs.lang('Manage Backend') }}</span>
         </div>
         <el-scrollbar>
           <el-menu
@@ -35,9 +35,10 @@ import NavRight from '@/layouts/nav/right/index.vue';
 import Main from '@/layouts/main/index.vue';
 import Sidebar from '@/layouts/sidebar/menus.vue';
 import { menuJson } from '@/utils/data/menu';
-
 import {computed, ref} from 'vue';
+import Function from '@/utils/functions';
 
+const funcs = new Function();
 const isCollapse = ref(false);
 const route = useRoute();
 const menuList = computed(() => (menuJson));

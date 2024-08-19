@@ -167,6 +167,10 @@
     "en-us": "Confirm Reset",
     "zh-cn": "确认重置"
   },
+  "Reset": {
+    "en-us": "Reset",
+    "zh-cn": "重置"
+  },
   "Register": {
     "en-us": "Register",
     "zh-cn": "注册"
@@ -299,6 +303,10 @@
     "en-us": "Query",
     "zh-cn": "查询"
   },
+  "Confirm": {
+    "en-us": "Confirm",
+    "zh-cn": "确认"
+  },
   "Cancel": {
     "en-us": "Cancel",
     "zh-cn": "取消"
@@ -318,5 +326,17 @@
   "Deleted Successfully": {
     "en-us": "Deleted Successfully",
     "zh-cn": "删除成功"
+  },
+  "Menu Search": {
+    "en-us": "Menu Search",
+    "zh-cn": "菜单搜索"
+  },
+  "Support menu names and paths": {
+    "en-us": "Support menu names and paths",
+    "zh-cn": "支持菜单名称、路径"
+  },
+  "No Menu": {
+    "en-us": "No Menu",
+    "zh-cn": "暂无菜单"
   }
 }

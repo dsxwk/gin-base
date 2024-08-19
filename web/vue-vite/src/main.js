@@ -1,6 +1,7 @@
 import { createApp } from 'vue';
 import App from '../App.vue';
-import {useRouter, useRoute} from 'vue-router';
+import Functions from '@/utils/functions';
+import {LOGIN_URL} from '@/config';
 import TablePlus from 'element-plus-table';
 // reset style sheet
 import "@/styles/reset.scss";
@@ -26,6 +27,7 @@ import errorHandler from '@/utils/errorHandler';
 import routers from '@/routers/router';
 import {createRouter, createWebHistory} from 'vue-router';
 
+const funcs = new Functions();
 const routes = createRouter({
     history: createWebHistory(),
     routes: routers
@@ -34,7 +36,21 @@ const routes = createRouter({
 routes.beforeEach((to, from, next) => {
     NProgress.start();
     // 动态标题
-    document.title = to.meta.title || '后台管理';
+    document.title = to.meta.title || funcs.lang('Manage Backend');
+
+    // 设置语言 to = {...to, query: {...to.query, lang: funcs.getLang()}};
+    to.fullPath = funcs.setUrlParam(to.fullPath, 'lang', funcs.getLang());
+    from.fullPath = funcs.setUrlParam(from.fullPath, 'lang', funcs.getLang());
+
+    // 判断是访问登陆页登录了就在当前页面,没有重置路由到登陆页
+    if (to.path.toLocaleLowerCase() === LOGIN_URL) {
+        if (funcs.checkLogin()) {
+            return next(from.fullPath)
+        } else {
+            return next(to.fullPath)
+        }
+    }
+
     next();
 });
 

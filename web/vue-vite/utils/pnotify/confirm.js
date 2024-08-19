@@ -2,16 +2,18 @@ import {alert, defaultModules} from '@pnotify/core';
 import * as PNotifyConfirm from '@pnotify/confirm';
 import * as PNotify from '@pnotify/core';
 import '@pnotify/countdown/dist/PNotifyCountdown.css';
+import Functions from '@/utils/functions';
 
 defaultModules.set(PNotifyConfirm, {});
 
+const funcs = new Functions();
 const pnotifyConfirm = function pnotifyConfirm(text = 'Are you sure?', type, title, delay) {
     return new Promise((resolve, reject) => {
         alert({
             text: text,
             // icon: 'fas fa-question-circle',
             type: type ? type : 'notice',
-            title: title ? title : '提示信息',
+            title: title ? title : funcs.lang('Reminder Information'),
             // 时间
             delay: delay ? delay : 2000,
             hide: false,
@@ -30,14 +32,14 @@ const pnotifyConfirm = function pnotifyConfirm(text = 'Are you sure?', type, tit
                     confirm: true,
                     buttons: [
                         {
-                            'text': '确认',
+                            'text': funcs.lang('Confirm'),
                             click: notice => {
                                 notice.close();
                                 resolve(true);
                             }
                         },
                         {
-                            'text': '取消',
+                            'text': funcs.lang('Cancel'),
                             click: notice => {
                                 notice.close();
                                 resolve(false);

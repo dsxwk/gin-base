@@ -5,7 +5,7 @@
       <el-input
         v-model="searchMenu"
         ref="menuInputRef"
-        placeholder="菜单搜索：支持菜单名称、路径"
+        :placeholder="funcs.lang('Menu Search')+': '+funcs.lang('Support menu names and paths')"
         size="large"
         clearable
         :prefix-icon="Search"
@@ -28,7 +28,7 @@
           <i :class="'iconfont icon-huiche'" class="menu-enter" @click="handleOpen"></i>
         </div>
       </div>
-      <el-empty v-else class="mt20 mb20" :image-size="100" description="暂无菜单" />
+      <el-empty v-else class="mt20 mb20" :image-size="100" :description="funcs.lang('No Menu')" />
     </el-dialog>
   </div>
 </template>
@@ -39,7 +39,9 @@ import { Search } from '@element-plus/icons-vue';
 import { useRouter } from 'vue-router';
 import { useDebounceFn } from '@vueuse/core';
 import { menuJson } from '@/utils/data/menu';
+import Functions from '@/utils/functions';
 
+const funcs = new Functions();
 const router = useRouter();
 const menuList = computed(() => (menuJson.filter(item => !item.meta.isHide)));
 

@@ -13,6 +13,9 @@ import { useRoute } from 'vue-router';
 import {menuJson} from '@/utils/data/menu/index.js';
 import { ArrowRight } from '@element-plus/icons-vue';
 import {HOME_URL} from '@/config';
+import Functions from '@/utils/functions';
+
+const funcs = new Functions();
 
 // 获取当前路由信息
 const route = useRoute();
@@ -45,9 +48,9 @@ const breadcrumbList = computed(() => {
   const breadcrumbs = [];
 
   // 如果当前路径是首页
-  if (route.path === HOME_URL) {
+  if (route.path === funcs.getRealPath(HOME_URL)) {
     return [{
-      name: '首页',
+      name: funcs.lang('Home'),
       path: HOME_URL,
       meta: {
         icon: 'HomeFilled'
@@ -57,7 +60,7 @@ const breadcrumbList = computed(() => {
 
   // 始终有首页
   breadcrumbs.push({
-    name: '首页',
+    name: funcs.lang('Home'),
     path: HOME_URL,
     meta: {
       icon: 'HomeFilled'

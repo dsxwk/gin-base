@@ -8,11 +8,11 @@
       <div class="login-form">
         <div class="login-logo">
           <img class="login-icon" src="/favicon.ico" alt="" />
-          <h2 class="logo-text">后台管理</h2>
+          <h2 class="logo-text">{{ funcs.lang('Manage Backend') }}</h2>
         </div>
         <el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" size="large">
           <el-form-item prop="username">
-            <el-input v-model="loginForm.username" placeholder="用户名：admin">
+            <el-input v-model="loginForm.username" :placeholder="funcs.lang('Home')+': admin'">
               <template #prefix>
                 <el-icon class="el-input__icon">
                   <user />
@@ -21,7 +21,7 @@
             </el-input>
           </el-form-item>
           <el-form-item prop="password">
-            <el-input v-model="loginForm.password" type="password" placeholder="密码：123456" show-password autocomplete="new-password">
+            <el-input v-model="loginForm.password" type="password" :placeholder="funcs.lang('Password')+': 123456'" show-password autocomplete="new-password">
               <template #prefix>
                 <el-icon class="el-input__icon">
                   <lock />
@@ -31,9 +31,9 @@
           </el-form-item>
         </el-form>
         <div class="login-btn">
-          <el-button :icon="CircleClose" round size="large" @click="resetForm(loginFormRef)"> 重置 </el-button>
+          <el-button :icon="CircleClose" round size="large" @click="resetForm(loginFormRef)"> {{ funcs.lang('Reset') }} </el-button>
           <el-button :icon="UserFilled" round size="large" type="primary" class="login-bt" @click="login(loginFormRef)">
-            登录
+            {{ funcs.lang('Login') }}
           </el-button>
         </div>
       </div>
@@ -41,16 +41,16 @@
   </div>
 </template>
 <script setup>
-import { ref, onBeforeMount, onMounted, reactive, onBeforeUnmount } from 'vue';
+import { ref, onMounted, reactive, onBeforeUnmount } from 'vue';
 import { CircleClose, UserFilled, Sunny, Moon } from '@element-plus/icons-vue';
 import { useRoute, useRouter } from 'vue-router';
 import loginModule from '@/app/modules/admin/login';
 import createService from '@/utils/service';
-import Funcs from '@/utils/functions';
+import Functions from '@/utils/functions';
 import pnotify from '@/utils/pnotify/alert';
 import {HOME_URL} from "@/config";
 
-const funcs = new Funcs();
+const funcs = new Functions();
 const route = useRoute();
 const router = useRouter();
 const loginService = createService(loginModule);
@@ -61,8 +61,8 @@ const loginForm = reactive({
 });
 const loginFormRef = ref();
 const loginRules = reactive({
-  username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
-  password: [{ required: true, message: "请输入密码", trigger: "blur" }]
+  username: [{ required: true, message: funcs.lang('Please Entry Username'), trigger: "blur" }],
+  password: [{ required: true, message: funcs.lang('Please Entry Password'), trigger: "blur" }]
 });
 const switchDark = () => {
   const htmlElement = document.querySelector('html');
@@ -81,12 +81,6 @@ const resetForm = (formEl) => {
 
   formEl.resetFields();
 };
-onBeforeMount(() => {
-  if (funcs.checkLogin()) {
-    router.push(HOME_URL + '?lang=' + funcs.getLang());
-    return;
-  }
-});
 onMounted(() => {
   // 监听enter事件调用登录
   document.onkeydown = (e) => {
@@ -113,7 +107,7 @@ const login = async (formEl) => {
 
   funcs.setLogin(result.data);
 
-  pnotify('登录成功');
+  pnotify(funcs.lang('Successfully logged in'));
 
   setTimeout(function () {
     // 验证路径是否有redirect

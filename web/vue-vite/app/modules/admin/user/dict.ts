@@ -1,7 +1,10 @@
+import Functions from '@/utils/functions';
+
+const funcs = new Functions();
 /**
  * @description: 用户性别
  */
 export const genderDict = [
-    { label: "男", value: 1 },
-    { label: "女", value: 2 }
+    { label: funcs.lang('Male'), value: 1 },
+    { label: funcs.lang('Female'), value: 2 }
 ];

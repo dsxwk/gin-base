@@ -229,7 +229,9 @@ export default class Functions {
         if (this.getUrlParam('lang') == null) {
             this.setCookie('lang', 'zh-cn');
         } else {
-            this.setCookie('lang', this.getUrlParam('lang'));
+            if (this.getUrlParam('lang') === 'zh-cn' || this.getUrlParam('lang') === 'en-us') {
+                this.setCookie('lang', this.getUrlParam('lang'));
+            }
         }
 
         return this.getCookie('lang');

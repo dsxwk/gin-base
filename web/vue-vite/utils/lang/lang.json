@@ -338,5 +338,17 @@
   "No Menu": {
     "en-us": "No Menu",
     "zh-cn": "暂无菜单"
+  },
+  "Full Screen": {
+    "en-us": "Full Screen",
+    "zh-cn": "全屏"
+  },
+  "Mobile devices do not support full screen": {
+    "en-us": "Mobile devices do not support full screen",
+    "zh-cn": "移动设备不支持全屏"
+  },
+  "Current browser does not support full screen": {
+    "en-us": "Current browser does not support full screen",
+    "zh-cn": "当前您的浏览器不支持全屏"
   }
 }

@@ -1,12 +1,15 @@
 <template>
   <div class="fullscreen">
-    <i title="全屏" :class="['iconfont', isFullscreen ? 'icon-suoxiao' : 'icon-fangda']" class="toolBar-icon" @click="handleFullScreen"></i>
+    <i :title="funcs.lang('Full Screen')" :class="['iconfont', isFullscreen ? 'icon-suoxiao' : 'icon-fangda']" class="toolBar-icon" @click="handleFullScreen"></i>
   </div>
 </template>
 <script setup>
 import { onMounted, ref } from 'vue';
 import screenfull from 'screenfull';
 import pnotify from '@/utils/pnotify/alert';
+import Functions from '@/utils/functions';
+
+const funcs = new Functions();
 const isFullscreen = ref(screenfull.isFullscreen);
 const isMobile = ref(false);
 
@@ -29,11 +32,11 @@ const checkIfMobile = () => {
 
 const handleFullScreen = () => {
   if (isMobile.value) {
-    pnotify('移动端不支持全屏 ❌', 'error');
+    pnotify(funcs.lang('Mobile devices do not support full screen') + ' ❌', 'error');
     return;
   } else {
     if (!screenfull.isEnabled) {
-      pnotify('当前您的浏览器不支持全屏 ❌', 'info');
+      pnotify(funcs.lang('Current browser does not support full screen') + ' ❌', 'info');
     }
     screenfull?.toggle();
   }

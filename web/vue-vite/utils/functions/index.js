@@ -302,13 +302,7 @@ export default class Functions {
      * @returns {*}
      */
     lang(key) {
-        let lang = this.getLang();
-
-        if (data[key]) {
-            return data[key][lang];
-        } else {
-            return key;
-        }
+        return data[key][this.getLang()] || key;
     };
 
     /**

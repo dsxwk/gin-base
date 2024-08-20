@@ -1,6 +1,6 @@
 <template>
   <div class="search-menu">
-    <i title="菜单搜索" :class="'iconfont icon-sousuo'" class="toolBar-icon" @click="handleOpen"></i>
+    <i :title="funcs.lang('Menu Search')" :class="'iconfont icon-sousuo'" class="toolBar-icon" @click="handleOpen"></i>
     <el-dialog class="search-dialog" v-model="isShowSearch" :width="600" :show-close="false" top="10vh">
       <el-input
         v-model="searchMenu"

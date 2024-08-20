@@ -23,8 +23,7 @@ export default async function request(path, config) {
             let redirect = location.pathname + location.search;
             pnotifyConfirm('登录未授权或已过期请重新登录!', 'error').then(res => {
                 if (res) {
-                    location.href = '/login?' + `redirect=${funcs.urlencode(redirect)}`;
-                    console.log('确认');
+                    location.href = '/login?lang=' + funcs.getLang() + `&redirect=${funcs.urlencode(redirect)}`;
                 } else {
                     console.log('取消');
                 }

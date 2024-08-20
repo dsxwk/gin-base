@@ -1,6 +1,8 @@
+import Functions from '@/utils/functions';
 // 定义路由配置
 import {HOME_URL} from '@/config';
 
+const funcs = new Functions();
 const routers = [
     {
         path: '/',
@@ -10,7 +12,7 @@ const routers = [
         path: '/login',
         component: () => import('@/views/login/login.vue'),
         meta: {
-            title: '登录'
+            title: funcs.lang('Login')
         }
     },
     {
@@ -18,7 +20,7 @@ const routers = [
         redirect: HOME_URL,
         component: () => import('@/layouts/index.vue'),
         meta: {
-            title: '首页'
+            title: funcs.lang('Home')
         },
         children: [
             {
@@ -32,7 +34,7 @@ const routers = [
         redirect: '/article',
         component: () => import('@/layouts/index.vue'),
         meta: {
-            title: '文章列表'
+            title: funcs.lang('Article List')
         },
         children: [
             {
@@ -46,7 +48,7 @@ const routers = [
         redirect: '/user',
         component: () => import('@/layouts/index.vue'),
         meta: {
-            title: '用户列表'
+            title: funcs.lang('User List')
         },
         children: [
             {

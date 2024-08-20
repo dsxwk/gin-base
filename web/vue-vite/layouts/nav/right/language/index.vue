@@ -1,6 +1,6 @@
 <template>
   <el-dropdown trigger="click">
-    <i title="切换语言" :class="'iconfont icon-zhongyingwen'" class="toolBar-icon"></i>
+    <i :title="funcs.lang('Switch Language')" :class="'iconfont icon-zhongyingwen'" class="toolBar-icon"></i>
     <template #dropdown>
       <el-dropdown-menu>
         <el-dropdown-item @click="swichLang('zh-cn')">

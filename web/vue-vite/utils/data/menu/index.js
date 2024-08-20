@@ -1,3 +1,7 @@
+import Functions from '@/utils/functions';
+
+const funcs = new Functions();
+
 /**
  * @description 📚 路由参数配置简介
  * @param path ==> 路由菜单访问路径
@@ -21,7 +25,7 @@ export const menuJson = [
     "component": "@/views/home/index.vue",
     "meta": {
       "icon": "HomeFilled",
-      "title": "首页",
+      "title": funcs.lang('Home'),
       "isLink": "",
       "isHide": false,
       "isFull": false,
@@ -35,7 +39,7 @@ export const menuJson = [
     "redirect": "/user",
     "meta": {
       "icon": "User",
-      "title": "用户管理",
+      "title": funcs.lang('User Management'),
       "isLink": "",
       "isHide": false,
       "isFull": false,
@@ -49,7 +53,7 @@ export const menuJson = [
         "component": "@/views/user/index.vue",
         "meta": {
           "icon": "",
-          "title": "用户列表",
+          "title": funcs.lang('User List'),
           "isLink": "",
           "isHide": false,
           "isFull": false,
@@ -66,7 +70,7 @@ export const menuJson = [
     "redirect": "/article",
     "meta": {
       "icon": "Document",
-      "title": "文章管理",
+      "title": funcs.lang('Article Management'),
       "isLink": "",
       "isHide": false,
       "isFull": false,
@@ -80,7 +84,7 @@ export const menuJson = [
         "component": "@/views/article/index.vue",
         "meta": {
           "icon": "",
-          "title": "文章列表",
+          "title": funcs.lang('Article List'),
           "isLink": "",
           "isHide": false,
           "isFull": false,
@@ -88,121 +92,6 @@ export const menuJson = [
           "isKeepAlive": true
         },
         "children": []
-      }
-    ]
-  },
-  {
-    "path": "/dataScreen",
-    "name": "dataScreen",
-    "component": "/dataScreen/index",
-    "meta": {
-      "icon": "Histogram",
-      "title": "数据大屏",
-      "isLink": "",
-      "isHide": false,
-      "isFull": true,
-      "isAffix": false,
-      "isKeepAlive": true
-    }
-  },
-  {
-    "path": "/proTable",
-    "name": "proTable",
-    "redirect": "/proTable/useProTable",
-    "meta": {
-      "icon": "MessageBox",
-      "title": "超级表格",
-      "isLink": "",
-      "isHide": false,
-      "isFull": false,
-      "isAffix": false,
-      "isKeepAlive": true
-    },
-    "children": [
-      {
-        "path": "/proTable/useProTable",
-        "name": "useProTable",
-        "component": "/proTable/useProTable/index",
-        "meta": {
-          "icon": "Menu",
-          "title": "使用 ProTable",
-          "isLink": "",
-          "isHide": false,
-          "isFull": false,
-          "isAffix": false,
-          "isKeepAlive": true
-        },
-        "children": []
-      },
-      {
-        "path": "/proTable/useTreeFilter",
-        "name": "useTreeFilter",
-        "component": "/proTable/useTreeFilter/index",
-        "meta": {
-          "icon": "Menu",
-          "title": "使用 TreeFilter",
-          "isLink": "",
-          "isHide": false,
-          "isFull": false,
-          "isAffix": false,
-          "isKeepAlive": true
-        }
-      },
-      {
-        "path": "/proTable/useSelectFilter",
-        "name": "useSelectFilter",
-        "component": "/proTable/useSelectFilter/index",
-        "meta": {
-          "icon": "Menu",
-          "title": "使用 SelectFilter",
-          "isLink": "",
-          "isHide": false,
-          "isFull": false,
-          "isAffix": false,
-          "isKeepAlive": true
-        }
-      },
-      {
-        "path": "/proTable/treeProTable",
-        "name": "treeProTable",
-        "component": "/proTable/treeProTable/index",
-        "meta": {
-          "icon": "Menu",
-          "title": "树形 ProTable",
-          "isLink": "",
-          "isHide": false,
-          "isFull": false,
-          "isAffix": false,
-          "isKeepAlive": true
-        }
-      },
-      {
-        "path": "/proTable/complexProTable",
-        "name": "complexProTable",
-        "component": "/proTable/complexProTable/index",
-        "meta": {
-          "icon": "Menu",
-          "title": "复杂 ProTable",
-          "isLink": "",
-          "isHide": false,
-          "isFull": false,
-          "isAffix": false,
-          "isKeepAlive": true
-        }
-      },
-      {
-        "path": "/proTable/document",
-        "name": "proTableDocument",
-        "component": "/proTable/document/index",
-        "meta": {
-          "icon": "Menu",
-          "title": "ProTable 文档",
-          "isLink": "https://juejin.cn/post/7166068828202336263/#heading-14",
-          "isHide": false,
-          "isFull": false,
-          "isAffix": false,
-          "isKeepAlive": true
-        }
       }
     ]
   },
@@ -413,7 +302,7 @@ export const menuJson = [
     "redirect": "/dashboard/dataVisualize",
     "meta": {
       "icon": "Odometer",
-      "title": "Dashboard",
+      "title": funcs.lang('Dashboard'),
       "isLink": "",
       "isHide": false,
       "isFull": false,
@@ -427,7 +316,7 @@ export const menuJson = [
         "component": "/dashboard/dataVisualize/index",
         "meta": {
           "icon": "Menu",
-          "title": "数据可视化",
+          "title": funcs.lang('Data Visualization'),
           "isLink": "",
           "isHide": false,
           "isFull": false,
@@ -443,7 +332,7 @@ export const menuJson = [
     "redirect": "/form/proForm",
     "meta": {
       "icon": "Tickets",
-      "title": "表单 Form",
+      "title": funcs.lang('Form'),
       "isLink": "",
       "isHide": false,
       "isFull": false,
@@ -457,7 +346,7 @@ export const menuJson = [
         "component": "/form/proForm/index",
         "meta": {
           "icon": "Menu",
-          "title": "超级 Form",
+          "title": funcs.lang('Supper Form'),
           "isLink": "",
           "isHide": false,
           "isFull": false,
@@ -471,7 +360,7 @@ export const menuJson = [
         "component": "/form/basicForm/index",
         "meta": {
           "icon": "Menu",
-          "title": "基础 Form",
+          "title": funcs.lang('Basic Form'),
           "isLink": "",
           "isHide": false,
           "isFull": false,
@@ -485,7 +374,7 @@ export const menuJson = [
         "component": "/form/validateForm/index",
         "meta": {
           "icon": "Menu",
-          "title": "校验 Form",
+          "title": funcs.lang('Validation Form'),
           "isLink": "",
           "isHide": false,
           "isFull": false,
@@ -499,7 +388,7 @@ export const menuJson = [
         "component": "/form/dynamicForm/index",
         "meta": {
           "icon": "Menu",
-          "title": "动态 Form",
+          "title": funcs.lang('Dynamic Form'),
           "isLink": "",
           "isHide": false,
           "isFull": false,
@@ -515,7 +404,7 @@ export const menuJson = [
     "redirect": "/echarts/waterChart",
     "meta": {
       "icon": "TrendCharts",
-      "title": "ECharts",
+      "title": funcs.lang('ECharts'),
       "isLink": "",
       "isHide": false,
       "isFull": false,
@@ -529,7 +418,7 @@ export const menuJson = [
         "component": "/echarts/waterChart/index",
         "meta": {
           "icon": "Menu",
-          "title": "水型图",
+          "title": funcs.lang('Waterfall Chart'),
           "isLink": "",
           "isHide": false,
           "isFull": false,
@@ -538,12 +427,12 @@ export const menuJson = [
         }
       },
       {
-        "path": "/echarts/columnChart",
-        "name": "columnChart",
-        "component": "/echarts/columnChart/index",
+        "path": "/echarts/barChart",
+        "name": "barChart",
+        "component": "/echarts/barChart/index",
         "meta": {
           "icon": "Menu",
-          "title": "柱状图",
+          "title": funcs.lang('Bar Chart'),
           "isLink": "",
           "isHide": false,
           "isFull": false,
@@ -557,7 +446,7 @@ export const menuJson = [
         "component": "/echarts/lineChart/index",
         "meta": {
           "icon": "Menu",
-          "title": "折线图",
+          "title": funcs.lang('Line Chart'),
           "isLink": "",
           "isHide": false,
           "isFull": false,
@@ -571,7 +460,7 @@ export const menuJson = [
         "component": "/echarts/pieChart/index",
         "meta": {
           "icon": "Menu",
-          "title": "饼图",
+          "title": funcs.lang('Pie Chart'),
           "isLink": "",
           "isHide": false,
           "isFull": false,
@@ -585,7 +474,7 @@ export const menuJson = [
         "component": "/echarts/radarChart/index",
         "meta": {
           "icon": "Menu",
-          "title": "雷达图",
+          "title": funcs.lang('Radar Chart'),
           "isLink": "",
           "isHide": false,
           "isFull": false,
@@ -599,7 +488,7 @@ export const menuJson = [
         "component": "/echarts/nestedChart/index",
         "meta": {
           "icon": "Menu",
-          "title": "嵌套环形图",
+          "title": funcs.lang('Nested Ring Chart'),
           "isLink": "",
           "isHide": false,
           "isFull": false,

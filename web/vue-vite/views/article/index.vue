@@ -1,7 +1,7 @@
 <template>
   <TablePlus
       ref="tablePlus"
-      title="列表"
+      :title="funcs.lang('List')"
       :columns="columns"
       :request-api="getList"
       :init-param="initParam"
@@ -12,7 +12,7 @@
   >
     <!-- 表格 header 按钮 -->
     <template #tableHeader="scope">
-      <el-button type="primary" :icon="CirclePlus" class="mb10">新建</el-button>
+      <el-button type="primary" :icon="CirclePlus" class="mb10">{{ funcs.lang('Create') }}</el-button>
       <el-button
           type="primary"
           plain
@@ -20,7 +20,7 @@
           class="mb10"
           @click="batchPublish(scope.selectedListIds, 2)"
       >
-        批量发布
+        {{ funcs.lang('Batch Publish') }}
       </el-button>
       <el-button
           type="danger"
@@ -30,7 +30,7 @@
           class="mb10"
           @click="batchDelete(scope.selectedListIds)"
       >
-        批量删除
+        {{ funcs.lang('Batch Delete') }}
       </el-button>
     </template>
     <!-- 表格操作 -->
@@ -41,9 +41,9 @@
           :icon="EditPen"
           @click="openDrawerEdit(scope.row)"
       >
-        编辑
+        {{ funcs.lang('Edit') }}
       </el-button>
-      <el-button type="primary" link :icon="Delete">删除</el-button>
+      <el-button type="primary" link :icon="Delete">{{ funcs.lang('Delete') }}</el-button>
     </template>
   </TablePlus>
 </template>
@@ -52,7 +52,9 @@ import { ref, reactive, h } from 'vue';
 import { CirclePlus, Delete, EditPen } from '@element-plus/icons-vue';
 import articleModule from '@/app/modules/admin/article';
 import createService from '@/utils/service';
+import Functions from '@/utils/functions';
 
+const funcs = new Functions();
 const data = ref([]);
 const articleService = createService(articleModule);
 
@@ -95,38 +97,39 @@ const batchPublish = async (articleIds: string[], status: number) => {
 // 表格配置项
 const columns = [
   { type: "selection", fixed: "left", width: 80 },
-  { type: "index", label: "序号", width: 80 },
+  { type: "index", label: funcs.lang('Index'), width: 80 },
   {
     prop: "title",
-    label: "标题"
+    label: funcs.lang('Title')
   },
   {
     prop: "content",
-    label: "内容",
+    label: funcs.lang('Content'),
+    width: 160,
     search: {
       el: "input",
-      props: { maxlength: 30, placeholder: "请输入文章内容" }
+      props: { maxlength: 30, placeholder: funcs.lang('Please enter the article content') }
     }
   },
   {
     prop: "origin",
-    label: "数据来源",
+    label: funcs.lang('Data Source'),
     width: 160,
     enum: [
       {
-        label: "文章库",
+        label: funcs.lang('Article Library'),
         value: 1
       },
       {
-        label: "自建新增",
+        label: funcs.lang('Self Built'),
         value: 2
       }
     ],
-    search: { el: "tree-select", props: { filterable: true } }
+    search: { el: "tree-select", props: { filterable: true, placeholder: funcs.lang('Please select') } }
   },
   {
     prop: "created_at",
-    label: "创建时间",
+    label: funcs.lang('Create Time'),
     width: 180,
     render: (scope) => {
       return h('div', scope.row.created_at || '-');
@@ -134,26 +137,26 @@ const columns = [
   },
   {
     prop: "publish_status",
-    label: "是否发布",
+    label: funcs.lang('Is Publish'),
     width: 160,
     enum: [
       {
-        label: "已发布",
+        label: funcs.lang('Published'),
         value: 2
       },
       {
-        label: "未发布",
+        label: funcs.lang('Unpublished'),
         value: 1
       }
     ],
-    search: { el: "tree-select", props: { filterable: true } },
+    search: { el: "tree-select", props: { filterable: true, placeholder: funcs.lang('Please select') } },
     render: (scope) => {
       console.log("scope", scope)
       return h(
           'el-switch',
           {
             modelValue: scope.row.publishStatus,
-            'active-text': scope.row.publishStatus === 2 ? '已发布' : '未发布',
+            'active-text': scope.row.publishStatus === 2 ? funcs.lang('Published') : funcs.lang('Unpublished'),
             'active-value': 2,
             'inactive-value': 1,
             onClick: () => doPublish(scope.row)
@@ -161,7 +164,7 @@ const columns = [
       );
     }
   },
-  { prop: "operation", label: "操作", fixed: "right", width: 200 }
+  { prop: "operation", label: funcs.lang('Operation'), fixed: "right", width: 200 }
 ]
 const resetCallback = () => {
   console.log("resetCallBack")

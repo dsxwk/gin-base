@@ -350,5 +350,149 @@
   "Current browser does not support full screen": {
     "en-us": "Current browser does not support full screen",
     "zh-cn": "当前您的浏览器不支持全屏"
+  },
+  "User Management": {
+    "en-us": "User Management",
+    "zh-cn": "用户管理"
+  },
+  "Article Management": {
+    "en-us": "Article Management",
+    "zh-cn": "文章管理"
+  },
+  "Data Visualization": {
+    "en-us": "Data Visualization",
+    "zh-cn": "数据可视化"
+  },
+  "Form": {
+    "en-us": "Form",
+    "zh-cn": "表单"
+  },
+  "Supper Form": {
+    "en-us": "Supper Form",
+    "zh-cn": "超级表单"
+  },
+  "Basic Form": {
+    "en-us": "Basic Form",
+    "zh-cn": "基础表单"
+  },
+  "Validation Form": {
+    "en-us": "Validation Form",
+    "zh-cn": "校验表单"
+  },
+  "Dynamic Form": {
+    "en-us": "Dynamic Form",
+    "zh-cn": "动态表单"
+  },
+  "ECharts": {
+    "en-us": "ECharts",
+    "zh-cn": "统计图"
+  },
+  "Waterfall Chart": {
+    "en-us": "Waterfall Chart",
+    "zh-cn": "水形图"
+  },
+  "Bar Chart": {
+    "en-us": "Bar Chart",
+    "zh-cn": "柱状图"
+  },
+  "Line Chart": {
+    "en-us": "Line Chart",
+    "zh-cn": "折线图"
+  },
+  "Pie Chart": {
+    "en-us": "Pie Chart",
+    "zh-cn": "饼状图"
+  },
+  "Radar Chart": {
+    "en-us": "Radar Chart",
+    "zh-cn": "雷达图"
+  },
+  "Nested Ring Chart": {
+    "en-us": "Nested Ring Chart",
+    "zh-cn": "嵌套环形图"
+  },
+  "List": {
+    "en-us": "List",
+    "zh-cn": "列表"
+  },
+  "Edit": {
+    "en-us": "Edit",
+    "zh-cn": "编辑"
+  },
+  "Batch Publish": {
+    "en-us": "Batch Publish",
+    "zh-cn": "批量发布"
+  },
+  "Batch Delete": {
+    "en-us": "Batch Delete",
+    "zh-cn": "批量删除"
+  },
+  "Index": {
+    "en-us": "Index",
+    "zh-cn": "序号"
+  },
+  "Title": {
+    "en-us": "Title",
+    "zh-cn": "标题"
+  },
+  "Content": {
+    "en-us": "Content",
+    "zh-cn": "内容"
+  },
+  "Please enter the article content": {
+    "en-us": "Please enter the article content",
+    "zh-cn": "请输入文章内容"
+  },
+  "Data Source": {
+    "en-us": "Data Source",
+    "zh-cn": "数据来源"
+  },
+  "Article Library": {
+    "en-us": "Article Library",
+    "zh-cn": "文章库"
+  },
+  "Self Built": {
+    "en-us": "Self Built",
+    "zh-cn": "自建新增"
+  },
+  "Create Time": {
+    "en-us": "Create Time",
+    "zh-cn": "创建时间"
+  },
+  "Is Publish": {
+    "en-us": "Is Publish",
+    "zh-cn": "是否发布"
+  },
+  "Published": {
+    "en-us": "Published",
+    "zh-cn": "已发布"
+  },
+  "Unpublished": {
+    "en-us": "Unpublished",
+    "zh-cn": "未发布"
+  },
+  "Operation": {
+    "en-us": "Operation",
+    "zh-cn": "操作"
+  },
+  "Please select": {
+    "en-us": "Please select",
+    "zh-cn": "请选择"
+  },
+  "Switch Language": {
+    "en-us": "Switch Language",
+    "zh-cn": "切换语言"
+  },
+  "Super Admin": {
+    "en-us": "Super Admin",
+    "zh-cn": "超级管理员"
+  },
+  "Personal Information": {
+    "en-us": "Personal Information",
+    "zh-cn": "个人信息"
+  },
+  "Change Password": {
+    "en-us": "Change Password",
+    "zh-cn": "修改密码"
   }
 }

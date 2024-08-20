@@ -45,11 +45,19 @@
       </el-button>
       <el-button type="primary" link :icon="Delete">{{ funcs.lang('Delete') }}</el-button>
     </template>
+    <template #toolButton="scope">
+      <el-button :icon="Refresh" circle @click="getList" />
+      <el-button v-if="columns.length" :icon="Operation" circle />
+      <el-button
+          :icon="Search"
+          circle
+      />
+    </template>
   </TablePlus>
 </template>
 <script setup lang="tsx">
 import { ref, reactive, h } from 'vue';
-import { CirclePlus, Delete, EditPen } from '@element-plus/icons-vue';
+import { CirclePlus, Delete, EditPen, Refresh, Operation, Search } from '@element-plus/icons-vue';
 import articleModule from '@/app/modules/admin/article';
 import createService from '@/utils/service';
 import Functions from '@/utils/functions';

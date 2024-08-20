@@ -79,7 +79,7 @@ const getList = async () => {
     pageSize: result.data.page_size,
     list: result.data.list
   };
-}
+};
 const dataCallback = (data: any) => {
   console.log("data", data);
   return {
@@ -88,20 +88,20 @@ const dataCallback = (data: any) => {
     pageNum: data?.page,
     pageSize: data?.pageSize
   }
-}
+};
 // 批量删除用户信息
 const batchDelete = async (articleIds: string[]) => {
   console.log("articleIds", articleIds)
   // await fetchAPI()
   tablePlus.value?.clearSelection()
   tablePlus.value?.getTableList()
-}
+};
 const batchPublish = async (articleIds: string[], status: number) => {
   console.log("articleIds: string[], status: number", articleIds, status)
   // await fetchAPI()
   tablePlus.value?.clearSelection()
   tablePlus.value?.getTableList()
-}
+};
 // 表格配置项
 const columns = [
   { type: "selection", fixed: "left", width: 80 },
@@ -173,18 +173,17 @@ const columns = [
     }
   },
   { prop: "operation", label: funcs.lang('Operation'), fixed: "right", width: 200 }
-]
+];
 const resetCallback = () => {
-  console.log("resetCallBack")
-  tablePlus.value?.getTableList()
-}
+  console.log('resetCallBack');
+  tablePlus.value?.getTableList();
+};
 // 上架
 const doPublish = async (params: any) => {
-  console.log("doPublish", params)
-  // await fetchAPI()
-  tablePlus.value?.getTableList()
-}
+  console.log('doPublish', params);
+  tablePlus.value?.getTableList();
+};
 const openDrawerEdit = async (row: Partial<any>) => {
-  console.log(row)
-}
+  console.log(row);
+};
 </script>

@@ -128,6 +128,17 @@ export default class Functions {
     }
 
     /**
+     * @description 处理 prop，当 prop 为多级嵌套时 ==> 返回最后一级 prop
+     * @param {String} prop 当前 prop
+     * @returns {String}
+     * */
+    handleProp(prop) {
+        const propArr = prop.split(".");
+        if (propArr.length == 1) return prop;
+        return propArr[propArr.length - 1];
+    }
+
+    /**
      * 判断两个对象是否相同
      * @param {Object} a 要比较的对象一
      * @param {Object} b 要比较的对象二
@@ -302,7 +313,7 @@ export default class Functions {
      * @returns {*}
      */
     lang(key) {
-        return data[key][this.getLang()] || key;
+        return data[key] ? data[key][this.getLang()] : key;
     };
 
     /**

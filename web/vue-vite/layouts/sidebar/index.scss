@@ -12,6 +12,9 @@
   }
 }
 .el-menu-item {
+  span {
+    padding-left: 20px;
+  }
   &:hover {
     /*color: var(--el-menu-hover-text-color);*/
     color: #909399;

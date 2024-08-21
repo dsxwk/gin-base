@@ -59,19 +59,26 @@ func (s *User) BeforeUpdate(tx *gorm.DB) (err error) {
 
 // 查询之后
 func (s *User) AfterFind(tx *gorm.DB) (err error) {
+	// 时间格式转换
 	if s.CreatedAt != nil {
-		createdAt := time.Now().Format("2006-01-02 15:04:05")
-		s.CreatedAt = &createdAt
+		createdAt, _ := time.Parse(time.RFC3339, *s.CreatedAt)
+		// 格式化 time.Time 类型为字符串，并重新赋值给 *string 类型的字段
+		formattedCreatedAt := createdAt.Format("2006-01-02 15:04:05")
+		s.CreatedAt = &formattedCreatedAt
 	}
 
 	if s.UpdatedAt != nil {
-		updatedAt := time.Now().Format("2006-01-02 15:04:05")
-		s.UpdatedAt = &updatedAt
+		updatedAt, _ := time.Parse(time.RFC3339, *s.UpdatedAt)
+		// 格式化 time.Time 类型为字符串，并重新赋值给 *string 类型的字段
+		formattedUpdatedAt := updatedAt.Format("2006-01-02 15:04:05")
+		s.UpdatedAt = &formattedUpdatedAt
 	}
 
 	if s.DeletedAt != nil {
-		deletedAt := time.Now().Format("2006-01-02 15:04:05")
-		s.DeletedAt = &deletedAt
+		deletedAt, _ := time.Parse(time.RFC3339, *s.DeletedAt)
+		// 格式化 time.Time 类型为字符串，并重新赋值给 *string 类型的字段
+		formattedDeletedAt := deletedAt.Format("2006-01-02 15:04:05")
+		s.DeletedAt = &formattedDeletedAt
 	}
 
 	return

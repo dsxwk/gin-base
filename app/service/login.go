@@ -34,5 +34,9 @@ func (s *LoginService) Login(username string, password string) (model.User, erro
 		return userModel, errors.New("登录密码错误")
 	}
 
+	if userModel.Status != 1 {
+		return userModel, errors.New("账号已被禁用")
+	}
+
 	return userModel, nil
 }

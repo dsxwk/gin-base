@@ -120,7 +120,7 @@ const columns = [
     }
   },
   {
-    prop: "origin",
+    prop: "data_source",
     label: funcs.lang('Data Source'),
     width: 160,
     enum: [
@@ -144,7 +144,7 @@ const columns = [
     }
   },
   {
-    prop: "publish_status",
+    prop: "is_publish",
     label: funcs.lang('Is Publish'),
     width: 160,
     enum: [

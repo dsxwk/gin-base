@@ -55,8 +55,9 @@
     </template>
   </TablePlus>
 </template>
-<script setup lang="tsx">
+<script setup>
 import { ref, reactive, h } from 'vue';
+import { ElSwitch } from 'element-plus';
 import { CirclePlus, Delete, EditPen, Refresh, Operation, Search } from '@element-plus/icons-vue';
 import articleModule from '@/app/modules/admin/article';
 import createService from '@/utils/service';
@@ -80,8 +81,7 @@ const getList = async () => {
     list: result.data.list
   };
 };
-const dataCallback = (data: any) => {
-  console.log("data", data);
+const dataCallback = (data) => {
   return {
     list: data?.list,
     total: data?.total,
@@ -90,15 +90,14 @@ const dataCallback = (data: any) => {
   }
 };
 // 批量删除用户信息
-const batchDelete = async (articleIds: string[]) => {
+const batchDelete = async (articleIds) => {
   console.log("articleIds", articleIds)
   // await fetchAPI()
   tablePlus.value?.clearSelection()
   tablePlus.value?.getTableList()
 };
-const batchPublish = async (articleIds: string[], status: number) => {
+const batchPublish = async (articleIds, status) => {
   console.log("articleIds: string[], status: number", articleIds, status)
-  // await fetchAPI()
   tablePlus.value?.clearSelection()
   tablePlus.value?.getTableList()
 };
@@ -150,24 +149,32 @@ const columns = [
     enum: [
       {
         label: funcs.lang('Published'),
-        value: 2
+        value: 1
       },
       {
         label: funcs.lang('Unpublished'),
-        value: 1
+        value: 2
       }
     ],
     search: { el: "tree-select", props: { filterable: true, placeholder: funcs.lang('Please select') } },
     render: (scope) => {
-      console.log("scope", scope)
       return h(
-          'el-switch',
+          ElSwitch,
           {
-            modelValue: scope.row.publishStatus,
-            'active-text': scope.row.publishStatus === 2 ? funcs.lang('Published') : funcs.lang('Unpublished'),
-            'active-value': 2,
-            'inactive-value': 1,
-            onClick: () => doPublish(scope.row)
+            // 根据状态设置开关的初始值
+            modelValue: scope.row.is_publish,
+            // 开启时的文字描述
+            'active-text': funcs.lang('Published'),
+            // 关闭时的文字描述
+            'inactive-text': funcs.lang('Unpublished'),
+            // 开启时的值
+            'active-value': 1,
+            // 关闭时的值
+            'inactive-value': 2,
+            onChange: (value) => {
+              // 切换开关状态时调用 publish 方法
+              publish(scope.row, value);
+            }
           }
       );
     }
@@ -178,12 +185,14 @@ const resetCallback = () => {
   console.log('resetCallBack');
   tablePlus.value?.getTableList();
 };
-// 上架
-const doPublish = async (params: any) => {
-  console.log('doPublish', params);
-  tablePlus.value?.getTableList();
+const publish = async (row, newValue) => {
+  console.log('id=' + row.id + ' Publish status changed:', newValue === 1 ? funcs.lang('Published') : funcs.lang('Unpublished'));
+
+  // 更新api...
+  // 更新表格中当前行的 is_publish 值
+  row.is_publish = newValue;
 };
-const openDrawerEdit = async (row: Partial<any>) => {
+const openDrawerEdit = async (row) => {
   console.log(row);
 };
 </script>

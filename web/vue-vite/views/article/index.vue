@@ -92,7 +92,6 @@ const dataCallback = (data) => {
 // 批量删除用户信息
 const batchDelete = async (articleIds) => {
   console.log("articleIds", articleIds)
-  // await fetchAPI()
   tablePlus.value?.clearSelection()
   tablePlus.value?.getTableList()
 };

@@ -54,6 +54,7 @@
       />
     </template>
   </TablePlus>
+  <ArticleDrawer :drawerProps="drawerProps"/>
 </template>
 <script setup>
 import { ref, reactive, h } from 'vue';
@@ -62,18 +63,27 @@ import { CirclePlus, Delete, EditPen, Refresh, Operation, Search } from '@elemen
 import articleModule from '@/app/modules/admin/article';
 import createService from '@/utils/service';
 import Functions from '@/utils/functions';
+import ArticleDrawer from './components/drawer.vue';
 
 const funcs = new Functions();
 const data = ref([]);
 const articleService = createService(articleModule);
+const drawerProps = {
+  row: {
 
-const tablePlus = ref()
+  },
+  title: '',
+  visible: true,
+};
+const tablePlus = ref();
 const initParam = reactive({
+  pageNo: 1,
   pageNum: 1,
   pageSize: 10
 });
-const getList = async () => {
-  const result = await articleService.list({page: 1, pageSize: 10});
+const getList = async (params) => {
+  params.page = params.page || initParam.pageNum;
+  const result = await articleService.list(params);
   return {
     total: result.data.total,
     pageNo: result.data.page,
@@ -138,7 +148,7 @@ const columns = [
     label: funcs.lang('Create Time'),
     width: 180,
     render: (scope) => {
-      return h('div', scope.row.created_at || '-');
+      return h('span', scope.row.created_at || '-');
     }
   },
   {

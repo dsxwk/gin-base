@@ -51,7 +51,10 @@ import { ref, reactive } from 'vue';
 import { ElMessageBox } from 'element-plus';
 import {dataSourceDict} from '@/app/modules/admin/article/dict';
 import Functions from '@/utils/functions';
+import articleModule from '@/app/modules/admin/article';
+import createService from '@/utils/service';
 
+const articleService = createService(articleModule);
 const funcs = new Functions();
 const props = defineProps({
   drawerProps: {
@@ -70,7 +73,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['updateIsPublish']);
+const emit = defineEmits(['updateIsPublish', 'dataChange']);
 const swithIsPublish = () => {
   emit('updateIsPublish', props.drawerProps.row.is_publish);
 }
@@ -92,13 +95,16 @@ const handleClose = (done) => {
 function cancel() {
   props.drawerProps.visible = false;
 }
-function confirm() {
+async function confirm() {
   // 创建和更新
   if (props.drawerProps.row.id) {
+    await articleService.update(props.drawerProps.row);
     console.log('update', props.drawerProps.row.id);
   } else {
+    await articleService.create(props.drawerProps.row);
     console.log('create');
   }
+  emit('dataChange');
   props.drawerProps.visible = false;
 }
 </script>

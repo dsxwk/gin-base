@@ -52,7 +52,7 @@
       <el-button :icon="Search" circle/>
     </template>
   </TablePlus>
-  <ArticleDrawer :drawerProps="drawerProps" @updateIsPublish="updateIsPublish"/>
+  <ArticleDrawer :drawerProps="drawerProps" @updateIsPublish="updateIsPublish" @dataChange="dataChange"/>
   <ColSetting :colSetting="colSetting" v-model:isOpen="isOpen"/>
 </template>
 <script setup>
@@ -65,6 +65,7 @@ import Functions from '@/utils/functions';
 import ArticleDrawer from './components/drawer.vue';
 import ColSetting from '@/components/Table/ColSetting/index.vue';
 import {dataSourceDict, isPublish} from '@/app/modules/admin/article/dict';
+import pnotifyConfirm from '@/utils/pnotify/confirm';
 
 const funcs = new Functions();
 const data = ref([]);
@@ -91,6 +92,9 @@ const operationBtnText = reactive({
 const reload = () => {
   location.reload();
 };
+const dataChange = () => {
+  getList(initParam);
+}
 const getList = async (params) => {
   params.page = params.page || initParam.pageNum;
   const result = await articleService.list(params);
@@ -223,6 +227,14 @@ const edit = async (row) => {
   drawerProps.visible = true;
 };
 const del = async (row) => {
+  pnotifyConfirm('确定删除吗?', 'error').then(res => {
+    if (res) {
+      articleService.delete({id: row.id});
+      getList(initParam);
+    } else {
+      console.log('取消', id);
+    }
+  });
   console.log('delete', row.id);
 }
 </script>

@@ -494,5 +494,29 @@
   "Change Password": {
     "en-us": "Change Password",
     "zh-cn": "修改密码"
+  },
+  "Login unauthorized or expired, please log in again": {
+    "en-us": "Login unauthorized or expired, please log in again",
+    "zh-cn": "登录未授权或已过期,请重新登录"
+  },
+  "Expand": {
+    "en-us": "Expand",
+    "zh-cn": "展开"
+  },
+  "Collapse": {
+    "en-us": "Collapse",
+    "zh-cn": "收起"
+  },
+  "Please enter the title": {
+    "en-us": "Please enter the title",
+    "zh-cn": "请输入标题"
+  },
+  "Please enter the content": {
+    "en-us": "Please enter the content",
+    "zh-cn": "请输入内容"
+  },
+  "Please select data source": {
+    "en-us": "Please select data source",
+    "zh-cn": "请选择数据来源"
   }
 }

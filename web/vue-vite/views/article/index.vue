@@ -8,17 +8,18 @@
       :pagination="true"
       :data-callback="dataCallback"
       :reset-callback="resetCallback"
+      :operationBtnText="operationBtnText"
       row-key="id"
   >
     <!-- 表格 header 按钮 -->
     <template #tableHeader="scope">
-      <el-button type="primary" :icon="CirclePlus" class="mb10">{{ funcs.lang('Create') }}</el-button>
+      <el-button type="primary" :icon="CirclePlus" class="mb10" @click="create">{{ funcs.lang('Create') }}</el-button>
       <el-button
           type="primary"
           plain
           :disabled="!scope.isSelected"
           class="mb10"
-          @click="batchPublish(scope.selectedListIds, 2)"
+          @click="batchPublish(scope.selectedListIds, 1)"
       >
         {{ funcs.lang('Batch Publish') }}
       </el-button>
@@ -39,22 +40,20 @@
           type="primary"
           link
           :icon="EditPen"
-          @click="openDrawerEdit(scope.row)"
+          @click="edit(scope.row)"
       >
         {{ funcs.lang('Edit') }}
       </el-button>
-      <el-button type="primary" link :icon="Delete">{{ funcs.lang('Delete') }}</el-button>
+      <el-button type="primary" link :icon="Delete" @click="del(scope.row)">{{ funcs.lang('Delete') }}</el-button>
     </template>
     <template #toolButton="scope">
-      <el-button :icon="Refresh" circle @click="getList" />
-      <el-button v-if="columns.length" :icon="Operation" circle />
-      <el-button
-          :icon="Search"
-          circle
-      />
+      <el-button :icon="Refresh" circle @click="reload"/>
+      <el-button v-if="columns.length" :icon="Operation" circle @click="openColSetting"/>
+      <el-button :icon="Search" circle/>
     </template>
   </TablePlus>
-  <ArticleDrawer :drawerProps="drawerProps"/>
+  <ArticleDrawer :drawerProps="drawerProps" @updateIsPublish="updateIsPublish"/>
+  <ColSetting :colSetting="colSetting" v-model:isOpen="isOpen"/>
 </template>
 <script setup>
 import { ref, reactive, h } from 'vue';
@@ -64,31 +63,42 @@ import articleModule from '@/app/modules/admin/article';
 import createService from '@/utils/service';
 import Functions from '@/utils/functions';
 import ArticleDrawer from './components/drawer.vue';
+import ColSetting from '@/components/Table/ColSetting/index.vue';
+import {dataSourceDict, isPublish} from '@/app/modules/admin/article/dict';
 
 const funcs = new Functions();
 const data = ref([]);
 const articleService = createService(articleModule);
-const drawerProps = {
+const drawerProps = reactive({
   row: {
-
+    is_publish: 1
   },
   title: '',
-  visible: true,
-};
+  visible: false,
+});
 const tablePlus = ref();
 const initParam = reactive({
   pageNo: 1,
   pageNum: 1,
   pageSize: 10
 });
+const operationBtnText = reactive({
+  search: funcs.lang('Search'),
+  reset: funcs.lang('Reset'),
+  ArrowDown: funcs.lang('Expand'),
+  ArrowUp: funcs.lang('Collapse'),
+});
+const reload = () => {
+  location.reload();
+};
 const getList = async (params) => {
   params.page = params.page || initParam.pageNum;
   const result = await articleService.list(params);
   return {
-    total: result.data.total,
-    pageNo: result.data.page,
-    pageSize: result.data.page_size,
-    list: result.data.list
+    total: result?.data?.total,
+    pageNo: result?.data?.page,
+    pageSize: result?.data?.page_size,
+    list: result?.data?.list
   };
 };
 const dataCallback = (data) => {
@@ -98,6 +108,14 @@ const dataCallback = (data) => {
     pageNum: data?.page,
     pageSize: data?.pageSize
   }
+};
+const create = () => {
+  drawerProps.title = funcs.lang('Create');
+  drawerProps.row = {};
+  drawerProps.visible = true;
+}
+const updateIsPublish = (value) => {
+  drawerProps.row.is_publish = value;
 };
 // 批量删除用户信息
 const batchDelete = async (articleIds) => {
@@ -113,15 +131,22 @@ const batchPublish = async (articleIds, status) => {
 // 表格配置项
 const columns = [
   { type: "selection", fixed: "left", width: 80 },
-  { type: "index", label: funcs.lang('Index'), width: 80 },
+  { type: "index", label: funcs.lang('Index'), width: 120 },
+  { type: "expand", label: funcs.lang('Expand'), width: 120 },
+  {
+    prop: "id",
+    width: 120,
+    label: funcs.lang('ID')
+  },
   {
     prop: "title",
+    width: 200,
     label: funcs.lang('Title')
   },
   {
     prop: "content",
     label: funcs.lang('Content'),
-    width: 160,
+    width: 200,
     search: {
       el: "input",
       props: { maxlength: 30, placeholder: funcs.lang('Please enter the article content') }
@@ -130,23 +155,14 @@ const columns = [
   {
     prop: "data_source",
     label: funcs.lang('Data Source'),
-    width: 160,
-    enum: [
-      {
-        label: funcs.lang('Article Library'),
-        value: 1
-      },
-      {
-        label: funcs.lang('Self Built'),
-        value: 2
-      }
-    ],
+    width: 200,
+    enum: dataSourceDict,
     search: { el: "tree-select", props: { filterable: true, placeholder: funcs.lang('Please select') } }
   },
   {
     prop: "created_at",
     label: funcs.lang('Create Time'),
-    width: 180,
+    width: 200,
     render: (scope) => {
       return h('span', scope.row.created_at || '-');
     }
@@ -154,17 +170,8 @@ const columns = [
   {
     prop: "is_publish",
     label: funcs.lang('Is Publish'),
-    width: 160,
-    enum: [
-      {
-        label: funcs.lang('Published'),
-        value: 1
-      },
-      {
-        label: funcs.lang('Unpublished'),
-        value: 2
-      }
-    ],
+    width: 200,
+    enum: isPublish,
     search: { el: "tree-select", props: { filterable: true, placeholder: funcs.lang('Please select') } },
     render: (scope) => {
       return h(
@@ -190,6 +197,15 @@ const columns = [
   },
   { prop: "operation", label: funcs.lang('Operation'), fixed: "right", width: 200 }
 ];
+// 列设置,需要过滤掉不需要设置的列
+const colSetting = columns.filter(item => {
+  const { type, prop } = item;
+  return !['selection', 'index', 'expand'].includes(type) && prop !== "operation";
+});
+const isOpen = ref(false);
+const openColSetting = () => {
+  isOpen.value = !isOpen.value;
+};
 const resetCallback = () => {
   console.log('resetCallBack');
   tablePlus.value?.getTableList();
@@ -201,7 +217,12 @@ const publish = async (row, newValue) => {
   // 更新表格中当前行的 is_publish 值
   row.is_publish = newValue;
 };
-const openDrawerEdit = async (row) => {
-  console.log(row);
+const edit = async (row) => {
+  drawerProps.title = funcs.lang('Update');
+  drawerProps.row = row;
+  drawerProps.visible = true;
 };
+const del = async (row) => {
+  console.log('delete', row.id);
+}
 </script>

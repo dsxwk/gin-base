@@ -21,13 +21,18 @@ export default async function request(path, config) {
 
         if (data.code === 401) {
             let redirect = location.pathname + location.search;
-            pnotifyConfirm('登录未授权或已过期请重新登录!', 'error').then(res => {
+            pnotifyConfirm(funcs.lang('Login unauthorized or expired, please log in again'), 'error').then(res => {
                 if (res) {
                     location.href = '/login?lang=' + funcs.getLang() + `&redirect=${funcs.urlencode(redirect)}`;
                 } else {
                     console.log('取消');
                 }
             });
+            return;
+        }
+
+        if (data.code === 400) {
+            pnotify(data.msg, 'notice');
             return;
         }
 

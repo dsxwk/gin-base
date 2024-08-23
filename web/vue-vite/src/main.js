@@ -2,7 +2,7 @@ import { createApp } from 'vue';
 import App from '../App.vue';
 import Functions from '@/utils/functions';
 import {LOGIN_URL} from '@/config';
-import TablePlus from 'element-plus-table';
+import TablePlus from 'icourt-table';
 // reset style sheet
 import "@/styles/reset.scss";
 // CSS common style sheet

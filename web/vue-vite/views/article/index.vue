@@ -1,5 +1,6 @@
 <template>
   <TablePlus
+      :isShowSearch="isShowSearch"
       ref="tablePlus"
       :title="funcs.lang('List')"
       :columns="columns"
@@ -9,6 +10,7 @@
       :data-callback="dataCallback"
       :reset-callback="resetCallback"
       :operationBtnText="operationBtnText"
+      :emptyListText="funcs.lang('No Data')"
       row-key="id"
   >
     <!-- 表格 header 按钮 -->
@@ -49,7 +51,7 @@
     <template #toolButton="scope">
       <el-button :icon="Refresh" circle @click="reload"/>
       <el-button v-if="columns.length" :icon="Operation" circle @click="openColSetting"/>
-      <el-button :icon="Search" circle/>
+      <el-button :icon="Search" circle @click="isShowSearch = !isShowSearch"/>
     </template>
   </TablePlus>
   <ArticleDrawer :drawerProps="drawerProps" @updateIsPublish="updateIsPublish" @dataChange="dataChange"/>
@@ -68,6 +70,7 @@ import {dataSourceDict, isPublish} from '@/app/modules/admin/article/dict';
 import pnotifyConfirm from '@/utils/pnotify/confirm';
 
 const funcs = new Functions();
+const isShowSearch = ref(true);
 const data = ref([]);
 const articleService = createService(articleModule);
 const drawerProps = reactive({
@@ -136,7 +139,10 @@ const batchPublish = async (articleIds, status) => {
 const columns = [
   { type: "selection", fixed: "left", width: 80 },
   { type: "index", label: funcs.lang('Index'), width: 120 },
-  { type: "expand", label: funcs.lang('Expand'), width: 120 },
+  { type: "expand", label: funcs.lang('Expand'), width: 120,
+    render: (scope) => {
+      return h('span', JSON.stringify(scope.row) || '-');
+    } },
   {
     prop: "id",
     width: 120,

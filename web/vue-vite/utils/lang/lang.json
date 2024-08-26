@@ -518,5 +518,29 @@
   "Please select data source": {
     "en-us": "Please select data source",
     "zh-cn": "请选择数据来源"
+  },
+  "Column Settings": {
+    "en-us": "Column Settings",
+    "zh-cn": "列设置"
+  },
+  "Column Name": {
+    "en-us": "Column Name",
+    "zh-cn": "列名"
+  },
+  "Is Display": {
+    "en-us": "Is Display",
+    "zh-cn": "是否显示"
+  },
+  "Sort": {
+    "en-us": "Sort",
+    "zh-cn": "排序"
+  },
+  "No columns can be configured": {
+    "en-us": "No columns can be configured",
+    "zh-cn": "暂无可配置列"
+  },
+  "No Data": {
+    "en-us": "No Data",
+    "zh-cn": "暂无数据"
   }
 }

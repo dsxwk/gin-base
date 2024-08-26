@@ -542,5 +542,9 @@
   "No Data": {
     "en-us": "No Data",
     "zh-cn": "暂无数据"
+  },
+  "Are you sure you want to delete?": {
+    "en-us": "Are you sure you want to delete?",
+    "zh-cn": "确定删除吗?"
   }
 }

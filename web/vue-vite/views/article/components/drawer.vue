@@ -101,6 +101,7 @@ async function confirm() {
     await articleService.update(props.drawerProps.row);
     console.log('update', props.drawerProps.row.id);
   } else {
+    console.log(props.drawerProps.row);
     await articleService.create(props.drawerProps.row);
     console.log('create');
   }

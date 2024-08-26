@@ -101,12 +101,14 @@ const dataChange = () => {
 const getList = async (params) => {
   params.page = params.page || initParam.pageNum;
   const result = await articleService.list(params);
-  return {
+  let data = {
     total: result?.data?.total,
     pageNo: result?.data?.page,
     pageSize: result?.data?.page_size,
     list: result?.data?.list
   };
+  dataCallback(data);
+  return data;
 };
 const dataCallback = (data) => {
   return {
@@ -233,12 +235,12 @@ const edit = async (row) => {
   drawerProps.visible = true;
 };
 const del = async (row) => {
-  pnotifyConfirm('确定删除吗?', 'error').then(res => {
+  pnotifyConfirm(funcs.lang('Are you sure you want to delete?'), 'error').then(res => {
     if (res) {
       articleService.delete({id: row.id});
       getList(initParam);
     } else {
-      console.log('取消', id);
+      console.log('取消', row.id);
     }
   });
   console.log('delete', row.id);

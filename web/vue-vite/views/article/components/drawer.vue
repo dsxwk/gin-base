@@ -98,12 +98,11 @@ function cancel() {
 async function confirm() {
   // 创建和更新
   if (props.drawerProps.row.id) {
+    console.log('update', props.drawerProps.row);
     await articleService.update(props.drawerProps.row);
-    console.log('update', props.drawerProps.row.id);
   } else {
-    console.log(props.drawerProps.row);
+    console.log('create', props.drawerProps.row);
     await articleService.create(props.drawerProps.row);
-    console.log('create');
   }
   emit('dataChange');
   props.drawerProps.visible = false;

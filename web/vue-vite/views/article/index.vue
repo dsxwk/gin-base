@@ -58,7 +58,7 @@
   <ColSetting :colSetting="colSetting" v-model:isOpen="isOpen"/>
 </template>
 <script setup>
-import { ref, reactive, h } from 'vue';
+import { ref, reactive, watch, h } from 'vue';
 import { ElSwitch } from 'element-plus';
 import { CirclePlus, Delete, EditPen, Refresh, Operation, Search } from '@element-plus/icons-vue';
 import articleModule from '@/app/modules/admin/article';
@@ -71,7 +71,6 @@ import pnotifyConfirm from '@/utils/pnotify/confirm';
 
 const funcs = new Functions();
 const isShowSearch = ref(true);
-const data = ref([]);
 const articleService = createService(articleModule);
 const drawerProps = reactive({
   row: {
@@ -95,27 +94,26 @@ const operationBtnText = reactive({
 const reload = () => {
   location.reload();
 };
+watch(initParam, () => {
+  dataChange();
+}, { deep: true });
 const dataChange = () => {
-  getList(initParam);
+  initParam.page = initParam.page || initParam.pageNum;
+  initParam.page_size = initParam.pageSize || initParam.pageSize;
+  // 手动触发 TablePlus 更新数据
+  tablePlus.value?.getTableList();
 }
 const getList = async (params) => {
   params.page = params.page || initParam.pageNum;
-  const result = await articleService.list(params);
-  let data = {
-    total: result?.data?.total,
-    pageNo: result?.data?.page,
-    pageSize: result?.data?.page_size,
-    list: result?.data?.list
-  };
-  dataCallback(data);
-  return data;
+  params.page_size = params.pageSize || initParam.pageSize;
+  return await articleService.list(params);
 };
 const dataCallback = (data) => {
   return {
-    list: data?.list,
-    total: data?.total,
-    pageNum: data?.page,
-    pageSize: data?.pageSize
+    list: data?.data?.list,
+    total: data?.data?.total,
+    pageNum: data?.data?.page,
+    pageSize: data?.data?.page_size
   }
 };
 const create = () => {
@@ -126,7 +124,6 @@ const create = () => {
 const updateIsPublish = (value) => {
   drawerProps.row.is_publish = value;
 };
-// 批量删除用户信息
 const batchDelete = async (articleIds) => {
   console.log("articleIds", articleIds)
   tablePlus.value?.clearSelection()
@@ -207,12 +204,12 @@ const columns = [
       );
     }
   },
-  { prop: "operation", label: funcs.lang('Operation'), fixed: "right", width: 200 }
+  { prop: 'operation', label: funcs.lang('Operation'), fixed: 'right', width: 200 }
 ];
 // 列设置,需要过滤掉不需要设置的列
 const colSetting = columns.filter(item => {
   const { type, prop } = item;
-  return !['selection', 'index', 'expand'].includes(type) && prop !== "operation";
+  return !['selection', 'index', 'expand'].includes(type) && prop !== 'operation';
 });
 const isOpen = ref(false);
 const openColSetting = () => {

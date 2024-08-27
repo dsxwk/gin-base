@@ -34,7 +34,7 @@ type PageData struct {
 	// 当前页
 	Page int `json:"page"`
 	// 每页条数
-	PageSize int `json:"page_size"`
+	PageSize int `json:"pageSize"`
 	// 数据列表
 	List interface{} `json:"list"`
 }

@@ -124,13 +124,13 @@ const create = () => {
 const updateIsPublish = (value) => {
   drawerProps.row.is_publish = value;
 };
-const batchDelete = async (articleIds) => {
-  console.log("articleIds", articleIds)
+const batchDelete = async (ids) => {
+  console.log("ids", ids)
   tablePlus.value?.clearSelection()
   tablePlus.value?.getTableList()
 };
-const batchPublish = async (articleIds, status) => {
-  console.log("articleIds: string[], status: number", articleIds, status)
+const batchPublish = async (ids, status) => {
+  console.log("ids: string[], status: number", ids, status)
   tablePlus.value?.clearSelection()
   tablePlus.value?.getTableList()
 };
@@ -169,14 +169,6 @@ const columns = [
     search: { el: "tree-select", props: { filterable: true, placeholder: funcs.lang('Please select') } }
   },
   {
-    prop: "created_at",
-    label: funcs.lang('Create Time'),
-    width: 200,
-    render: (scope) => {
-      return h('span', scope.row.created_at || '-');
-    }
-  },
-  {
     prop: "is_publish",
     label: funcs.lang('Is Publish'),
     width: 200,
@@ -202,6 +194,14 @@ const columns = [
             }
           }
       );
+    }
+  },
+  {
+    prop: "created_at",
+    label: funcs.lang('Create Time'),
+    width: 200,
+    render: (scope) => {
+      return h('span', scope.row.created_at || '-');
     }
   },
   { prop: 'operation', label: funcs.lang('Operation'), fixed: 'right', width: 200 }

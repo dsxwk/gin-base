@@ -546,5 +546,37 @@
   "Are you sure you want to delete?": {
     "en-us": "Are you sure you want to delete?",
     "zh-cn": "确定删除吗?"
+  },
+  "User Status": {
+    "en-us": "User Status",
+    "zh-cn": "用户状态"
+  },
+  "Enabled": {
+    "en-us": "Enabled",
+    "zh-cn": "启用"
+  },
+  "Disabled": {
+    "en-us": "Disabled",
+    "zh-cn": "禁用"
+  },
+  "Please enter the username": {
+    "en-us": "Please enter the username",
+    "zh-cn": "请输入用户名"
+  },
+  "Please enter the age": {
+    "en-us": "Please enter the age",
+    "zh-cn": "请输入年龄"
+  },
+  "Please select the gender": {
+    "en-us": "Please select the gender",
+    "zh-cn": "请选择性别"
+  },
+  "Please enter the full name": {
+    "en-us": "Please enter the full name",
+    "zh-cn": "请输入姓名"
+  },
+  "Please enter the email": {
+    "en-us": "Please enter the email",
+    "zh-cn": "请输入邮箱"
   }
 }

@@ -81,8 +81,7 @@ const drawerProps = reactive({
 });
 const tablePlus = ref();
 const initParam = reactive({
-  pageNo: 1,
-  pageNum: 1,
+  page: 1,
   pageSize: 10
 });
 const operationBtnText = reactive({
@@ -98,14 +97,10 @@ watch(initParam, () => {
   dataChange();
 }, { deep: true });
 const dataChange = () => {
-  initParam.page = initParam.page || initParam.pageNum;
-  initParam.page_size = initParam.pageSize || initParam.pageSize;
   // 手动触发 TablePlus 更新数据
   tablePlus.value?.getTableList();
 }
 const getList = async (params) => {
-  params.page = params.page || initParam.pageNum;
-  params.page_size = params.pageSize || initParam.pageSize;
   return await articleService.list(params);
 };
 const dataCallback = (data) => {
@@ -113,7 +108,7 @@ const dataCallback = (data) => {
     list: data?.data?.list,
     total: data?.data?.total,
     pageNum: data?.data?.page,
-    pageSize: data?.data?.page_size
+    pageSize: data?.data?.pageSize
   }
 };
 const create = () => {
@@ -235,7 +230,7 @@ const del = async (row) => {
   pnotifyConfirm(funcs.lang('Are you sure you want to delete?'), 'error').then(res => {
     if (res) {
       articleService.delete({id: row.id});
-      getList(initParam);
+      tablePlus.value?.getTableList();
     } else {
       console.log('取消', row.id);
     }

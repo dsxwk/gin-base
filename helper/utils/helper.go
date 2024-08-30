@@ -189,3 +189,17 @@ func BuildWhereClause(filters interface{}, tag string) (string, []interface{}) {
 	whereClause := strings.Join(clauses, " AND ")
 	return whereClause, args
 }
+
+// @function: ToCamelCase
+// @description: 将下划线分隔的字段名转换为驼峰命名
+// @param: s string
+// @return: string
+func ToCamelCase(s string) string {
+	words := strings.Split(s, "_")
+	for i := range words {
+		if i > 0 {
+			words[i] = strings.Title(words[i])
+		}
+	}
+	return strings.Join(words, "")
+}

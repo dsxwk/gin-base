@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"gin-base/common/global"
+	"gin-base/helper/utils"
 	"go.uber.org/zap"
 	"gorm.io/gen"
 	"gorm.io/gorm"
@@ -17,6 +18,8 @@ func main() {
 		tableName string
 		// 生成路径
 		path string
+		// 是否生成驼峰字段
+		camel bool
 	)
 
 	// 表名,默认为空,描述
@@ -24,6 +27,9 @@ func main() {
 
 	// 生成路径,默认为空,描述
 	flag.StringVar(&path, "path", "", "生成路径")
+
+	// 是否生成驼峰字段
+	flag.BoolVar(&camel, "camel", false, "是否生成驼峰字段")
 
 	// 解析命令行参数
 	flag.Parse()
@@ -33,7 +39,7 @@ func main() {
 		return
 	}
 
-	CreateTableStruct(tableName, path)
+	CreateTableStruct(tableName, path, camel)
 
 	// 检查目录是否存在
 	if _, err := os.Stat(path); os.IsNotExist(err) {
@@ -55,7 +61,7 @@ func main() {
 // 生成表结构体
 // @param tableName 表名
 // @param path 生成路径
-func CreateTableStruct(tableName string, path string) {
+func CreateTableStruct(tableName string, path string, camel bool) {
 	if path == "" {
 		path = "./query"
 	}
@@ -84,6 +90,13 @@ func CreateTableStruct(tableName string, path string) {
 
 	// 要先于`ApplyBasic`执行
 	g.WithDataTypeMap(dataMap)
+
+	// 自定义JSON tag
+	if camel {
+		g.WithJSONTagNameStrategy(func(columnName string) string {
+			return utils.ToCamelCase(columnName)
+		})
+	}
 
 	// 创建模型的结构体,生成文件在 model 目录; 先创建的结果会被后面创建的覆盖
 	// 这里创建个别模型仅仅是为了拿到`*generate.QueryStructMeta`类型对象用于后面的模型关联操作中

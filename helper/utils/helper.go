@@ -3,9 +3,11 @@ package utils
 import (
 	"crypto/md5"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"golang.org/x/crypto/bcrypt"
 	"log"
+	"math/rand"
 	"reflect"
 	"regexp"
 	"strings"
@@ -202,4 +204,138 @@ func ToCamelCase(s string) string {
 		}
 	}
 	return strings.Join(words, "")
+}
+
+// @function: ConvertXStringToInt64Arr
+// @description: *string 转 []int64
+// @param: str *string
+// @return: []int64
+func ConvertXStringToInt64Arr(str *string) []int64 {
+	var (
+		data []int64
+	)
+
+	if str != nil {
+		_ = json.Unmarshal([]byte(*str), &data)
+		return data
+	}
+
+	return data
+}
+
+// @function: ConvertXStringToInt64Arr
+// @description: *string 转 []string
+// @param: str *string
+// @return: []string
+func ConvertXStringToStringArr(str *string) []string {
+	var (
+		data []string
+	)
+
+	if str != nil {
+		_ = json.Unmarshal([]byte(*str), &data)
+		return data
+	}
+
+	return data
+}
+
+// @function: RandomFileName
+// @description: 生成随机文件名
+// @param: ext string 文件后缀
+// @return: string
+func RandomFileName(ext string) string {
+	// 获取当前时间的时间戳
+	timestamp := time.Now().UnixNano() / int64(time.Millisecond)
+
+	// 生成一个随机数
+	rand.Seed(time.Now().UnixNano())
+	randomNum := rand.Intn(1000)
+
+	// 组合时间戳和随机数生成文件名
+	fileName := fmt.Sprintf("file_%d_%d."+ext, timestamp, randomNum)
+	return fileName
+}
+
+// @function: RemoveDuplicates
+// @description: 字符串切片去重
+// @param: input []string
+// @return: []string
+func RemoveDuplicates(input []string) []string {
+	var (
+		outputData []string
+	)
+
+	uniqueDataMap := make(map[string]bool)
+
+	for _, value := range input {
+		if !uniqueDataMap[value] {
+			uniqueDataMap[value] = true
+			outputData = append(outputData, value)
+		}
+	}
+
+	return outputData
+}
+
+// BatchUpdateSql 生成批量更新 SQL 语句
+// table: 数据表名称
+// data: 更新数据，每个元素是一个包含列名和值的映射
+// primaryKey: 主键字段名
+// conditions: 附加的 WHERE 条件（可选）
+// 返回值是生成的 SQL 语句和对应的参数值
+// 调用示例: sql, values := BatchUpdateSql("table", data, "id", map[string]interface{}{"status": 1})
+// global.DB.Exec(sql, values...)
+func BatchUpdateSql(table string, data []map[string]interface{}, primaryKey string, conditions map[string]interface{}) (string, []interface{}) {
+	if len(data) == 0 || primaryKey == "" {
+		return "", nil
+	}
+
+	var (
+		setParts []string
+		values   []interface{}
+		idValues []interface{}
+	)
+
+	// 确保处理所有的列名
+	columns := make(map[string]bool)
+	for _, row := range data {
+		for column := range row {
+			if column != primaryKey {
+				columns[column] = true
+			}
+		}
+		// 将 id 值转换为正确的类型
+		idValues = append(idValues, row[primaryKey])
+	}
+
+	// 生成 SET 子句
+	for column := range columns {
+		caseClause := fmt.Sprintf("`%s` = CASE `%s` ", column, primaryKey)
+		for _, row := range data {
+			caseClause += "WHEN ? THEN ? "
+			values = append(values, row[primaryKey], row[column])
+		}
+		caseClause += "END"
+		setParts = append(setParts, caseClause)
+	}
+
+	setClause := strings.Join(setParts, ", ")
+
+	var idValuesStr []string
+	for _, v := range idValues {
+		idValuesStr = append(idValuesStr, fmt.Sprintf("%v", v))
+	}
+	// 生成 WHERE 子句
+	whereParts := []string{fmt.Sprintf("`%s` IN (%s)", primaryKey, strings.Join(idValuesStr, ","))}
+	for k, v := range conditions {
+		whereParts = append(whereParts, fmt.Sprintf("`%s` = ?", k))
+		values = append(values, v)
+	}
+
+	whereClause := strings.Join(whereParts, " AND deleted_at IS NULL")
+
+	sql := fmt.Sprintf("UPDATE `%s` SET %s WHERE %s", table, setClause, whereClause)
+
+	return sql, values
 }

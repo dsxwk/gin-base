@@ -5,6 +5,7 @@
 package model
 
 import (
+	"encoding/json"
 	"gorm.io/gorm"
 	"time"
 )
@@ -22,9 +23,23 @@ type Article struct {
 	DataSource int64     `gorm:"column:data_source;type:int(11);not null;comment:数据来源 1=文章库 2=自建" json:"data_source"` // 数据来源 1=文章库 2=自建
 	IsPublish  int64     `gorm:"column:is_publish;type:int(11);not null;comment:是否发布 1=已发布 2=未发布" json:"is_publish"`  // 是否发布 1=已发布 2=未发布
 	Category   *Category `json:"category" gorm:"foreignkey:category_id;references:id"`                                // 关联分类
+	Tag        *string   `gorm:"column:tag;type:json;comment:标签" json:"tag"`                                          // 标签
 	CreatedAt  *string   `gorm:"column:created_at;type:datetime;comment:创建时间" json:"created_at"`                      // 创建时间
 	UpdatedAt  *string   `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updated_at"`                      // 更新时间
 	DeletedAt  *string   `gorm:"column:deleted_at;type:datetime;comment:删除时间" json:"deleted_at"`                      // 删除时间
+}
+
+type ArticleQuery struct {
+	ID         int64     `json:"id" comment:"ID"`                                                     // ID
+	UID        int64     `json:"uid" comment:"用户id"`                                                  // 用户id
+	User       *User     `json:"user" gorm:"foreignkey:uid;references:id" comment:"关联用户"`             // 关联用户
+	Title      string    `json:"title" comment:"标题"`                                                  // 标题
+	Content    string    `json:"content" comment:"内容"`                                                // 内容
+	CategoryID int64     `json:"category_id" comment:"分类id"`                                          // 分类id
+	DataSource int64     `json:"data_source" comment:"数据来源 1=文章库 2=自建"`                               // 数据来源 1=文章库 2=自建
+	IsPublish  int64     `json:"is_publish" comment:"是否发布 1=已发布 2=未发布"`                               // 是否发布 1=已发布 2=未发布
+	Category   *Category `json:"category" gorm:"foreignkey:category_id;references:id" comment:"关联分类"` // 关联分类
+	Tag        []string  `json:"tag" comment:"标签"`                                                    // 标签
 }
 
 // TableName Article's table name
@@ -92,4 +107,28 @@ func (s *Article) BeforeDelete(tx *gorm.DB) (err error) {
 	}
 
 	return
+}
+
+// 获取标签
+func (s *Article) GetTag() []string {
+	if s != nil && s.Tag != nil {
+		var directLeader []string
+		json.Unmarshal([]byte(*s.Tag), &directLeader)
+		return directLeader
+	}
+	return nil
+}
+
+// 设置标签
+func (s *Article) SetTag(tag []string) *string {
+	var (
+		model Article
+	)
+
+	if tag != nil {
+		tagJSON, _ := json.Marshal(tag)
+		tagStr := string(tagJSON)
+		model.Tag = &tagStr
+	}
+	return model.Tag
 }

@@ -54,7 +54,7 @@ func (s *ArticleController) Create(c *gin.Context) {
 	var (
 		articleService  service.ArticleService
 		articleValidate validate.ArticleValidate
-		req             model.Article
+		req             model.ArticleQuery
 	)
 
 	err := c.ShouldBind(&req)
@@ -102,7 +102,7 @@ func (s *ArticleController) Update(c *gin.Context) {
 	var (
 		articleService  service.ArticleService
 		articleValidate validate.ArticleValidate
-		req             model.Article
+		req             model.ArticleQuery
 	)
 
 	idParam := c.Param("id")

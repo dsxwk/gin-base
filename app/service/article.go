@@ -34,6 +34,7 @@ func (s *ArticleService) List(req validate.ArticleValidate) (global.PageData, er
 
 	var (
 		articleModel []model.Article
+		articleQuery []model.ArticleQuery
 		pageData     global.PageData
 		//fields       []field
 	)
@@ -57,14 +58,20 @@ func (s *ArticleService) List(req validate.ArticleValidate) (global.PageData, er
 	}
 
 	// 执行分页查询
-	err = db.Offset(offset).Limit(limit).Find(&articleModel).Error
+	err = db.Offset(offset).Limit(limit).Find(&articleModel).Scan(&articleQuery).Error
 	if err != nil {
 		return pageData, err
 	}
 
+	for k, m := range articleModel {
+		articleQuery[k].User = m.User
+		articleQuery[k].Category = m.Category
+		articleQuery[k].Tag = m.GetTag()
+	}
+
 	pageData.Page = req.Page
 	pageData.PageSize = req.PageSize
-	pageData.List = articleModel
+	pageData.List = articleQuery
 
 	return pageData, nil
 }
@@ -73,26 +80,55 @@ func (s *ArticleService) List(req validate.ArticleValidate) (global.PageData, er
 // @description: 创建
 // @param: req model.Article
 // @return: model.Article, error
-func (s *ArticleService) Create(req model.Article) (model.Article, error) {
-	err := global.DB.Create(&req).Error
-	if err != nil {
-		return req, err
+func (s *ArticleService) Create(req model.ArticleQuery) (model.Article, error) {
+	var (
+		articleModel model.Article
+	)
+
+	articleModel = model.Article{
+		UID:        req.UID,
+		Title:      req.Title,
+		Content:    req.Content,
+		CategoryID: req.CategoryID,
+		DataSource: req.DataSource,
+		IsPublish:  req.IsPublish,
+		Tag:        articleModel.SetTag(req.Tag),
 	}
 
-	return req, nil
+	err := global.DB.Create(&articleModel).Error
+	if err != nil {
+		return articleModel, err
+	}
+
+	return articleModel, nil
 }
 
 // @function: Update
 // @description: 更新
 // @param: req model.Article
 // @return: model.Article, error
-func (this *ArticleService) Update(req model.Article) (model.Article, error) {
-	err := global.DB.Updates(&req).Error
-	if err != nil {
-		return req, err
+func (this *ArticleService) Update(req model.ArticleQuery) (model.Article, error) {
+	var (
+		articleModel model.Article
+	)
+
+	articleModel = model.Article{
+		ID:         req.ID,
+		UID:        req.UID,
+		Title:      req.Title,
+		Content:    req.Content,
+		CategoryID: req.CategoryID,
+		DataSource: req.DataSource,
+		IsPublish:  req.IsPublish,
+		Tag:        articleModel.SetTag(req.Tag),
 	}
 
-	return req, nil
+	err := global.DB.Updates(&articleModel).Error
+	if err != nil {
+		return articleModel, err
+	}
+
+	return articleModel, nil
 }
 
 // @function: Detail

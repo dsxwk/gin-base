@@ -11,7 +11,7 @@
  Target Server Version : 80012
  File Encoding         : 65001
 
- Date: 21/08/2024 10:28:51
+ Date: 18/09/2024 16:46:38
 */
 
 SET NAMES utf8mb4;
@@ -29,17 +29,18 @@ CREATE TABLE `article`  (
   `category_id` int(11) NOT NULL DEFAULT 0 COMMENT '分类id',
   `data_source` tinyint(3) UNSIGNED NOT NULL DEFAULT 2 COMMENT '数据来源 1=文章库 2=自建',
   `is_publish` tinyint(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT '是否发布 1=已发布 2=未发布',
+  `tag` json NULL COMMENT '标签',
   `created_at` datetime NULL DEFAULT NULL COMMENT '创建时间',
   `updated_at` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `deleted_at` datetime NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 26 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of article
 -- ----------------------------
-INSERT INTO `article` VALUES (1, 1, '标题1', '内容1', 1, 2, 1, '2023-09-19 11:43:58', '2024-07-10 10:51:50', NULL);
-INSERT INTO `article` VALUES (13, 1, '测试7', '测试内容7', 0, 2, 1, '2024-07-22 11:21:18', '2024-07-22 11:21:18', NULL);
+INSERT INTO `article` VALUES (1, 1, '标题1', '内容1', 1, 2, 1, '[\"测试标签1\", \"测试标签2\"]', '2023-09-19 11:43:58', '2024-09-18 16:35:25', NULL);
+INSERT INTO `article` VALUES (13, 1, '测试77', '测试内容77', 0, 2, 1, '[\"标签3\", \"标签4\"]', '2024-07-22 11:21:18', '2024-07-22 11:21:18', NULL);
 
 -- ----------------------------
 -- Table structure for category
@@ -118,7 +119,7 @@ CREATE TABLE `user`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uniq_idx_username`(`username`) USING BTREE,
   UNIQUE INDEX `uniq_idx_email`(`email`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 36 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user

@@ -20,18 +20,15 @@
     color: #909399;
   }
   &.is-active {
-    /*color: var(--el-menu-active-color) !important;*/
-    color: #009688 !important;
-    /*background-color: var(--el-menu-active-bg-color) !important;*/
-    background-color: #e6f5f3 !important;
+    color: var(--el-menu-active-color) !important;
+    background-color: var(--el-menu-active-bg-color) !important;
     &::before {
       position: absolute;
       top: 0;
       bottom: 0;
       width: 4px;
       content: "";
-      /*background-color: var(--el-color-primary);*/
-      background-color: #009688;
+      background-color: var(--el-color-primary);
       /* 新增 */
       left: 0;
     }

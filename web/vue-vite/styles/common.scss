@@ -82,21 +82,16 @@
 
 /* nprogress */
 #nprogress .bar {
-  /*background: var(--el-color-primary) !important;*/
-  background: #009688 !important;
+  background: var(--el-color-primary) !important;
 }
 #nprogress .spinner-icon {
-  /*border-top-color: var(--el-color-primary) !important;*/
-  border-top-color: #009688 !important;
-  /*border-left-color: var(--el-color-primary) !important;*/
-  border-left-color: #009688 !important;
+  border-top-color: var(--el-color-primary) !important;
+  border-left-color: var(--el-color-primary) !important;
 }
 #nprogress .peg {
   box-shadow:
-          /*0 0 10px var(--el-color-primary),*/
-          0 0 10px #009688,
-          /*0 0 5px var(--el-color-primary) !important;*/
-          0 0 5px #009688 !important;
+          0 0 10px var(--el-color-primary),
+          0 0 5px var(--el-color-primary) !important;
 }
 
 /* 外边距、内边距全局样式 */

@@ -5,7 +5,7 @@
       display: none;
     }
     .el-input__wrapper.is-focus {
-      box-shadow: 0 0 0 1px #009688 inset;
+      box-shadow: 0 0 0 1px var(--el-color-primary) inset;
     }
   }
   .menu-list {
@@ -43,8 +43,7 @@
     }
     .menu-active {
       color: #ffffff;
-      /*background-color: var(--el-color-primary);*/
-      background-color: #009688;
+      background-color: var(--el-color-primary);
       .menu-icon {
         font-size: 18px;
       }

@@ -4,20 +4,23 @@
   </div>
 </template>
 
-<script setup lang="ts" name="cure">
+<script setup lang="ts">
 import { ECOption } from "@/components/ECharts/config";
 import ECharts from "@/components/ECharts/index.vue";
+import Functions from '@/utils/functions';
+
+const funcs = new Functions();
 
 const curveData = [
-  { value: 30, spotName: "掘金" },
+  { value: 30, spotName: funcs.lang('Juejin') },
   { value: 90, spotName: "CSDN" },
   { value: 10, spotName: "Gitee" },
   { value: 70, spotName: "GitHub" },
-  { value: 20, spotName: "知乎" },
+  { value: 20, spotName: funcs.lang('Zhihu') },
   { value: 60, spotName: "MyBlog" },
-  { value: 55, spotName: "简书" },
+  { value: 55, spotName: funcs.lang('Jianshu') },
   { value: 80, spotName: "StackOverFlow" },
-  { value: 50, spotName: "博客园" }
+  { value: 50, spotName: funcs.lang('Cnblogs') }
 ];
 
 const option: ECOption = {

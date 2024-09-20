@@ -261,11 +261,11 @@
   },
   "FullName": {
     "en-us": "FullName",
-     "zh-cn": "姓名"
+    "zh-cn": "姓名"
   },
   "Please Entry FullName": {
     "en-us": "Please Entry FullName",
-     "zh-cn": "请输入姓名"
+    "zh-cn": "请输入姓名"
   },
   "Male": {
     "en-us": "Male",
@@ -315,7 +315,7 @@
     "en-us": "Please Select Gender",
     "zh-cn": "请选择性别"
   },
-  "Created Successfully":{
+  "Created Successfully": {
     "en-us": "Created Successfully",
     "zh-cn": "创建成功"
   },
@@ -634,5 +634,77 @@
   "Component Path": {
     "en-us": "Component Path",
     "zh-cn": "组件路径"
+  },
+  "User Data": {
+    "en-us": "User Data",
+    "zh-cn": "用户数据"
+  },
+  "Access Total": {
+    "en-us": "Access Total",
+    "zh-cn": "访问总数"
+  },
+  "Total Users": {
+    "en-us": "Total Users",
+    "zh-cn": "总用户数"
+  },
+  "Today Registered": {
+    "en-us": "Today Registered",
+    "zh-cn": "今日注册"
+  },
+  "Today Visits": {
+    "en-us": "Today Visits",
+    "zh-cn": "今日访问量"
+  },
+  "Yesterday Visits": {
+    "en-us": "Yesterday Visits",
+    "zh-cn": "昨日访问量"
+  },
+  "Visit Proportion": {
+    "en-us": "Visit Proportion",
+    "zh-cn": "访问量占比"
+  },
+  "Future 7 Days": {
+    "en-us": "Future 7 Days",
+    "zh-cn": "未来7日"
+  },
+  "Last 7 Days": {
+    "en-us": "Last 7 Days",
+    "zh-cn": "近七日"
+  },
+  "Last Month": {
+    "en-us": "Last Month",
+    "zh-cn": "近一月"
+  },
+  "Last 3 Months": {
+    "en-us": "Last 3 Months",
+    "zh-cn": "近三月"
+  },
+  "Last 6 Months": {
+    "en-us": "Last 6 Months",
+    "zh-cn": "近半年"
+  },
+  "Last Year": {
+    "en-us": "Last Year",
+    "zh-cn": "近一年"
+  },
+  "Access Volume": {
+    "en-us": "Access Volume",
+    "zh-cn": "访问量"
+  },
+  "Juejin": {
+    "en-us": "Juejin",
+    "zh-cn": "掘金"
+  },
+  "Zhihu": {
+    "en-us": "Zhihu",
+    "zh-cn": "知乎"
+  },
+  "Jianshu": {
+    "en-us": "Jianshu",
+    "zh-cn": "简书"
+  },
+  "Cnblogs": {
+    "en-us": "Cnblogs",
+    "zh-cn": "博客园"
   }
 }

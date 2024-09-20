@@ -96,7 +96,7 @@ export const menuJson = [
     ]
   },
   {
-    "path": "/auth",
+    "path": "",
     "name": "auth",
     "redirect": "/auth/menu",
     "meta": {
@@ -140,7 +140,7 @@ export const menuJson = [
     ]
   },
   {
-    "path": "/assembly",
+    "path": "",
     "name": "assembly",
     "redirect": "/assembly/guide",
     "meta": {
@@ -297,7 +297,7 @@ export const menuJson = [
     ]
   },
   {
-    "path": "/dashboard",
+    "path": "",
     "name": "dashboard",
     "redirect": "/dashboard/dataVisualize",
     "meta": {
@@ -731,7 +731,7 @@ export const menuJson = [
     ]
   },
   {
-    "path": "/system",
+    "path": "",
     "name": "system",
     "redirect": "/system/accountManage",
     "meta": {

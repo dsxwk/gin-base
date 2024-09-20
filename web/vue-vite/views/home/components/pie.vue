@@ -7,16 +7,19 @@
 <script setup lang="ts">
 import { ECOption } from "@/components/ECharts/config";
 import ECharts from "@/components/ECharts/index.vue";
+import Functions from '@/utils/functions';
+
+const funcs = new Functions();
 
 const pieData = [
-  { value: 5000, name: "Gitee 访问量" },
-  { value: 5000, name: "GitHub 访问量" }
+  { value: 5000, name: "Gitee " + funcs.lang('Access Volume') },
+  { value: 5000, name: "GitHub " + funcs.lang('Access Volume') }
 ];
 
 const option: ECOption = {
   title: {
     text: "Gitee / GitHub",
-    subtext: "访问占比",
+    subtext: funcs.lang('Visit Proportion'),
     left: "56%",
     top: "45%",
     textAlign: "center",

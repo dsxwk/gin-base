@@ -12,7 +12,7 @@
         :reset-callback="resetCallback"
         :operationBtnText="operationBtnText"
         :emptyListText="funcs.lang('No Data')"
-        row-key="id"
+        row-key="name"
     >
       <!-- 表格 header 按钮 -->
       <template #tableHeader="scope">
@@ -30,7 +30,7 @@
       </template>
       <!-- 菜单图标 -->
       <template #icon="scope">
-        <el-icon :size="18">
+        <el-icon :size="18" v-if="scope.row.meta.icon">
           <component :is="scope.row.meta.icon"></component>
         </el-icon>
       </template>
@@ -100,12 +100,12 @@ const getList = async (params) => {
   // return await menuService.list(params);
   return await {
     data: {
-          list: menuJson,
-          total: menuJson.length,
-          page: 1,
-          pageSize: 10
-        }
-      };
+      list: menuJson,
+      total: menuJson.length,
+      page: 1,
+      pageSize: menuJson.length
+    }
+  };
 };
 const dataCallback = (data) => {
   return {

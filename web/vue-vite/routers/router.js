@@ -57,6 +57,20 @@ const routers = [
             }
         ]
     },
+    {
+        path: '/layouts',
+        redirect: '/menu',
+        component: () => import('@/layouts/index.vue'),
+        meta: {
+            title: funcs.lang('Menu List')
+        },
+        children: [
+            {
+                path: '/menu',
+                component: () => import('@/views/system/menu/index.vue'),
+            }
+        ]
+    },
     // 可以继续添加其他路由配置
     {
         path: '/:catchAll(.*)',

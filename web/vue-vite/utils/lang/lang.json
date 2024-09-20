@@ -578,5 +578,53 @@
   "Please enter the email": {
     "en-us": "Please enter the email",
     "zh-cn": "请输入邮箱"
+  },
+  "Permission Management": {
+    "en-us": "Permission Management",
+    "zh-cn": "权限管理"
+  },
+  "Common Components": {
+    "en-us": "Common Components",
+    "zh-cn": "常用组件"
+  },
+  "Custom Directive": {
+    "en-us": "Custom Directive",
+    "zh-cn": "自定义指令"
+  },
+  "Nested Menu": {
+    "en-us": "Nested Menu",
+    "zh-cn": "菜单嵌套"
+  },
+  "System Management": {
+    "en-us": "System Management",
+    "zh-cn": "系统管理"
+  },
+  "Menu Management": {
+    "en-us": "Menu Management",
+    "zh-cn": "菜单管理"
+  },
+  "External Link": {
+    "en-us": "External Link",
+    "zh-cn": "外部链接"
+  },
+  "About Project": {
+    "en-us": "About Project",
+    "zh-cn": "关于项目"
+  },
+  "Icon": {
+    "en-us": "Icon",
+    "zh-cn": "图标"
+  },
+  "Menu Name": {
+    "en-us": "Menu Name",
+    "zh-cn": "菜单名称"
+  },
+  "Route": {
+    "en-us": "Route",
+    "zh-cn": "路由"
+  },
+  "Component Path": {
+    "en-us": "Component Path",
+    "zh-cn": "组件路径"
   }
 }

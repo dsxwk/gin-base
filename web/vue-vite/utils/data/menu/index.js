@@ -101,7 +101,7 @@ export const menuJson = [
     "redirect": "/auth/menu",
     "meta": {
       "icon": "Lock",
-      "title": "权限管理",
+      "title": funcs.lang('Permission Management'),
       "isLink": "",
       "isHide": false,
       "isFull": false,
@@ -145,7 +145,7 @@ export const menuJson = [
     "redirect": "/assembly/guide",
     "meta": {
       "icon": "Briefcase",
-      "title": "常用组件",
+      "title": funcs.lang('Common Components'),
       "isLink": "",
       "isHide": false,
       "isFull": false,
@@ -504,7 +504,7 @@ export const menuJson = [
     "redirect": "/directives/copyDirect",
     "meta": {
       "icon": "Stamp",
-      "title": "自定义指令",
+      "title": funcs.lang('Custom Directive'),
       "isLink": "",
       "isHide": false,
       "isFull": false,
@@ -604,7 +604,7 @@ export const menuJson = [
     "redirect": "/menu/menu1",
     "meta": {
       "icon": "List",
-      "title": "菜单嵌套",
+      "title": funcs.lang('Nested Menu'),
       "isLink": "",
       "isHide": false,
       "isFull": false,
@@ -736,7 +736,7 @@ export const menuJson = [
     "redirect": "/system/accountManage",
     "meta": {
       "icon": "Tools",
-      "title": "系统管理",
+      "title": funcs.lang('System Management'),
       "isLink": "",
       "isHide": false,
       "isFull": false,
@@ -773,12 +773,12 @@ export const menuJson = [
         }
       },
       {
-        "path": "/system/menuMange",
+        "path": "/menu",
         "name": "menuMange",
-        "component": "/system/menuMange/index",
+        "component": "/system/menu/index",
         "meta": {
           "icon": "Menu",
-          "title": "菜单管理",
+          "title": funcs.lang('Menu Management'),
           "isLink": "",
           "isHide": false,
           "isFull": false,
@@ -850,7 +850,7 @@ export const menuJson = [
     "redirect": "/link/bing",
     "meta": {
       "icon": "Paperclip",
-      "title": "外部链接",
+      "title": funcs.lang('External Link'),
       "isLink": "",
       "isHide": false,
       "isFull": false,
@@ -936,7 +936,7 @@ export const menuJson = [
     "component": "/about/index",
     "meta": {
       "icon": "InfoFilled",
-      "title": "关于项目",
+      "title": funcs.lang('About Project'),
       "isLink": "",
       "isHide": false,
       "isFull": false,

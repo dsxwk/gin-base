@@ -1,52 +1,54 @@
 <template>
-  <TablePlus
-      :isShowSearch="isShowSearch"
-      ref="tablePlus"
-      :title="funcs.lang('List')"
-      :columns="columns"
-      :request-api="getList"
-      :init-param="initParam"
-      :pagination="true"
-      :data-callback="dataCallback"
-      :reset-callback="resetCallback"
-      :operationBtnText="operationBtnText"
-      :emptyListText="funcs.lang('No Data')"
-      row-key="id"
-  >
-    <!-- 表格 header 按钮 -->
-    <template #tableHeader="scope">
-      <el-button type="primary" :icon="CirclePlus" class="mb10" @click="create">{{ funcs.lang('Create') }}</el-button>
-      <el-button
-          type="danger"
-          :icon="Delete"
-          plain
-          :disabled="!scope.isSelected"
-          class="mb10"
-          @click="batchDelete(scope.selectedListIds)"
-      >
-        {{ funcs.lang('Batch Delete') }}
-      </el-button>
-    </template>
-    <!-- 表格操作 -->
-    <template #operation="scope">
-      <el-button
-          type="primary"
-          link
-          :icon="EditPen"
-          @click="edit(scope.row)"
-      >
-        {{ funcs.lang('Edit') }}
-      </el-button>
-      <el-button type="primary" link :icon="Delete" @click="del(scope.row)">{{ funcs.lang('Delete') }}</el-button>
-    </template>
-    <template #toolButton="scope">
-      <el-button :icon="Refresh" circle @click="reload"/>
-      <el-button v-if="columns.length" :icon="Operation" circle @click="openColSetting"/>
-      <el-button :icon="Search" circle @click="isShowSearch = !isShowSearch"/>
-    </template>
-  </TablePlus>
-  <UserDrawer :drawerProps="drawerProps" @updateIsPublish="updateUserStatus" @dataChange="dataChange"/>
-  <ColSetting :colSetting="colSetting" v-model:isOpen="isOpen"/>
+  <div class="table-box">
+    <TablePlus
+        :isShowSearch="isShowSearch"
+        ref="tablePlus"
+        :title="funcs.lang('List')"
+        :columns="columns"
+        :request-api="getList"
+        :init-param="initParam"
+        :pagination="true"
+        :data-callback="dataCallback"
+        :reset-callback="resetCallback"
+        :operationBtnText="operationBtnText"
+        :emptyListText="funcs.lang('No Data')"
+        row-key="id"
+    >
+      <!-- 表格 header 按钮 -->
+      <template #tableHeader="scope">
+        <el-button type="primary" :icon="CirclePlus" class="mb10" @click="create">{{ funcs.lang('Create') }}</el-button>
+        <el-button
+            type="danger"
+            :icon="Delete"
+            plain
+            :disabled="!scope.isSelected"
+            class="mb10"
+            @click="batchDelete(scope.selectedListIds)"
+        >
+          {{ funcs.lang('Batch Delete') }}
+        </el-button>
+      </template>
+      <!-- 表格操作 -->
+      <template #operation="scope">
+        <el-button
+            type="primary"
+            link
+            :icon="EditPen"
+            @click="edit(scope.row)"
+        >
+          {{ funcs.lang('Edit') }}
+        </el-button>
+        <el-button type="primary" link :icon="Delete" @click="del(scope.row)">{{ funcs.lang('Delete') }}</el-button>
+      </template>
+      <template #toolButton="scope">
+        <el-button :icon="Refresh" circle @click="reload"/>
+        <el-button v-if="columns.length" :icon="Operation" circle @click="openColSetting"/>
+        <el-button :icon="Search" circle @click="isShowSearch = !isShowSearch"/>
+      </template>
+    </TablePlus>
+    <UserDrawer :drawerProps="drawerProps" @updateIsPublish="updateUserStatus" @dataChange="dataChange"/>
+    <ColSetting :colSetting="colSetting" v-model:isOpen="isOpen"/>
+  </div>
 </template>
 <script setup>
 import { ref, reactive, watch, h } from 'vue';

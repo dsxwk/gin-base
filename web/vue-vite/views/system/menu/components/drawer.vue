@@ -8,32 +8,20 @@
           :rules="rules"
           :model="drawerProps.row"
       >
-        <el-form-item :label="funcs.lang('Username')" prop="username">
-          <el-input v-model="drawerProps.row.username" :placeholder="funcs.lang('Please enter the username')" clearable></el-input>
+        <el-form-item :label="funcs.lang('Menu Name')" prop="meta.title">
+          <el-input v-model="drawerProps.row.meta.title" :placeholder="funcs.lang('Please enter the Menu Name')" clearable></el-input>
         </el-form-item>
-        <el-form-item :label="funcs.lang('FullName')" prop="full_name">
-          <el-input v-model="drawerProps.row.full_name" :placeholder="funcs.lang('Please enter the full name')" clearable></el-input>
+        <el-form-item :label="funcs.lang('Menu Alias')" prop="name">
+          <el-input v-model="drawerProps.row.name" :placeholder="funcs.lang('Please enter the Menu Alias')" clearable></el-input>
         </el-form-item>
-        <el-form-item :label="funcs.lang('Gender')" prop="gender">
-          <el-select  v-model="drawerProps.row.gender" :placeholder="funcs.lang('Please select the gender')" clearable>
-            <el-option
-                v-for="item in genderDict"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-            />
-          </el-select>
+        <el-form-item :label="funcs.lang('Icon')" prop="meta.icon">
+          <el-input v-model="drawerProps.row.name" :placeholder="funcs.lang('Please enter the Icon')" clearable></el-input>
         </el-form-item>
-        <el-form-item :label="funcs.lang('User Status')" prop="status">
-          <el-switch
-              v-model="drawerProps.row.status"
-              @click="swithUserStatus"
-              class="mb-2"
-              :active-text="funcs.lang('Enabled')"
-              :inactive-text="funcs.lang('Disabled')"
-              :active-value="1"
-              :inactive-value="2"
-          />
+        <el-form-item :label="funcs.lang('Route')" prop="path">
+          <el-input v-model="drawerProps.row.path" :placeholder="funcs.lang('Please enter the Route')" clearable></el-input>
+        </el-form-item>
+        <el-form-item :label="funcs.lang('Component Path')" prop="component">
+          <el-input v-model="drawerProps.row.component" :placeholder="funcs.lang('Please enter the Component Path')" clearable></el-input>
         </el-form-item>
       </el-form>
     </template>
@@ -51,10 +39,10 @@ import { ref, reactive } from 'vue';
 import { ElMessageBox } from 'element-plus';
 import {genderDict} from '@/app/modules/admin/user/dict';
 import Functions from '@/utils/functions';
-import userModule from '@/app/modules/admin/user';
+import menuModule from '@/app/modules/admin/menu';
 import createService from '@/utils/service';
 
-const userService = createService(userModule);
+const menuService = createService(menuModule);
 const funcs = new Functions();
 const props = defineProps({
   drawerProps: {
@@ -73,10 +61,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['updateUserStatus', 'dataChange']);
-const swithUserStatus = () => {
-  emit('updateUserStatus', props.drawerProps.row.is_publish);
-}
+const emit = defineEmits(['dataChange']);
 const direction = ref('rtl');
 const rules = reactive({
   username: [{ required: true, message: funcs.lang('Please enter the username') }],

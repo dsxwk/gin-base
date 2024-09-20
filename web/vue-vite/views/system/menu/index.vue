@@ -1,52 +1,60 @@
 <template>
-  <TablePlus
-      :isShowSearch="isShowSearch"
-      ref="tablePlus"
-      :title="funcs.lang('List')"
-      :columns="columns"
-      :request-api="getList"
-      :init-param="initParam"
-      :pagination="true"
-      :data-callback="dataCallback"
-      :reset-callback="resetCallback"
-      :operationBtnText="operationBtnText"
-      :emptyListText="funcs.lang('No Data')"
-      row-key="id"
-  >
-    <!-- 表格 header 按钮 -->
-    <template #tableHeader="scope">
-      <el-button type="primary" :icon="CirclePlus" class="mb10" @click="create">{{ funcs.lang('Create') }}</el-button>
-      <el-button
-          type="danger"
-          :icon="Delete"
-          plain
-          :disabled="!scope.isSelected"
-          class="mb10"
-          @click="batchDelete(scope.selectedListIds)"
-      >
-        {{ funcs.lang('Batch Delete') }}
-      </el-button>
-    </template>
-    <!-- 表格操作 -->
-    <template #operation="scope">
-      <el-button
-          type="primary"
-          link
-          :icon="EditPen"
-          @click="edit(scope.row)"
-      >
-        {{ funcs.lang('Edit') }}
-      </el-button>
-      <el-button type="primary" link :icon="Delete" @click="del(scope.row)">{{ funcs.lang('Delete') }}</el-button>
-    </template>
-    <template #toolButton="scope">
-      <el-button :icon="Refresh" circle @click="reload"/>
-      <el-button v-if="columns.length" :icon="Operation" circle @click="openColSetting"/>
-      <el-button :icon="Search" circle @click="isShowSearch = !isShowSearch"/>
-    </template>
-  </TablePlus>
-  <MeunDrawer :drawerProps="drawerProps" @updateIsPublish="updateUserStatus" @dataChange="dataChange"/>
-  <ColSetting :colSetting="colSetting" v-model:isOpen="isOpen"/>
+  <div class="table-box">
+    <TablePlus
+        :isShowSearch="isShowSearch"
+        ref="tablePlus"
+        :title="funcs.lang('List')"
+        :columns="columns"
+        :request-api="getList"
+        :init-param="initParam"
+        :pagination="true"
+        :data-callback="dataCallback"
+        :reset-callback="resetCallback"
+        :operationBtnText="operationBtnText"
+        :emptyListText="funcs.lang('No Data')"
+        row-key="id"
+    >
+      <!-- 表格 header 按钮 -->
+      <template #tableHeader="scope">
+        <el-button type="primary" :icon="CirclePlus" class="mb10" @click="create">{{ funcs.lang('Create') }}</el-button>
+        <el-button
+            type="danger"
+            :icon="Delete"
+            plain
+            :disabled="!scope.isSelected"
+            class="mb10"
+            @click="batchDelete(scope.selectedListIds)"
+        >
+          {{ funcs.lang('Batch Delete') }}
+        </el-button>
+      </template>
+      <!-- 菜单图标 -->
+      <template #icon="scope">
+        <el-icon :size="18">
+          <component :is="scope.row.meta.icon"></component>
+        </el-icon>
+      </template>
+      <!-- 表格操作 -->
+      <template #operation="scope">
+        <el-button
+            type="primary"
+            link
+            :icon="EditPen"
+            @click="edit(scope.row)"
+        >
+          {{ funcs.lang('Edit') }}
+        </el-button>
+        <el-button type="primary" link :icon="Delete" @click="del(scope.row)">{{ funcs.lang('Delete') }}</el-button>
+      </template>
+      <template #toolButton="scope">
+        <el-button :icon="Refresh" circle @click="reload"/>
+        <el-button v-if="columns.length" :icon="Operation" circle @click="openColSetting"/>
+        <el-button :icon="Search" circle @click="isShowSearch = !isShowSearch"/>
+      </template>
+    </TablePlus>
+    <MeunDrawer :drawerProps="drawerProps" @dataChange="dataChange"/>
+    <ColSetting :colSetting="colSetting" v-model:isOpen="isOpen"/>
+  </div>
 </template>
 <script setup>
 import {CirclePlus, Delete, EditPen, Operation, Refresh, Search} from '@element-plus/icons-vue';
@@ -55,8 +63,9 @@ import MeunDrawer from './components/drawer.vue';
 import Functions from '@/utils/functions';
 import pnotifyConfirm from '@/utils/pnotify/confirm';
 import {reactive, ref, watch} from "vue";
-import createService from "@/utils/service.js";
-import menuModule from "@/app/modules/admin/menu/index.js";
+import createService from '@/utils/service.js';
+import menuModule from '@/app/modules/admin/menu';
+import {menuJson} from '@/utils/data/menu';
 
 const funcs = new Functions();
 const isShowSearch = ref(true);
@@ -89,7 +98,14 @@ const dataChange = () => {
 }
 const getList = async (params) => {
   // return await menuService.list(params);
-  return await [];
+  return await {
+    data: {
+          list: menuJson,
+          total: menuJson.length,
+          page: 1,
+          pageSize: 10
+        }
+      };
 };
 const dataCallback = (data) => {
   return {
@@ -110,10 +126,11 @@ const batchDelete = async (ids) => {
   tablePlus.value?.getTableList()
 };
 const columns = [
-  { prop: "meta.title", label: funcs.lang('Title'), align: "left", search: { el: "input" } },
-  { prop: "meta.icon", label: funcs.lang('Icon') },
-  { prop: "name", label: funcs.lang('Menu Name'), search: { el: "input" } },
-  { prop: "path", label: funcs.lang('Route'), width: 300, search: { el: "input" } },
+  { type: "index", label: funcs.lang('Index'), width: 120 },
+  { prop: "meta.title", label: funcs.lang('Menu Name'), width:200, align: "left", search: { el: "input", props: {placeholder:funcs.lang('Please enter the Menu Name')} } },
+  { prop: "meta.icon", label: funcs.lang('Icon'),  width:100},
+  { prop: "name", label: funcs.lang('Menu Alias'), width:200, search: { el: "input", props: {placeholder:funcs.lang('Please enter the Menu Alias')} } },
+  { prop: "path", label: funcs.lang('Route'), width: 300, search: { el: "input", props: {placeholder:funcs.lang('Please enter the Route')} } },
   { prop: "component", label: funcs.lang('Component Path'), width: 300 },
   { prop: "operation", label: funcs.lang('Operation'), width: 250, fixed: "right" }
 ];

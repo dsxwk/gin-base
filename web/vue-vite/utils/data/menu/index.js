@@ -599,7 +599,7 @@ export const menuJson = [
     ]
   },
   {
-    "path": "/menu",
+    "path": "/nestedMenu",
     "name": "menu",
     "redirect": "/menu/menu1",
     "meta": {
@@ -613,7 +613,7 @@ export const menuJson = [
     },
     "children": [
       {
-        "path": "/menu/menu1",
+        "path": "/nestedMenu/menu1",
         "name": "menu1",
         "component": "/menu/menu1/index",
         "meta": {
@@ -627,7 +627,7 @@ export const menuJson = [
         }
       },
       {
-        "path": "/menu/menu2",
+        "path": "/nestedMenu/menu2",
         "name": "menu2",
         "redirect": "/menu/menu2/menu21",
         "meta": {
@@ -641,7 +641,7 @@ export const menuJson = [
         },
         "children": [
           {
-            "path": "/menu/menu2/menu21",
+            "path": "/nestedMenu/menu2/menu21",
             "name": "menu21",
             "component": "/menu/menu2/menu21/index",
             "meta": {
@@ -655,7 +655,7 @@ export const menuJson = [
             }
           },
           {
-            "path": "/menu/menu2/menu22",
+            "path": "/nestedMenu/menu2/menu22",
             "name": "menu22",
             "redirect": "/menu/menu2/menu22/menu221",
             "meta": {
@@ -669,7 +669,7 @@ export const menuJson = [
             },
             "children": [
               {
-                "path": "/menu/menu2/menu22/menu221",
+                "path": "/nestedMenu/menu2/menu22/menu221",
                 "name": "menu221",
                 "component": "/menu/menu2/menu22/menu221/index",
                 "meta": {
@@ -683,7 +683,7 @@ export const menuJson = [
                 }
               },
               {
-                "path": "/menu/menu2/menu22/menu222",
+                "path": "/nestedMenu/menu2/menu22/menu222",
                 "name": "menu222",
                 "component": "/menu/menu2/menu22/menu222/index",
                 "meta": {
@@ -699,7 +699,7 @@ export const menuJson = [
             ]
           },
           {
-            "path": "/menu/menu2/menu23",
+            "path": "/nestedMenu/menu2/menu23",
             "name": "menu23",
             "component": "/menu/menu2/menu23/index",
             "meta": {
@@ -715,7 +715,7 @@ export const menuJson = [
         ]
       },
       {
-        "path": "/menu/menu3",
+        "path": "/nestedMenu/menu3",
         "name": "menu3",
         "component": "/menu/menu3/index",
         "meta": {

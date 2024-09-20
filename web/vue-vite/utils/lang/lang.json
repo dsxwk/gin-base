@@ -603,6 +603,10 @@
     "en-us": "Menu Management",
     "zh-cn": "菜单管理"
   },
+  "Menu List": {
+    "en-us": "Menu List",
+    "zh-cn": "菜单列表"
+  },
   "External Link": {
     "en-us": "External Link",
     "zh-cn": "外部链接"
@@ -618,6 +622,10 @@
   "Menu Name": {
     "en-us": "Menu Name",
     "zh-cn": "菜单名称"
+  },
+  "Menu Alias": {
+    "en-us": "Menu Alias",
+    "zh-cn": "菜单别名"
   },
   "Route": {
     "en-us": "Route",

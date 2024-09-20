@@ -706,5 +706,13 @@
   "Cnblogs": {
     "en-us": "Cnblogs",
     "zh-cn": "博客园"
+  },
+  "Platform": {
+    "en-us": "Platform",
+    "zh-cn": "平台"
+  },
+  "Data Volume": {
+    "en-us": "Data Volume",
+    "zh-cn": "数据量"
   }
 }

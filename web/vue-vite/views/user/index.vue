@@ -120,16 +120,16 @@ const batchDelete = async (ids) => {
 // 表格配置项
 const columns = [
   { type: "selection", fixed: "left", width: 80 },
+  {
+    prop: "id",
+    width: 120,
+    label: funcs.lang('ID')
+  },
   { type: "index", label: funcs.lang('Index'), width: 120 },
   { type: "expand", label: funcs.lang('Expand'), width: 120,
     render: (scope) => {
       return h('span', JSON.stringify(scope.row) || '-');
     }
-  },
-  {
-    prop: "id",
-    width: 120,
-    label: funcs.lang('ID')
   },
   {
     prop: "username",

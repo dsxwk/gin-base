@@ -52,7 +52,7 @@ export const menuJson = [
         "name": "userList",
         "component": "@/views/user/index.vue",
         "meta": {
-          "icon": "",
+          "icon": "Menu",
           "title": funcs.lang('User List'),
           "isLink": "",
           "isHide": false,
@@ -83,7 +83,7 @@ export const menuJson = [
         "name": "articleList",
         "component": "@/views/article/index.vue",
         "meta": {
-          "icon": "",
+          "icon": "Menu",
           "title": funcs.lang('Article List'),
           "isLink": "",
           "isHide": false,
@@ -92,6 +92,120 @@ export const menuJson = [
           "isKeepAlive": true
         },
         "children": []
+      }
+    ]
+  },
+  {
+    "path": "",
+    "name": "system",
+    "redirect": "/system/accountManage",
+    "meta": {
+      "icon": "Tools",
+      "title": funcs.lang('System Management'),
+      "isLink": "",
+      "isHide": false,
+      "isFull": false,
+      "isAffix": false,
+      "isKeepAlive": true
+    },
+    "children": [
+      {
+        "path": "/system/accountManage",
+        "name": "accountManage",
+        "component": "/system/accountManage/index",
+        "meta": {
+          "icon": "Menu",
+          "title": "账号管理",
+          "isLink": "",
+          "isHide": false,
+          "isFull": false,
+          "isAffix": false,
+          "isKeepAlive": true
+        }
+      },
+      {
+        "path": "/system/roleManage",
+        "name": "roleManage",
+        "component": "/system/roleManage/index",
+        "meta": {
+          "icon": "Menu",
+          "title": "角色管理",
+          "isLink": "",
+          "isHide": false,
+          "isFull": false,
+          "isAffix": false,
+          "isKeepAlive": true
+        }
+      },
+      {
+        "path": "/menu",
+        "name": "menuMange",
+        "component": "/system/menu/index",
+        "meta": {
+          "icon": "Menu",
+          "title": funcs.lang('Menu Management'),
+          "isLink": "",
+          "isHide": false,
+          "isFull": false,
+          "isAffix": false,
+          "isKeepAlive": true
+        }
+      },
+      {
+        "path": "/system/departmentManage",
+        "name": "departmentManage",
+        "component": "/system/departmentManage/index",
+        "meta": {
+          "icon": "Menu",
+          "title": "部门管理",
+          "isLink": "",
+          "isHide": false,
+          "isFull": false,
+          "isAffix": false,
+          "isKeepAlive": true
+        }
+      },
+      {
+        "path": "/system/dictManage",
+        "name": "dictManage",
+        "component": "/system/dictManage/index",
+        "meta": {
+          "icon": "Menu",
+          "title": "字典管理",
+          "isLink": "",
+          "isHide": false,
+          "isFull": false,
+          "isAffix": false,
+          "isKeepAlive": true
+        }
+      },
+      {
+        "path": "/system/timingTask",
+        "name": "timingTask",
+        "component": "/system/timingTask/index",
+        "meta": {
+          "icon": "Menu",
+          "title": "定时任务",
+          "isLink": "",
+          "isHide": false,
+          "isFull": false,
+          "isAffix": false,
+          "isKeepAlive": true
+        }
+      },
+      {
+        "path": "/system/systemLog",
+        "name": "systemLog",
+        "component": "/system/systemLog/index",
+        "meta": {
+          "icon": "Menu",
+          "title": "系统日志",
+          "isLink": "",
+          "isHide": false,
+          "isFull": false,
+          "isAffix": false,
+          "isKeepAlive": true
+        }
       }
     ]
   },
@@ -721,120 +835,6 @@ export const menuJson = [
         "meta": {
           "icon": "Menu",
           "title": "菜单3",
-          "isLink": "",
-          "isHide": false,
-          "isFull": false,
-          "isAffix": false,
-          "isKeepAlive": true
-        }
-      }
-    ]
-  },
-  {
-    "path": "",
-    "name": "system",
-    "redirect": "/system/accountManage",
-    "meta": {
-      "icon": "Tools",
-      "title": funcs.lang('System Management'),
-      "isLink": "",
-      "isHide": false,
-      "isFull": false,
-      "isAffix": false,
-      "isKeepAlive": true
-    },
-    "children": [
-      {
-        "path": "/system/accountManage",
-        "name": "accountManage",
-        "component": "/system/accountManage/index",
-        "meta": {
-          "icon": "Menu",
-          "title": "账号管理",
-          "isLink": "",
-          "isHide": false,
-          "isFull": false,
-          "isAffix": false,
-          "isKeepAlive": true
-        }
-      },
-      {
-        "path": "/system/roleManage",
-        "name": "roleManage",
-        "component": "/system/roleManage/index",
-        "meta": {
-          "icon": "Menu",
-          "title": "角色管理",
-          "isLink": "",
-          "isHide": false,
-          "isFull": false,
-          "isAffix": false,
-          "isKeepAlive": true
-        }
-      },
-      {
-        "path": "/menu",
-        "name": "menuMange",
-        "component": "/system/menu/index",
-        "meta": {
-          "icon": "Menu",
-          "title": funcs.lang('Menu Management'),
-          "isLink": "",
-          "isHide": false,
-          "isFull": false,
-          "isAffix": false,
-          "isKeepAlive": true
-        }
-      },
-      {
-        "path": "/system/departmentManage",
-        "name": "departmentManage",
-        "component": "/system/departmentManage/index",
-        "meta": {
-          "icon": "Menu",
-          "title": "部门管理",
-          "isLink": "",
-          "isHide": false,
-          "isFull": false,
-          "isAffix": false,
-          "isKeepAlive": true
-        }
-      },
-      {
-        "path": "/system/dictManage",
-        "name": "dictManage",
-        "component": "/system/dictManage/index",
-        "meta": {
-          "icon": "Menu",
-          "title": "字典管理",
-          "isLink": "",
-          "isHide": false,
-          "isFull": false,
-          "isAffix": false,
-          "isKeepAlive": true
-        }
-      },
-      {
-        "path": "/system/timingTask",
-        "name": "timingTask",
-        "component": "/system/timingTask/index",
-        "meta": {
-          "icon": "Menu",
-          "title": "定时任务",
-          "isLink": "",
-          "isHide": false,
-          "isFull": false,
-          "isAffix": false,
-          "isKeepAlive": true
-        }
-      },
-      {
-        "path": "/system/systemLog",
-        "name": "systemLog",
-        "component": "/system/systemLog/index",
-        "meta": {
-          "icon": "Menu",
-          "title": "系统日志",
           "isLink": "",
           "isHide": false,
           "isFull": false,

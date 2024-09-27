@@ -4,7 +4,7 @@ const funcs = new Functions();
 /**
  * @description: 数据来源
  */
-export const dataSourceDict = [
+export const dataSourceEnum = [
     {
         label: funcs.lang('Article Library'),
         value: 1
@@ -18,7 +18,7 @@ export const dataSourceDict = [
 /**
  * @description: 是否发布
  */
-export const isPublish = [
+export const isPublishEnum = [
     {
         label: funcs.lang('Published'),
         value: 1

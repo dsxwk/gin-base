@@ -37,7 +37,6 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import { ElMessageBox } from 'element-plus';
-import {genderDict} from '@/app/modules/admin/user/dict';
 import Functions from '@/utils/functions';
 import menuModule from '@/app/modules/admin/menu';
 import createService from '@/utils/service';

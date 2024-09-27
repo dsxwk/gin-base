@@ -242,6 +242,8 @@ export default class Functions {
         } else {
             if (this.getUrlParam('lang') === 'zh-cn' || this.getUrlParam('lang') === 'en-us') {
                 this.setCookie('lang', this.getUrlParam('lang'));
+            } else {
+                this.setCookie('lang', 'zh-cn');
             }
         }
 

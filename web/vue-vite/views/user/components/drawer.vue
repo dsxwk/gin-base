@@ -17,7 +17,7 @@
         <el-form-item :label="funcs.lang('Gender')" prop="gender">
           <el-select  v-model="drawerProps.row.gender" :placeholder="funcs.lang('Please select the gender')" clearable>
             <el-option
-                v-for="item in genderDict"
+                v-for="item in genderEnum"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -49,10 +49,10 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import { ElMessageBox } from 'element-plus';
-import {genderDict} from '@/app/modules/admin/user/dict';
 import Functions from '@/utils/functions';
 import userModule from '@/app/modules/admin/user';
 import createService from '@/utils/service';
+import {genderEnum} from '@/enums/user';
 
 const userService = createService(userModule);
 const funcs = new Functions();

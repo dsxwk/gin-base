@@ -60,7 +60,7 @@ import createService from '@/utils/service';
 import UserDrawer from './components/drawer.vue';
 import ColSetting from '@/components/Table/ColSetting/index.vue';
 import pnotifyConfirm from '@/utils/pnotify/confirm';
-import {genderDict} from '@/app/modules/admin/user/dict';
+import {genderEnum} from '@/enums/user';
 
 const funcs = new Functions();
 const isShowSearch = ref(true);
@@ -171,7 +171,7 @@ const columns = [
     prop: "gender",
     label: funcs.lang('Gender'),
     width: 200,
-    enum: genderDict,
+    enum: genderEnum,
     search: { el: "tree-select", props: { filterable: true, placeholder: funcs.lang('Please select') } },
   },
   {

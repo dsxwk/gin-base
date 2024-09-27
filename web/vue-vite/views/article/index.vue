@@ -68,8 +68,8 @@ import createService from '@/utils/service';
 import Functions from '@/utils/functions';
 import ArticleDrawer from './components/drawer.vue';
 import ColSetting from '@/components/Table/ColSetting/index.vue';
-import {dataSourceDict, isPublish} from '@/app/modules/admin/article/dict';
 import pnotifyConfirm from '@/utils/pnotify/confirm';
+import {dataSourceEnum, isPublishEnum} from '@/enums/article';
 
 const funcs = new Functions();
 const isShowSearch = ref(true);
@@ -162,14 +162,14 @@ const columns = [
     prop: "data_source",
     label: funcs.lang('Data Source'),
     width: 200,
-    enum: dataSourceDict,
+    enum: dataSourceEnum,
     search: { el: "tree-select", props: { filterable: true, placeholder: funcs.lang('Please select') } }
   },
   {
     prop: "is_publish",
     label: funcs.lang('Is Publish'),
     width: 200,
-    enum: isPublish,
+    enum: isPublishEnum,
     search: { el: "tree-select", props: { filterable: true, placeholder: funcs.lang('Please select') } },
     render: (scope) => {
       return h(

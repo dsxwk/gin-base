@@ -17,7 +17,7 @@
         <el-form-item :label="funcs.lang('Data Source')" prop="data_source">
           <el-select  v-model="drawerProps.row.data_source" :placeholder="funcs.lang('Please select data source')" clearable>
             <el-option
-                v-for="item in dataSourceDict"
+                v-for="item in dataSourceEnum"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -49,10 +49,10 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import { ElMessageBox } from 'element-plus';
-import {dataSourceDict} from '@/app/modules/admin/article/dict';
 import Functions from '@/utils/functions';
 import articleModule from '@/app/modules/admin/article';
 import createService from '@/utils/service';
+import {dataSourceEnum} from '@/enums/article';
 
 const articleService = createService(articleModule);
 const funcs = new Functions();

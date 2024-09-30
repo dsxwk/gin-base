@@ -149,6 +149,10 @@ const resetCallback = () => {
 };
 const edit = async (row) => {
   drawerProps.title = funcs.lang('Update');
+  console.log(row);
+  if (typeof row.component === "function") {
+    row.component = row.component.toString();
+  }
   drawerProps.row = row;
   drawerProps.visible = true;
 };

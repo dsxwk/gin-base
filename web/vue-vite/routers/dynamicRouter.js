@@ -1,6 +1,6 @@
 import {HOME_URL} from '@/config';
 import Functions from '@/utils/functions';
-import {menuJson} from "@/utils/data/menu/index.js";
+import {menuJson} from '@/utils/data/menu';
 
 // 引入 views 文件夹下所有 vue 文件
 const modules = import.meta.glob('@/views/**/*.vue');

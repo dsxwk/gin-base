@@ -22,7 +22,7 @@ export const menuJson = [
   {
     "path": "/dashboard",
     "name": "home",
-    "component": "@/views/home/index.vue",
+    "component": "/home/index",
     "meta": {
       "icon": "HomeFilled",
       "title": funcs.lang('Home'),
@@ -50,7 +50,7 @@ export const menuJson = [
       {
         "path": "/user",
         "name": "userList",
-        "component": "@/views/user/index.vue",
+        "component": "/user/index",
         "meta": {
           "icon": "Menu",
           "title": funcs.lang('User List'),
@@ -81,7 +81,7 @@ export const menuJson = [
       {
         "path": "/article",
         "name": "articleList",
-        "component": "@/views/article/index.vue",
+        "component": "/article/index",
         "meta": {
           "icon": "Menu",
           "title": funcs.lang('Article List'),

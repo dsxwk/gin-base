@@ -441,7 +441,7 @@ export const menuJson = [
     ]
   },
   {
-    "path": "/form",
+    "path": "",
     "name": "form",
     "redirect": "/form/proForm",
     "meta": {
@@ -513,7 +513,7 @@ export const menuJson = [
     ]
   },
   {
-    "path": "/echarts",
+    "path": "",
     "name": "echarts",
     "redirect": "/echarts/waterChart",
     "meta": {
@@ -613,7 +613,7 @@ export const menuJson = [
     ]
   },
   {
-    "path": "/directives",
+    "path": "",
     "name": "directives",
     "redirect": "/directives/copyDirect",
     "meta": {
@@ -713,7 +713,7 @@ export const menuJson = [
     ]
   },
   {
-    "path": "/nestedMenu",
+    "path": "",
     "name": "menu",
     "redirect": "/menu/menu1",
     "meta": {
@@ -845,7 +845,7 @@ export const menuJson = [
     ]
   },
   {
-    "path": "/link",
+    "path": "",
     "name": "link",
     "redirect": "/link/bing",
     "meta": {

@@ -5,7 +5,6 @@ const funcs = new Functions();
 
 /**
  * 静态路由
- *
  * @description 📚 路由参数配置简介
  * @param path ==> 路由菜单访问路径
  * @param name ==> 路由 name (对应页面组件 name, 可用作 KeepAlive 缓存标识 && 按钮权限筛选)
@@ -42,7 +41,7 @@ export const staticRouters = [
         },
         children: []
     },
-    {
+    /*{
         path: '/layouts',
         redirect: HOME_URL,
         component: () => import('@/layouts/index.vue'),
@@ -97,7 +96,7 @@ export const staticRouters = [
                 component: () => import('@/views/system/menu/index.vue'),
             }
         ]
-    },
+    },*/
     // 异常404路由
     {
         path: '/:catchAll(.*)',

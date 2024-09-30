@@ -2,11 +2,11 @@ import {createRouter, createWebHistory} from 'vue-router';
 import Functions from '@/utils/functions';
 // nprogress
 import NProgress from '@/utils/nprogress';
-import {staticRouters} from '@/routers/staticRouter.js';
+import {staticRouters} from '@/routers/staticRouter';
 import {LOGIN_URL} from '@/config';
+import {getDynamicRouter} from '@/routers/dynamicRouter';
 
 const funcs = new Functions();
-
 /**
  * @description 📚 路由参数配置简介
  * @param path ==> 路由菜单访问路径
@@ -25,9 +25,14 @@ const funcs = new Functions();
  * */
 const routers = createRouter({
     history: createWebHistory(),
-    routes: [...staticRouters]
+    routes: staticRouters,
+    strict: false,
+    scrollBehavior: () => ({ left: 0, top: 0 })
 });
 
+let isRoute = true;
+// 引入 views 文件夹下所有 vue 文件
+const modules = import.meta.glob('@/views/**/*.vue');
 routers.beforeEach(async (to, from, next) => {
     NProgress.start();
     // 动态标题
@@ -44,6 +49,17 @@ routers.beforeEach(async (to, from, next) => {
         } else {
             return next(to.fullPath)
         }
+    }
+
+    if (isRoute) {
+        const dynamicRouters = await getDynamicRouter();
+        dynamicRouters.forEach(item => {
+            routers.addRoute(item);
+        });
+
+        isRoute = false;
+
+        return next({ ...to, replace: true });
     }
 
     next();

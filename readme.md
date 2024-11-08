@@ -30,7 +30,6 @@ Golang Gin 是一个轻量级且高效的 Golang Web 框架。它具有高性能
 - Vue3
 - Vite
 - vite
-- adminlte
 - element-plus
 
 ## go-base目录结构

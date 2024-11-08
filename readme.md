@@ -6,7 +6,7 @@ The current project is for personal learning and testing only. All commercial on
 
 ## Project Address
 Github: https://github.com/dsxwk/gin-base.git
-Gitee: https://gitee.com/wangke/gin-base.git
+Gitee: https://gitee.com/wang-ke/gin-base.git
 
 ## Introduction to the Gin Framework
 Gin is a web framework written in Go. It is known for its simplicity, speed, and efficiency, and is widely used in Go web development.

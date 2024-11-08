@@ -7,7 +7,7 @@
 
 ## 项目地址
 - Github: https://github.com/dsxwk/gin-base.git
-- Gitee: https://gitee.com/wangke/gin-base.git
+- Gitee: https://gitee.com/wang-ke/gin-base.git
 
 ## Gin框架介绍
 

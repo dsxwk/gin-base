@@ -23,6 +23,7 @@ Golang Gin is a lightweight and efficient Golang web framework. It is widely use
 - Command model generation
 - Validators and custom validation scenarios
 - Jwt authentication
+- Air
 - …
 
 ## Backend Technologies Used
@@ -88,7 +89,7 @@ Golang Gin is a lightweight and efficient Golang web framework. It is widely use
 cd path/to/your/backend
 go mod download
 go mod tidy vendor
-go run main.go
+go run main.go # OR air
 ```
 #### Frontend
 ```bash

@@ -25,6 +25,7 @@ Golang Gin 是一个轻量级且高效的 Golang Web 框架。它具有高性能
 - 命令行生成模型
 - 验证器以及自定义验证场景
 - Jwt鉴权
+- Air
 - ...
 
 ## 后端使用技术
@@ -91,7 +92,7 @@ Golang Gin 是一个轻量级且高效的 Golang Web 框架。它具有高性能
 cd path/to/your/backend
 go mod download
 go mod tidy vendor
-go run main.go
+go run main.go # 或 air
 ```
 
 ```bash

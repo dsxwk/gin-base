@@ -19,6 +19,12 @@ Gin is a web framework written in Go. It is known for its simplicity, speed, and
 
 Golang Gin is a lightweight and efficient Golang web framework. It is widely used in the development of various web applications due to its high performance, ease of use, and flexibility.
 
+## Project screenshot
+
+![img.png](img.png)
+![img_1.png](img_1.png)
+![img_2.png](img_2.png)
+
 ## Introduction to the Gin-Base Project
 - Command model generation
 - Validators and custom validation scenarios

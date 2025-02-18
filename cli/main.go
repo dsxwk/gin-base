@@ -76,7 +76,7 @@ func main() {
 		break
 	}
 
-	if *fileName == "" {
+	if *_make != "model" && *fileName == "" {
 		fmt.Println("请输入文件名,Usage: go run main.go --make=" + *_make + " --fileName=/app/your path/your file name")
 		return
 	}
@@ -181,7 +181,7 @@ func generateModel(tableName string, path string, camel bool) {
 	}
 
 	if path == "" {
-		path = "app/temp"
+		path = filepath.Join(config.GetRootPath() + "/app/temp")
 	}
 	createTableStruct(tableName, path, camel)
 
@@ -192,10 +192,6 @@ func generateModel(tableName string, path string, camel bool) {
 // @param tableName 表名
 // @param path 生成路径
 func createTableStruct(tableName string, path string, camel bool) {
-	if path == "" {
-		path = "./query"
-	}
-
 	g := gen.NewGenerator(gen.Config{
 		OutPath:           path,
 		Mode:              gen.WithDefaultQuery,
@@ -237,5 +233,89 @@ func createTableStruct(tableName string, path string, camel bool) {
 
 	g.Execute()
 
+	// 修改文件，插入钩子方法
+	insertHooksIntoModel(path, tableName)
+
 	_ = os.RemoveAll(path)
+}
+
+// 插入钩子方法到生成的模型文件
+func insertHooksIntoModel(path string, tableName string) {
+	// 确保路径和文件名正确
+	modelFilePath := filepath.Join(config.GetRootPath(), "app", "model", tableName+".gen.go")
+	structName := utils.ToCamelCase(tableName)
+	// 首字母大写
+	structName = strings.ToUpper(string(structName[0])) + structName[1:]
+
+	// 打开文件
+	file, err := os.OpenFile(modelFilePath, os.O_APPEND|os.O_RDWR, 0666)
+	if err != nil {
+		fmt.Printf("Error opening file: %v\n", err)
+		return
+	}
+	defer file.Close()
+
+	// 准备钩子方法的内容
+	hooks := fmt.Sprintf(`
+// 创建之前
+func (s *%s) BeforeCreate(tx *gorm.DB) (err error) {
+	if s.CreatedAt == nil {
+		createdAt := time.Now().Format("2006-01-02 15:04:05")
+		s.CreatedAt = &createdAt
+	}
+	if s.UpdatedAt == nil {
+		updatedAt := time.Now().Format("2006-01-02 15:04:05")
+		s.UpdatedAt = &updatedAt
+	}
+	return
+}
+
+// 更新之前
+func (s *%s) BeforeUpdate(tx *gorm.DB) (err error) {
+	if s.UpdatedAt == nil {
+		updatedAt := time.Now().Format("2006-01-02 15:04:05")
+		s.UpdatedAt = &updatedAt
+	}
+	return
+}
+
+// 查询之后
+func (s *%s) AfterFind(tx *gorm.DB) (err error) {
+	if s.CreatedAt != nil {
+		createdAt, _ := time.Parse(time.RFC3339, *s.CreatedAt)
+		formattedCreatedAt := createdAt.Format("2006-01-02 15:04:05")
+		s.CreatedAt = &formattedCreatedAt
+	}
+	if s.UpdatedAt != nil {
+		updatedAt, _ := time.Parse(time.RFC3339, *s.UpdatedAt)
+		formattedUpdatedAt := updatedAt.Format("2006-01-02 15:04:05")
+		s.UpdatedAt = &formattedUpdatedAt
+	}
+	if s.DeletedAt != nil {
+		deletedAt, _ := time.Parse(time.RFC3339, *s.DeletedAt)
+		formattedDeletedAt := deletedAt.Format("2006-01-02 15:04:05")
+		s.DeletedAt = &formattedDeletedAt
+	}
+	return
+}
+
+// 删除之前
+func (s *%s) BeforeDelete(tx *gorm.DB) (err error) {
+	if s.DeletedAt == nil {
+		deletedAt := time.Now().Format("2006-01-02 15:04:05")
+		s.DeletedAt = &deletedAt
+	}
+
+	return
+}
+	`, structName, structName, structName, structName)
+
+	// 将钩子方法写入文件
+	_, err = file.WriteString(hooks)
+	if err != nil {
+		fmt.Printf("Error writing hooks to file: %v\n", err)
+		return
+	}
+
+	fmt.Println("钩子方法已插入到模型文件:", modelFilePath)
 }

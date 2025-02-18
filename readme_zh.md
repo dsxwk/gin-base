@@ -107,13 +107,29 @@ cd path/to/your/frontend
 npm install
 npm run dev
 ```
-### 命令行生成模型 --path参数默认就行无需修改
+### 命令行生成
 
 ```bash
-go run ./cli/main.go --tableName=user --path=app/temp
-go run ./cli/main.go --tableName=article --path=app/temp
-go run ./cli/main.go --tableName=category --path=app/temp
-go run ./cli/main.go --tableName=system_config --path=app/temp
+# 公共参数 --make=<model|controller|service|validate|middleware>
+# 生成模型 
+# --tableName=<user(你的表名)> --camel=true|false(true:生成驼峰字段,false:生成下划线字段)
+go run ./cli/main.go --make=model --tableName=user --camel=true
+
+# 生成控制器
+# --fileName=</app/controller/v1/test(生成的文件路径)> --function=<List|Create|Update|Delete|Detail ...(方法名称)> --method=<get|post|put|delete(请求方式)> --router=</v1/user(访问路由)> --description=<方法注释>
+go run ./cli/main.go --make=controller  --fileName=/app/controller/v1/test --function=List --method=get --router=/v1/list --description=测试
+
+# 生成服务
+# --fileName=</app/service/test(生成的文件路径)> --function=<List|Create|Update|Delete|Detail ...(方法名称)> --description=<方法注释>
+go run ./cli/main.go --make=service  --fileName=/app/service/test --function=List --description=测试
+
+# 生成验证器
+# --fileName=</app/validate/test(生成的文件路径)> --description=<方法注释>
+go run ./cli/main.go --make=validate  --fileName=/app/validate/test --description=测试
+
+# 生成中间件
+# --fileName=</app/middleware/test(生成的文件路径)> --description=<方法注释>
+go run ./cli/main.go --make=middleware  --fileName=/app/middleware/test --description=测试 
 ```
 ### 生成模型结构示例
 
@@ -302,13 +318,6 @@ var (
 
 // 加载路由
 func LoadRouters(router *gin.Engine) {
-	/*// 统一路由分组
-	v1 := router.Group("api/v1")
-
-	// 加载路由...
-	// 登录
-	LoginRoutes(v1)*/
-
 	// 登录
 	login_controller := controller.LoginController{}
 
@@ -326,37 +335,34 @@ func LoadRouters(router *gin.Engine) {
 		v1.POST("/login", login_controller.Login)
 
 		// 需要token验证
-		v1.Use(jwtMiddleware)
+		// 用户
+		user := v1.Group("user").Use(jwtMiddleware)
 		{
-			// 用户列表
-			v1.GET("/user", user_controller.List)
-
+			// 列表
+			user.GET("/", user_controller.List)
 			// 创建用户
-			v1.POST("/user", user_controller.Create)
-
+			user.POST("/", user_controller.Create)
 			// 更新用户
-			v1.PUT("/user/:id", user_controller.Update)
-
+			user.PUT("/:id", user_controller.Update)
 			// 用户详情
-			v1.GET("/user/:id", user_controller.Detail)
-
+			user.GET("/:id", user_controller.Detail)
 			// 删除用户
-			v1.DELETE("/user/:id", user_controller.Delete)
+			user.DELETE("/:id", user_controller.Delete)
+		}
 
-			// 文章列表
-			v1.GET("/article", article_controller.List)
-
-			// 创建文章
-			v1.POST("/article", article_controller.Create)
-
-			// 更新文章
-			v1.PUT("/article/:id", article_controller.Update)
-
-			// 文章详情
-			v1.GET("/article/:id", article_controller.Detail)
-
-			// 删除文章
-			v1.DELETE("/article/:id", article_controller.Delete)
+		// 文章
+		article := v1.Group("article").Use(jwtMiddleware)
+		{
+			// 列表
+			article.GET("/", article_controller.List)
+			// 创建
+			article.POST("/", article_controller.Create)
+			// 更新
+			article.PUT("/:id", article_controller.Update)
+			// 详情
+			article.GET("/:id", article_controller.Detail)
+			// 删除
+			article.DELETE("/:id", article_controller.Delete)
 		}
 	}
 }

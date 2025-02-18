@@ -104,13 +104,29 @@ cd path/to/your/frontend
 npm install
 npm run dev
 ```
-### Command Model Generation --path Parameter Default is Fine,No Need to Modify
+### Command Model Generation
 
 ```bash
-go run ./cli/main.go --tableName=user --path=app/temp
-go run ./cli/main.go --tableName=article --path=app/temp
-go run ./cli/main.go --tableName=category --path=app/temp
-go run ./cli/main.go --tableName=system_config --path=app/temp
+# Common Parameters --make=<model|controller|service|validate|middleware>
+# Generative Model 
+# --tableName=<user(your table name)> --camel=true|false(true:Generate camel hump field,false:Generate underline field)
+go run ./cli/main.go --make=model --tableName=user --camel=true
+
+# Generative Controller
+# --fileName=</app/controller/v1/test(The generated file path)> --function=<List|Create|Update|Delete|Detail ...(Action name)> --method=<get|post|put|delete(request method)> --router=</v1/user(access route)> --description=<Action annotation>
+go run ./cli/main.go --make=controller  --fileName=/app/controller/v1/test --function=List --method=get --router=/v1/list --description=test
+
+# Generative Service
+# --fileName=</app/service/test(The generated file path)> --function=<List|Create|Update|Delete|Detail ...(Action name)> --description=<Action annotation>
+go run ./cli/main.go --make=service  --fileName=/app/service/test --function=List --description=test
+
+# Generative validate
+# --fileName=</app/validate/test(The generated file path)> --description=<Action annotation>
+go run ./cli/main.go --make=validate  --fileName=/app/validate/test --description=test
+
+# Generative Middleware
+# --fileName=</app/middleware/test(The generated file path)> --description=<Action annotation>
+go run ./cli/main.go --make=middleware  --fileName=/app/middleware/test --description=test 
 ```
 ### Example of Generating a Model Structure
 
@@ -302,13 +318,6 @@ var (
 
 // Load routes
 func LoadRouters(router *gin.Engine) {
-	/*// Unified routing grouping
-	v1 := router.Group("api/v1")
-
-	// Load routes...
-	// Login
-	LoginRoutes(v1)*/
-
 	// Login
 	login_controller := controller.LoginController{}
 
@@ -326,38 +335,35 @@ func LoadRouters(router *gin.Engine) {
 		v1.POST("/login", login_controller.Login)
 
 		// Token verification is required
-		v1.Use(jwtMiddleware)
+		// User
+		user := v1.Group("user").Use(jwtMiddleware)
 		{
-			// User List
-			v1.GET("/user", user_controller.List)
-
-			// Create User
-			v1.POST("/user", user_controller.Create)
-
-			// Update User
-			v1.PUT("/user/:id", user_controller.Update)
-
-			// User Detail
-			v1.GET("/user/:id", user_controller.Detail)
-
-			// Delete User
-			v1.DELETE("/user/:id", user_controller.Delete)
-
-			// Article List
-			v1.GET("/article", article_controller.List)
-
-			// Create Article
-			v1.POST("/article", article_controller.Create)
-
-			// Update Article
-			v1.PUT("/article/:id", article_controller.Update)
-
-			// Article Detail
-			v1.GET("/article/:id", article_controller.Detail)
-
-			// Delete Article
-			v1.DELETE("/article/:id", article_controller.Delete)
+			// List
+			user.GET("/", user_controller.List)
+			// Create
+			v1.POST("/", user_controller.Create)
+			// Update
+			v1.PUT("/:id", user_controller.Update)
+			// Detail
+			v1.GET("/:id", user_controller.Detail)
+			// Delete
+			v1.DELETE("/:id", user_controller.Delete)
 		}
+		
+		// Article
+		article := v1.Group("article").Use(jwtMiddleware)
+		{
+			// List
+			article.GET("/", article_controller.List)
+			// Create
+			v1.POST("/", article_controller.Create)
+			// Update
+			v1.PUT("/:id", article_controller.Update)
+			// Detail
+			v1.GET("/:id", article_controller.Detail)
+			// Delete
+			v1.DELETE("/:id", article_controller.Delete)
+        }
 	}
 }
 ```

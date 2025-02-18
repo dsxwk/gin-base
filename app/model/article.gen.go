@@ -112,9 +112,9 @@ func (s *Article) BeforeDelete(tx *gorm.DB) (err error) {
 // 获取标签
 func (s *Article) GetTag() []string {
 	if s != nil && s.Tag != nil {
-		var directLeader []string
-		json.Unmarshal([]byte(*s.Tag), &directLeader)
-		return directLeader
+		var tagJson []string
+		json.Unmarshal([]byte(*s.Tag), &tagJson)
+		return tagJson
 	}
 	return nil
 }

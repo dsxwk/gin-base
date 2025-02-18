@@ -36,37 +36,34 @@ func LoadRouters(router *gin.Engine) {
 		v1.POST("/login", login_controller.Login)
 
 		// 需要token验证
-		v1.Use(jwtMiddleware)
+		// 用户
+		user := v1.Group("user").Use(jwtMiddleware)
 		{
-			// 用户列表
-			v1.GET("/user", user_controller.List)
-
+			// 列表
+			user.GET("/", user_controller.List)
 			// 创建用户
-			v1.POST("/user", user_controller.Create)
-
+			user.POST("/", user_controller.Create)
 			// 更新用户
-			v1.PUT("/user/:id", user_controller.Update)
-
+			user.PUT("/:id", user_controller.Update)
 			// 用户详情
-			v1.GET("/user/:id", user_controller.Detail)
-
+			user.GET("/:id", user_controller.Detail)
 			// 删除用户
-			v1.DELETE("/user/:id", user_controller.Delete)
+			user.DELETE("/:id", user_controller.Delete)
+		}
 
-			// 文章列表
-			v1.GET("/article", article_controller.List)
-
-			// 创建文章
-			v1.POST("/article", article_controller.Create)
-
-			// 更新文章
-			v1.PUT("/article/:id", article_controller.Update)
-
-			// 文章详情
-			v1.GET("/article/:id", article_controller.Detail)
-
-			// 删除文章
-			v1.DELETE("/article/:id", article_controller.Delete)
+		// 文章
+		article := v1.Group("article").Use(jwtMiddleware)
+		{
+			// 列表
+			article.GET("/", article_controller.List)
+			// 创建
+			article.POST("/", article_controller.Create)
+			// 更新
+			article.PUT("/:id", article_controller.Update)
+			// 详情
+			article.GET("/:id", article_controller.Detail)
+			// 删除
+			article.DELETE("/:id", article_controller.Delete)
 		}
 	}
 }

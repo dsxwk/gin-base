@@ -587,13 +587,13 @@ func LoadRouters(router *gin.Engine) {
 			// List
 			user.GET("/", user_controller.List)
 			// Create
-			v1.POST("/", user_controller.Create)
+			user.POST("/", user_controller.Create)
 			// Update
-			v1.PUT("/:id", user_controller.Update)
+			user.PUT("/:id", user_controller.Update)
 			// Detail
-			v1.GET("/:id", user_controller.Detail)
+			user.GET("/:id", user_controller.Detail)
 			// Delete
-			v1.DELETE("/:id", user_controller.Delete)
+			user.DELETE("/:id", user_controller.Delete)
 		}
 		
 		// Article
@@ -602,13 +602,13 @@ func LoadRouters(router *gin.Engine) {
 			// List
 			article.GET("/", article_controller.List)
 			// Create
-			v1.POST("/", article_controller.Create)
+			article.POST("/", article_controller.Create)
 			// Update
-			v1.PUT("/:id", article_controller.Update)
+			article.PUT("/:id", article_controller.Update)
 			// Detail
-			v1.GET("/:id", article_controller.Detail)
+			article.GET("/:id", article_controller.Detail)
 			// Delete
-			v1.DELETE("/:id", article_controller.Delete)
+			article.DELETE("/:id", article_controller.Delete)
         }
 	}
 }

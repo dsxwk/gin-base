@@ -6,6 +6,7 @@ import (
 	"gin-base/common"
 	"gin-base/common/global"
 	"gin-base/helper/utils"
+	"github.com/jinzhu/copier"
 	"gorm.io/gorm"
 )
 
@@ -85,7 +86,7 @@ func (s *ArticleService) Create(req model.ArticleQuery) (model.Article, error) {
 		articleModel model.Article
 	)
 
-	articleModel = model.Article{
+	/*articleModel = model.Article{
 		UID:        req.UID,
 		Title:      req.Title,
 		Content:    req.Content,
@@ -93,9 +94,14 @@ func (s *ArticleService) Create(req model.ArticleQuery) (model.Article, error) {
 		DataSource: req.DataSource,
 		IsPublish:  req.IsPublish,
 		Tag:        articleModel.SetTag(req.Tag),
+	}*/
+	err := copier.Copy(&articleModel, &req)
+	if err != nil {
+		return articleModel, err
 	}
+	articleModel.Tag = articleModel.SetTag(req.Tag)
 
-	err := global.DB.Create(&articleModel).Error
+	err = global.DB.Create(&articleModel).Error
 	if err != nil {
 		return articleModel, err
 	}
@@ -112,18 +118,13 @@ func (this *ArticleService) Update(req model.ArticleQuery) (model.Article, error
 		articleModel model.Article
 	)
 
-	articleModel = model.Article{
-		ID:         req.ID,
-		UID:        req.UID,
-		Title:      req.Title,
-		Content:    req.Content,
-		CategoryID: req.CategoryID,
-		DataSource: req.DataSource,
-		IsPublish:  req.IsPublish,
-		Tag:        articleModel.SetTag(req.Tag),
+	err := copier.Copy(&articleModel, &req)
+	if err != nil {
+		return articleModel, err
 	}
+	articleModel.Tag = articleModel.SetTag(req.Tag)
 
-	err := global.DB.Updates(&articleModel).Error
+	err = global.DB.Updates(&articleModel).Error
 	if err != nil {
 		return articleModel, err
 	}

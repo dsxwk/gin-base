@@ -52,20 +52,26 @@ type Config struct {
 
 // 初始化配置
 func InitConfig() Config { // 初始化数据
+	rootPath := GetRootPath()
+	file := filepath.Join(rootPath+"/config", "config.yaml")
+	yamlFile, err := ioutil.ReadFile(file)
+	if err != nil {
+		log.Fatal(err)
+	}
+	c := Config{}
+	if err = yaml.Unmarshal(yamlFile, &c); err != nil {
+		log.Fatal(err)
+	}
+	return c
+}
+
+func GetRootPath() string {
 	pwd, err := os.Getwd()
 	if err != nil {
 		panic(err)
 		os.Exit(1)
 	}
 	adsPath := strings.Replace(pwd, "\\", "/", -1)
-	file := filepath.Join(adsPath+"/config", "config.yaml")
-	yamlFile, err := ioutil.ReadFile(file)
-	if err != nil {
-		log.Fatal(err)
-	}
-	c := Config{}
-	if err := yaml.Unmarshal(yamlFile, &c); err != nil {
-		log.Fatal(err)
-	}
-	return c
+
+	return adsPath
 }

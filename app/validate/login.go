@@ -24,7 +24,7 @@ func GetLoginValidate(data LoginValidate, scene string) error {
 // ConfigValidation 配置验证
 // - 定义验证场景
 // - 也可以添加验证设置
-func (a LoginValidate) ConfigValidation(v *validator.Validation) {
+func (s LoginValidate) ConfigValidation(v *validator.Validation) {
 	v.WithScenes(validator.SValues{
 		"login": []string{"Username", "Password"},
 	})

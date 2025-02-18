@@ -61,7 +61,7 @@ func init() {
 			logger.Config{
 				SlowThreshold: time.Millisecond * Config.Mysql.SlowQuerySeconds, //慢SQL阈值（单位：ms）
 				LogLevel:      logger.Info,
-				//IgnoreRecordNotFoundError: true, // 忽略Record Not Found 错误
+				// IgnoreRecordNotFoundError: true, // 忽略Record Not Found 错误
 				Colorful: true, // 给log添加颜色
 			},
 		),
@@ -70,10 +70,10 @@ func init() {
 		Log.Error(err.Error(), zap.Error(err))
 		panic("数据库链接错误")
 	}
-	sqlDB, err := DB.DB()
-	sqlDB.SetMaxIdleConns(10)
-	sqlDB.SetMaxOpenConns(100)
-	sqlDB.SetConnMaxLifetime(59 * time.Second)
+	q, err := DB.DB()
+	q.SetMaxIdleConns(10)
+	q.SetMaxOpenConns(100)
+	q.SetConnMaxLifetime(59 * time.Second)
 
 	// 日志记录慢查询
 	LogSlowQuery(DB)

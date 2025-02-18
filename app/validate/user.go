@@ -46,7 +46,7 @@ func GetUserValidate(data UserValidate, scene string) error {
 // ConfigValidation 配置验证
 // - 定义验证场景
 // - 也可以添加验证设置
-func (a UserValidate) ConfigValidation(v *validator.Validation) {
+func (s UserValidate) ConfigValidation(v *validator.Validation) {
 	v.WithScenes(validator.SValues{
 		"list":   []string{"Page", "PageSize"},
 		"detail": []string{"ID"},

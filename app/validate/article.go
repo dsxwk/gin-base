@@ -27,7 +27,7 @@ func GetArticleValidate(data ArticleValidate, scene string) error {
 // ConfigValidation 配置验证
 // - 定义验证场景
 // - 也可以添加验证设置
-func (a ArticleValidate) ConfigValidation(v *validator.Validation) {
+func (s ArticleValidate) ConfigValidation(v *validator.Validation) {
 	v.WithScenes(validator.SValues{
 		"list":   []string{"Page", "PageSize"},
 		"create": []string{"Title", "Content"}, // []string{"User.FullName", "Title"}

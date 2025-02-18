@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"gin-base/common/global"
 	"golang.org/x/crypto/bcrypt"
 	"log"
 	"math/rand"
@@ -46,6 +47,19 @@ func Pagination(page, pageSize int) (int, int) {
 	limit := pageSize
 
 	return offset, limit
+}
+
+// @function: GetPageData
+// @description: 获取分页数据
+// @param: page, pageSize, total, data
+// @return: global.PageData
+func GetPageData(page int, pageSize int, total int64, data interface{}) global.PageData {
+	return global.PageData{
+		Total:    total,
+		Page:     page,
+		PageSize: pageSize,
+		List:     data,
+	}
 }
 
 // @function: BcryptHash

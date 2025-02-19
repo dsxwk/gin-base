@@ -14,6 +14,16 @@ type {{.Name}}Validate struct {
     Content  string `json:"content" validate:"required" label:"内容"`
 }
 
+// 请求验证
+func Get{{.Name}}Validate(data {{.Name}}Validate, scene string) error {
+	v := validator.Struct(data, scene)
+	if !v.Validate(scene) {
+		return errors.New(v.Errors.One())
+	}
+
+	return nil
+}
+
 // ConfigValidation 配置验证
 // - 定义验证场景
 // - 也可以添加验证设置

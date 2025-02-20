@@ -21,12 +21,12 @@ func LoadRouters(router *gin.Engine) {
 
 	// 登录
 	login_controller := controller.LoginController{}
-
 	// 用户
 	user_controller := controller.UserController{}
-
 	// 文章
 	article_controller := controller.ArticleController{}
+	// 缓存
+	cache_controller := controller.CacheController{}
 
 	// 统一路由分组
 	v1 := router.Group("api/v1")
@@ -37,12 +37,12 @@ func LoadRouters(router *gin.Engine) {
 
 		// 需要token验证
 		// 用户
-		user := v1.Group("user").Use(jwtMiddleware)
+		user := v1.Group("user", jwtMiddleware)
 		{
 			// 列表
-			user.GET("/", user_controller.List)
+			user.GET("", user_controller.List)
 			// 创建用户
-			user.POST("/", user_controller.Create)
+			user.POST("", user_controller.Create)
 			// 更新用户
 			user.PUT("/:id", user_controller.Update)
 			// 用户详情
@@ -52,18 +52,29 @@ func LoadRouters(router *gin.Engine) {
 		}
 
 		// 文章
-		article := v1.Group("article").Use(jwtMiddleware)
+		article := v1.Use(jwtMiddleware)
 		{
 			// 列表
-			article.GET("/", article_controller.List)
+			article.GET("/article", article_controller.List)
 			// 创建
-			article.POST("/", article_controller.Create)
+			article.POST("/article", article_controller.Create)
 			// 更新
-			article.PUT("/:id", article_controller.Update)
+			article.PUT("/article/:id", article_controller.Update)
 			// 详情
-			article.GET("/:id", article_controller.Detail)
+			article.GET("/article/:id", article_controller.Detail)
 			// 删除
-			article.DELETE("/:id", article_controller.Delete)
+			article.DELETE("/article/:id", article_controller.Delete)
+		}
+
+		// 缓存
+		cache := v1.Use(jwtMiddleware)
+		{
+			// 设置缓存
+			cache.POST("/cache", cache_controller.SetCache)
+			// 获取缓存
+			cache.GET("/cache", cache_controller.GetCache)
+			// 删除缓存
+			cache.DELETE("/cache", cache_controller.DeleteCache)
 		}
 	}
 }

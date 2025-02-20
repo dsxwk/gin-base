@@ -18,6 +18,7 @@ var (
 	DB     *gorm.DB // 数据库全局变量
 	Log    *zap.Logger
 	Config = config.InitConfig()
+	Cache  = config.InitCache()
 )
 
 // 公共响应

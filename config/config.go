@@ -1,6 +1,8 @@
 package config
 
 import (
+	"fmt"
+	"gin-base/helper"
 	"gopkg.in/yaml.v3"
 	"io/ioutil"
 	"log"
@@ -18,6 +20,12 @@ type Mysql struct {
 	User             string        `yaml:"user"`
 	Password         string        `yaml:"password"`
 	SlowQuerySeconds time.Duration `yaml:"slow-query-seconds"`
+}
+
+type Redis struct {
+	Address  string `yaml:"address"`
+	Password string `yaml:"password"`
+	DB       int    `yaml:"db"`
 }
 
 // 日志
@@ -42,12 +50,19 @@ type Cors struct {
 	AllowCredentials string `yaml:"allow-credentials"`
 }
 
+// 缓存
+type Cache struct {
+	Type  string `yaml:"type"`
+	Redis Redis
+}
+
 // 配置
 type Config struct {
 	Mysql
 	Log
 	Jwt
 	Cors
+	Cache
 }
 
 // 初始化配置
@@ -65,6 +80,29 @@ func InitConfig() Config { // 初始化数据
 	return c
 }
 
+// 初始化缓存
+func InitCache() helper.CacheInterface {
+	var (
+		c      helper.CacheInterface
+		config = InitConfig()
+	)
+
+	// 没有配置缓存类型,默认使用内存缓存
+	if config.Cache.Type == "memory" || config.Cache.Type == "" {
+		c = helper.NewMemoryCache(5*time.Minute, 10*time.Minute)
+	} else if config.Cache.Type == "redis" {
+		// 使用 Redis 缓存
+		c = helper.NewRedisCache(config.Cache.Redis.Address, config.Cache.Redis.Password, config.Cache.Redis.DB)
+	} else {
+		log.Fatalf("Unsupported cache type: %s", config.Cache.Type)
+	}
+
+	fmt.Println("Cache initialized with type:", config.Cache.Type)
+
+	return c
+}
+
+// 获取根目录
 func GetRootPath() string {
 	pwd, err := os.Getwd()
 	if err != nil {

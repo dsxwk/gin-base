@@ -277,7 +277,7 @@ func (s *Article) SetTag(tag []string) *string {
 
 ### 设置器和获取器的使用
 ```go
-// @function: List
+// List
 // @description: 列表
 // @param: req validate.ArticleValidate
 // @return: global.PageData, error
@@ -326,7 +326,7 @@ func (s *ArticleService) List(req validate.ArticleValidate) (global.PageData, er
 	return pageData, nil
 }
 
-// @function: Update
+// Update
 // @description: 更新
 // @param: req model.Article
 // @return: model.Article, error
@@ -374,7 +374,7 @@ type CacheService struct {
 	common.BaseService
 }
 
-// @function: SetCache
+// SetCache
 // @description: 设置缓存
 // @param: key string, value interface{}, expire time.Duration
 // @return: interface{}
@@ -384,7 +384,7 @@ func (s *CacheService) SetCache(key string, value interface{}, expire time.Durat
 	return true
 }
 
-// @function: GetCache
+// GetCache
 // @description: 获取缓存
 // @param: key string
 // @return: interface{}
@@ -397,7 +397,7 @@ func (s *CacheService) GetCache(key string) (interface{}, bool) {
 	return false, ok
 }
 
-// @function: DeleteCache
+// DeleteCache
 // @description: 删除缓存
 // @param: key string
 // @return: interface{}
@@ -511,9 +511,10 @@ type ArticleController struct {
 	common.BaseController
 }
 
-// @Tags    文章
+// List
+// @Tags 文章
 // @Summary 列表
-// @Router  /v1/article [get]
+// @Router /v1/article [get]
 func (s *ArticleController) List(c *gin.Context) {
 	var (
 		articleService service.ArticleService
@@ -554,7 +555,7 @@ import (
 	validator "github.com/gookit/validate"
 )
 
-// 文章请求验证
+// ArticleValidate 文章请求验证
 type ArticleValidate struct {
 	Page     int    `form:"page" validate:"required|int|gt:0" label:"页码"`
 	PageSize int    `form:"pageSize" validate:"required|int|gt:0" label:"每页数量"`
@@ -563,7 +564,7 @@ type ArticleValidate struct {
 	Content  string `json:"content" validate:"required" label:"内容"`
 }
 
-// 请求验证
+// GetArticleValidate 请求验证
 func GetArticleValidate(data ArticleValidate, scene string) error {
 	v := validator.Struct(data, scene)
 	if !v.Validate(scene) {
@@ -623,7 +624,7 @@ var (
 	jwtMiddleware = middleware.Jwt{}.JwtMiddleware()
 )
 
-// 加载路由
+// LoadRouters 加载路由
 func LoadRouters(router *gin.Engine) {
 	// 登录
 	login_controller := controller.LoginController{}

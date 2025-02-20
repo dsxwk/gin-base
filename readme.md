@@ -274,7 +274,7 @@ func (s *Article) SetTag(tag []string) *string {
 
 ### The use of the setter and getter
 ```go
-// @function: List
+// List
 // @description: list
 // @param: req validate.ArticleValidate
 // @return: global.PageData, error
@@ -323,7 +323,7 @@ func (s *ArticleService) List(req validate.ArticleValidate) (global.PageData, er
 	return pageData, nil
 }
 
-// @function: Update
+// Update
 // @description: update
 // @param: req model.Article
 // @return: model.Article, error
@@ -371,7 +371,7 @@ type CacheService struct {
 	common.BaseService
 }
 
-// @function: SetCache
+// SetCache
 // @description: Set cache
 // @param: key string, value interface{}, expire time.Duration
 // @return: interface{}
@@ -381,7 +381,7 @@ func (s *CacheService) SetCache(key string, value interface{}, expire time.Durat
 	return true
 }
 
-// @function: GetCache
+// GetCache
 // @description: Get cache
 // @param: key string
 // @return: interface{}
@@ -394,7 +394,7 @@ func (s *CacheService) GetCache(key string) (interface{}, bool) {
 	return false, ok
 }
 
-// @function: DeleteCache
+// DeleteCache
 // @description: Delete cache
 // @param: key string
 // @return: interface{}
@@ -508,9 +508,10 @@ type ArticleController struct {
 	common.BaseController
 }
 
-// @Tags    Article
+// List
+// @Tags Article
 // @Summary List
-// @Router  /v1/article [get]
+// @Router /v1/article [get]
 func (s *ArticleController) List(c *gin.Context) {
 	var (
 		articleService service.ArticleService
@@ -551,6 +552,7 @@ import (
 	validator "github.com/gookit/validate"
 )
 
+// ArticleValidate
 // Article Request Validation
 type ArticleValidate struct {
 	Page     int    `form:"page" validate:"required|int|gt:0" label:"页码"`
@@ -560,6 +562,7 @@ type ArticleValidate struct {
 	Content  string `json:"content" validate:"required" label:"内容"`
 }
 
+// GetArticleValidate
 // Request Validation
 func GetArticleValidate(data ArticleValidate, scene string) error {
 	v := validator.Struct(data, scene)
@@ -623,6 +626,7 @@ var (
 	jwtMiddleware = middleware.Jwt{}.JwtMiddleware()
 )
 
+// LoadRouters
 // Load routes
 func LoadRouters(router *gin.Engine) {
 	// Login

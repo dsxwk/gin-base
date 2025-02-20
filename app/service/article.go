@@ -86,15 +86,6 @@ func (s *ArticleService) Create(req model.ArticleQuery) (model.Article, error) {
 		articleModel model.Article
 	)
 
-	/*articleModel = model.Article{
-		UID:        req.UID,
-		Title:      req.Title,
-		Content:    req.Content,
-		CategoryID: req.CategoryID,
-		DataSource: req.DataSource,
-		IsPublish:  req.IsPublish,
-		Tag:        articleModel.SetTag(req.Tag),
-	}*/
 	err := copier.Copy(&articleModel, &req)
 	if err != nil {
 		return articleModel, err

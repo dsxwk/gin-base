@@ -10,14 +10,14 @@ import (
 type BaseController struct {
 }
 
-// 获取当前登录用户id
+// GetUserId 获取当前登录用户id
 func (s *BaseController) GetUserId(ctx *gin.Context) int64 {
 	id, _ := ctx.Get("user.id")
 	uid := id.(float64)
 	return int64(uid)
 }
 
-// api统一返回
+// ApiResponse api统一返回
 func (s *BaseController) ApiResponse(ctx *gin.Context, code int64, message string, data interface{}) {
 	var response global.Response
 

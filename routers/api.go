@@ -10,7 +10,7 @@ var (
 	jwtMiddleware = middleware.Jwt{}.JwtMiddleware()
 )
 
-// 加载路由
+// LoadRouters 加载路由
 func LoadRouters(router *gin.Engine) {
 	/*// 统一路由分组
 	v1 := router.Group("api/v1")

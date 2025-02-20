@@ -6,14 +6,15 @@ import (
 	"time"
 )
 
-// @Description YourDescription
+// CacheValidate
+// @Description 缓存验证
 type CacheValidate struct {
 	Key    string        `json:"key" form:"key" validate:"required" label:"键"`
 	Value  interface{}   `json:"value" validate:"required" label:"值"`
 	Expire time.Duration `json:"expire" validate:"required" label:"过期时间"`
 }
 
-// 请求验证
+// GetCacheValidate 请求验证
 func GetCacheValidate(data CacheValidate, scene string) error {
 	v := validator.Struct(data, scene)
 	if !v.Validate(scene) {

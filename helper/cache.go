@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-// Cache 接口，所有缓存类型都实现这个接口
+// CacheInterface Cache 接口,所有缓存类型都实现这个接口
 type CacheInterface interface {
 	SetCache(key string, value interface{}, expire time.Duration)
 	GetCache(key string) (interface{}, bool)

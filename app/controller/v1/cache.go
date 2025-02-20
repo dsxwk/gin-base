@@ -13,6 +13,7 @@ type CacheController struct {
 	common.BaseController
 }
 
+// SetCache
 // @Description 设置缓存
 // @Router /v1/cache [post]
 func (s *CacheController) SetCache(c *gin.Context) {
@@ -39,6 +40,7 @@ func (s *CacheController) SetCache(c *gin.Context) {
 	s.ApiResponse(c, global.Success, "success", res)
 }
 
+// GetCache
 // @Description 获取缓存
 // @Router /v1/cache [get]
 func (s *CacheController) GetCache(c *gin.Context) {
@@ -65,6 +67,7 @@ func (s *CacheController) GetCache(c *gin.Context) {
 	s.ApiResponse(c, global.Success, "success", res)
 }
 
+// DeleteCache
 // @Description 删除缓存
 // @Router /v1/cache [delete]
 func (s *CacheController) DeleteCache(c *gin.Context) {

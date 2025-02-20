@@ -15,9 +15,10 @@ type ArticleController struct {
 	common.BaseController
 }
 
-// @Tags    文章
+// List
+// @Tags 文章
 // @Summary 列表
-// @Router  /v1/article [get]
+// @Router /v1/article [get]
 func (s *ArticleController) List(c *gin.Context) {
 	var (
 		articleService service.ArticleService
@@ -47,9 +48,10 @@ func (s *ArticleController) List(c *gin.Context) {
 	s.ApiResponse(c, global.Success, "获取成功", pageData)
 }
 
-// @Tags    文章
+// Create
+// @Tags 文章
 // @Summary 创建
-// @Router  /v1/article [post]
+// @Router /v1/article [post]
 func (s *ArticleController) Create(c *gin.Context) {
 	var (
 		articleService  service.ArticleService
@@ -95,9 +97,10 @@ func (s *ArticleController) Create(c *gin.Context) {
 	s.ApiResponse(c, global.Success, "创建成功", articleModel)
 }
 
-// @Tags    文章
+// Update
+// @Tags 文章
 // @Summary 更新
-// @Router  /v1/article/:id [put]
+// @Router /v1/article/:id [put]
 func (s *ArticleController) Update(c *gin.Context) {
 	var (
 		articleService  service.ArticleService
@@ -155,9 +158,10 @@ func (s *ArticleController) Update(c *gin.Context) {
 	s.ApiResponse(c, global.Success, "更新成功", articleModel)
 }
 
-// @Tags    文章
+// Detail
+// @Tags 文章
 // @Summary 详情
-// @Router  /v1/article/:id [get]
+// @Router /v1/article/:id [get]
 func (s *ArticleController) Detail(c *gin.Context) {
 	var (
 		articleService  service.ArticleService
@@ -195,9 +199,10 @@ func (s *ArticleController) Detail(c *gin.Context) {
 	s.ApiResponse(c, global.Success, "查询成功", articleModel)
 }
 
-// @Tags    文章
+// Delete
+// @Tags 文章
 // @Summary 删除
-// @Router  /v1/article/:id [delete]
+// @Router /v1/article/:id [delete]
 func (s *ArticleController) Delete(c *gin.Context) {
 	var (
 		articleService  service.ArticleService

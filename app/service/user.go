@@ -13,9 +13,9 @@ type UserService struct {
 	common.BaseService
 }
 
-// @function: List
+// List
 // @description: 列表
-// @param: req validate.UserValidate
+// @param: req validate.UserValidate, search validate.UserSearch
 // @return: global.PageData, error
 func (s *UserService) List(req validate.UserValidate, search validate.UserSearch) (global.PageData, error) {
 	var (
@@ -54,7 +54,7 @@ func (s *UserService) List(req validate.UserValidate, search validate.UserSearch
 	return pageData, nil
 }
 
-// @function: Create
+// Create
 // @description: 创建
 // @param: req model.User
 // @return: model.User, error
@@ -70,7 +70,7 @@ func (s *UserService) Create(req model.User) (model.User, error) {
 	return req, nil
 }
 
-// @function: Update
+// Update
 // @description: 更新
 // @param: req model.User
 // @return: model.User, error
@@ -83,7 +83,7 @@ func (this *UserService) Update(req model.User) (model.User, error) {
 	return req, nil
 }
 
-// @function: Detail
+// Detail
 // @description: 详情
 // @param: id int64
 // @return: model.User, error
@@ -101,7 +101,7 @@ func (s *UserService) Detail(id int64) (model.User, error) {
 	return userModel, nil
 }
 
-// @function: Delete
+// Delete
 // @description: 删除
 // @param: id int64
 // @return: model.User, error

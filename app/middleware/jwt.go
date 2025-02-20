@@ -37,7 +37,7 @@ func (s Jwt) JwtMiddleware() gin.HandlerFunc {
 	}
 }
 
-// 生成token
+// Encode 生成token
 func (s Jwt) Encode(id int64, exp int64) (string, int64, error) {
 	if exp == 0 {
 		exp = time.Now().Add(time.Duration(Config.Jwt.Exp) * time.Second).Unix()
@@ -55,7 +55,7 @@ func (s Jwt) Encode(id int64, exp int64) (string, int64, error) {
 	return jwtToken, exp, err
 }
 
-// 解析token
+// Decode 解析token
 func (s Jwt) Decode(jwtToken string) (map[string]interface{}, error) {
 	token, err := jwt.Parse(jwtToken, func(token *jwt.Token) (interface{}, error) {
 		// 验证签名方法

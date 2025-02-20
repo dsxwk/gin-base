@@ -5,13 +5,13 @@ import (
 	validator "github.com/gookit/validate"
 )
 
-// 登录请求验证
+// LoginValidate 登录请求验证
 type LoginValidate struct {
 	Username string `json:"username" validate:"required|minLen:3|maxLen:10" label:"用户名"`
 	Password string `json:"password" validate:"required|minLen:6" label:"密码"`
 }
 
-// 请求验证
+// GetLoginValidate 请求验证
 func GetLoginValidate(data LoginValidate, scene string) error {
 	v := validator.Struct(data, scene)
 	if !v.Validate(scene) {

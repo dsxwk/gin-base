@@ -13,10 +13,9 @@ type LoginService struct {
 	common.BaseService
 }
 
-// @function: Login
+// Login
 // @description: 登录
-// @param: username string
-// @param: password string
+// @param: username string, password string
 // @return: model.User, error
 func (s *LoginService) Login(username string, password string) (model.User, error) {
 	var (

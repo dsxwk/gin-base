@@ -5,7 +5,7 @@ import (
 	validator "github.com/gookit/validate"
 )
 
-// 用户请求验证
+// UserValidate 用户请求验证
 type UserValidate struct {
 	ID       int64  `json:"id" validate:"required|int|gt:0" label:"ID"`
 	Page     int    `form:"page" validate:"required|int|gt:0" label:"页码"`
@@ -17,7 +17,7 @@ type UserValidate struct {
 	Password string `json:"password" validate:"required" label:"密码"`
 }
 
-// 用户搜索
+// UserSearch 用户搜索
 type UserSearch struct {
 	Username string `form:"username" validate:"required" label:"用户名"`
 	FullName string `form:"full_name" validate:"required" label:"姓名"`
@@ -25,7 +25,7 @@ type UserSearch struct {
 	Gender   int    `form:"gender" validate:"required|int" label:"性别"`
 }
 
-// 用户搜索验证
+// UserSearchValidate 用户搜索验证
 type UserSearchValidate struct {
 	Username string `form:"username" validate:"required" label:"用户名"`
 	FullName string `form:"full_name" validate:"required" label:"姓名"`
@@ -33,7 +33,7 @@ type UserSearchValidate struct {
 	Gender   int    `form:"gender" validate:"required|int" label:"性别"`
 }
 
-// 请求验证
+// GetUserValidate 请求验证
 func GetUserValidate(data UserValidate, scene string) error {
 	v := validator.Struct(data, scene)
 	if !v.Validate(scene) {

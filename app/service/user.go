@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"gin-base/app/model"
 	"gin-base/app/validate"
 	"gin-base/common"
@@ -91,7 +92,8 @@ func (s *UserService) Detail(id int64) (model.User, error) {
 		userModel model.User
 	)
 
-	err := global.DB.Find(&userModel, id).Error
+	err := global.DB.First(&userModel, id).Error
+	fmt.Printf("err: %v\n", err)
 	if err != nil {
 		return userModel, err
 	}

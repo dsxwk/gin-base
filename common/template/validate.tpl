@@ -5,6 +5,7 @@ import (
     validator "github.com/gookit/validate"
 )
 
+// {{.Name}}Validate
 // @Description {{.Description}}
 type {{.Name}}Validate struct {
     Page     int    `form:"page" validate:"required|int|gt:0" label:"页码"`
@@ -14,7 +15,7 @@ type {{.Name}}Validate struct {
     Content  string `json:"content" validate:"required" label:"内容"`
 }
 
-// 请求验证
+// Get{{.Name}}Validate 请求验证
 func Get{{.Name}}Validate(data {{.Name}}Validate, scene string) error {
 	v := validator.Struct(data, scene)
 	if !v.Validate(scene) {

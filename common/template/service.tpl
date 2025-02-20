@@ -8,7 +8,7 @@ type {{.Name}}Service struct {
     common.BaseService
 }
 
-// @function: {{.Function}}
+// {{.Function}}
 // @description: {{.Description}}
 // @param: YourParam string
 // @return: bool

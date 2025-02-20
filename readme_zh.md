@@ -31,6 +31,7 @@ Golang Gin 是一个轻量级且高效的 Golang Web 框架。它具有高性能
 - 命令行生成快捷创建模型、控制器、服务、验证器、中间件
 - 验证器以及自定义验证场景
 - Jwt鉴权
+- 缓存
 - Air
 - ...
 
@@ -41,6 +42,7 @@ Golang Gin 是一个轻量级且高效的 Golang Web 框架。它具有高性能
 - Jwt
 - Mysql
 - Validator
+- Cache
 
 ## 前端使用技术
 
@@ -348,6 +350,65 @@ func (this *ArticleService) Update(req model.ArticleQuery) (model.Article, error
 }
 ```
 
+## 缓存使用 支持内存缓存和redis缓存需要在yaml当中指定
+```yaml
+# 缓存
+cache:
+  type: "redis"  # 或者 "redis"
+  redis:
+    address: "127.0.0.1:6379"
+    password: ""  # 密码为空则不需要
+    db: 0
+```
+### 缓存调用示例
+```go
+package service
+
+import (
+	"gin-base/common"
+	"gin-base/common/global"
+	"time"
+)
+
+type CacheService struct {
+	common.BaseService
+}
+
+// @function: SetCache
+// @description: 设置缓存
+// @param: key string, value interface{}, expire time.Duration
+// @return: interface{}
+func (s *CacheService) SetCache(key string, value interface{}, expire time.Duration) interface{} {
+	global.Cache.SetCache(key, value, expire)
+
+	return true
+}
+
+// @function: GetCache
+// @description: 获取缓存
+// @param: key string
+// @return: interface{}
+func (s *CacheService) GetCache(key string) (interface{}, bool) {
+	res, ok := global.Cache.GetCache(key)
+	if ok {
+		return res, ok
+	}
+
+	return false, ok
+}
+
+// @function: DeleteCache
+// @description: 删除缓存
+// @param: key string
+// @return: interface{}
+func (s *CacheService) DeleteCache(key string) interface{} {
+	global.Cache.DeleteCache(key)
+
+	return true
+}
+
+```
+
 ## air使用
 ### 更新代码无需重启将自动重启更新
 ```shell
@@ -566,10 +627,8 @@ var (
 func LoadRouters(router *gin.Engine) {
 	// 登录
 	login_controller := controller.LoginController{}
-
 	// 用户
 	user_controller := controller.UserController{}
-
 	// 文章
 	article_controller := controller.ArticleController{}
 
@@ -582,12 +641,12 @@ func LoadRouters(router *gin.Engine) {
 
 		// 需要token验证
 		// 用户
-		user := v1.Group("user").Use(jwtMiddleware)
+		user := v1.Group("user", jwtMiddleware)
 		{
 			// 列表
-			user.GET("/", user_controller.List)
+			user.GET("", user_controller.List)
 			// 创建用户
-			user.POST("/", user_controller.Create)
+			user.POST("", user_controller.Create)
 			// 更新用户
 			user.PUT("/:id", user_controller.Update)
 			// 用户详情
@@ -597,19 +656,24 @@ func LoadRouters(router *gin.Engine) {
 		}
 
 		// 文章
-		article := v1.Group("article").Use(jwtMiddleware)
+		article := v1.Use(jwtMiddleware)
 		{
 			// 列表
-			article.GET("/", article_controller.List)
+			article.GET("/article", article_controller.List)
 			// 创建
-			article.POST("/", article_controller.Create)
+			article.POST("/article", article_controller.Create)
 			// 更新
-			article.PUT("/:id", article_controller.Update)
+			article.PUT("/article/:id", article_controller.Update)
 			// 详情
-			article.GET("/:id", article_controller.Detail)
+			article.GET("/article/:id", article_controller.Detail)
 			// 删除
-			article.DELETE("/:id", article_controller.Delete)
+			article.DELETE("/article/:id", article_controller.Delete)
 		}
 	}
 }
+```
+
+## 缓存
+```go
+
 ```

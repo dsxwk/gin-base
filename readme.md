@@ -29,6 +29,7 @@ Golang Gin is a lightweight and efficient Golang web framework. It is widely use
 - Command line generation for quick creation of model, controller, service, validator, middleware
 - Validators and custom validation scenarios
 - Jwt authentication
+- Cache
 - Air
 - …
 
@@ -38,6 +39,7 @@ Golang Gin is a lightweight and efficient Golang web framework. It is widely use
 - Jwt
 - Mysql
 - Validator
+- Cache
 
 ## Frontend Technologies Used
 - Vue3
@@ -345,6 +347,65 @@ func (this *ArticleService) Update(req model.ArticleQuery) (model.Article, error
 }
 ```
 
+## Cache usage Support for memory caching and Redis caching needs to be specified in YAML
+```yaml
+# 缓存
+cache:
+  type: "redis"  # OR "redis"
+  redis:
+    address: "127.0.0.1:6379"
+    password: ""  # If the password is empty, it is not necessary
+    db: 0
+```
+### Cache call example
+```go
+package service
+
+import (
+	"gin-base/common"
+	"gin-base/common/global"
+	"time"
+)
+
+type CacheService struct {
+	common.BaseService
+}
+
+// @function: SetCache
+// @description: Set cache
+// @param: key string, value interface{}, expire time.Duration
+// @return: interface{}
+func (s *CacheService) SetCache(key string, value interface{}, expire time.Duration) interface{} {
+	global.Cache.SetCache(key, value, expire)
+
+	return true
+}
+
+// @function: GetCache
+// @description: Get cache
+// @param: key string
+// @return: interface{}
+func (s *CacheService) GetCache(key string) (interface{}, bool) {
+	res, ok := global.Cache.GetCache(key)
+	if ok {
+		return res, ok
+	}
+
+	return false, ok
+}
+
+// @function: DeleteCache
+// @description: Delete cache
+// @param: key string
+// @return: interface{}
+func (s *CacheService) DeleteCache(key string) interface{} {
+	global.Cache.DeleteCache(key)
+
+	return true
+}
+
+```
+
 ## air
 ### Updating the code will automatically restart without the need for a restart 
 ```shell
@@ -566,10 +627,8 @@ var (
 func LoadRouters(router *gin.Engine) {
 	// Login
 	login_controller := controller.LoginController{}
-
 	// User
 	user_controller := controller.UserController{}
-
 	// Article
 	article_controller := controller.ArticleController{}
 
@@ -585,9 +644,9 @@ func LoadRouters(router *gin.Engine) {
 		user := v1.Group("user").Use(jwtMiddleware)
 		{
 			// List
-			user.GET("/", user_controller.List)
+			user.GET("", user_controller.List)
 			// Create
-			user.POST("/", user_controller.Create)
+			user.POST("", user_controller.Create)
 			// Update
 			user.PUT("/:id", user_controller.Update)
 			// Detail
@@ -597,19 +656,20 @@ func LoadRouters(router *gin.Engine) {
 		}
 		
 		// Article
-		article := v1.Group("article").Use(jwtMiddleware)
+		article := v1.Use(jwtMiddleware)
 		{
 			// List
-			article.GET("/", article_controller.List)
+			article.GET("/article", article_controller.List)
 			// Create
-			article.POST("/", article_controller.Create)
+			article.POST("/article", article_controller.Create)
 			// Update
-			article.PUT("/:id", article_controller.Update)
+			article.PUT("/article/:id", article_controller.Update)
 			// Detail
-			article.GET("/:id", article_controller.Detail)
+			article.GET("/article/:id", article_controller.Detail)
 			// Delete
-			article.DELETE("/:id", article_controller.Delete)
+			article.DELETE("/article/:id", article_controller.Delete)
         }
 	}
 }
 ```
+

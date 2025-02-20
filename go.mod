@@ -8,6 +8,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-redis/redis/v8 v8.11.5
+	github.com/go-resty/resty/v2 v2.16.5
 	github.com/gookit/validate v1.5.4
 	github.com/jinzhu/copier v0.4.0
 	github.com/patrickmn/go-cache v2.1.0+incompatible

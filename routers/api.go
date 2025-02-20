@@ -75,6 +75,8 @@ func LoadRouters(router *gin.Engine) {
 			cache.GET("/cache", cache_controller.GetCache)
 			// 删除缓存
 			cache.DELETE("/cache", cache_controller.DeleteCache)
+			// http请求测试
+			cache.POST("/send", cache_controller.Send)
 		}
 	}
 }

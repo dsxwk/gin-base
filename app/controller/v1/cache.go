@@ -93,3 +93,20 @@ func (s *CacheController) DeleteCache(c *gin.Context) {
 
 	s.ApiResponse(c, global.Success, "success", res)
 }
+
+// Send
+// @Description http请求测试
+// @Router /v1/send [post]
+func (s *CacheController) Send(c *gin.Context) {
+	var (
+		cacheService service.CacheService
+	)
+
+	res, err := cacheService.Send()
+	if err != nil {
+		s.ApiResponse(c, global.SystemError, err.Error(), nil)
+		return
+	}
+
+	s.ApiResponse(c, global.Success, "success", res)
+}

@@ -354,11 +354,11 @@ func (this *ArticleService) Update(req model.ArticleQuery) (model.Article, error
 ```yaml
 # 缓存
 cache:
-  type: "redis"  # 或者 "redis"
+  type: "redis"  # memory 或者 "redis"
   redis:
     address: "127.0.0.1:6379"
     password: ""  # 密码为空则不需要
-    db: 0
+    db: 1
 ```
 ### 缓存调用示例
 ```go

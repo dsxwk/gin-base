@@ -10,6 +10,7 @@ var (
 	Log    = config.InitLogger()
 	Config = config.InitConfig()
 	Cache  = config.InitCache()
+	Redis  = config.InitRedis()
 )
 
 // Response 公共响应

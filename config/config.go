@@ -103,7 +103,7 @@ func InitCache() helper.CacheInterface {
 		c = helper.NewMemoryCache(5*time.Minute, 10*time.Minute)
 	} else if config.Cache.Type == "redis" {
 		// 使用 Redis 缓存
-		c = helper.NewRedisCache(config.Cache.Redis.Address, config.Cache.Redis.Password, config.Cache.Redis.DB)
+		c = InitRedis()
 	} else {
 		log.Fatalf("Unsupported cache type: %s", config.Cache.Type)
 	}
@@ -173,6 +173,11 @@ func InitLogger() *zap.Logger {
 	)
 
 	return zap.New(core)
+}
+
+// InitRedis 初始化redis
+func InitRedis() *helper.RedisCache {
+	return helper.NewRedisCache(config.Cache.Redis.Address, config.Cache.Redis.Password, config.Cache.Redis.DB)
 }
 
 // GetRootPath 获取根目录

@@ -42,18 +42,18 @@ func (s *UserController) List(c *gin.Context) {
 	// 验证
 	err = validate.GetUserValidate(req, "list")
 	if err != nil {
-		s.ApiResponse(c, global.ArgsError, err.Error(), nil)
+		s.ApiResponse(c, global.ArgsError, err.Error())
 		return
 	}
 
 	pageData, err := userService.List(req, search)
 	if err != nil {
 		global.Log.Error(err.Error())
-		s.ApiResponse(c, global.SystemError, err.Error(), nil)
+		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
 
-	s.ApiResponse(c, global.Success, "获取成功", pageData)
+	s.ApiResponse(c, global.Success, pageData)
 }
 
 // Create
@@ -90,14 +90,14 @@ func (s *UserController) Create(c *gin.Context) {
 	// 验证
 	err = validate.GetUserValidate(userValidate, "create")
 	if err != nil {
-		s.ApiResponse(c, global.ArgsError, err.Error(), nil)
+		s.ApiResponse(c, global.ArgsError, err.Error())
 		return
 	}
 
 	userModel, err := userService.Create(req)
 	if err != nil {
 		global.Log.Error(err.Error())
-		s.ApiResponse(c, global.SystemError, err.Error(), nil)
+		s.ApiResponse(c, global.SystemError, nil, err.Error())
 		return
 	}
 
@@ -117,13 +117,13 @@ func (s *UserController) Update(c *gin.Context) {
 
 	idParam := c.Param("id")
 	if idParam == "" {
-		s.ApiResponse(c, global.ArgsError, "id参数必传", nil)
+		s.ApiResponse(c, global.ArgsError, "id参数必传")
 		return
 	}
 
 	id, err := strconv.ParseInt(idParam, 10, 64)
 	if err != nil {
-		s.ApiResponse(c, global.ArgsError, "id参数格式错误", nil)
+		s.ApiResponse(c, global.ArgsError, "id参数格式错误")
 		return
 	}
 
@@ -152,14 +152,14 @@ func (s *UserController) Update(c *gin.Context) {
 	// 验证
 	err = validate.GetUserValidate(userValidate, "update")
 	if err != nil {
-		s.ApiResponse(c, global.ArgsError, err.Error(), nil)
+		s.ApiResponse(c, global.ArgsError, err.Error())
 		return
 	}
 
 	userModel, err := userService.Update(req)
 	if err != nil {
 		global.Log.Error(err.Error())
-		s.ApiResponse(c, global.SystemError, err.Error(), nil)
+		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
 
@@ -178,13 +178,13 @@ func (s *UserController) Detail(c *gin.Context) {
 
 	idParam := c.Param("id")
 	if idParam == "" {
-		s.ApiResponse(c, global.ArgsError, "id参数必传", nil)
+		s.ApiResponse(c, global.ArgsError, "id参数必传")
 		return
 	}
 
 	id, err := strconv.ParseInt(idParam, 10, 64)
 	if err != nil {
-		s.ApiResponse(c, global.ArgsError, "id参数格式错误", nil)
+		s.ApiResponse(c, global.ArgsError, "id参数格式错误")
 		return
 	}
 
@@ -193,18 +193,18 @@ func (s *UserController) Detail(c *gin.Context) {
 	// 验证
 	err = validate.GetUserValidate(req, "detail")
 	if err != nil {
-		s.ApiResponse(c, global.ArgsError, err.Error(), nil)
+		s.ApiResponse(c, global.ArgsError, err.Error())
 		return
 	}
 
 	pageData, err := userService.Detail(id)
 	if err != nil {
 		global.Log.Error(err.Error())
-		s.ApiResponse(c, global.SystemError, err.Error(), nil)
+		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
 
-	s.ApiResponse(c, global.Success, "获取成功", pageData)
+	s.ApiResponse(c, global.Success, pageData)
 }
 
 // Delete
@@ -219,13 +219,13 @@ func (s *UserController) Delete(c *gin.Context) {
 
 	idParam := c.Param("id")
 	if idParam == "" {
-		s.ApiResponse(c, global.ArgsError, "id参数必传", nil)
+		s.ApiResponse(c, global.ArgsError, "id参数必传")
 		return
 	}
 
 	id, err := strconv.ParseInt(idParam, 10, 64)
 	if err != nil {
-		s.ApiResponse(c, global.ArgsError, "id参数格式错误", nil)
+		s.ApiResponse(c, global.ArgsError, "id参数格式错误")
 		return
 	}
 
@@ -234,14 +234,14 @@ func (s *UserController) Delete(c *gin.Context) {
 	// 验证
 	err = validate.GetUserValidate(userValidate, "delete")
 	if err != nil {
-		s.ApiResponse(c, global.ArgsError, err.Error(), nil)
+		s.ApiResponse(c, global.ArgsError, err.Error())
 		return
 	}
 
 	userModel, err := userService.Delete(id)
 	if err != nil {
 		global.Log.Error(err.Error())
-		s.ApiResponse(c, global.SystemError, err.Error(), nil)
+		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
 

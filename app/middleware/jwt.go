@@ -6,7 +6,6 @@ import (
 	"gin-base/config"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-	"net/http"
 	"time"
 )
 
@@ -21,15 +20,13 @@ func (s Jwt) JwtMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.Request.Header.Get("token")
 		if token == "" || token == "null" {
-			c.JSON(http.StatusOK, global.Response{global.Unauthorized, "请求未授权！", []string{}})
-			c.Abort()
+			global.ApiResponse(c, global.Unauthorized)
 			return
 		}
 
 		data, err := s.Decode(token)
 		if err != nil {
-			c.JSON(http.StatusOK, global.Response{global.Unauthorized, err.Error(), []string{}})
-			c.Abort()
+			global.ApiResponse(c, global.Unauthorized, err.Error())
 			return
 		}
 

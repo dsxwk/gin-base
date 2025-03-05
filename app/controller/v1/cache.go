@@ -31,13 +31,13 @@ func (s *CacheController) SetCache(c *gin.Context) {
 	// 验证
 	err = validate.GetCacheValidate(req, "setCache")
 	if err != nil {
-		s.ApiResponse(c, global.ArgsError, err.Error(), nil)
+		s.ApiResponse(c, global.ArgsError, err.Error())
 		return
 	}
 
 	res := cacheService.SetCache(req.Key, req.Value, (req.Expire)*time.Second)
 
-	s.ApiResponse(c, global.Success, "success", res)
+	s.ApiResponse(c, global.Success, res)
 }
 
 // GetCache
@@ -58,13 +58,13 @@ func (s *CacheController) GetCache(c *gin.Context) {
 	// 验证
 	err = validate.GetCacheValidate(req, "getCache")
 	if err != nil {
-		s.ApiResponse(c, global.ArgsError, err.Error(), nil)
+		s.ApiResponse(c, global.ArgsError, err.Error())
 		return
 	}
 
 	res, _ := cacheService.GetCache(req.Key)
 
-	s.ApiResponse(c, global.Success, "success", res)
+	s.ApiResponse(c, global.Success, res)
 }
 
 // DeleteCache
@@ -85,13 +85,13 @@ func (s *CacheController) DeleteCache(c *gin.Context) {
 	// 验证
 	err = validate.GetCacheValidate(req, "deleteCache")
 	if err != nil {
-		s.ApiResponse(c, global.ArgsError, err.Error(), nil)
+		s.ApiResponse(c, global.ArgsError, err.Error())
 		return
 	}
 
 	res := cacheService.DeleteCache(req.Key)
 
-	s.ApiResponse(c, global.Success, "success", res)
+	s.ApiResponse(c, global.Success, res)
 }
 
 // Send
@@ -104,9 +104,9 @@ func (s *CacheController) Send(c *gin.Context) {
 
 	res, err := cacheService.Send()
 	if err != nil {
-		s.ApiResponse(c, global.SystemError, err.Error(), nil)
+		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
 
-	s.ApiResponse(c, global.Success, "success", res)
+	s.ApiResponse(c, global.Success, res)
 }

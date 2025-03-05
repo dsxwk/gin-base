@@ -527,18 +527,18 @@ func (s *ArticleController) List(c *gin.Context) {
 	// validate
 	err = validate.GetArticleValidate(req, "list")
 	if err != nil {
-		s.ApiResponse(c, global.ArgsError, err.Error(), nil)
+		s.ApiResponse(c, global.ArgsError, err.Error())
 		return
 	}
 
 	pageData, err := articleService.List(req)
 	if err != nil {
 		global.Log.Error(err.Error())
-		s.ApiResponse(c, global.SystemError, err.Error(), nil)
+		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
 
-	s.ApiResponse(c, global.Success, "success", pageData)
+	s.ApiResponse(c, global.Success, pageData)
 }
 ```
 

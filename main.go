@@ -16,9 +16,8 @@ import (
 //go:generate go mod vendor
 
 func main() {
-	//gin.SetMode(gin.ReleaseMode) // 生产模式
-	gin.SetMode(gin.DebugMode) // debug模式
-	//gin.SetMode(gin.TestMode) // 测试模式
+	// 运行环境模式 debug模式, test测试模式, release生产模式, 默认是debug,根据当前配置文件读取
+	gin.SetMode(global.Config.Env.Mode)
 
 	router := gin.Default()
 

@@ -19,6 +19,10 @@ import (
 	"time"
 )
 
+type Env struct {
+	Mode string `yaml:"mode"` // 运行环境模式
+}
+
 // Mysql mysql
 type Mysql struct {
 	Host             string        `yaml:"host"`
@@ -70,6 +74,7 @@ type Config struct {
 	Jwt
 	Cors
 	Cache
+	Env
 }
 
 var (

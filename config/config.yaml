@@ -1,3 +1,5 @@
+# 运行环境模式 debug, test, release
+  mode: debug
 # 日志配置
 log:
   max-size: 10 # 单个日志文件大小（MB）

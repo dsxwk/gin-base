@@ -15,7 +15,7 @@ type CacheController struct {
 
 // SetCache
 // @Description 设置缓存
-// @Router /v1/cache [post]
+// @Router /api/v1/cache [post]
 func (s *CacheController) SetCache(c *gin.Context) {
 	var (
 		cacheService service.CacheService
@@ -42,7 +42,7 @@ func (s *CacheController) SetCache(c *gin.Context) {
 
 // GetCache
 // @Description 获取缓存
-// @Router /v1/cache [get]
+// @Router /api/v1/cache [get]
 func (s *CacheController) GetCache(c *gin.Context) {
 	var (
 		cacheService service.CacheService
@@ -69,7 +69,7 @@ func (s *CacheController) GetCache(c *gin.Context) {
 
 // DeleteCache
 // @Description 删除缓存
-// @Router /v1/cache [delete]
+// @Router /api/v1/cache [delete]
 func (s *CacheController) DeleteCache(c *gin.Context) {
 	var (
 		cacheService service.CacheService
@@ -96,7 +96,7 @@ func (s *CacheController) DeleteCache(c *gin.Context) {
 
 // Send
 // @Description http请求测试
-// @Router /v1/send [post]
+// @Router /api/v1/send [post]
 func (s *CacheController) Send(c *gin.Context) {
 	var (
 		cacheService service.CacheService

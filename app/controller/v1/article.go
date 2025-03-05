@@ -18,7 +18,7 @@ type ArticleController struct {
 // List
 // @Tags 文章
 // @Summary 列表
-// @Router /v1/article [get]
+// @Router /api/v1/article [get]
 func (s *ArticleController) List(c *gin.Context) {
 	var (
 		articleService service.ArticleService
@@ -51,7 +51,7 @@ func (s *ArticleController) List(c *gin.Context) {
 // Create
 // @Tags 文章
 // @Summary 创建
-// @Router /v1/article [post]
+// @Router /api/v1/article [post]
 func (s *ArticleController) Create(c *gin.Context) {
 	var (
 		articleService  service.ArticleService
@@ -100,7 +100,7 @@ func (s *ArticleController) Create(c *gin.Context) {
 // Update
 // @Tags 文章
 // @Summary 更新
-// @Router /v1/article/:id [put]
+// @Router /api/v1/article/:id [put]
 func (s *ArticleController) Update(c *gin.Context) {
 	var (
 		articleService  service.ArticleService
@@ -161,7 +161,7 @@ func (s *ArticleController) Update(c *gin.Context) {
 // Detail
 // @Tags 文章
 // @Summary 详情
-// @Router /v1/article/:id [get]
+// @Router /api/v1/article/:id [get]
 func (s *ArticleController) Detail(c *gin.Context) {
 	var (
 		articleService  service.ArticleService
@@ -202,7 +202,7 @@ func (s *ArticleController) Detail(c *gin.Context) {
 // Delete
 // @Tags 文章
 // @Summary 删除
-// @Router /v1/article/:id [delete]
+// @Router /api/v1/article/:id [delete]
 func (s *ArticleController) Delete(c *gin.Context) {
 	var (
 		articleService  service.ArticleService

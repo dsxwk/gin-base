@@ -18,7 +18,7 @@ type UserController struct {
 // List
 // @Tags 用户
 // @Summary 列表
-// @Router /v1/user [get]
+// @Router /api/v1/user [get]
 func (s *UserController) List(c *gin.Context) {
 	var (
 		userService service.UserService
@@ -59,7 +59,7 @@ func (s *UserController) List(c *gin.Context) {
 // Create
 // @Tags 用户
 // @Summary 创建
-// @Router /v1/user [post]
+// @Router /api/v1/user [post]
 func (s *UserController) Create(c *gin.Context) {
 	var (
 		userService  service.UserService
@@ -107,7 +107,7 @@ func (s *UserController) Create(c *gin.Context) {
 // Update
 // @Tags 用户
 // @Summary 更新
-// @Router /v1/user/:id [put]
+// @Router /api/v1/user/:id [put]
 func (s *UserController) Update(c *gin.Context) {
 	var (
 		userService  service.UserService
@@ -169,7 +169,7 @@ func (s *UserController) Update(c *gin.Context) {
 // Detail
 // @Tags 用户
 // @Summary 详情
-// @Router /v1/user/:id [get]
+// @Router /api/v1/user/:id [get]
 func (s *UserController) Detail(c *gin.Context) {
 	var (
 		userService service.UserService

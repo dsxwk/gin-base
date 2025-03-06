@@ -40,7 +40,7 @@ func main() {
 	// 加载路由
 	routers.LoadRouters(router)
 
-	err := router.Run(":8080")
+	err := router.Run(`:` + global.Config.Env.Port)
 	if err != nil {
 		fmt.Println("启动服务失败，错误信息为：", err)
 	}

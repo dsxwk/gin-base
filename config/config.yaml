@@ -1,5 +1,7 @@
-# 运行环境模式 debug, test, release
-  mode: debug
+# 环境配置
+env:
+  mode: debug # 运行环境模式 debug, test, release
+  port: 8000 # 服务端口
 # 日志配置
 log:
   max-size: 10 # 单个日志文件大小（MB）

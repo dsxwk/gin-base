@@ -1,8 +1,10 @@
 package config
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
+	"gin-base/common/global/context"
 	"gin-base/helper"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -13,6 +15,7 @@ import (
 	"gorm.io/gorm/logger"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
@@ -68,6 +71,11 @@ type Cache struct {
 	Redis Redis
 }
 
+// Logger 包装器
+type Logger struct {
+	*zap.Logger
+}
+
 // Config 配置
 type Config struct {
 	Mysql
@@ -82,6 +90,81 @@ var (
 	config = InitConfig()
 	logs   = InitLogger()
 )
+
+// NewLogger 创建新的 Logger 包装器
+func NewLogger(zapLogger *zap.Logger) *Logger {
+	return &Logger{zapLogger}
+}
+
+// addContextFields 添加上下文字段
+func (l *Logger) addContextFields(fields []zap.Field) []zap.Field {
+	c := context.GetGinContext("ginLogContext")
+	if c != nil {
+		path := c.Request.URL.Path
+		method := c.Request.Method
+		var params string
+
+		switch method {
+		case http.MethodGet, http.MethodDelete:
+			params = c.Request.URL.RawQuery
+		case http.MethodPost, http.MethodPut, http.MethodPatch:
+			bodyBytes, err := ioutil.ReadAll(c.Request.Body)
+			if err == nil {
+				params = string(bodyBytes)
+				// Restore the io.ReadCloser to its original state
+				c.Request.Body = ioutil.NopCloser(bytes.NewBuffer(bodyBytes))
+			}
+		}
+		params = strings.ReplaceAll(params, " ", "")
+		params = strings.ReplaceAll(params, "\r", "")
+		params = strings.ReplaceAll(params, "\n", "")
+
+		fields = append(fields, zap.String("method", method), zap.String("path", path), zap.String("params", params), zap.Stack("stacktrace"))
+	}
+	return fields
+}
+
+// Debug 包装器方法
+func (l *Logger) Debug(msg string, fields ...zap.Field) {
+	fields = l.addContextFields(fields)
+	l.Logger.Debug(msg, fields...)
+}
+
+// Info 包装器方法
+func (l *Logger) Info(msg string, fields ...zap.Field) {
+	fields = l.addContextFields(fields)
+	l.Logger.Info(msg, fields...)
+}
+
+// Warn 包装器方法
+func (l *Logger) Warn(msg string, fields ...zap.Field) {
+	fields = l.addContextFields(fields)
+	l.Logger.Warn(msg, fields...)
+}
+
+// Error 包装器方法
+func (l *Logger) Error(msg string, fields ...zap.Field) {
+	fields = l.addContextFields(fields)
+	l.Logger.Error(msg, fields...)
+}
+
+// DPanic 包装器方法
+func (l *Logger) DPanic(msg string, fields ...zap.Field) {
+	fields = l.addContextFields(fields)
+	l.Logger.DPanic(msg, fields...)
+}
+
+// Panic 包装器方法
+func (l *Logger) Panic(msg string, fields ...zap.Field) {
+	fields = l.addContextFields(fields)
+	l.Logger.Panic(msg, fields...)
+}
+
+// Fatal 包装器方法
+func (l *Logger) Fatal(msg string, fields ...zap.Field) {
+	fields = l.addContextFields(fields)
+	l.Logger.Fatal(msg, fields...)
+}
 
 // InitConfig 初始化配置
 func InitConfig() Config {
@@ -152,7 +235,7 @@ func InitDB() *gorm.DB {
 }
 
 // InitLogger 初始化日志
-func InitLogger() *zap.Logger {
+func InitLogger() *Logger {
 	// 设置日志文件输出路径和文件年月日
 	logPath := "log/" + time.Now().Format("2006-01-02") + ".log"
 
@@ -178,7 +261,9 @@ func InitLogger() *zap.Logger {
 		atomicLevel,
 	)
 
-	return zap.New(core)
+	zapLogger := zap.New(core)
+
+	return NewLogger(zapLogger)
 }
 
 // InitRedis 初始化redis

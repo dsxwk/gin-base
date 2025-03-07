@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"gin-base/app/middleware"
 	"gin-base/common/global"
 	"gin-base/routers"
 	"github.com/gin-gonic/gin"
@@ -36,6 +37,9 @@ func main() {
 
 	// 设置跨域
 	router.Use(Cors())
+
+	// 全局日志中间件
+	router.Use(middleware.LoggerMiddleware())
 
 	// 加载路由
 	routers.LoadRouters(router)

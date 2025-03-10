@@ -271,6 +271,11 @@ func InitRedis() *helper.RedisCache {
 	return helper.NewRedisCache(config.Cache.Redis.Address, config.Cache.Redis.Password, config.Cache.Redis.DB)
 }
 
+// InitEvent 初始化事件
+func InitEvent() *helper.Events {
+	return helper.NewEvents()
+}
+
 // GetRootPath 获取根目录
 func GetRootPath() string {
 	pwd, err := os.Getwd()

@@ -5,6 +5,7 @@ import (
 	"gin-base/app/model"
 	"gin-base/common"
 	"gin-base/common/global"
+	"gin-base/helper"
 	"gin-base/helper/utils"
 	"gorm.io/gorm"
 )
@@ -36,6 +37,16 @@ func (s *LoginService) Login(username string, password string) (model.User, erro
 	if userModel.Status != 1 {
 		return userModel, errors.New("账号已被禁用")
 	}
+
+	// 发布事件
+	event := helper.Event{
+		Name: "user_login",
+		Data: map[string]interface{}{
+			"username": username,
+			"password": password,
+		},
+	}
+	global.Event.Publish(event)
 
 	return userModel, nil
 }

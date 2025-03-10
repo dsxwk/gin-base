@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"gin-base/app/middleware"
 	"gin-base/common/global"
+	"gin-base/helper"
 	"gin-base/routers"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"time"
 )
 
 //go:generate go env -w GO111MODULE=on
@@ -41,6 +43,9 @@ func main() {
 	// 全局日志中间件
 	router.Use(middleware.LoggerMiddleware())
 
+	// 注册所有事件
+	global.Event.RegisterAllEvent(onEventReceived)
+
 	// 加载路由
 	routers.LoadRouters(router)
 
@@ -48,6 +53,12 @@ func main() {
 	if err != nil {
 		fmt.Println("启动服务失败，错误信息为：", err)
 	}
+}
+
+// onEventReceived 接收事件
+func onEventReceived(event helper.Event, timestamp time.Time) {
+	// todo 处理事件
+	fmt.Printf("Event received at %s: name: %s, data: %v\n", timestamp.Format(time.RFC3339), event.Name, event.Data)
 }
 
 // Cors 跨域请求

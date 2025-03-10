@@ -13,6 +13,7 @@ var (
 	Config = config.InitConfig()
 	Cache  = config.InitCache()
 	Redis  = config.InitRedis()
+	Event  = config.InitEvent()
 )
 
 // PageData 公共分页数据返回

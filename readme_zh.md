@@ -32,6 +32,7 @@ Golang Gin 是一个轻量级且高效的 Golang Web 框架。它具有高性能
 - 验证器以及自定义验证场景
 - Jwt鉴权
 - 缓存
+- 事件
 - Air
 - ...
 
@@ -43,6 +44,7 @@ Golang Gin 是一个轻量级且高效的 Golang Web 框架。它具有高性能
 - Mysql
 - Validator
 - Cache
+- Event
 
 ## 前端使用技术
 
@@ -407,6 +409,149 @@ func (s *CacheService) DeleteCache(key string) interface{} {
 	return true
 }
 
+```
+
+## 事件使用
+### 发布事件 注:以登录为例只需要在你想要传递数据的地方加入发布事件
+```go
+package service
+
+import (
+	"errors"
+	"gin-base/app/model"
+	"gin-base/common"
+	"gin-base/common/global"
+	"gin-base/helper"
+	"gin-base/helper/utils"
+	"gorm.io/gorm"
+)
+
+type LoginService struct {
+	common.BaseService
+}
+
+// Login
+// @description: 登录
+// @param: username string, password string
+// @return: model.User, error
+func (s *LoginService) Login(username string, password string) (model.User, error) {
+	var (
+		userModel model.User
+	)
+
+	if err := global.DB.Where("username = ?", username).First(&userModel).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return userModel, errors.New("登录账号错误")
+		}
+	}
+
+	check := utils.BcryptCheck(password, userModel.Password)
+	if !check {
+		return userModel, errors.New("登录密码错误")
+	}
+
+	if userModel.Status != 1 {
+		return userModel, errors.New("账号已被禁用")
+	}
+
+	// 发布事件
+	event := helper.Event{
+		Name: "user_login",
+		Data: map[string]interface{}{
+			"username": username,
+			"password": password,
+		},
+	}
+	global.Event.Publish(event)
+
+	return userModel, nil
+}
+
+```
+
+### 收到事件
+```go
+package main
+
+import (
+	"fmt"
+	"gin-base/app/middleware"
+	"gin-base/common/global"
+	"gin-base/helper"
+	"gin-base/routers"
+	"github.com/gin-gonic/gin"
+	"net/http"
+	"time"
+)
+
+//go:generate go env -w GO111MODULE=on
+//go:generate go env -w GOPROXY=https://goproxy.cn,direct
+//go:generate go get -u
+//go:generate go mod tidy
+//go:generate go mod download
+//go:generate go mod vendor
+
+func main() {
+	// 运行环境模式 debug模式, test测试模式, release生产模式, 默认是debug,根据当前配置文件读取
+	gin.SetMode(global.Config.Env.Mode)
+
+	router := gin.Default()
+
+	router.GET("/ping", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"code":    0,
+			"message": "pong",
+			"data":    []string{},
+		})
+	})
+
+	// 静态文件
+	router.StaticFS("/resource", http.Dir("./resource"))
+	// 设置 HTTP 请求处理文件上传时可以使用的最大内存为 90MB
+	router.MaxMultipartMemory = 90 << 20
+
+	// 设置跨域
+	router.Use(Cors())
+
+	// 全局日志中间件
+	router.Use(middleware.LoggerMiddleware())
+
+	// 注册所有事件
+	global.Event.RegisterAllEvent(onEventReceived)
+
+	// 加载路由
+	routers.LoadRouters(router)
+
+	err := router.Run(`:` + global.Config.Env.Port)
+	if err != nil {
+		fmt.Println("启动服务失败，错误信息为：", err)
+	}
+}
+
+// onEventReceived 接收事件
+func onEventReceived(event helper.Event, timestamp time.Time) {
+	// todo 处理事件
+	fmt.Printf("Event received at %s: name: %s, data: %v\n", timestamp.Format(time.RFC3339), event.Name, event.Data)
+}
+
+// Cors 跨域请求
+func Cors() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Header("Access-Control-Allow-Origin", global.Config.Cors.AllowOrigin)
+		c.Header("Access-Control-Allow-Headers", global.Config.Cors.AllowHeaders)
+		c.Header("Access-Control-Expose-Headers", global.Config.Cors.ExposeHeaders)
+		c.Header("Access-Control-Allow-Methods", global.Config.Cors.AllowMethods)
+		c.Header("Access-Control-Allow-Credentials", global.Config.Cors.AllowCredentials)
+
+		// 放行所有OPTIONS方法
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(http.StatusNoContent)
+		}
+
+		// 处理请求
+		c.Next()
+	}
+}
 ```
 
 ## air使用

@@ -30,6 +30,7 @@ Golang Gin is a lightweight and efficient Golang web framework. It is widely use
 - Validators and custom validation scenarios
 - Jwt authentication
 - Cache
+- Event
 - Air
 - …
 
@@ -40,6 +41,7 @@ Golang Gin is a lightweight and efficient Golang web framework. It is widely use
 - Mysql
 - Validator
 - Cache
+- Event
 
 ## Frontend Technologies Used
 - Vue3
@@ -404,6 +406,149 @@ func (s *CacheService) DeleteCache(key string) interface{} {
 	return true
 }
 
+```
+
+## Event usage
+### Release event note: Taking login as an example, you only need to add the release event where you want to transmit data
+```go
+package service
+
+import (
+	"errors"
+	"gin-base/app/model"
+	"gin-base/common"
+	"gin-base/common/global"
+	"gin-base/helper"
+	"gin-base/helper/utils"
+	"gorm.io/gorm"
+)
+
+type LoginService struct {
+	common.BaseService
+}
+
+// Login
+// @description: Login
+// @param: username string, password string
+// @return: model.User, error
+func (s *LoginService) Login(username string, password string) (model.User, error) {
+	var (
+		userModel model.User
+	)
+
+	if err := global.DB.Where("username = ?", username).First(&userModel).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return userModel, errors.New("Login account error")
+		}
+	}
+
+	check := utils.BcryptCheck(password, userModel.Password)
+	if !check {
+		return userModel, errors.New("Login password error")
+	}
+
+	if userModel.Status != 1 {
+		return userModel, errors.New("Account has been disabled")
+	}
+
+	// Publish an event
+	event := helper.Event{
+		Name: "user_login",
+		Data: map[string]interface{}{
+			"username": username,
+			"password": password,
+		},
+	}
+	global.Event.Publish(event)
+
+	return userModel, nil
+}
+
+```
+
+### Received event
+```go
+package main
+
+import (
+	"fmt"
+	"gin-base/app/middleware"
+	"gin-base/common/global"
+	"gin-base/helper"
+	"gin-base/routers"
+	"github.com/gin-gonic/gin"
+	"net/http"
+	"time"
+)
+
+//go:generate go env -w GO111MODULE=on
+//go:generate go env -w GOPROXY=https://goproxy.cn,direct
+//go:generate go get -u
+//go:generate go mod tidy
+//go:generate go mod download
+//go:generate go mod vendor
+
+func main() {
+	// Run environment mode debug mode, Test mode, Release production mode, default is debug, read based on the current configuration file
+	gin.SetMode(global.Config.Env.Mode)
+
+	router := gin.Default()
+
+	router.GET("/ping", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"code":    0,
+			"message": "pong",
+			"data":    []string{},
+		})
+	})
+
+	// Static files
+	router.StaticFS("/resource", http.Dir("./resource"))
+	// Set the maximum memory that can be used for HTTP request processing file upload to 90MB
+	router.MaxMultipartMemory = 90 << 20
+
+	// Set up cross domain settings
+	router.Use(Cors())
+
+	// Global log middleware
+	router.Use(middleware.LoggerMiddleware())
+
+	// Register all events
+	global.Event.RegisterAllEvent(onEventReceived)
+
+	// Load route
+	routers.LoadRouters(router)
+
+	err := router.Run(`:` + global.Config.Env.Port)
+	if err != nil {
+		fmt.Println("Service startup failed with error message:", err)
+	}
+}
+
+// onEventReceived Receive events
+func onEventReceived(event helper.Event, timestamp time.Time) {
+	// todo Process Event
+	fmt.Printf("Event received at %s: name: %s, data: %v\n", timestamp.Format(time.RFC3339), event.Name, event.Data)
+}
+
+// Cors cross-domain requests
+func Cors() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Header("Access-Control-Allow-Origin", global.Config.Cors.AllowOrigin)
+		c.Header("Access-Control-Allow-Headers", global.Config.Cors.AllowHeaders)
+		c.Header("Access-Control-Expose-Headers", global.Config.Cors.ExposeHeaders)
+		c.Header("Access-Control-Allow-Methods", global.Config.Cors.AllowMethods)
+		c.Header("Access-Control-Allow-Credentials", global.Config.Cors.AllowCredentials)
+
+		// Release all OPTIONS methods
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(http.StatusNoContent)
+		}
+
+		// Processing requests
+		c.Next()
+	}
+}
 ```
 
 ## air

@@ -71,6 +71,11 @@ func main() {
 		break
 	}
 
+	if opts.Make == "model" && opts.TableName == "" {
+		fmt.Println("请输入模型对应的表名,Usage: go run ./cli/main.go --make=" + opts.Make + " --tableName=your table name")
+		return
+	}
+
 	if opts.Make != "model" && opts.FileName == "" {
 		fmt.Println("请输入文件名,Usage: go run ./cli/main.go --make=" + opts.Make + " --fileName=/app/your path/your file name")
 		return

@@ -34,15 +34,3 @@ func Snake(s string) string {
 
 	return strings.Join(words, "")
 }
-
-// InArrayString 检查字符串是否在切片中
-// @param: str string, list []string
-// @return: bool
-func InArrayString(str string, list []string) bool {
-	for _, v := range list {
-		if v == str {
-			return true
-		}
-	}
-	return false
-}

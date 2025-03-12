@@ -56,7 +56,7 @@ func main() {
 		break
 	default:
 		// 判断make类型
-		if !utils.InArrayString(opts.Make, []string{"controller", "service", "validate", "middleware", "router"}) {
+		if !utils.InArray(opts.Make, []string{"controller", "service", "validate", "middleware", "router"}) {
 			fmt.Println("暂不支持make类型为【" + opts.Make + "】暂只支持命令类型为【controller, model, service, validate, middleware, router】")
 			return
 		}

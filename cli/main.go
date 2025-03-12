@@ -1,11 +1,11 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"gin-base/common/global"
 	"gin-base/config"
 	"gin-base/helper/utils"
+	"github.com/spf13/pflag"
 	"gorm.io/gen"
 	"gorm.io/gorm"
 	"html/template"
@@ -14,74 +14,69 @@ import (
 	"strings"
 )
 
+type Options struct {
+	Make        string // 文件类型
+	Function    string // 函数方法
+	Method      string // 请求方法
+	Router      string // 路由
+	Description string // 函数方法描述或注释
+	TableName   string // 模型对应的表名
+	Path        string // 模型生成路径
+	Camel       bool   // 是否驼峰命名
+	FileName    string // 生成的文件名
+}
+
 func main() {
 	var (
+		opts         Options
 		templateFile string
 		rootPath     = config.GetRootPath()
 	)
 
-	// 文件类型
-	_make := flag.String("make", "", "文件类型")
+	pflag.StringVarP(&opts.Make, "make", "m", "", "文件类型(示例：controller|model|service|validate|middleware)")
+	pflag.StringVarP(&opts.Function, "function", "f", "", "函数方法(示例：create)")
+	pflag.StringVarP(&opts.Method, "method", "e", "", "请求方法(示例：get)")
+	pflag.StringVarP(&opts.Router, "router", "r", "", "路由(示例：/v1/user)")
+	pflag.StringVarP(&opts.Description, "description", "d", "", "函数方法描述或注释")
+	pflag.StringVarP(&opts.TableName, "tableName", "t", "", "模型对应的表名(示例：user)")
+	pflag.StringVarP(&opts.Path, "path", "p", "", "模型生成路径(默认可不传)")
+	pflag.BoolVarP(&opts.Camel, "camel", "c", false, "是否驼峰命名(示例：true 默认为false)")
+	pflag.StringVarP(&opts.FileName, "fileName", "i", "", "生成的文件名(示例：/app/controller/v1/test)")
 
-	// 函数
-	function := flag.String("function", "", "函数")
+	pflag.Parse()
 
-	// 方法
-	method := flag.String("method", "", "方法")
-
-	// 路由
-	router := flag.String("router", "", "路由")
-
-	// 描述
-	description := flag.String("description", "", "描述")
-
-	// 表名,默认为空,描述
-	tableName := flag.String("tableName", "", "表名")
-
-	// 生成路径,默认为空,描述
-	path := flag.String("path", "", "生成路径")
-
-	// 是否生成驼峰字段
-	camel := flag.Bool("camel", false, "是否生成驼峰字段")
-
-	// 生成的文件名
-	fileName := flag.String("fileName", "", "文件名")
-
-	// 解析命令行参数
-	flag.Parse()
-
-	if *_make == "" {
-		fmt.Println("请输入正确的文件类型,Usage: go run main.go --make=<controller|model|service|validate|middleware>")
+	if opts.Make == "" {
+		fmt.Println("请输入正确的文件类型,Usage: go run ./cli/main.go --make=<controller|model|service|validate|middleware>")
 		return
 	}
 
-	switch *_make {
+	switch opts.Make {
 	case "model":
-		generateModel(*tableName, *path, *camel)
+		generateModel(opts.TableName, opts.Path, opts.Camel)
 		break
 	case "controller":
-		templateFile = filepath.Join(rootPath, "common", "template", *_make+".tpl")
+		templateFile = filepath.Join(rootPath, "common", "template", opts.Make+".tpl")
 		break
 	case "service":
-		templateFile = filepath.Join(rootPath, "common", "template", *_make+".tpl")
+		templateFile = filepath.Join(rootPath, "common", "template", opts.Make+".tpl")
 		break
 	case "validate":
-		templateFile = filepath.Join(rootPath, "common", "template", *_make+".tpl")
+		templateFile = filepath.Join(rootPath, "common", "template", opts.Make+".tpl")
 		break
 	case "middleware":
-		templateFile = filepath.Join(rootPath, "common", "template", *_make+".tpl")
+		templateFile = filepath.Join(rootPath, "common", "template", opts.Make+".tpl")
 		break
 	default:
-		fmt.Println("暂不支持make类型为【" + *_make + "】暂只支持命令类型为【controller, model, service, validate, middleware】")
+		fmt.Println("暂不支持make类型为【" + opts.Make + "】暂只支持命令类型为【controller, model, service, validate, middleware】")
 		break
 	}
 
-	if *_make != "model" && *fileName == "" {
-		fmt.Println("请输入文件名,Usage: go run main.go --make=" + *_make + " --fileName=/app/your path/your file name")
+	if opts.Make != "model" && opts.FileName == "" {
+		fmt.Println("请输入文件名,Usage: go run ./cli/main.go --make=" + opts.Make + " --fileName=/app/your path/your file name")
 		return
 	}
 
-	if err := generateFile(templateFile, *fileName, *function, *method, *router, *description); err != nil {
+	if err := generateFile(templateFile, opts.FileName, opts.Function, opts.Method, opts.Router, opts.Description); err != nil {
 		fmt.Println(err.Error())
 		return
 	}

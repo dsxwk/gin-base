@@ -6,8 +6,7 @@ import (
 	"time"
 )
 
-// CacheValidate
-// @Description 缓存验证
+// CacheValidate 缓存验证
 type CacheValidate struct {
 	Key    string        `json:"key" form:"key" validate:"required" label:"键"`
 	Value  interface{}   `json:"value" validate:"required" label:"值"`

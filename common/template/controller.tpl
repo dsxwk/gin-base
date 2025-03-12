@@ -10,8 +10,7 @@ type {{.Name}}Controller struct {
     common.BaseController
 }
 
-// {{.Function}}
-// @Description {{.Description}}
+// {{.Function}} {{.Description}}
 // @Router {{.Router}} [{{.Method}}]
 func (s *{{.Name}}Controller) {{.Function}}(c *gin.Context) {
     // Define your controller function here

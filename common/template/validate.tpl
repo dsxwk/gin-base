@@ -5,8 +5,7 @@ import (
     validator "github.com/gookit/validate"
 )
 
-// {{.Name}}Validate
-// @Description {{.Description}}
+// {{.Name}}Validate {{.Description}}
 type {{.Name}}Validate struct {
     Page     int    `form:"page" validate:"required|int|gt:0" label:"页码"`
     PageSize int    `form:"pageSize" validate:"required|int|gt:0" label:"每页数量"`

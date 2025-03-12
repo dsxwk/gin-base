@@ -8,8 +8,7 @@ type {{.Name}}Service struct {
     common.BaseService
 }
 
-// {{.Function}}
-// @description: {{.Description}}
+// {{.Function}} {{.Description}}
 // @param: YourParam string
 // @return: bool
 func (s *{{.Name}}Service) {{.Function}}(YourParam string) bool {

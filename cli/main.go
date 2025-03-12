@@ -33,7 +33,7 @@ func main() {
 		rootPath     = config.GetRootPath()
 	)
 
-	pflag.StringVarP(&opts.Make, "make", "m", "", "文件类型(示例：controller|model|service|validate|middleware)")
+	pflag.StringVarP(&opts.Make, "make", "m", "", "文件类型(示例：controller|model|service|validate|middleware|router)")
 	pflag.StringVarP(&opts.Function, "function", "f", "", "函数方法(示例：create)")
 	pflag.StringVarP(&opts.Method, "method", "e", "", "请求方法(示例：get)")
 	pflag.StringVarP(&opts.Router, "router", "r", "", "路由(示例：/v1/user)")
@@ -46,7 +46,7 @@ func main() {
 	pflag.Parse()
 
 	if opts.Make == "" {
-		fmt.Println("请输入正确的文件类型,Usage: go run ./cli/main.go --make=<controller|model|service|validate|middleware>")
+		fmt.Println("请输入正确的文件类型,Usage: go run ./cli/main.go --make=<controller|model|service|validate|middleware|router>")
 		return
 	}
 
@@ -54,20 +54,13 @@ func main() {
 	case "model":
 		generateModel(opts.TableName, opts.Path, opts.Camel)
 		break
-	case "controller":
-		templateFile = filepath.Join(rootPath, "common", "template", opts.Make+".tpl")
-		break
-	case "service":
-		templateFile = filepath.Join(rootPath, "common", "template", opts.Make+".tpl")
-		break
-	case "validate":
-		templateFile = filepath.Join(rootPath, "common", "template", opts.Make+".tpl")
-		break
-	case "middleware":
-		templateFile = filepath.Join(rootPath, "common", "template", opts.Make+".tpl")
-		break
 	default:
-		fmt.Println("暂不支持make类型为【" + opts.Make + "】暂只支持命令类型为【controller, model, service, validate, middleware】")
+		// 判断make类型
+		if !utils.InArrayString(opts.Make, []string{"controller", "service", "validate", "middleware", "router"}) {
+			fmt.Println("暂不支持make类型为【" + opts.Make + "】暂只支持命令类型为【controller, model, service, validate, middleware, router】")
+			return
+		}
+		templateFile = filepath.Join(rootPath, "common", "template", opts.Make+".tpl")
 		break
 	}
 

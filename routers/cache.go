@@ -11,7 +11,7 @@ type CacheRouter struct{}
 // RegisterRoutes 实现 Router 接口
 func (r CacheRouter) RegisterRoutes(routerGroup *gin.RouterGroup) {
 	var (
-		controller = v1.CacheController{}
+		controller v1.CacheController
 	)
 
 	// 设置缓存

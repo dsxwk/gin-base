@@ -11,7 +11,7 @@ type ArticleRouter struct{}
 // RegisterRoutes 实现 Router 接口
 func (r ArticleRouter) RegisterRoutes(routerGroup *gin.RouterGroup) {
 	var (
-		controller = v1.ArticleController{}
+		controller v1.ArticleController
 	)
 
 	// 列表

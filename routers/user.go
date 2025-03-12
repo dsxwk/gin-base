@@ -11,7 +11,7 @@ type UserRouter struct{}
 // RegisterRoutes 实现 Router 接口
 func (r UserRouter) RegisterRoutes(routerGroup *gin.RouterGroup) {
 	var (
-		controller = v1.UserController{}
+		controller v1.UserController
 	)
 
 	// 列表

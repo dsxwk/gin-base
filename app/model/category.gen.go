@@ -25,7 +25,7 @@ func (*Category) TableName() string {
 	return TableNameCategory
 }
 
-// 创建之前
+// BeforeCreate 创建之前
 func (s *Category) BeforeCreate(tx *gorm.DB) (err error) {
 	if s.CreatedAt == nil {
 		createdAt := time.Now().Format("2006-01-02 15:04:05")
@@ -40,7 +40,7 @@ func (s *Category) BeforeCreate(tx *gorm.DB) (err error) {
 	return
 }
 
-// 更新之前
+// BeforeUpdate 更新之前
 func (s *Category) BeforeUpdate(tx *gorm.DB) (err error) {
 	if s.UpdatedAt == nil {
 		updatedAt := time.Now().Format("2006-01-02 15:04:05")
@@ -50,7 +50,7 @@ func (s *Category) BeforeUpdate(tx *gorm.DB) (err error) {
 	return
 }
 
-// 查询之后
+// AfterFind 查询之后
 func (s *Category) AfterFind(tx *gorm.DB) (err error) {
 	if s.CreatedAt != nil {
 		createdAt := time.Now().Format("2006-01-02 15:04:05")
@@ -70,7 +70,7 @@ func (s *Category) AfterFind(tx *gorm.DB) (err error) {
 	return
 }
 
-// 删除之前
+// BeforeDelete 删除之前
 func (s *Category) BeforeDelete(tx *gorm.DB) (err error) {
 	if s.DeletedAt == nil {
 		deletedAt := time.Now().Format("2006-01-02 15:04:05")

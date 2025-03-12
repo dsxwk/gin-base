@@ -47,7 +47,7 @@ func (*Article) TableName() string {
 	return TableNameArticle
 }
 
-// 创建之前
+// BeforeCreate 创建之前
 func (s *Article) BeforeCreate(tx *gorm.DB) (err error) {
 	if s.CreatedAt == nil {
 		createdAt := time.Now().Format("2006-01-02 15:04:05")
@@ -62,7 +62,7 @@ func (s *Article) BeforeCreate(tx *gorm.DB) (err error) {
 	return
 }
 
-// 更新之前
+// BeforeUpdate 更新之前
 func (s *Article) BeforeUpdate(tx *gorm.DB) (err error) {
 	if s.UpdatedAt == nil {
 		updatedAt := time.Now().Format("2006-01-02 15:04:05")
@@ -72,7 +72,7 @@ func (s *Article) BeforeUpdate(tx *gorm.DB) (err error) {
 	return
 }
 
-// 查询之后
+// AfterFind 查询之后
 func (s *Article) AfterFind(tx *gorm.DB) (err error) {
 	// 时间格式转换
 	if s.CreatedAt != nil {
@@ -99,7 +99,7 @@ func (s *Article) AfterFind(tx *gorm.DB) (err error) {
 	return
 }
 
-// 删除之前
+// BeforeDelete 删除之前
 func (s *Article) BeforeDelete(tx *gorm.DB) (err error) {
 	if s.DeletedAt == nil {
 		deletedAt := time.Now().Format("2006-01-02 15:04:05")
@@ -109,7 +109,7 @@ func (s *Article) BeforeDelete(tx *gorm.DB) (err error) {
 	return
 }
 
-// 获取标签
+// GetTag 获取标签
 func (s *Article) GetTag() []string {
 	if s != nil && s.Tag != nil {
 		var tagJson []string
@@ -119,7 +119,7 @@ func (s *Article) GetTag() []string {
 	return nil
 }
 
-// 设置标签
+// SetTag 设置标签
 func (s *Article) SetTag(tag []string) *string {
 	var (
 		model Article

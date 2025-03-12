@@ -134,6 +134,10 @@ go run ./cli/main.go --make=validate  --fileName=/app/validate/test --descriptio
 # 生成中间件
 # --fileName=</app/middleware/test(生成的文件路径)> --description=<方法注释>
 go run ./cli/main.go --make=middleware  --fileName=/app/middleware/test --description=测试 
+
+# 生成路由
+# --fileName=</routers/test(生成的文件路径)>
+go run ./cli/main.go --make=middleware  --fileName=/routers/test
 ```
 ### 生成模型结构示例
 
@@ -187,7 +191,7 @@ func (*Article) TableName() string {
 	return TableNameArticle
 }
 
-// 创建之前
+// BeforeCreate 创建之前
 func (s *Article) BeforeCreate(tx *gorm.DB) (err error) {
 	if s.CreatedAt == nil {
 		createdAt := time.Now().Format("2006-01-02 15:04:05")
@@ -202,7 +206,7 @@ func (s *Article) BeforeCreate(tx *gorm.DB) (err error) {
 	return
 }
 
-// 更新之前
+// BeforeUpdate 更新之前
 func (s *Article) BeforeUpdate(tx *gorm.DB) (err error) {
 	if s.UpdatedAt == nil {
 		updatedAt := time.Now().Format("2006-01-02 15:04:05")
@@ -212,7 +216,7 @@ func (s *Article) BeforeUpdate(tx *gorm.DB) (err error) {
 	return
 }
 
-// 查询之后
+// AfterFind 查询之后
 func (s *Article) AfterFind(tx *gorm.DB) (err error) {
 	// 时间格式转换
 	if s.CreatedAt != nil {
@@ -239,7 +243,7 @@ func (s *Article) AfterFind(tx *gorm.DB) (err error) {
 	return
 }
 
-// 删除之前
+// BeforeDelete 删除之前
 func (s *Article) BeforeDelete(tx *gorm.DB) (err error) {
 	if s.DeletedAt == nil {
 		deletedAt := time.Now().Format("2006-01-02 15:04:05")
@@ -252,7 +256,7 @@ func (s *Article) BeforeDelete(tx *gorm.DB) (err error) {
 
 ## 设置器和获取器
 ```go
-// 获取标签
+// GetTag 获取标签
 func (s *Article) GetTag() []string {
 	if s != nil && s.Tag != nil {
 		var tagJson []string
@@ -262,7 +266,7 @@ func (s *Article) GetTag() []string {
 	return nil
 }
 
-// 设置标签
+// SetTag 设置标签
 func (s *Article) SetTag(tag []string) *string {
 	var (
 		model Article
@@ -279,8 +283,7 @@ func (s *Article) SetTag(tag []string) *string {
 
 ### 设置器和获取器的使用
 ```go
-// List
-// @description: 列表
+// List 列表
 // @param: req validate.ArticleValidate
 // @return: global.PageData, error
 func (s *ArticleService) List(req validate.ArticleValidate) (global.PageData, error) {
@@ -328,8 +331,7 @@ func (s *ArticleService) List(req validate.ArticleValidate) (global.PageData, er
 	return pageData, nil
 }
 
-// Update
-// @description: 更新
+// Update 更新
 // @param: req model.Article
 // @return: model.Article, error
 func (this *ArticleService) Update(req model.ArticleQuery) (model.Article, error) {
@@ -376,8 +378,7 @@ type CacheService struct {
 	common.BaseService
 }
 
-// SetCache
-// @description: 设置缓存
+// SetCache 设置缓存
 // @param: key string, value interface{}, expire time.Duration
 // @return: interface{}
 func (s *CacheService) SetCache(key string, value interface{}, expire time.Duration) interface{} {
@@ -386,8 +387,7 @@ func (s *CacheService) SetCache(key string, value interface{}, expire time.Durat
 	return true
 }
 
-// GetCache
-// @description: 获取缓存
+// GetCache 获取缓存
 // @param: key string
 // @return: interface{}
 func (s *CacheService) GetCache(key string) (interface{}, bool) {
@@ -399,8 +399,7 @@ func (s *CacheService) GetCache(key string) (interface{}, bool) {
 	return false, ok
 }
 
-// DeleteCache
-// @description: 删除缓存
+// DeleteCache 删除缓存
 // @param: key string
 // @return: interface{}
 func (s *CacheService) DeleteCache(key string) interface{} {
@@ -430,8 +429,7 @@ type LoginService struct {
 	common.BaseService
 }
 
-// Login
-// @description: 登录
+// Login 登录
 // @param: username string, password string
 // @return: model.User, error
 func (s *LoginService) Login(username string, password string) (model.User, error) {
@@ -656,9 +654,7 @@ type ArticleController struct {
 	common.BaseController
 }
 
-// List
-// @Tags 文章
-// @Summary 列表
+// List 列表
 // @Router /v1/article [get]
 func (s *ArticleController) List(c *gin.Context) {
 	var (
@@ -754,72 +750,55 @@ func (s ArticleValidate) Translates() map[string]string {
 }
 ```
 
-## 路由以及中间件
+## 路由注册
 
 ```go
 package routers
 
 import (
-	controller "gin-base/app/controller/v1"
-	"gin-base/app/middleware"
+	"gin-base/app/controller/v1"
 	"github.com/gin-gonic/gin"
 )
 
-var (
-	jwtMiddleware = middleware.Jwt{}.JwtMiddleware()
-)
+// UserRouter 用户路由
+type UserRouter struct{}
 
-// LoadRouters 加载路由
-func LoadRouters(router *gin.Engine) {
-	// 登录
-	login_controller := controller.LoginController{}
-	// 用户
-	user_controller := controller.UserController{}
-	// 文章
-	article_controller := controller.ArticleController{}
+// RegisterRoutes 实现 Router 接口
+func (r UserRouter) RegisterRoutes(routerGroup *gin.RouterGroup) {
+	var (
+		controller v1.UserController
+	)
 
-	// 统一路由分组
-	v1 := router.Group("api/v1")
-	{
-		// 不需要token验证
-		// 用户登录
-		v1.POST("/login", login_controller.Login)
-
-		// 需要token验证
-		// 用户
-		user := v1.Group("user", jwtMiddleware)
-		{
-			// 列表
-			user.GET("", user_controller.List)
-			// 创建用户
-			user.POST("", user_controller.Create)
-			// 更新用户
-			user.PUT("/:id", user_controller.Update)
-			// 用户详情
-			user.GET("/:id", user_controller.Detail)
-			// 删除用户
-			user.DELETE("/:id", user_controller.Delete)
-		}
-
-		// 文章
-		article := v1.Use(jwtMiddleware)
-		{
-			// 列表
-			article.GET("/article", article_controller.List)
-			// 创建
-			article.POST("/article", article_controller.Create)
-			// 更新
-			article.PUT("/article/:id", article_controller.Update)
-			// 详情
-			article.GET("/article/:id", article_controller.Detail)
-			// 删除
-			article.DELETE("/article/:id", article_controller.Delete)
-		}
-	}
+	// 列表
+	routerGroup.GET("/user", controller.List)
+	// 创建
+	routerGroup.POST("/user", controller.Create)
+	// 更新
+	routerGroup.PUT("/user/:id", controller.Update)
+	// 删除
+	routerGroup.DELETE("/user/:id", controller.Delete)
+	// 详情
+	routerGroup.GET("/user/:id", controller.Detail)
 }
 ```
 
 ## 缓存
 ```go
+package cache
 
+import (
+	"fmt"
+	"time"
+)
+
+// Test 缓存测试
+func Test() {
+	// 设置缓存
+	global.Cache.SetCache("test", "test", 10*time.Second)
+	// 获取缓存
+	res := global.Cache.GetCache("test")
+	// 删除缓存
+	global.Cache.DelCache("test")
+	fmt.Printf("%v\n", res)
+}
 ```

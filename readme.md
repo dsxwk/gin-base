@@ -131,6 +131,10 @@ go run ./cli/main.go --make=validate  --fileName=/app/validate/test --descriptio
 # Generative Middleware
 # --fileName=</app/middleware/test(The generated file path)> --description=<Action annotation>
 go run ./cli/main.go --make=middleware  --fileName=/app/middleware/test --description=test 
+
+# Generative Router
+# --fileName=</routers/test(The generated file path)>
+go run ./cli/main.go --make=router  --fileName=/routers/test
 ```
 ### Example of Generating a Model Structure
 
@@ -184,7 +188,7 @@ func (*Article) TableName() string {
 	return TableNameArticle
 }
 
-// Before creation
+// BeforeCreate Before creation
 func (s *Article) BeforeCreate(tx *gorm.DB) (err error) {
 	if s.CreatedAt == nil {
 		createdAt := time.Now().Format("2006-01-02 15:04:05")
@@ -199,7 +203,7 @@ func (s *Article) BeforeCreate(tx *gorm.DB) (err error) {
 	return
 }
 
-// Before updating
+// BeforeUpdate Before updating
 func (s *Article) BeforeUpdate(tx *gorm.DB) (err error) {
 	if s.UpdatedAt == nil {
 		updatedAt := time.Now().Format("2006-01-02 15:04:05")
@@ -209,7 +213,7 @@ func (s *Article) BeforeUpdate(tx *gorm.DB) (err error) {
 	return
 }
 
-// After querying
+// AfterFind After querying
 func (s *Article) AfterFind(tx *gorm.DB) (err error) {
 	// Time format conversion
 	if s.CreatedAt != nil {
@@ -236,7 +240,7 @@ func (s *Article) AfterFind(tx *gorm.DB) (err error) {
 	return
 }
 
-// Before deletion
+// BeforeDelete Before deletion
 func (s *Article) BeforeDelete(tx *gorm.DB) (err error) {
 	if s.DeletedAt == nil {
 		deletedAt := time.Now().Format("2006-01-02 15:04:05")
@@ -249,7 +253,7 @@ func (s *Article) BeforeDelete(tx *gorm.DB) (err error) {
 
 ## Setter and Getter
 ```go
-// Get tags
+// GetTag Get tags
 func (s *Article) GetTag() []string {
 	if s != nil && s.Tag != nil {
 		var tagJson []string
@@ -259,7 +263,7 @@ func (s *Article) GetTag() []string {
 	return nil
 }
 
-// Set tags
+// SetTag Set tags
 func (s *Article) SetTag(tag []string) *string {
 	var (
 		model Article
@@ -276,8 +280,7 @@ func (s *Article) SetTag(tag []string) *string {
 
 ### The use of the setter and getter
 ```go
-// List
-// @description: list
+// List list
 // @param: req validate.ArticleValidate
 // @return: global.PageData, error
 func (s *ArticleService) List(req validate.ArticleValidate) (global.PageData, error) {
@@ -325,8 +328,7 @@ func (s *ArticleService) List(req validate.ArticleValidate) (global.PageData, er
 	return pageData, nil
 }
 
-// Update
-// @description: update
+// Update update
 // @param: req model.Article
 // @return: model.Article, error
 func (this *ArticleService) Update(req model.ArticleQuery) (model.Article, error) {
@@ -373,8 +375,7 @@ type CacheService struct {
 	common.BaseService
 }
 
-// SetCache
-// @description: Set cache
+// SetCache Set cache
 // @param: key string, value interface{}, expire time.Duration
 // @return: interface{}
 func (s *CacheService) SetCache(key string, value interface{}, expire time.Duration) interface{} {
@@ -383,8 +384,7 @@ func (s *CacheService) SetCache(key string, value interface{}, expire time.Durat
 	return true
 }
 
-// GetCache
-// @description: Get cache
+// GetCache Get cache
 // @param: key string
 // @return: interface{}
 func (s *CacheService) GetCache(key string) (interface{}, bool) {
@@ -396,8 +396,7 @@ func (s *CacheService) GetCache(key string) (interface{}, bool) {
 	return false, ok
 }
 
-// DeleteCache
-// @description: Delete cache
+// DeleteCache Delete cache
 // @param: key string
 // @return: interface{}
 func (s *CacheService) DeleteCache(key string) interface{} {
@@ -427,8 +426,7 @@ type LoginService struct {
 	common.BaseService
 }
 
-// Login
-// @description: Login
+// Login Login
 // @param: username string, password string
 // @return: model.User, error
 func (s *LoginService) Login(username string, password string) (model.User, error) {
@@ -653,9 +651,7 @@ type ArticleController struct {
 	common.BaseController
 }
 
-// List
-// @Tags Article
-// @Summary List
+// List List
 // @Router /v1/article [get]
 func (s *ArticleController) List(c *gin.Context) {
 	var (
@@ -697,8 +693,7 @@ import (
 	validator "github.com/gookit/validate"
 )
 
-// ArticleValidate
-// Article Request Validation
+// ArticleValidate Article Request Validation
 type ArticleValidate struct {
 	Page     int    `form:"page" validate:"required|int|gt:0" label:"页码"`
 	PageSize int    `form:"pageSize" validate:"required|int|gt:0" label:"每页数量"`
@@ -756,69 +751,57 @@ func (s ArticleValidate) Translates() map[string]string {
 }
 ```
 
-## Setting Up Custom Routes and Middleware
+## Register Route
 
 ```go
 package routers
 
 import (
-	controller "gin-base/app/controller/v1"
-	"gin-base/app/middleware"
+	"gin-base/app/controller/v1"
 	"github.com/gin-gonic/gin"
 )
 
-var (
-	jwtMiddleware = middleware.Jwt{}.JwtMiddleware()
-)
+// UserRouter User Router
+type UserRouter struct{}
 
-// LoadRouters
-// Load routes
-func LoadRouters(router *gin.Engine) {
-	// Login
-	login_controller := controller.LoginController{}
-	// User
-	user_controller := controller.UserController{}
-	// Article
-	article_controller := controller.ArticleController{}
+// RegisterRoutes Implement Router interface
+func (r UserRouter) RegisterRoutes(routerGroup *gin.RouterGroup) {
+	var (
+		controller v1.UserController
+	)
 
-	// Unified routing grouping
-	v1 := router.Group("api/v1")
-	{
-		// No token verification required
-		// User login
-		v1.POST("/login", login_controller.Login)
-
-		// Token verification is required
-		// User
-		user := v1.Group("user").Use(jwtMiddleware)
-		{
-			// List
-			user.GET("", user_controller.List)
-			// Create
-			user.POST("", user_controller.Create)
-			// Update
-			user.PUT("/:id", user_controller.Update)
-			// Detail
-			user.GET("/:id", user_controller.Detail)
-			// Delete
-			user.DELETE("/:id", user_controller.Delete)
-		}
-		
-		// Article
-		article := v1.Use(jwtMiddleware)
-		{
-			// List
-			article.GET("/article", article_controller.List)
-			// Create
-			article.POST("/article", article_controller.Create)
-			// Update
-			article.PUT("/article/:id", article_controller.Update)
-			// Detail
-			article.GET("/article/:id", article_controller.Detail)
-			// Delete
-			article.DELETE("/article/:id", article_controller.Delete)
-        }
-	}
+	// List
+	routerGroup.GET("/user", controller.List)
+	// Create
+	routerGroup.POST("/user", controller.Create)
+	// Update
+	routerGroup.PUT("/user/:id", controller.Update)
+	// Delete
+	routerGroup.DELETE("/user/:id", controller.Delete)
+	// Detail
+	routerGroup.GET("/user/:id", controller.Detail)
 }
+
 ```
 
+## Cache
+
+```go
+package cache
+
+import (
+	"fmt"
+	"time"
+)
+
+// Test Cache Test
+func Test() {
+	// Set Cache
+	global.Cache.SetCache("test", "test", 10*time.Second)
+	// Get Cache
+	res := global.Cache.GetCache("test")
+	// Delete Cache
+	global.Cache.DelCache("test")
+	fmt.Printf("%v\n", res)
+}
+```

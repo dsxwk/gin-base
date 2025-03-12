@@ -15,8 +15,7 @@ import (
 	"time"
 )
 
-// @function: FormatTime
-// @description: 格式化时间
+// FormatTime 格式化时间
 // @param: t string
 // @return: string
 func FormatTime(t string) string {
@@ -29,8 +28,7 @@ func FormatTime(t string) string {
 	return ts.Format("2006-01-02 15:04:05")
 }
 
-// @function: Pagination
-// @description: 计算分页
+// Pagination 计算分页
 // @param: page, pageSize int
 // @return: int, int
 func Pagination(page, pageSize int) (int, int) {
@@ -49,9 +47,8 @@ func Pagination(page, pageSize int) (int, int) {
 	return offset, limit
 }
 
-// @function: GetPageData
-// @description: 获取分页数据
-// @param: page, pageSize, total, data
+// GetPageData 获取分页数据
+// @param: page int, pageSize int, total int64, data interface{}
 // @return: global.PageData
 func GetPageData(page int, pageSize int, total int64, data interface{}) global.PageData {
 	return global.PageData{
@@ -62,8 +59,7 @@ func GetPageData(page int, pageSize int, total int64, data interface{}) global.P
 	}
 }
 
-// @function: BcryptHash
-// @description: 使用bcrypt对密码进行加密
+// BcryptHash 使用bcrypt对密码进行加密
 // @param: password string
 // @return: string
 func BcryptHash(password string) string {
@@ -72,8 +68,7 @@ func BcryptHash(password string) string {
 	return string(bytes)
 }
 
-// @function: BcryptCheck
-// @description: 对比明文密码和数据库的哈希值
+// BcryptCheck 对比明文密码和数据库的哈希值
 // @param: password, hash string
 // @return: bool
 func BcryptCheck(password, hash string) bool {
@@ -82,9 +77,8 @@ func BcryptCheck(password, hash string) bool {
 	return err == nil
 }
 
-// @function: Md5
-// @description: md5加密
-// @param: str []byte
+// Md5 md5加密
+// @param: str []byte, b ...byte
 // @return: string
 func Md5(str []byte, b ...byte) string {
 	h := md5.New()
@@ -93,8 +87,7 @@ func Md5(str []byte, b ...byte) string {
 	return hex.EncodeToString(h.Sum(b))
 }
 
-// @function: KeyIsExist
-// @description: 检查map键名是否存在
+// KeyIsExist 检查map键名是否存在
 // @param: data map[string]interface{}, key string
 // @return: bool
 func KeyIsExist(data map[string]interface{}, key string) bool {
@@ -103,8 +96,7 @@ func KeyIsExist(data map[string]interface{}, key string) bool {
 	return exists
 }
 
-// @function: CamelToSnake
-// @description: 驼峰转下划线
+// CamelToSnake 驼峰转下划线
 // @param: field string
 // @return: string
 func CamelToSnake(field string) string {
@@ -122,8 +114,7 @@ func CamelToSnake(field string) string {
 	return snake
 }
 
-// @function: CamelToSnakeMap
-// @description: 驼峰键名数据转下划线键名数据
+// CamelToSnakeMap 驼峰键名数据转下划线键名数据
 // @param: data map[string]interface{}
 // @return: map[string]interface{}
 func CamelToSnakeMap(data map[string]interface{}) map[string]interface{} {
@@ -136,8 +127,7 @@ func CamelToSnakeMap(data map[string]interface{}) map[string]interface{} {
 	return returnData
 }
 
-// @function: FilterStructToMap
-// @description: 根据结构体过滤请求字段
+// FilterStructToMap 根据结构体过滤请求字段
 // @param: req map[string]interface{}, filterStruct interface{}
 // @return: result map[string]interface{}
 func FilterStructToMap(req map[string]interface{}, filterStruct interface{}) (result map[string]interface{}) {
@@ -158,10 +148,8 @@ func FilterStructToMap(req map[string]interface{}, filterStruct interface{}) (re
 	return result
 }
 
-// @function: BuildWhereClause
-// @description: 构建查询条件
-// @param: filters interface{}
-// @param: tag 获取的标签 json、form 等
+// BuildWhereClause 构建查询条件
+// @param: filters interface{}, tag string 获取的标签 json、form 等
 // @return: string, []interface{}
 func BuildWhereClause(filters interface{}, tag string) (string, []interface{}) {
 	var (
@@ -206,8 +194,7 @@ func BuildWhereClause(filters interface{}, tag string) (string, []interface{}) {
 	return whereClause, args
 }
 
-// @function: ToCamelCase
-// @description: 将下划线分隔的字段名转换为驼峰命名
+// ToCamelCase 将下划线分隔的字段名转换为驼峰命名
 // @param: s string
 // @return: string
 func ToCamelCase(s string) string {
@@ -220,8 +207,7 @@ func ToCamelCase(s string) string {
 	return strings.Join(words, "")
 }
 
-// @function: ConvertXStringToInt64Arr
-// @description: *string 转 []int64
+// ConvertXStringToInt64Arr *string 转 []int64
 // @param: str *string
 // @return: []int64
 func ConvertXStringToInt64Arr(str *string) []int64 {
@@ -237,8 +223,7 @@ func ConvertXStringToInt64Arr(str *string) []int64 {
 	return data
 }
 
-// @function: ConvertXStringToInt64Arr
-// @description: *string 转 []string
+// ConvertXStringToStringArr *string 转 []string
 // @param: str *string
 // @return: []string
 func ConvertXStringToStringArr(str *string) []string {
@@ -254,8 +239,7 @@ func ConvertXStringToStringArr(str *string) []string {
 	return data
 }
 
-// @function: RandomFileName
-// @description: 生成随机文件名
+// RandomFileName 生成随机文件名
 // @param: ext string 文件后缀
 // @return: string
 func RandomFileName(ext string) string {
@@ -271,8 +255,7 @@ func RandomFileName(ext string) string {
 	return fileName
 }
 
-// @function: RemoveDuplicates
-// @description: 字符串切片去重
+// RemoveDuplicates 字符串切片去重
 // @param: input []string
 // @return: []string
 func RemoveDuplicates(input []string) []string {

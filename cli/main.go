@@ -80,7 +80,7 @@ func main() {
 	}
 }
 
-// 生成模版文件
+// generateFile 生成模版文件
 func generateFile(templateFile, filename string, function string, method string, router string, description string) error {
 	// 加载模板文件
 	fmt.Printf("Loading template file: %s\n", templateFile)
@@ -166,7 +166,7 @@ func generateFile(templateFile, filename string, function string, method string,
 	return nil
 }
 
-// 生成 model
+// generateModel 生成 model
 func generateModel(tableName string, path string, camel bool) {
 	if tableName == "" {
 		fmt.Println("请输入表名,Usage: go run main.go --make=model --tableName=your table name")
@@ -181,7 +181,7 @@ func generateModel(tableName string, path string, camel bool) {
 	fmt.Println(tableName + " 表结构体生成成功!")
 }
 
-// 生成表结构体
+// createTableStruct 生成表结构体
 // @param tableName 表名
 // @param path 生成路径
 func createTableStruct(tableName string, path string, camel bool) {
@@ -232,7 +232,7 @@ func createTableStruct(tableName string, path string, camel bool) {
 	_ = os.RemoveAll(path)
 }
 
-// 插入钩子方法到生成的模型文件
+// insertHooksIntoModel 插入钩子方法到生成的模型文件
 func insertHooksIntoModel(path string, tableName string) {
 	// 确保路径和文件名正确
 	modelFilePath := filepath.Join(config.GetRootPath(), "app", "model", tableName+".gen.go")
@@ -250,7 +250,7 @@ func insertHooksIntoModel(path string, tableName string) {
 
 	// 准备钩子方法的内容
 	hooks := fmt.Sprintf(`
-// 创建之前
+// BeforeCreate 创建之前
 func (s *%s) BeforeCreate(tx *gorm.DB) (err error) {
 	if s.CreatedAt == nil {
 		createdAt := time.Now().Format("2006-01-02 15:04:05")
@@ -263,7 +263,7 @@ func (s *%s) BeforeCreate(tx *gorm.DB) (err error) {
 	return
 }
 
-// 更新之前
+// BeforeUpdate 更新之前
 func (s *%s) BeforeUpdate(tx *gorm.DB) (err error) {
 	if s.UpdatedAt == nil {
 		updatedAt := time.Now().Format("2006-01-02 15:04:05")
@@ -272,7 +272,7 @@ func (s *%s) BeforeUpdate(tx *gorm.DB) (err error) {
 	return
 }
 
-// 查询之后
+// AfterFind 查询之后
 func (s *%s) AfterFind(tx *gorm.DB) (err error) {
 	if s.CreatedAt != nil {
 		createdAt, _ := time.Parse(time.RFC3339, *s.CreatedAt)
@@ -292,7 +292,7 @@ func (s *%s) AfterFind(tx *gorm.DB) (err error) {
 	return
 }
 
-// 删除之前
+// BeforeDelete 删除之前
 func (s *%s) BeforeDelete(tx *gorm.DB) (err error) {
 	if s.DeletedAt == nil {
 		deletedAt := time.Now().Format("2006-01-02 15:04:05")

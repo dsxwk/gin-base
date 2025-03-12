@@ -14,9 +14,7 @@ type LoginController struct {
 	common.BaseController
 }
 
-// Login
-// @Tags 登录
-// @Summary 登录
+// Login 登录
 // @Router /api/v1/login [post]
 func (s *LoginController) Login(c *gin.Context) {
 	var (

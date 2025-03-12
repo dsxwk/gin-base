@@ -16,8 +16,7 @@ type ArticleService struct {
 	common.BaseService
 }
 
-// List
-// @description: 列表
+// List 列表
 // @param: req validate.ArticleValidate
 // @return: global.PageData, error
 func (s *ArticleService) List(req validate.ArticleValidate) (global.PageData, error) {
@@ -79,8 +78,7 @@ func (s *ArticleService) List(req validate.ArticleValidate) (global.PageData, er
 	return pageData, nil
 }
 
-// Create
-// @description: 创建
+// Create 创建
 // @param: req model.Article
 // @return: model.Article, error
 func (s *ArticleService) Create(req model.ArticleQuery) (model.Article, error) {
@@ -102,8 +100,7 @@ func (s *ArticleService) Create(req model.ArticleQuery) (model.Article, error) {
 	return articleModel, nil
 }
 
-// Update
-// @description: 更新
+// Update 更新
 // @param: req model.Article
 // @return: model.Article, error
 func (this *ArticleService) Update(req model.ArticleQuery) (model.Article, error) {
@@ -141,8 +138,7 @@ func (this *ArticleService) Update(req model.ArticleQuery) (model.Article, error
 	return articleModel, nil
 }
 
-// Detail
-// @description: 详情
+// Detail 详情
 // @param: id int64
 // @return: model.Article, error
 func (s *ArticleService) Detail(id int64) (model.Article, error) {
@@ -163,8 +159,7 @@ func (s *ArticleService) Detail(id int64) (model.Article, error) {
 	return articleModel, nil
 }
 
-// Delete
-// @description: 删除
+// Delete 删除
 // @param: id int64
 // @return: model.Article, error
 func (s *ArticleService) Delete(id int64) (model.Article, error) {

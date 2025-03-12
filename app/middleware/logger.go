@@ -5,8 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// LoggerMiddleware
-// @Description 全局日志中间件
+// LoggerMiddleware 全局日志中间件
 func LoggerMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		context.SetGinContext(c, "ginLogContext")

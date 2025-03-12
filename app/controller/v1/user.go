@@ -15,9 +15,7 @@ type UserController struct {
 	common.BaseController
 }
 
-// List
-// @Tags 用户
-// @Summary 列表
+// List 列表
 // @Router /api/v1/user [get]
 func (s *UserController) List(c *gin.Context) {
 	var (
@@ -56,9 +54,7 @@ func (s *UserController) List(c *gin.Context) {
 	s.ApiResponse(c, global.Success, pageData)
 }
 
-// Create
-// @Tags 用户
-// @Summary 创建
+// Create 创建
 // @Router /api/v1/user [post]
 func (s *UserController) Create(c *gin.Context) {
 	var (
@@ -104,9 +100,7 @@ func (s *UserController) Create(c *gin.Context) {
 	s.ApiResponse(c, global.Success, "创建成功", userModel)
 }
 
-// Update
-// @Tags 用户
-// @Summary 更新
+// Update 更新
 // @Router /api/v1/user/:id [put]
 func (s *UserController) Update(c *gin.Context) {
 	var (
@@ -166,9 +160,7 @@ func (s *UserController) Update(c *gin.Context) {
 	s.ApiResponse(c, global.Success, "更新成功", userModel)
 }
 
-// Detail
-// @Tags 用户
-// @Summary 详情
+// Detail 详情
 // @Router /api/v1/user/:id [get]
 func (s *UserController) Detail(c *gin.Context) {
 	var (
@@ -207,9 +199,7 @@ func (s *UserController) Detail(c *gin.Context) {
 	s.ApiResponse(c, global.Success, pageData)
 }
 
-// Delete
-// @Tags 用户
-// @Summary 删除
+// Delete 删除
 // @Router /v1/user/:id [delete]
 func (s *UserController) Delete(c *gin.Context) {
 	var (

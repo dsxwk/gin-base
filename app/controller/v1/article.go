@@ -15,9 +15,7 @@ type ArticleController struct {
 	common.BaseController
 }
 
-// List
-// @Tags 文章
-// @Summary 列表
+// List 列表
 // @Router /api/v1/article [get]
 func (s *ArticleController) List(c *gin.Context) {
 	var (
@@ -48,9 +46,7 @@ func (s *ArticleController) List(c *gin.Context) {
 	s.ApiResponse(c, global.Success, pageData)
 }
 
-// Create
-// @Tags 文章
-// @Summary 创建
+// Create 创建
 // @Router /api/v1/article [post]
 func (s *ArticleController) Create(c *gin.Context) {
 	var (
@@ -97,9 +93,7 @@ func (s *ArticleController) Create(c *gin.Context) {
 	s.ApiResponse(c, global.Success, "创建成功", articleModel)
 }
 
-// Update
-// @Tags 文章
-// @Summary 更新
+// Update 更新
 // @Router /api/v1/article/:id [put]
 func (s *ArticleController) Update(c *gin.Context) {
 	var (
@@ -158,9 +152,7 @@ func (s *ArticleController) Update(c *gin.Context) {
 	s.ApiResponse(c, global.Success, "更新成功", articleModel)
 }
 
-// Detail
-// @Tags 文章
-// @Summary 详情
+// Detail 详情
 // @Router /api/v1/article/:id [get]
 func (s *ArticleController) Detail(c *gin.Context) {
 	var (
@@ -199,9 +191,7 @@ func (s *ArticleController) Detail(c *gin.Context) {
 	s.ApiResponse(c, global.Success, articleModel)
 }
 
-// Delete
-// @Tags 文章
-// @Summary 删除
+// Delete 删除
 // @Router /api/v1/article/:id [delete]
 func (s *ArticleController) Delete(c *gin.Context) {
 	var (

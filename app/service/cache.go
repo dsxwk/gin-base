@@ -11,8 +11,7 @@ type CacheService struct {
 	common.BaseService
 }
 
-// SetCache
-// @description: 设置缓存
+// SetCache 设置缓存
 // @param: key string, value interface{}, expire time.Duration
 // @return: interface{}
 func (s *CacheService) SetCache(key string, value interface{}, expire time.Duration) interface{} {
@@ -21,8 +20,7 @@ func (s *CacheService) SetCache(key string, value interface{}, expire time.Durat
 	return true
 }
 
-// GetCache
-// @description: 获取缓存
+// GetCache 获取缓存
 // @param: key string
 // @return: interface{}
 func (s *CacheService) GetCache(key string) (interface{}, bool) {
@@ -34,8 +32,7 @@ func (s *CacheService) GetCache(key string) (interface{}, bool) {
 	return false, ok
 }
 
-// DeleteCache
-// @description: 删除缓存
+// DeleteCache 删除缓存
 // @param: key string
 // @return: interface{}
 func (s *CacheService) DeleteCache(key string) interface{} {
@@ -44,8 +41,7 @@ func (s *CacheService) DeleteCache(key string) interface{} {
 	return true
 }
 
-// Send
-// @description: http请求测试
+// Send http请求测试
 // @param: none
 // @return: interface{}
 func (s *CacheService) Send() (interface{}, error) {

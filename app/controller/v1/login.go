@@ -21,9 +21,9 @@ type LoginController struct {
 // @Accept json
 // @Produce json
 // @Param user body validate.LoginValidate true "请求参数" SchemaExample({"username": "admin", "password": "123456"})
-// @Success 200 {object} global.Response "成功返回"
-// @Failure 400 {object} global.Response "参数错误"
-// @Failure 500 {object} global.Response "系统错误"
+// @Success 200 {object} global.Response{global.Success} "成功返回"
+// @Failure 400 {object} global.Response{global.ArgsError} "参数错误"
+// @Failure 500 {object} global.Response{global.SystemError} "系统错误"
 // @Router /api/v1/login [post]
 func (s *LoginController) Login(c *gin.Context) {
 	var (

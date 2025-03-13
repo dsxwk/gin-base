@@ -1,0 +1,50 @@
+definitions:
+  global.Response:
+    properties:
+      code:
+        type: integer
+      data: {}
+      msg:
+        type: string
+    type: object
+  validate.LoginValidate:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /api/v1/login:
+    post:
+      consumes:
+      - application/json
+      description: 用户登录
+      parameters:
+      - description: 请求参数
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/validate.LoginValidate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功返回
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 登录
+      tags:
+      - 登录
+swagger: "2.0"

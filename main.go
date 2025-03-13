@@ -2,11 +2,14 @@ package main
 
 import (
 	"fmt"
+	_ "gin-base/app/controller/v1"
 	"gin-base/app/middleware"
 	"gin-base/common/global"
 	"gin-base/helper"
 	"gin-base/routers"
 	"github.com/gin-gonic/gin"
+	"github.com/swaggo/files"
+	"github.com/swaggo/gin-swagger"
 	"net/http"
 	"time"
 )
@@ -31,6 +34,9 @@ func main() {
 			"data":    []string{},
 		})
 	})
+
+	// Swagger 路由
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// 静态文件
 	router.StaticFS("/resource", http.Dir("./resource"))

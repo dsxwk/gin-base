@@ -15,96 +15,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/article": {
-            "get": {
-                "description": "文章列表",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "文章"
-                ],
-                "summary": "文章",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "name": "content",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "name": "id",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "pageSize",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "name": "title",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "成功返回",
-                        "schema": {
-                            "$ref": "#/definitions/global.Response"
-                        }
-                    },
-                    "400": {
-                        "description": "参数错误",
-                        "schema": {
-                            "$ref": "#/definitions/global.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "系统错误",
-                        "schema": {
-                            "$ref": "#/definitions/global.Response"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "responses": {}
-            }
-        },
-        "/api/v1/article/:id": {
-            "get": {
-                "responses": {}
-            },
-            "put": {
-                "responses": {}
-            },
-            "delete": {
-                "responses": {}
-            }
-        },
-        "/api/v1/cache": {
-            "get": {
-                "responses": {}
-            },
-            "post": {
-                "responses": {}
-            },
-            "delete": {
-                "responses": {}
-            }
-        },
         "/api/v1/login": {
             "post": {
                 "description": "用户登录",
@@ -149,32 +59,6 @@ const docTemplate = `{
                         }
                     }
                 }
-            }
-        },
-        "/api/v1/send": {
-            "post": {
-                "responses": {}
-            }
-        },
-        "/api/v1/user": {
-            "get": {
-                "responses": {}
-            },
-            "post": {
-                "responses": {}
-            }
-        },
-        "/api/v1/user/:id": {
-            "get": {
-                "responses": {}
-            },
-            "put": {
-                "responses": {}
-            }
-        },
-        "/v1/user/:id": {
-            "delete": {
-                "responses": {}
             }
         }
     },

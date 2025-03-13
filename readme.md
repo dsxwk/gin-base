@@ -31,6 +31,7 @@ Golang Gin is a lightweight and efficient Golang web framework. It is widely use
 - Jwt authentication
 - Cache
 - Event
+- Swagger
 - Air
 - …
 
@@ -42,6 +43,7 @@ Golang Gin is a lightweight and efficient Golang web framework. It is widely use
 - Validator
 - Cache
 - Event
+- Swagger
 
 ## Frontend Technologies Used
 - Vue3
@@ -804,4 +806,10 @@ func Test() {
 	global.Cache.DelCache("test")
 	fmt.Printf("%v\n", res)
 }
+```
+
+## Swagger Document generation note: Currently, only login is required. If you need to expand all documents, you can do so yourself
+```bash
+# Quickly generate document command
+swag init -g main.go --exclude cli
 ```

@@ -34,6 +34,7 @@ Golang Gin 是一个轻量级且高效的 Golang Web 框架。它具有高性能
 - 缓存
 - 事件
 - Air
+- Swagger
 - ...
 
 ## 后端使用技术
@@ -45,6 +46,7 @@ Golang Gin 是一个轻量级且高效的 Golang Web 框架。它具有高性能
 - Validator
 - Cache
 - Event
+- Swagger
 
 ## 前端使用技术
 
@@ -801,4 +803,10 @@ func Test() {
 	global.Cache.DelCache("test")
 	fmt.Printf("%v\n", res)
 }
+```
+
+## Swagger 文档生成 注：目前只有登录如需要全部文档自行扩展
+```bash
+# 快速生成文档命令
+swag init -g main.go --exclude cli
 ```

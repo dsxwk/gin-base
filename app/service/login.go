@@ -38,14 +38,14 @@ func (s *LoginService) Login(username string, password string) (model.User, erro
 	}
 
 	// 发布事件
-	event := event.Event{
+	e := event.Event{
 		Name: "user_login",
 		Data: map[string]interface{}{
 			"username": username,
 			"password": password,
 		},
 	}
-	global.Event.Publish(event)
+	global.Event.Publish(e)
 
 	return userModel, nil
 }

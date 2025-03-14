@@ -4,6 +4,7 @@ env:
   port: 8080 # 服务端口
 # 日志配置
 log:
+  access: true # 是否记录访问日志
   max-size: 10, # 单个日志文件大小（MB）
   max-backups: 3,  # 最多保留的旧日志文件数
   max-day: 28, # 保留的最大天数

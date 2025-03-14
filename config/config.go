@@ -244,11 +244,12 @@ func InitLogger() *Logger {
 	// 配置 Lumberjack 日志轮转
 	lumberJackLogger := &lumberjack.Logger{
 		Filename:   logPath,
-		MaxSize:    config.MaxSize,    // 单个日志文件大小（MB）
-		MaxBackups: config.MaxBackups, // 最多保留的旧日志文件数
-		MaxAge:     config.MaxDay,     // 保留的最大天数
+		MaxSize:    config.Log.MaxSize,    // 单个日志文件大小（MB）
+		MaxBackups: config.Log.MaxBackups, // 最多保留的旧日志文件数
+		MaxAge:     config.Log.MaxDay,     // 保留的最大天数
 		Compress:   true,
 	}
+	fmt.Printf("日志配置：%v\n", config.Log)
 
 	// 创建一个Zap配置
 	encoderConfig := zap.NewProductionEncoderConfig()

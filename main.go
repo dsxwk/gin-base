@@ -4,8 +4,8 @@ import (
 	"fmt"
 	_ "gin-base/app/controller/v1"
 	"gin-base/app/middleware"
+	"gin-base/common/extend/event"
 	"gin-base/common/global"
-	"gin-base/helper"
 	"gin-base/routers"
 	"github.com/gin-gonic/gin"
 	"github.com/swaggo/files"
@@ -62,7 +62,7 @@ func main() {
 }
 
 // onEventReceived 接收事件
-func onEventReceived(event helper.Event, timestamp time.Time) {
+func onEventReceived(event event.Event, timestamp time.Time) {
 	// todo 处理事件
 	fmt.Printf("Event received at %s: name: %s, data: %v\n", timestamp.Format(time.RFC3339), event.Name, event.Data)
 }

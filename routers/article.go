@@ -15,13 +15,13 @@ func (r ArticleRouter) RegisterRoutes(routerGroup *gin.RouterGroup) {
 	)
 
 	// 列表
-	routerGroup.GET("/user", controller.List)
+	routerGroup.GET("/article", controller.List)
 	// 创建
-	routerGroup.POST("/user", controller.Create)
+	routerGroup.POST("/article", controller.Create)
 	// 更新
-	routerGroup.PUT("/user/:id", controller.Update)
+	routerGroup.PUT("/article/:id", controller.Update)
 	// 删除
-	routerGroup.DELETE("/user/:id", controller.Delete)
+	routerGroup.DELETE("/article/:id", controller.Delete)
 	// 详情
-	routerGroup.GET("/user/:id", controller.Detail)
+	routerGroup.GET("/article/:id", controller.Detail)
 }

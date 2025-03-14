@@ -4,8 +4,9 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"gin-base/common/global/context"
-	"gin-base/helper"
+	"gin-base/common/extend/cache"
+	"gin-base/common/extend/context"
+	"gin-base/common/extend/event"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
@@ -182,14 +183,14 @@ func InitConfig() Config {
 }
 
 // InitCache 初始化缓存
-func InitCache() helper.CacheInterface {
+func InitCache() cache.CacheInterface {
 	var (
-		c helper.CacheInterface
+		c cache.CacheInterface
 	)
 
 	// 没有配置缓存类型,默认使用内存缓存
 	if config.Cache.Type == "memory" || config.Cache.Type == "" {
-		c = helper.NewMemoryCache(5*time.Minute, 10*time.Minute)
+		c = cache.NewMemoryCache(5*time.Minute, 10*time.Minute)
 	} else if config.Cache.Type == "redis" {
 		// 使用 Redis 缓存
 		c = InitRedis()
@@ -267,13 +268,13 @@ func InitLogger() *Logger {
 }
 
 // InitRedis 初始化redis
-func InitRedis() *helper.RedisCache {
-	return helper.NewRedisCache(config.Cache.Redis.Address, config.Cache.Redis.Password, config.Cache.Redis.DB)
+func InitRedis() *cache.RedisCache {
+	return cache.NewRedisCache(config.Cache.Redis.Address, config.Cache.Redis.Password, config.Cache.Redis.DB)
 }
 
 // InitEvent 初始化事件
-func InitEvent() *helper.Events {
-	return helper.NewEvents()
+func InitEvent() *event.Events {
+	return event.NewEvents()
 }
 
 // GetRootPath 获取根目录

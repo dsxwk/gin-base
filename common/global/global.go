@@ -30,8 +30,8 @@ type PageData struct {
 
 // ErrorCode 错误码和提示信息
 type ErrorCode struct {
-	Code    int64
-	Message string
+	Code    int64  `json:"code"`
+	Message string `json:"msg"`
 }
 
 // Response 公共响应

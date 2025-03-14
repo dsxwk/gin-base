@@ -8,12 +8,13 @@ import (
 
 // 全局变量
 var (
-	DB     = config.InitDB()
-	Log    = config.InitLogger()
-	Config = config.InitConfig()
-	Cache  = config.InitCache()
-	Redis  = config.InitRedis()
-	Event  = config.InitEvent()
+	FormatDate = "2006-01-02 15:04:05" // 全局日期格式
+	DB         = config.InitDB()       // 数据库
+	Log        = config.InitLogger()   // 日志
+	Config     = config.InitConfig()   // 配置
+	Cache      = config.InitCache()    // 缓存
+	Redis      = config.InitRedis()    // Redis
+	Event      = config.InitEvent()    // 事件
 )
 
 // PageData 公共分页数据返回

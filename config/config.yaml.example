@@ -18,6 +18,7 @@ jwt:
   exp: 7200 # 过期时间（单位秒）
 # 跨域
 cors:
+  enabled: true # 是否开启跨域
   allow-origin: "*" # 允许访问的域名列表
   allow-headers: "*" # 允许的请求头列表
   expose-headers: "*" # 允许返回的响应头列表

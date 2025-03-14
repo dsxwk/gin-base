@@ -44,7 +44,9 @@ func main() {
 	router.MaxMultipartMemory = 90 << 20
 
 	// 设置跨域
-	router.Use(Cors())
+	if global.Config.Cors.Enabled {
+		router.Use(Cors())
+	}
 
 	// 全局日志中间件
 	router.Use(middleware.LoggerMiddleware())

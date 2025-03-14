@@ -96,19 +96,19 @@ func generateFile(templateFile, filename string, function string, method string,
 
 	// 设置默认值
 	if function == "" {
-		function = "YourFunctionName"
+		function = "Your Function Name"
 	}
 
 	if method == "" {
-		method = "get|post ..."
+		method = "get"
 	}
 
 	if description == "" {
-		description = "YourDescription"
+		description = "Your Description"
 	}
 
 	if router == "" {
-		router = "YourRouter"
+		router = "Your Router"
 	}
 
 	// 确保目录存在

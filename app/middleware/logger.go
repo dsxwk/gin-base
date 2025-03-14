@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"gin-base/common/global/context"
+	"gin-base/common/extend/context"
 	"github.com/gin-gonic/gin"
 )
 

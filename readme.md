@@ -379,16 +379,19 @@ type CacheService struct {
 
 // SetCache Set cache
 // @param: key string, value interface{}, expire time.Duration
-// @return: interface{}
-func (s *CacheService) SetCache(key string, value interface{}, expire time.Duration) interface{} {
-	global.Cache.SetCache(key, value, expire)
+// @return: bool, error
+func (s *CacheService) SetCache(key string, value interface{}, expire time.Duration) (bool, error) {
+	err := global.Cache.SetCache(key, value, expire)
+	if err != nil {
+		return false, err
+	}
 
-	return true
+	return true, nil
 }
 
 // GetCache Get cache
 // @param: key string
-// @return: interface{}
+// @return: interface{}, bool
 func (s *CacheService) GetCache(key string) (interface{}, bool) {
 	res, ok := global.Cache.GetCache(key)
 	if ok {
@@ -400,11 +403,14 @@ func (s *CacheService) GetCache(key string) (interface{}, bool) {
 
 // DeleteCache Delete cache
 // @param: key string
-// @return: interface{}
-func (s *CacheService) DeleteCache(key string) interface{} {
-	global.Cache.DeleteCache(key)
+// @return: bool, error
+func (s *CacheService) DeleteCache(key string) (bool, error) {
+	err := global.Cache.DeleteCache(key)
+	if err != nil {
+		return false, err
+	}
 
-	return true
+	return true, nil
 }
 
 ```

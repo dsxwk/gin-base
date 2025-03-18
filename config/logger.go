@@ -31,32 +31,73 @@ func NewLogger(zapLogger *zap.Logger) *Logger {
 	return &Logger{zapLogger}
 }
 
+// GetLogFields 记录字段
+func GetLogFields(fields []zap.Field) []zap.Field {
+	c := context.GetGinContext("GinLogger")
+	if c == nil {
+		return nil
+	}
+
+	ip := c.ClientIP()
+	path := c.Request.URL.Path
+	method := c.Request.Method
+	var params string
+
+	switch method {
+	case http.MethodGet, http.MethodDelete:
+		params = c.Request.URL.RawQuery
+	case http.MethodPost, http.MethodPut, http.MethodPatch:
+		// 读取 Body
+		bodyBytes, err := ioutil.ReadAll(c.Request.Body)
+		if err == nil {
+			params = string(bodyBytes)
+			// 恢复 Body 的原始状态
+			c.Request.Body = ioutil.NopCloser(bytes.NewBuffer(bodyBytes))
+		}
+	}
+
+	// 清理参数中的空格和换行符
+	params = strings.TrimSpace(strings.ReplaceAll(strings.ReplaceAll(params, "\r", ""), "\n", ""))
+
+	// 添加日志字段
+	fields = append(fields,
+		zap.String("ip", ip),
+		zap.String("method", method),
+		zap.String("path", path),
+		zap.String("params", params),
+		zap.Object("stacktrace", StackTrace{}),
+	)
+
+	return fields
+}
+
+type StackTrace struct{}
+
+// MarshalLogObject 格式化堆栈信息
+func (s StackTrace) MarshalLogObject(encoder zapcore.ObjectEncoder) error {
+	// 获取堆栈信息
+	stack := zap.Stack("stack").String
+	lines := strings.Split(stack, "\n")
+
+	encoder.AddArray("stack", zapcore.ArrayMarshalerFunc(func(arrEnc zapcore.ArrayEncoder) error {
+		for _, line := range lines {
+			arrEnc.AppendString(strings.TrimSpace(line))
+		}
+		return nil
+	}))
+
+	return nil
+}
+
 // addContextFields 添加上下文字段
 func (l *Logger) addContextFields(fields []zap.Field) []zap.Field {
-	c := context.GetGinContext("ginLogContext")
-	if c != nil {
-		path := c.Request.URL.Path
-		method := c.Request.Method
-		var params string
-
-		switch method {
-		case http.MethodGet, http.MethodDelete:
-			params = c.Request.URL.RawQuery
-		case http.MethodPost, http.MethodPut, http.MethodPatch:
-			bodyBytes, err := ioutil.ReadAll(c.Request.Body)
-			if err == nil {
-				params = string(bodyBytes)
-				// Restore the io.ReadCloser to its original state
-				c.Request.Body = ioutil.NopCloser(bytes.NewBuffer(bodyBytes))
-			}
+	for _, field := range fields {
+		if field.Key == "ip" {
+			return fields
 		}
-		params = strings.ReplaceAll(params, " ", "")
-		params = strings.ReplaceAll(params, "\r", "")
-		params = strings.ReplaceAll(params, "\n", "")
-
-		fields = append(fields, zap.String("method", method), zap.String("path", path), zap.String("params", params), zap.Stack("stacktrace"))
 	}
-	return fields
+
+	return GetLogFields(fields)
 }
 
 // Debug 包装器方法
@@ -129,7 +170,8 @@ func InitLogger() *Logger {
 		atomicLevel,
 	)
 
-	zapLogger := zap.New(core)
+	// 添加 Caller（文件和行号）
+	zapLogger := zap.New(core, zap.AddCaller(), zap.AddCallerSkip(1))
 
 	return NewLogger(zapLogger)
 }

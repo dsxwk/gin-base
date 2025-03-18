@@ -2,7 +2,6 @@ package config
 
 import (
 	"bytes"
-	"fmt"
 	"gin-base/common/extend/context"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -155,7 +154,6 @@ func InitLogger() *Logger {
 		MaxAge:     config.Log.MaxDay,     // 保留的最大天数
 		Compress:   true,
 	}
-	fmt.Printf("日志配置：%v\n", config.Log)
 
 	// 创建一个Zap配置
 	encoderConfig := zap.NewProductionEncoderConfig()

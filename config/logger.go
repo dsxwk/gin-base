@@ -79,7 +79,7 @@ func (s StackTrace) MarshalLogObject(encoder zapcore.ObjectEncoder) error {
 	stack := zap.Stack("stack").String
 	lines := strings.Split(stack, "\n")
 
-	encoder.AddArray("stack", zapcore.ArrayMarshalerFunc(func(arrEnc zapcore.ArrayEncoder) error {
+	_ = encoder.AddArray("stack", zapcore.ArrayMarshalerFunc(func(arrEnc zapcore.ArrayEncoder) error {
 		for _, line := range lines {
 			arrEnc.AppendString(strings.TrimSpace(line))
 		}

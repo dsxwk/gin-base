@@ -54,14 +54,12 @@ func main() {
 	case "model":
 		generateModel(opts.TableName, opts.Path, opts.Camel)
 		break
-	default:
-		// 判断make类型
-		if !utils.InArray(opts.Make, []string{"controller", "service", "validate", "middleware", "router"}) {
-			fmt.Println("暂不支持make类型为【" + opts.Make + "】暂只支持命令类型为【controller, model, service, validate, middleware, router】")
-			return
-		}
+	case "controller", "service", "validate", "middleware", "router":
 		templateFile = filepath.Join(rootPath, "common", "template", opts.Make+".tpl")
 		break
+	default:
+		fmt.Println("暂不支持make类型为【" + opts.Make + "】暂只支持命令类型为【controller, model, service, validate, middleware, router】")
+		return
 	}
 
 	if opts.Make == "model" && opts.TableName == "" {

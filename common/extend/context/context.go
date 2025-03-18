@@ -1,25 +1,35 @@
 package context
 
 import (
-	"context"
 	"github.com/gin-gonic/gin"
+	"sync"
 )
 
 var (
-	Ctx context.Context
+	ginContextStore = make(map[string]interface{})
+	mu              sync.RWMutex
 )
 
-// SetGinContext 设置 Gin 上下文
-func SetGinContext(c *gin.Context, key string) {
-	Ctx = context.WithValue(context.Background(), key, c)
+// SetGinContext 设置 gin.Context
+func SetGinContext(key string, value interface{}) {
+	mu.Lock()
+	defer mu.Unlock()
+	ginContextStore[key] = value
 }
 
-// GetGinContext 获取 Gin 上下文
+// GetGinContext 获取 gin.Context
 func GetGinContext(key string) *gin.Context {
-	if Ctx != nil {
-		if ginCtx, ok := Ctx.Value(key).(*gin.Context); ok {
-			return ginCtx
-		}
+	mu.RLock()
+	defer mu.RUnlock()
+	if ctx, ok := ginContextStore[key]; ok {
+		return ctx.(*gin.Context)
 	}
 	return nil
+}
+
+// ClearGinContext 清理 gin.Context
+func ClearGinContext(key string) {
+	mu.Lock()
+	defer mu.Unlock()
+	delete(ginContextStore, key)
 }

@@ -34,7 +34,11 @@ func (s *CacheController) SetCache(c *gin.Context) {
 		return
 	}
 
-	res := cacheService.SetCache(req.Key, req.Value, (req.Expire)*time.Second)
+	res, err := cacheService.SetCache(req.Key, req.Value, (req.Expire)*time.Second)
+	if err != nil {
+		s.ApiResponse(c, global.SystemError, err.Error())
+		return
+	}
 
 	s.ApiResponse(c, global.Success, res)
 }
@@ -86,7 +90,11 @@ func (s *CacheController) DeleteCache(c *gin.Context) {
 		return
 	}
 
-	res := cacheService.DeleteCache(req.Key)
+	res, err := cacheService.DeleteCache(req.Key)
+	if err != nil {
+		s.ApiResponse(c, global.SystemError, err.Error())
+		return
+	}
 
 	s.ApiResponse(c, global.Success, res)
 }

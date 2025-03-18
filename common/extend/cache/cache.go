@@ -11,10 +11,10 @@ import (
 
 // CacheInterface Cache 接口,所有缓存类型都实现这个接口
 type CacheInterface interface {
-	SetCache(key string, value interface{}, expire time.Duration)
+	SetCache(key string, value interface{}, expire time.Duration) error
 	GetCache(key string) (interface{}, bool)
-	DeleteCache(key string)
-	GetCacheExpire(key string) (interface{}, time.Time, bool)
+	DeleteCache(key string) error
+	GetCacheExpire(key string) (interface{}, time.Time, bool, error)
 }
 
 // MemoryCache 内存缓存实现
@@ -28,23 +28,32 @@ func NewMemoryCache(defaultExpiration, cleanupInterval time.Duration) *MemoryCac
 	}
 }
 
-func (m *MemoryCache) SetCache(key string, value interface{}, expire time.Duration) {
+func (m *MemoryCache) SetCache(key string, value interface{}, expire time.Duration) error {
 	if expire == 0 {
 		expire = cache.NoExpiration
 	}
 	m.cache.Set(key, value, expire)
+
+	return nil
 }
 
 func (m *MemoryCache) GetCache(key string) (interface{}, bool) {
 	return m.cache.Get(key)
 }
 
-func (m *MemoryCache) DeleteCache(key string) {
+func (m *MemoryCache) DeleteCache(key string) error {
 	m.cache.Delete(key)
+
+	return nil
 }
 
-func (m *MemoryCache) GetCacheExpire(key string) (interface{}, time.Time, bool) {
-	return m.cache.GetWithExpiration(key)
+func (m *MemoryCache) GetCacheExpire(key string) (interface{}, time.Time, bool, error) {
+	value, exp, found := m.cache.GetWithExpiration(key)
+	if !found {
+		return nil, time.Time{}, false, errors.New("cache key not found")
+	}
+
+	return value, exp, true, nil
 }
 
 // RedisCache Redis 缓存实现
@@ -72,7 +81,7 @@ func (r *RedisCache) Lock(lockKey string, expire time.Duration) (bool, error) {
 	// 使用 SETNX 命令尝试设置锁
 	result, err := r.client.SetNX(r.ctx, lockKey, 1, expire).Result()
 	if err != nil {
-		return false, err
+		return false, fmt.Errorf("failed to acquire lock: %v", err)
 	}
 	if !result {
 		// 如果返回 false，表示锁已存在
@@ -102,11 +111,13 @@ func (r *RedisCache) UnLock(lockKey string) error {
 	return nil
 }
 
-func (r *RedisCache) SetCache(key string, value interface{}, expire time.Duration) {
+func (r *RedisCache) SetCache(key string, value interface{}, expire time.Duration) error {
 	err := r.client.Set(r.ctx, key, value, expire).Err()
 	if err != nil {
-		fmt.Println("Error setting Redis cache:", err)
+		return fmt.Errorf("error setting Redis cache: %v", err)
 	}
+
+	return nil
 }
 
 func (r *RedisCache) GetCache(key string) (interface{}, bool) {
@@ -118,26 +129,28 @@ func (r *RedisCache) GetCache(key string) (interface{}, bool) {
 	return val, true
 }
 
-func (r *RedisCache) DeleteCache(key string) {
+func (r *RedisCache) DeleteCache(key string) error {
 	err := r.client.Del(r.ctx, key).Err()
 	if err != nil {
-		fmt.Println("Error deleting Redis cache:", err)
+		return fmt.Errorf("error deleting Redis cache: %v", err)
 	}
+
+	return nil
 }
 
-func (r *RedisCache) GetCacheExpire(key string) (interface{}, time.Time, bool) {
+func (r *RedisCache) GetCacheExpire(key string) (interface{}, time.Time, bool, error) {
 	// Redis不支持使用相同的API获取到期时间,因此我们必须使用TTL
 	ttl, err := r.client.TTL(r.ctx, key).Result()
 	if err != nil {
-		return nil, time.Time{}, false
+		return nil, time.Time{}, false, fmt.Errorf("error getting TTL for key %v: %v", key, err)
 	}
 
 	val, err := r.client.Get(r.ctx, key).Result()
 	if err != nil {
-		return nil, time.Time{}, false
+		return nil, time.Time{}, false, fmt.Errorf("error getting value for key %v: %v", key, err)
 	}
 
 	expireTime := time.Now().Add(ttl)
 
-	return val, expireTime, true
+	return val, expireTime, true, nil
 }

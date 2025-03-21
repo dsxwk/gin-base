@@ -37,10 +37,12 @@ func GetLogFields(fields []zap.Field) []zap.Field {
 		return nil
 	}
 
-	ip := c.ClientIP()
-	path := c.Request.URL.Path
-	method := c.Request.Method
-	var params string
+	var (
+		ip     = c.ClientIP()
+		path   = c.Request.URL.Path
+		method = c.Request.Method
+		params string
+	)
 
 	switch method {
 	case http.MethodGet, http.MethodDelete:
@@ -64,8 +66,14 @@ func GetLogFields(fields []zap.Field) []zap.Field {
 		zap.String("method", method),
 		zap.String("path", path),
 		zap.String("params", params),
+		zap.Any("debug", map[string]interface{}{
+			"mysql": GetSQLLogs(),
+		}),
 		zap.Object("stacktrace", StackTrace{}),
 	)
+
+	// 清空
+	SQLRes = []string{}
 
 	return fields
 }

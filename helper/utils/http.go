@@ -3,6 +3,8 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
+	"gin-base/common/extend/event"
+	"gin-base/common/global"
 	"github.com/go-resty/resty/v2"
 	"strings"
 )
@@ -17,10 +19,28 @@ func HttpRequest(method, url string, headers map[string]string, body interface{}
 		data   = make(map[string]interface{})
 	)
 
+	userAgent := headers["User-Agent"]
+	if userAgent == "" {
+		req.SetHeader("User-Agent", userAgent)
+	}
+
 	// 设置全局请求头
 	for key, value := range headers {
 		req.SetHeader(key, value)
 	}
+
+	// 发布事件
+	e := event.Event{
+		Name: "send_http",
+		Data: map[string]interface{}{
+			"method": strings.ToUpper(method),
+			"uri":    url,
+			"header": headers,
+			"agent":  userAgent,
+			"body":   body,
+		},
+	}
+	global.Event.Publish(e)
 
 	switch strings.ToUpper(method) {
 	case "GET":

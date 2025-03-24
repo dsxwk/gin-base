@@ -67,6 +67,7 @@ func GetLogFields(fields []zap.Field) []zap.Field {
 		zap.String("path", path),
 		zap.String("params", params),
 		zap.Any("debug", map[string]interface{}{
+			"http":  GetHttpLogs(),
 			"mysql": GetSQLLogs(),
 		}),
 		zap.Object("stacktrace", StackTrace{}),
@@ -74,6 +75,7 @@ func GetLogFields(fields []zap.Field) []zap.Field {
 
 	// 清空
 	SQLRes = []string{}
+	ClearHttpLogs()
 
 	return fields
 }

@@ -6,6 +6,7 @@ import (
 	"gin-base/app/middleware"
 	"gin-base/common/extend/event"
 	"gin-base/common/global"
+	"gin-base/config"
 	"gin-base/routers"
 	"github.com/gin-gonic/gin"
 	"github.com/swaggo/files"
@@ -65,6 +66,9 @@ func main() {
 func onEventReceived(event event.Event, timestamp time.Time) {
 	// todo 处理事件
 	fmt.Printf("Event received at %s: name: %s, data: %v\n", timestamp.Format(time.RFC3339), event.Name, event.Data)
+	if event.Name == "send_http" {
+		config.SetHttpLog(event.Data)
+	}
 }
 
 // Cors 跨域请求

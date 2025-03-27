@@ -9,12 +9,47 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "contact": {},
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "25076778@qq.com"
+        },
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/article": {
+            "get": {
+                "responses": {}
+            },
+            "post": {
+                "responses": {}
+            }
+        },
+        "/api/v1/article/{id}": {
+            "get": {
+                "responses": {}
+            },
+            "put": {
+                "responses": {}
+            },
+            "delete": {
+                "responses": {}
+            }
+        },
+        "/api/v1/cache": {
+            "get": {
+                "responses": {}
+            },
+            "post": {
+                "responses": {}
+            },
+            "delete": {
+                "responses": {}
+            }
+        },
         "/api/v1/login": {
             "post": {
                 "description": "用户登录",
@@ -30,35 +65,72 @@ const docTemplate = `{
                 "summary": "登录",
                 "parameters": [
                     {
-                        "description": "请求参数",
-                        "name": "user",
+                        "description": "用户名",
+                        "name": "username",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/validate.LoginValidate"
+                            "type": "string",
+                            "example": "\"admin\""
+                        }
+                    },
+                    {
+                        "description": "密码",
+                        "name": "password",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "\"123456\""
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功返回",
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
                         "schema": {
                             "$ref": "#/definitions/global.Response"
                         }
                     },
                     "400": {
-                        "description": "参数错误",
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
                         "schema": {
                             "$ref": "#/definitions/global.Response"
                         }
                     },
                     "500": {
-                        "description": "系统错误",
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
                         "schema": {
                             "$ref": "#/definitions/global.Response"
                         }
                     }
                 }
+            }
+        },
+        "/api/v1/send": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/api/v1/user": {
+            "get": {
+                "responses": {}
+            },
+            "post": {
+                "responses": {}
+            }
+        },
+        "/api/v1/user/{id}": {
+            "get": {
+                "responses": {}
+            },
+            "put": {
+                "responses": {}
+            }
+        },
+        "/v1/user/{id}": {
+            "delete": {
+                "responses": {}
             }
         }
     },
@@ -74,29 +146,18 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
-        },
-        "validate.LoginValidate": {
-            "type": "object",
-            "properties": {
-                "password": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
         }
     }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "",
-	Host:             "",
+	Version:          "2.0",
+	Host:             "127.0.0.1:8080",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "",
-	Description:      "",
+	Title:            "Swagger Example API",
+	Description:      "API 文档示例",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

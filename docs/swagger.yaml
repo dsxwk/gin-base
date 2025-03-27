@@ -7,44 +7,88 @@ definitions:
       msg:
         type: string
     type: object
-  validate.LoginValidate:
-    properties:
-      password:
-        type: string
-      username:
-        type: string
-    type: object
+host: 127.0.0.1:8080
 info:
-  contact: {}
+  contact:
+    email: 25076778@qq.com
+    name: API Support
+    url: http://www.swagger.io/support
+  description: API 文档示例
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Example API
+  version: "2.0"
 paths:
+  /api/v1/article:
+    get:
+      responses: {}
+    post:
+      responses: {}
+  /api/v1/article/{id}:
+    delete:
+      responses: {}
+    get:
+      responses: {}
+    put:
+      responses: {}
+  /api/v1/cache:
+    delete:
+      responses: {}
+    get:
+      responses: {}
+    post:
+      responses: {}
   /api/v1/login:
     post:
       consumes:
       - application/json
       description: 用户登录
       parameters:
-      - description: 请求参数
+      - description: 用户名
         in: body
-        name: user
+        name: username
         required: true
         schema:
-          $ref: '#/definitions/validate.LoginValidate'
+          example: '"admin"'
+          type: string
+      - description: 密码
+        in: body
+        name: password
+        required: true
+        schema:
+          example: '"123456"'
+          type: string
       produces:
       - application/json
       responses:
         "200":
-          description: 成功返回
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
           schema:
             $ref: '#/definitions/global.Response'
         "400":
-          description: 参数错误
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
           schema:
             $ref: '#/definitions/global.Response'
         "500":
-          description: 系统错误
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
           schema:
             $ref: '#/definitions/global.Response'
       summary: 登录
       tags:
       - 登录
+  /api/v1/send:
+    post:
+      responses: {}
+  /api/v1/user:
+    get:
+      responses: {}
+    post:
+      responses: {}
+  /api/v1/user/{id}:
+    get:
+      responses: {}
+    put:
+      responses: {}
+  /v1/user/{id}:
+    delete:
+      responses: {}
 swagger: "2.0"

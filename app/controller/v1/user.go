@@ -101,7 +101,7 @@ func (s *UserController) Create(c *gin.Context) {
 }
 
 // Update 更新
-// @Router /api/v1/user/:id [put]
+// @Router /api/v1/user/{id} [put]
 func (s *UserController) Update(c *gin.Context) {
 	var (
 		userService  service.UserService
@@ -161,7 +161,7 @@ func (s *UserController) Update(c *gin.Context) {
 }
 
 // Detail 详情
-// @Router /api/v1/user/:id [get]
+// @Router /api/v1/user/{id} [get]
 func (s *UserController) Detail(c *gin.Context) {
 	var (
 		userService service.UserService
@@ -200,7 +200,7 @@ func (s *UserController) Detail(c *gin.Context) {
 }
 
 // Delete 删除
-// @Router /v1/user/:id [delete]
+// @Router /v1/user/{id} [delete]
 func (s *UserController) Delete(c *gin.Context) {
 	var (
 		userService  service.UserService

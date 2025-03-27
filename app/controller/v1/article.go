@@ -94,7 +94,7 @@ func (s *ArticleController) Create(c *gin.Context) {
 }
 
 // Update 更新
-// @Router /api/v1/article/:id [put]
+// @Router /api/v1/article/{id} [put]
 func (s *ArticleController) Update(c *gin.Context) {
 	var (
 		articleService  service.ArticleService
@@ -153,7 +153,7 @@ func (s *ArticleController) Update(c *gin.Context) {
 }
 
 // Detail 详情
-// @Router /api/v1/article/:id [get]
+// @Router /api/v1/article/{id} [get]
 func (s *ArticleController) Detail(c *gin.Context) {
 	var (
 		articleService  service.ArticleService
@@ -192,7 +192,7 @@ func (s *ArticleController) Detail(c *gin.Context) {
 }
 
 // Delete 删除
-// @Router /api/v1/article/:id [delete]
+// @Router /api/v1/article/{id} [delete]
 func (s *ArticleController) Delete(c *gin.Context) {
 	var (
 		articleService  service.ArticleService

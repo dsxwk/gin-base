@@ -7,6 +7,7 @@ import (
 	"gin-base/common/extend/event"
 	"gin-base/common/global"
 	"gin-base/config"
+	_ "gin-base/docs"
 	"gin-base/routers"
 	"github.com/gin-gonic/gin"
 	"github.com/swaggo/files"
@@ -22,6 +23,14 @@ import (
 //go:generate go mod download
 //go:generate go mod vendor
 
+// @title Swagger Example API
+// @version 2.0
+// @description API 文档示例
+// @termsOfService http://swagger.io/terms/
+// @contact.name API Support
+// @contact.url http://www.swagger.io/support
+// @contact.email 25076778@qq.com
+// @host 127.0.0.1:8080
 func main() {
 	// 运行环境模式 debug模式, test测试模式, release生产模式, 默认是debug,根据当前配置文件读取
 	gin.SetMode(global.Config.Env.Mode)

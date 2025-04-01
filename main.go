@@ -33,7 +33,7 @@ import (
 // @host 127.0.0.1:8080
 func main() {
 	// 运行环境模式 debug模式, test测试模式, release生产模式, 默认是debug,根据当前配置文件读取
-	gin.SetMode(global.Config.Env.Mode)
+	gin.SetMode(global.Config.Service.Mode)
 
 	router := gin.Default()
 
@@ -67,8 +67,8 @@ func main() {
 	// 加载路由
 	routers.LoadRouters(router)
 
-	fmt.Println(`启动服务: 0.0.0.0:` + global.Config.Env.Port)
-	_ = router.Run(`:` + global.Config.Env.Port)
+	fmt.Println(`启动服务: 0.0.0.0:` + global.Config.Service.Port)
+	_ = router.Run(`:` + global.Config.Service.Port)
 }
 
 // onEventReceived 接收事件

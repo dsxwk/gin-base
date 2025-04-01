@@ -16,7 +16,7 @@ type Config struct {
 	Jwt
 	Cors
 	Cache
-	Env
+	Service
 }
 
 var (

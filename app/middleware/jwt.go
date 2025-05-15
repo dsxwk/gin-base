@@ -66,9 +66,13 @@ func (s Jwt) Decode(jwtToken string) (map[string]interface{}, error) {
 		return []byte(Config.Jwt.Key), nil
 	})
 
+	if err != nil {
+		return nil, fmt.Errorf("token 解析失败: %w", err)
+	}
+
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		return claims, nil
-	} else {
-		return claims, err
 	}
+
+	return nil, fmt.Errorf("无效的 token")
 }

@@ -51,7 +51,7 @@ func (s UserValidate) ConfigValidation(v *validator.Validation) {
 		"list":   []string{"Page", "PageSize"},
 		"detail": []string{"ID"},
 		"create": []string{"Username", "FullName", "Nickname", "Gender", "Password"},
-		"update": []string{"ID"},
+		"update": []string{"ID", "FullName", "Nickname"},
 		"delete": []string{"ID"},
 	})
 }

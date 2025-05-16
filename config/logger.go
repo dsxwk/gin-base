@@ -1,13 +1,10 @@
 package config
 
 import (
-	"bytes"
 	"gin-base/common/extend/context"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
-	"io/ioutil"
-	"net/http"
 	"strings"
 	"time"
 )
@@ -38,23 +35,11 @@ func GetLogFields(fields []zap.Field) []zap.Field {
 	}
 
 	var (
-		ip     = c.ClientIP()
-		path   = c.Request.URL.Path
-		method = c.Request.Method
 		params string
 	)
 
-	switch method {
-	case http.MethodGet, http.MethodDelete:
-		params = c.Request.URL.RawQuery
-	case http.MethodPost, http.MethodPut, http.MethodPatch:
-		// 读取 Body
-		bodyBytes, err := ioutil.ReadAll(c.Request.Body)
-		if err == nil {
-			params = string(bodyBytes)
-			// 恢复 Body 的原始状态
-			c.Request.Body = ioutil.NopCloser(bytes.NewBuffer(bodyBytes))
-		}
+	if v, ok := c.Get("logParams"); ok {
+		params, _ = v.(string)
 	}
 
 	// 清理参数中的空格和换行符
@@ -62,9 +47,9 @@ func GetLogFields(fields []zap.Field) []zap.Field {
 
 	// 添加日志字段
 	fields = append(fields,
-		zap.String("ip", ip),
-		zap.String("method", method),
-		zap.String("path", path),
+		zap.String("ip", c.ClientIP()),
+		zap.String("method", c.Request.Method),
+		zap.String("path", c.Request.URL.Path),
 		zap.String("params", params),
 		zap.Any("debug", map[string]interface{}{
 			"http":  GetHttpLogs(),

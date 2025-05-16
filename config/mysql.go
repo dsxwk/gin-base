@@ -118,22 +118,81 @@ func LogSlowQuery(DB *gorm.DB) {
 			}
 		}
 	})
+
+	// 注册创建更新删除
+	_ = DB.Callback().Create().After("gorm:create").Register("slowquery:create", func(db *gorm.DB) {
+		var (
+			sql  = db.Statement.SQL.String()
+			vars = db.Statement.Vars
+		)
+
+		// 追加 SQL 数据
+		AddSQL(sql, vars)
+
+		// 发布 SQL 事件
+		sqlEvent := event.Event{
+			Name: "sql_listen",
+			Data: SQLRes,
+		}
+		EventBus.Publish(sqlEvent)
+	})
+
+	_ = DB.Callback().Update().After("gorm:update").Register("slowquery:update", func(db *gorm.DB) {
+		var (
+			sql  = db.Statement.SQL.String()
+			vars = db.Statement.Vars
+		)
+
+		// 追加 SQL 数据
+		AddSQL(sql, vars)
+
+		// 发布 SQL 事件
+		sqlEvent := event.Event{
+			Name: "sql_listen",
+			Data: SQLRes,
+		}
+		EventBus.Publish(sqlEvent)
+	})
+
+	_ = DB.Callback().Delete().After("gorm:delete").Register("slowquery:delete", func(db *gorm.DB) {
+		var (
+			sql  = db.Statement.SQL.String()
+			vars = db.Statement.Vars
+		)
+
+		// 追加 SQL 数据
+		AddSQL(sql, vars)
+
+		// 发布 SQL 事件
+		sqlEvent := event.Event{
+			Name: "sql_listen",
+			Data: SQLRes,
+		}
+		EventBus.Publish(sqlEvent)
+	})
 }
 
 // getSQL 替换 SQL 中的占位符 "?" 为实际值
 func getSQL(sql string, vars []interface{}) string {
 	for _, v := range vars {
 		// 将参数值格式化为字符串
-		var formattedValue string
+		var (
+			formattedValue string
+		)
 		switch value := v.(type) {
 		case string:
-			// 如果是字符串，加上引号
 			formattedValue = fmt.Sprintf("'%s'", value)
 		case []byte:
-			// 如果是字节数组，转换为字符串并加上引号
 			formattedValue = fmt.Sprintf("'%s'", string(value))
+		case time.Time:
+			formattedValue = fmt.Sprintf("'%s'", value.Format("2006-01-02 15:04:05"))
+		case *time.Time:
+			if value != nil {
+				formattedValue = fmt.Sprintf("'%s'", value.Format("2006-01-02 15:04:05"))
+			} else {
+				formattedValue = "NULL"
+			}
 		default:
-			// 其他类型直接转换为字符串
 			formattedValue = fmt.Sprintf("%v", value)
 		}
 

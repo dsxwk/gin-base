@@ -13,18 +13,19 @@ const TableNameUser = "user"
 
 // User mapped from table <user>
 type User struct {
-	ID        int64   `gorm:"column:id;type:int(10) unsigned;primaryKey;autoIncrement:true;comment:ID" json:"id"` // ID
-	Username  string  `gorm:"column:username;type:varchar(10);not null;comment:用户名" json:"username"`              // 用户名
-	FullName  string  `gorm:"column:full_name;type:varchar(20);not null;comment:姓名" json:"full_name"`             // 姓名
-	Email     string  `gorm:"column:email;type:varchar(50);not null;comment:邮箱" json:"email"`                     // 邮箱
-	Password  string  `gorm:"column:password;type:varchar(255);not null;comment:密码" json:"password"`              // 密码
-	Nickname  string  `gorm:"column:nickname;type:varchar(50);not null;comment:昵称" json:"nickname"`               // 昵称
-	Gender    int64   `gorm:"column:gender;type:tinyint(1) unsigned;not null;comment:性别 1=男 2=女" json:"gender"`   // 性别 1=男 2=女
-	Age       int64   `gorm:"column:age;type:int(10) unsigned;not null;comment:年龄" json:"age"`                    // 年龄
-	Status    int64   `gorm:"column:status;type:int(10) unsigned;not null;comment:状态 1=启用 2=停用" json:"status"`    // 状态 1=启用 2=停用
-	CreatedAt *string `gorm:"column:created_at;type:datetime;comment:创建时间" json:"created_at"`                     // 创建时间
-	UpdatedAt *string `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updated_at"`                     // 更新时间
-	DeletedAt *string `gorm:"column:deleted_at;type:datetime;comment:删除时间" json:"deleted_at"`                     // 删除时间
+	ID        int64          `gorm:"column:id;type:int(10) unsigned;primaryKey;autoIncrement:true;comment:ID" json:"id"` // ID
+	Avatar    string         `gorm:"column:avatar;type:varchar(10);not null;comment:头像" json:"avatar"`                   // 头像
+	Username  string         `gorm:"column:username;type:varchar(10);not null;comment:用户名" json:"username"`              // 用户名
+	FullName  string         `gorm:"column:full_name;type:varchar(20);not null;comment:姓名" json:"full_name"`             // 姓名
+	Email     string         `gorm:"column:email;type:varchar(50);not null;comment:邮箱" json:"email"`                     // 邮箱
+	Password  string         `gorm:"column:password;type:varchar(255);not null;comment:密码" json:"password"`              // 密码
+	Nickname  string         `gorm:"column:nickname;type:varchar(50);not null;comment:昵称" json:"nickname"`               // 昵称
+	Gender    int64          `gorm:"column:gender;type:tinyint(1) unsigned;not null;comment:性别 1=男 2=女" json:"gender"`   // 性别 1=男 2=女
+	Age       int64          `gorm:"column:age;type:int(10) unsigned;not null;comment:年龄" json:"age"`                    // 年龄
+	Status    int64          `gorm:"column:status;type:int(10) unsigned;not null;comment:状态 1=启用 2=停用" json:"status"`    // 状态 1=启用 2=停用
+	CreatedAt *time.Time     `gorm:"column:created_at;type:datetime;comment:创建时间" json:"created_at"`                     // 创建时间
+	UpdatedAt *time.Time     `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updated_at"`                     // 更新时间
+	DeletedAt gorm.DeletedAt `gorm:"column:deleted_at;type:datetime;comment:删除时间" json:"deleted_at"`                     // 删除时间
 }
 
 // TableName User's table name
@@ -35,61 +36,19 @@ func (User) TableName() string {
 // BeforeCreate 创建之前
 func (s *User) BeforeCreate(tx *gorm.DB) (err error) {
 	if s.CreatedAt == nil {
-		createdAt := time.Now().Format("2006-01-02 15:04:05")
-		s.CreatedAt = &createdAt
+		now := time.Now()
+		s.CreatedAt = &now
 	}
-
 	if s.UpdatedAt == nil {
-		updatedAt := time.Now().Format("2006-01-02 15:04:05")
-		s.UpdatedAt = &updatedAt
+		now := time.Now()
+		s.UpdatedAt = &now
 	}
-
 	return
 }
 
 // BeforeUpdate 更新之前
 func (s *User) BeforeUpdate(tx *gorm.DB) (err error) {
-	if s.UpdatedAt == nil {
-		updatedAt := time.Now().Format("2006-01-02 15:04:05")
-		s.UpdatedAt = &updatedAt
-	}
-
-	return
-}
-
-// AfterFind 查询之后
-func (s *User) AfterFind(tx *gorm.DB) (err error) {
-	// 时间格式转换
-	if s.CreatedAt != nil {
-		createdAt, _ := time.Parse(time.RFC3339, *s.CreatedAt)
-		// 格式化 time.Time 类型为字符串，并重新赋值给 *string 类型的字段
-		formattedCreatedAt := createdAt.Format("2006-01-02 15:04:05")
-		s.CreatedAt = &formattedCreatedAt
-	}
-
-	if s.UpdatedAt != nil {
-		updatedAt, _ := time.Parse(time.RFC3339, *s.UpdatedAt)
-		// 格式化 time.Time 类型为字符串，并重新赋值给 *string 类型的字段
-		formattedUpdatedAt := updatedAt.Format("2006-01-02 15:04:05")
-		s.UpdatedAt = &formattedUpdatedAt
-	}
-
-	if s.DeletedAt != nil {
-		deletedAt, _ := time.Parse(time.RFC3339, *s.DeletedAt)
-		// 格式化 time.Time 类型为字符串，并重新赋值给 *string 类型的字段
-		formattedDeletedAt := deletedAt.Format("2006-01-02 15:04:05")
-		s.DeletedAt = &formattedDeletedAt
-	}
-
-	return
-}
-
-// BeforeDelete 删除之前
-func (s *User) BeforeDelete(tx *gorm.DB) (err error) {
-	if s.DeletedAt == nil {
-		deletedAt := time.Now().Format("2006-01-02 15:04:05")
-		s.DeletedAt = &deletedAt
-	}
-
+	now := time.Now()
+	s.UpdatedAt = &now
 	return
 }

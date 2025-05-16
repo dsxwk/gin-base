@@ -200,7 +200,13 @@ func createTableStruct(tableName string, path string, camel bool) {
 		"mediumint": func(detailType gorm.ColumnType) (dataType string) { return "int64" },
 		"bigint":    func(detailType gorm.ColumnType) (dataType string) { return "int64" },
 		"int":       func(detailType gorm.ColumnType) (dataType string) { return "int64" },
-		"datetime":  func(detailType gorm.ColumnType) (dataType string) { return "string" }, // 添加此行将 datetime 转换为 string
+		"datetime": func(detailType gorm.ColumnType) (dataType string) {
+			// 针对 deleted_at 字段特殊处理
+			if detailType.Name() == "deleted_at" {
+				return "gorm.DeletedAt"
+			}
+			return "*time.Time"
+		},
 		//"timestamp":  func(detailType gorm.ColumnType) (dataType string) { return "string" }, // 添加此行将 timestamp 转换为 string
 		//"date":       func(detailType gorm.ColumnType) (dataType string) { return "string" }, // 添加此行将 date 转换为 string
 	}
@@ -251,55 +257,23 @@ func insertHooksIntoModel(path string, tableName string) {
 // BeforeCreate 创建之前
 func (s *%s) BeforeCreate(tx *gorm.DB) (err error) {
 	if s.CreatedAt == nil {
-		createdAt := time.Now().Format("2006-01-02 15:04:05")
-		s.CreatedAt = &createdAt
-	}
-	if s.UpdatedAt == nil {
-		updatedAt := time.Now().Format("2006-01-02 15:04:05")
-		s.UpdatedAt = &updatedAt
-	}
-	return
+        now := time.Now()
+        s.CreatedAt = &now
+    }
+    if s.UpdatedAt == nil {
+        now := time.Now()
+        s.UpdatedAt = &now
+    }
+    return
 }
 
 // BeforeUpdate 更新之前
 func (s *%s) BeforeUpdate(tx *gorm.DB) (err error) {
-	if s.UpdatedAt == nil {
-		updatedAt := time.Now().Format("2006-01-02 15:04:05")
-		s.UpdatedAt = &updatedAt
-	}
-	return
+	now := time.Now()
+    s.UpdatedAt = &now
+    return
 }
-
-// AfterFind 查询之后
-func (s *%s) AfterFind(tx *gorm.DB) (err error) {
-	if s.CreatedAt != nil {
-		createdAt, _ := time.Parse(time.RFC3339, *s.CreatedAt)
-		formattedCreatedAt := createdAt.Format("2006-01-02 15:04:05")
-		s.CreatedAt = &formattedCreatedAt
-	}
-	if s.UpdatedAt != nil {
-		updatedAt, _ := time.Parse(time.RFC3339, *s.UpdatedAt)
-		formattedUpdatedAt := updatedAt.Format("2006-01-02 15:04:05")
-		s.UpdatedAt = &formattedUpdatedAt
-	}
-	if s.DeletedAt != nil {
-		deletedAt, _ := time.Parse(time.RFC3339, *s.DeletedAt)
-		formattedDeletedAt := deletedAt.Format("2006-01-02 15:04:05")
-		s.DeletedAt = &formattedDeletedAt
-	}
-	return
-}
-
-// BeforeDelete 删除之前
-func (s *%s) BeforeDelete(tx *gorm.DB) (err error) {
-	if s.DeletedAt == nil {
-		deletedAt := time.Now().Format("2006-01-02 15:04:05")
-		s.DeletedAt = &deletedAt
-	}
-
-	return
-}
-	`, structName, structName, structName, structName)
+	`, structName, structName)
 
 	// 将钩子方法写入文件
 	_, err = file.WriteString(hooks)

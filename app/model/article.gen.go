@@ -14,19 +14,19 @@ const TableNameArticle = "article"
 
 // Article mapped from table <article>
 type Article struct {
-	ID         int64     `gorm:"column:id;type:int(10) unsigned;primaryKey;autoIncrement:true;comment:ID" json:"id"`  // ID
-	UID        int64     `gorm:"column:uid;type:int(11);not null;comment:用户id" json:"uid"`                            // 用户id
-	User       *User     `json:"user" gorm:"foreignkey:uid;references:id"`                                            // 关联用户
-	Title      string    `gorm:"column:title;type:varchar(50);not null;comment:标题" json:"title"`                      // 标题
-	Content    string    `gorm:"column:content;type:varchar(255);not null;comment:内容" json:"content"`                 // 内容
-	CategoryID int64     `gorm:"column:category_id;type:int(11);not null;comment:分类id" json:"category_id"`            // 分类id
-	DataSource int64     `gorm:"column:data_source;type:int(11);not null;comment:数据来源 1=文章库 2=自建" json:"data_source"` // 数据来源 1=文章库 2=自建
-	IsPublish  int64     `gorm:"column:is_publish;type:int(11);not null;comment:是否发布 1=已发布 2=未发布" json:"is_publish"`  // 是否发布 1=已发布 2=未发布
-	Category   *Category `json:"category" gorm:"foreignkey:category_id;references:id"`                                // 关联分类
-	Tag        *string   `gorm:"column:tag;type:json;comment:标签" json:"tag"`                                          // 标签
-	CreatedAt  *string   `gorm:"column:created_at;type:datetime;comment:创建时间" json:"created_at"`                      // 创建时间
-	UpdatedAt  *string   `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updated_at"`                      // 更新时间
-	DeletedAt  *string   `gorm:"column:deleted_at;type:datetime;comment:删除时间" json:"deleted_at"`                      // 删除时间
+	ID         int64          `gorm:"column:id;type:int(10) unsigned;primaryKey;autoIncrement:true;comment:ID" json:"id"`  // ID
+	UID        int64          `gorm:"column:uid;type:int(11);not null;comment:用户id" json:"uid"`                            // 用户id
+	User       *User          `json:"user" gorm:"foreignkey:uid;references:id"`                                            // 关联用户
+	Title      string         `gorm:"column:title;type:varchar(50);not null;comment:标题" json:"title"`                      // 标题
+	Content    string         `gorm:"column:content;type:varchar(255);not null;comment:内容" json:"content"`                 // 内容
+	CategoryID int64          `gorm:"column:category_id;type:int(11);not null;comment:分类id" json:"category_id"`            // 分类id
+	DataSource int64          `gorm:"column:data_source;type:int(11);not null;comment:数据来源 1=文章库 2=自建" json:"data_source"` // 数据来源 1=文章库 2=自建
+	IsPublish  int64          `gorm:"column:is_publish;type:int(11);not null;comment:是否发布 1=已发布 2=未发布" json:"is_publish"`  // 是否发布 1=已发布 2=未发布
+	Category   *Category      `json:"category" gorm:"foreignkey:category_id;references:id"`                                // 关联分类
+	Tag        *string        `gorm:"column:tag;type:json;comment:标签" json:"tag"`                                          // 标签
+	CreatedAt  *time.Time     `gorm:"column:created_at;type:datetime;comment:创建时间" json:"created_at"`                      // 创建时间
+	UpdatedAt  *time.Time     `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updated_at"`                      // 更新时间
+	DeletedAt  gorm.DeletedAt `gorm:"column:deleted_at;type:datetime;comment:删除时间" json:"deleted_at"`                      // 删除时间
 }
 
 type ArticleQuery struct {
@@ -50,62 +50,20 @@ func (*Article) TableName() string {
 // BeforeCreate 创建之前
 func (s *Article) BeforeCreate(tx *gorm.DB) (err error) {
 	if s.CreatedAt == nil {
-		createdAt := time.Now().Format("2006-01-02 15:04:05")
-		s.CreatedAt = &createdAt
+		now := time.Now()
+		s.CreatedAt = &now
 	}
-
 	if s.UpdatedAt == nil {
-		updatedAt := time.Now().Format("2006-01-02 15:04:05")
-		s.UpdatedAt = &updatedAt
+		now := time.Now()
+		s.UpdatedAt = &now
 	}
-
 	return
 }
 
 // BeforeUpdate 更新之前
 func (s *Article) BeforeUpdate(tx *gorm.DB) (err error) {
-	if s.UpdatedAt == nil {
-		updatedAt := time.Now().Format("2006-01-02 15:04:05")
-		s.UpdatedAt = &updatedAt
-	}
-
-	return
-}
-
-// AfterFind 查询之后
-func (s *Article) AfterFind(tx *gorm.DB) (err error) {
-	// 时间格式转换
-	if s.CreatedAt != nil {
-		createdAt, _ := time.Parse(time.RFC3339, *s.CreatedAt)
-		// 格式化 time.Time 类型为字符串，并重新赋值给 *string 类型的字段
-		formattedCreatedAt := createdAt.Format("2006-01-02 15:04:05")
-		s.CreatedAt = &formattedCreatedAt
-	}
-
-	if s.UpdatedAt != nil {
-		updatedAt, _ := time.Parse(time.RFC3339, *s.UpdatedAt)
-		// 格式化 time.Time 类型为字符串，并重新赋值给 *string 类型的字段
-		formattedUpdatedAt := updatedAt.Format("2006-01-02 15:04:05")
-		s.UpdatedAt = &formattedUpdatedAt
-	}
-
-	if s.DeletedAt != nil {
-		deletedAt, _ := time.Parse(time.RFC3339, *s.DeletedAt)
-		// 格式化 time.Time 类型为字符串，并重新赋值给 *string 类型的字段
-		formattedDeletedAt := deletedAt.Format("2006-01-02 15:04:05")
-		s.DeletedAt = &formattedDeletedAt
-	}
-
-	return
-}
-
-// BeforeDelete 删除之前
-func (s *Article) BeforeDelete(tx *gorm.DB) (err error) {
-	if s.DeletedAt == nil {
-		deletedAt := time.Now().Format("2006-01-02 15:04:05")
-		s.DeletedAt = &deletedAt
-	}
-
+	now := time.Now()
+	s.UpdatedAt = &now
 	return
 }
 

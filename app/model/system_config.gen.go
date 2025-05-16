@@ -13,16 +13,16 @@ const TableNameSystemConfig = "system_config"
 
 // SystemConfig mapped from table <system_config>
 type SystemConfig struct {
-	ID           int64   `gorm:"column:id;type:smallint(5) unsigned;primaryKey;autoIncrement:true;comment:id" json:"id"`                    // id
-	CnName       string  `gorm:"column:cn_name;type:varchar(60);not null;comment:中文名称" json:"cn_name"`                                      // 中文名称
-	EnName       string  `gorm:"column:en_name;type:varchar(60);not null;comment:英文名称" json:"en_name"`                                      // 英文名称
-	DefaultValue string  `gorm:"column:default_value;type:varchar(200);not null;comment:默认值" json:"default_value"`                          // 默认值
-	OptionValue  string  `gorm:"column:option_value;type:varchar(200);not null;comment:可选值" json:"option_value"`                            // 可选值
-	Type         int64   `gorm:"column:type;type:tinyint(1);not null;default:1;comment:配置类型 1=输入框 2=单选 3=复选 4=下拉菜单 5=文本域 6=附件" json:"type"` // 配置类型 1=输入框 2=单选 3=复选 4=下拉菜单 5=文本域 6=附件
-	Category     int64   `gorm:"column:category;type:tinyint(1);not null;default:1;comment:配置分类 1=基本信息 2=联系方式 3=seo设置" json:"category"`     // 配置分类 1=基本信息 2=联系方式 3=seo设置
-	CreatedAt    *string `gorm:"column:created_at;type:datetime;comment:创建时间" json:"created_at"`                                            // 创建时间
-	UpdatedAt    *string `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updated_at"`                                            // 更新时间
-	DeletedAt    *string `gorm:"column:deleted_at;type:datetime;comment:删除时间" json:"deleted_at"`                                            // 删除时间
+	ID           int64          `gorm:"column:id;type:smallint(5) unsigned;primaryKey;autoIncrement:true;comment:id" json:"id"`                    // id
+	CnName       string         `gorm:"column:cn_name;type:varchar(60);not null;comment:中文名称" json:"cn_name"`                                      // 中文名称
+	EnName       string         `gorm:"column:en_name;type:varchar(60);not null;comment:英文名称" json:"en_name"`                                      // 英文名称
+	DefaultValue string         `gorm:"column:default_value;type:varchar(200);not null;comment:默认值" json:"default_value"`                          // 默认值
+	OptionValue  string         `gorm:"column:option_value;type:varchar(200);not null;comment:可选值" json:"option_value"`                            // 可选值
+	Type         int64          `gorm:"column:type;type:tinyint(1);not null;default:1;comment:配置类型 1=输入框 2=单选 3=复选 4=下拉菜单 5=文本域 6=附件" json:"type"` // 配置类型 1=输入框 2=单选 3=复选 4=下拉菜单 5=文本域 6=附件
+	Category     int64          `gorm:"column:category;type:tinyint(1);not null;default:1;comment:配置分类 1=基本信息 2=联系方式 3=seo设置" json:"category"`     // 配置分类 1=基本信息 2=联系方式 3=seo设置
+	CreatedAt    *time.Time     `gorm:"column:created_at;type:datetime;comment:创建时间" json:"created_at"`                                            // 创建时间
+	UpdatedAt    *time.Time     `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updated_at"`                                            // 更新时间
+	DeletedAt    gorm.DeletedAt `gorm:"column:deleted_at;type:datetime;comment:删除时间" json:"deleted_at"`                                            // 删除时间
 }
 
 // TableName SystemConfig's table name
@@ -33,54 +33,19 @@ func (*SystemConfig) TableName() string {
 // BeforeCreate 创建之前
 func (s *SystemConfig) BeforeCreate(tx *gorm.DB) (err error) {
 	if s.CreatedAt == nil {
-		createdAt := time.Now().Format("2006-01-02 15:04:05")
-		s.CreatedAt = &createdAt
+		now := time.Now()
+		s.CreatedAt = &now
 	}
-
 	if s.UpdatedAt == nil {
-		updatedAt := time.Now().Format("2006-01-02 15:04:05")
-		s.UpdatedAt = &updatedAt
+		now := time.Now()
+		s.UpdatedAt = &now
 	}
-
 	return
 }
 
 // BeforeUpdate 更新之前
 func (s *SystemConfig) BeforeUpdate(tx *gorm.DB) (err error) {
-	if s.UpdatedAt == nil {
-		updatedAt := time.Now().Format("2006-01-02 15:04:05")
-		s.UpdatedAt = &updatedAt
-	}
-
-	return
-}
-
-// AfterFind 查询之后
-func (s *SystemConfig) AfterFind(tx *gorm.DB) (err error) {
-	if s.CreatedAt != nil {
-		createdAt := time.Now().Format("2006-01-02 15:04:05")
-		s.CreatedAt = &createdAt
-	}
-
-	if s.UpdatedAt != nil {
-		updatedAt := time.Now().Format("2006-01-02 15:04:05")
-		s.UpdatedAt = &updatedAt
-	}
-
-	if s.DeletedAt != nil {
-		deletedAt := time.Now().Format("2006-01-02 15:04:05")
-		s.DeletedAt = &deletedAt
-	}
-
-	return
-}
-
-// BeforeDelete 删除之前
-func (s *SystemConfig) BeforeDelete(tx *gorm.DB) (err error) {
-	if s.DeletedAt == nil {
-		deletedAt := time.Now().Format("2006-01-02 15:04:05")
-		s.DeletedAt = &deletedAt
-	}
-
+	now := time.Now()
+	s.UpdatedAt = &now
 	return
 }

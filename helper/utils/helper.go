@@ -16,16 +16,10 @@ import (
 )
 
 // FormatTime 格式化时间
-// @param: t string
+// @param: t time.Time
 // @return: string
-func FormatTime(t string) string {
-	ts, err := time.Parse(time.RFC3339, t)
-
-	if err != nil {
-		panic(err)
-	}
-
-	return ts.Format("2006-01-02 15:04:05")
+func FormatTime(t time.Time) string {
+	return t.Format("2006-01-02 15:04:05")
 }
 
 // Pagination 计算分页

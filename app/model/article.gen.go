@@ -59,14 +59,16 @@ func (s *Article) BeforeCreate(tx *gorm.DB) (err error) {
 		now := time.Now()
 		s.UpdatedAt = &now
 	}
-	return
+	return nil
 }
 
 // BeforeUpdate 更新之前
 func (s *Article) BeforeUpdate(tx *gorm.DB) (err error) {
-	now := time.Now()
-	s.UpdatedAt = &now
-	return
+	if s.UpdatedAt == nil {
+		now := time.Now()
+		s.UpdatedAt = &now
+	}
+	return nil
 }
 
 // GetTag 获取标签

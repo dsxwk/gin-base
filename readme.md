@@ -183,6 +183,8 @@ type ArticleQuery struct {
 	IsPublish  int64     `json:"is_publish" comment:"是否发布 1=已发布 2=未发布"`                               // 是否发布 1=已发布 2=未发布
 	Category   *Category `json:"category" gorm:"foreignkey:category_id;references:id" comment:"关联分类"` // 关联分类
 	Tag        []string  `json:"tag" comment:"标签"`                                                    // 标签
+	CreatedAt  string    `gorm:"column:created_at;type:datetime;comment:创建时间" json:"created_at"`      // 创建时间
+	UpdatedAt  string    `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updated_at"`      // 更新时间
 }
 
 // TableName Article's table name
@@ -193,63 +195,25 @@ func (*Article) TableName() string {
 // BeforeCreate Before creation
 func (s *Article) BeforeCreate(tx *gorm.DB) (err error) {
 	if s.CreatedAt == nil {
-		createdAt := time.Now().Format("2006-01-02 15:04:05")
-		s.CreatedAt = &createdAt
+		now := time.Now()
+		s.CreatedAt = &now
 	}
-
 	if s.UpdatedAt == nil {
-		updatedAt := time.Now().Format("2006-01-02 15:04:05")
-		s.UpdatedAt = &updatedAt
+		now := time.Now()
+		s.UpdatedAt = &now
 	}
-
-	return
+	return nil
 }
 
 // BeforeUpdate Before updating
 func (s *Article) BeforeUpdate(tx *gorm.DB) (err error) {
 	if s.UpdatedAt == nil {
-		updatedAt := time.Now().Format("2006-01-02 15:04:05")
-		s.UpdatedAt = &updatedAt
+		now := time.Now()
+		s.UpdatedAt = &now
+		return nil
 	}
 
-	return
-}
-
-// AfterFind After querying
-func (s *Article) AfterFind(tx *gorm.DB) (err error) {
-	// Time format conversion
-	if s.CreatedAt != nil {
-		createdAt, _ := time.Parse(time.RFC3339, *s.CreatedAt)
-		// Format time The Time type is a string, and it is reassigned to a field of type * string
-		formattedCreatedAt := createdAt.Format("2006-01-02 15:04:05")
-		s.CreatedAt = &formattedCreatedAt
-	}
-
-	if s.UpdatedAt != nil {
-		updatedAt, _ := time.Parse(time.RFC3339, *s.UpdatedAt)
-		// Format time The Time type is a string, and it is reassigned to a field of type * string
-		formattedUpdatedAt := updatedAt.Format("2006-01-02 15:04:05")
-		s.UpdatedAt = &formattedUpdatedAt
-	}
-
-	if s.DeletedAt != nil {
-		deletedAt, _ := time.Parse(time.RFC3339, *s.DeletedAt)
-		// Format time The Time type is a string, and it is reassigned to a field of type * string
-		formattedDeletedAt := deletedAt.Format("2006-01-02 15:04:05")
-		s.DeletedAt = &formattedDeletedAt
-	}
-
-	return
-}
-
-// BeforeDelete Before deletion
-func (s *Article) BeforeDelete(tx *gorm.DB) (err error) {
-	if s.DeletedAt == nil {
-		deletedAt := time.Now().Format("2006-01-02 15:04:05")
-		s.DeletedAt = &deletedAt
-	}
-
-	return
+	return nil
 }
 ```
 
@@ -321,6 +285,8 @@ func (s *ArticleService) List(req validate.ArticleValidate) (global.PageData, er
 		articleQuery[k].User = m.User
 		articleQuery[k].Category = m.Category
 		articleQuery[k].Tag = m.GetTag()
+        articleQuery[k].CreatedAt = utils.FormatTime(m.CreatedAt)
+        articleQuery[k].UpdatedAt = utils.FormatTime(m.UpdatedAt)
 	}
 
 	pageData.Page = req.Page

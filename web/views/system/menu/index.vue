@@ -1,0 +1,178 @@
+<template>
+  <div class="table-demo-container layout-padding">
+    <div class="table-demo-padding layout-padding-view layout-padding-auto">
+      <TableSearch :search="state.tableData.search" @search="onSearch" />
+      <Table
+          ref="tableRef"
+          v-bind="state.tableData"
+          class="table-demo"
+          @delRow="onTableDelRow"
+          @pageChange="onTablePageChange"
+          @sortHeader="onSortHeader"
+      >
+        <template #tools>
+          <div class="table-tool">
+            <el-button size="default" type="primary" @click="onOpenAddMenu('add')">
+              <el-icon>
+                <ele-FolderAdd />
+              </el-icon>
+              新增菜单
+            </el-button>
+          </div>
+        </template>
+        <template #operation="{row}">
+          <div class="flex items-center">
+            <el-popconfirm title="确定删除吗？" @confirm="onTableDelRow(row)">
+              <template #reference>
+                <el-button text type="danger">删除</el-button>
+              </template>
+            </el-popconfirm>
+            <el-button text type="primary" @click="onOpenEditMenu('edit', row)">编辑</el-button>
+          </div>
+        </template>
+        <template #dialog>
+          <MenuDialog ref="menuDialogRef" @refresh="getTableData()" />
+        </template>
+      </Table>
+    </div>
+  </div>
+</template>
+
+<script setup name="systemMenu">
+import {defineAsyncComponent, reactive, ref, onMounted, h} from 'vue';
+import { ElMessage } from 'element-plus';
+import {menuJson} from '/@/static/menu';
+
+// 引入组件
+const Table = defineAsyncComponent(() => import('/@/components/table/index.vue'));
+const TableSearch = defineAsyncComponent(() => import('/@/components/table/component/search.vue'));
+const MenuDialog = defineAsyncComponent(() => import('/@/views/system/menu/component/dialog.vue'));
+
+// 定义变量内容
+const tableRef = ref();
+const menuDialogRef = ref();
+const state = reactive({
+  tableData: {
+    // 列表数据（必传）
+    data: [],
+    // 表头内容（必传，注意格式）
+    header: [
+      { key: 'menuType', colWidth: '', title: '菜单类型', type: 'text', isCheck: true,
+        render: (scope) => {
+          console.log(scope.row);
+          return scope.row?.menuType;
+        }
+      },
+      { key: 'title', colWidth: '', title: '菜单名称', type: 'text', isCheck: true },
+      { key: 'name', colWidth: '', title: '路由名称', type: 'text', isCheck: true },
+      { key: 'path', colWidth: '', title: '路由路径', type: 'text', isCheck: true },
+      { key: 'redirect', colWidth: '', title: '重定向', type: 'text', isCheck: true },
+      /*{ key: 'icon', colWidth: '', title: '菜单图标', type: 'image', isCheck: true,
+        render: (scope) => {
+          return h('i', {
+            class: scope.row.meta.icon
+          });
+        },
+      },*/
+      { key: 'icon', colWidth: '', title: '菜单图标', isCheck: true,
+        render: (scope) => {
+          return h('el-icon', {
+            class: scope.row?.meta?.icon
+          });
+        },
+      },
+      { key: 'componentAlias', colWidth: '', title: '组件路径', type: 'text', isCheck: true },
+      { key: 'isLink', colWidth: '', width: '70', height: '40', title: '链接地址', type: 'text', isCheck: true },
+      { key: 'isHide', colWidth: '', width: '70', height: '40', title: '是否隐藏', type: 'select', isCheck: true },
+    ],
+    // 配置项（必传）
+    config: {
+      total: 0, // 列表总数
+      loading: true, // loading 加载
+      isBorder: true, // 是否显示表格边框
+      isSerialNo: true, // 是否显示表格序号
+      isSelection: true, // 是否显示表格多选
+      isOperate: true, // 是否显示表格操作栏
+    },
+    // 搜索表单，动态生成（传空数组时，将不显示搜索，注意格式）
+    search: [
+      { label: '菜单类型', prop: 'menuType', placeholder: '请输入菜单类型', required: true, type: 'input' },
+      { label: '菜单名称', prop: 'title', placeholder: '请输入菜单名称', required: false, type: 'input' },
+      { label: '路由名称', prop: 'name', placeholder: '请输入路由名称', required: false, type: 'input' },
+      {
+        label: '是否隐藏',
+        prop: 'isHide',
+        placeholder: '请选择',
+        required: false,
+        type: 'select',
+        options: [
+          { label: '隐藏', value: true },
+          { label: '不隐藏', value: false },
+        ],
+      },
+    ],
+    // 搜索参数（不用传，用于分页、搜索时传给后台的值，`getTableData` 中使用）
+    param: {
+      page: 1,
+      pageSize: 10,
+    },
+    // 打印标题
+    printName: 'ginBaseAdmin 表格打印演示',
+  },
+});
+// 打开新增菜单弹窗
+const onOpenAddMenu = (type) => {
+  menuDialogRef.value.openDialog(type);
+};
+// 打开编辑菜单弹窗
+const onOpenEditMenu = (type, row) => {
+  menuDialogRef.value.openDialog(type, row);
+};
+// 初始化列表数据
+const getTableData = () => {
+  state.tableData.config.loading = true;
+  state.tableData.data = menuJson.data;
+  // 数据总数（模拟，真实从接口取）
+  state.tableData.config.total = state.tableData.data.length;
+  setTimeout(() => {
+    state.tableData.config.loading = false;
+  }, 500);
+};
+// 搜索点击时表单回调
+const onSearch = (data) => {
+  state.tableData.param = Object.assign({}, state.tableData.param, { ...data });
+  tableRef.value.pageReset();
+};
+// 删除当前项回调
+const onTableDelRow = (row) => {
+  ElMessage.success(`删除${row.name}成功！`);
+  state.tableData.data = state.tableData.data.filter((item) => item.id !== row.id);
+  // getTableData();
+};
+// 分页改变时回调
+const onTablePageChange = (page) => {
+  state.tableData.param.page = page.page;
+  state.tableData.param.pageSize = page.pageSize;
+  getTableData();
+};
+// 拖动显示列排序回调
+const onSortHeader = (data) => {
+  state.tableData.header = data;
+};
+// 页面加载时
+onMounted(() => {
+  getTableData();
+});
+</script>
+
+<style scoped lang="scss">
+.table-demo-container {
+  .table-demo-padding {
+    padding: 15px;
+    .table-demo {
+      flex: 1;
+      overflow: hidden;
+    }
+  }
+}
+</style>

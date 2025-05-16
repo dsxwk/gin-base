@@ -24,6 +24,7 @@ func (s *CacheController) SetCache(c *gin.Context) {
 	err := c.ShouldBind(&req)
 	if err != nil {
 		global.Log.Error(err.Error())
+		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
 
@@ -54,6 +55,7 @@ func (s *CacheController) GetCache(c *gin.Context) {
 	err := c.ShouldBindQuery(&req)
 	if err != nil {
 		global.Log.Error(err.Error())
+		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
 
@@ -80,6 +82,7 @@ func (s *CacheController) DeleteCache(c *gin.Context) {
 	err := c.ShouldBindQuery(&req)
 	if err != nil {
 		global.Log.Error(err.Error())
+		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
 

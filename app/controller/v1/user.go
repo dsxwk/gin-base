@@ -1,13 +1,13 @@
 package v1
 
 import (
-	"encoding/json"
 	"gin-base/app/model"
 	"gin-base/app/service"
 	"gin-base/app/validate"
 	"gin-base/common"
 	"gin-base/common/global"
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/copier"
 	"strconv"
 )
 
@@ -27,6 +27,7 @@ func (s *UserController) List(c *gin.Context) {
 	err := c.ShouldBindQuery(&req)
 	if err != nil {
 		global.Log.Error(err.Error())
+		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
 
@@ -34,6 +35,7 @@ func (s *UserController) List(c *gin.Context) {
 	err = c.ShouldBindQuery(&search)
 	if err != nil {
 		global.Log.Error(err.Error())
+		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
 
@@ -66,20 +68,13 @@ func (s *UserController) Create(c *gin.Context) {
 	err := c.ShouldBind(&req)
 	if err != nil {
 		global.Log.Error(err.Error())
+		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
 
-	// 序列化为 JSON
-	jsonData, err := json.Marshal(req)
+	err = copier.Copy(&userValidate, &req)
 	if err != nil {
-		global.Log.Error(err.Error())
-		return
-	}
-
-	// 反序列化到响应结构体
-	err = json.Unmarshal(jsonData, &userValidate)
-	if err != nil {
-		global.Log.Error(err.Error())
+		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
 
@@ -124,22 +119,15 @@ func (s *UserController) Update(c *gin.Context) {
 	err = c.ShouldBind(&req)
 	if err != nil {
 		global.Log.Error(err.Error())
+		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
 
 	req.ID = id
 	userValidate.ID = id
-	// 序列化为 JSON
-	jsonData, err := json.Marshal(req)
+	err = copier.Copy(&userValidate, &req)
 	if err != nil {
-		global.Log.Error(err.Error())
-		return
-	}
-
-	// 反序列化到响应结构体
-	err = json.Unmarshal(jsonData, &userValidate)
-	if err != nil {
-		global.Log.Error(err.Error())
+		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
 

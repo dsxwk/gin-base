@@ -37,6 +37,7 @@ func (s *LoginController) Login(c *gin.Context) {
 	err := c.ShouldBind(&req)
 	if err != nil {
 		global.Log.Error(err.Error())
+		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
 
@@ -66,6 +67,7 @@ func (s *LoginController) Login(c *gin.Context) {
 	res := make(map[string]interface{})
 	res["token"] = token
 	res["exp"] = exp
+	res["user"] = userModel
 
 	s.ApiResponse(c, global.Success, "登录成功", res)
 }

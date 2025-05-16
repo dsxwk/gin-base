@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"gin-base/app/model"
 	"gin-base/app/validate"
 	"gin-base/common"
@@ -19,6 +18,7 @@ type UserService struct {
 func (s *UserService) List(req validate.UserValidate, search validate.UserSearch) (global.PageData, error) {
 	var (
 		userModel []model.User
+		userQuery []model.UserQuery
 		pageData  global.PageData
 	)
 
@@ -41,14 +41,19 @@ func (s *UserService) List(req validate.UserValidate, search validate.UserSearch
 	}
 
 	// 执行分页查询
-	err = db.Offset(offset).Limit(limit).Find(&userModel).Error
+	err = db.Offset(offset).Limit(limit).Find(&userModel).Scan(&userQuery).Error
 	if err != nil {
 		return pageData, err
 	}
 
+	for K, m := range userModel {
+		userQuery[K].CreatedAt = utils.FormatTime(m.CreatedAt)
+		userQuery[K].UpdatedAt = utils.FormatTime(m.UpdatedAt)
+	}
+
 	pageData.Page = req.Page
 	pageData.PageSize = req.PageSize
-	pageData.List = userModel
+	pageData.List = userQuery
 
 	return pageData, nil
 }
@@ -82,19 +87,22 @@ func (this *UserService) Update(req model.User) (model.User, error) {
 
 // Detail 详情
 // @param: id int64
-// @return: model.User, error
-func (s *UserService) Detail(id int64) (model.User, error) {
+// @return: model.UserQuery, error
+func (s *UserService) Detail(id int64) (model.UserQuery, error) {
 	var (
 		userModel model.User
+		userQuery model.UserQuery
 	)
 
-	err := global.DB.First(&userModel, id).Error
-	fmt.Printf("err: %v\n", err)
+	err := global.DB.First(&userModel, id).Scan(&userQuery).Error
 	if err != nil {
-		return userModel, err
+		return userQuery, err
 	}
 
-	return userModel, nil
+	userQuery.CreatedAt = utils.FormatTime(userModel.CreatedAt)
+	userQuery.UpdatedAt = utils.FormatTime(userModel.UpdatedAt)
+
+	return userQuery, nil
 }
 
 // Delete 删除

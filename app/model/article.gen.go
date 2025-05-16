@@ -40,6 +40,8 @@ type ArticleQuery struct {
 	IsPublish  int64     `json:"is_publish" comment:"是否发布 1=已发布 2=未发布"`                               // 是否发布 1=已发布 2=未发布
 	Category   *Category `json:"category" gorm:"foreignkey:category_id;references:id" comment:"关联分类"` // 关联分类
 	Tag        []string  `json:"tag" comment:"标签"`                                                    // 标签
+	CreatedAt  string    `gorm:"column:created_at;type:datetime;comment:创建时间" json:"created_at"`      // 创建时间
+	UpdatedAt  string    `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updated_at"`      // 更新时间
 }
 
 // TableName Article's table name

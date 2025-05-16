@@ -16,9 +16,9 @@ import (
 )
 
 // FormatTime 格式化时间
-// @param: t time.Time
+// @param: t *time.Time
 // @return: string
-func FormatTime(t time.Time) string {
+func FormatTime(t *time.Time) string {
 	return t.Format("2006-01-02 15:04:05")
 }
 

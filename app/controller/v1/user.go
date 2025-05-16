@@ -177,14 +177,14 @@ func (s *UserController) Detail(c *gin.Context) {
 		return
 	}
 
-	pageData, err := userService.Detail(id)
+	user, err := userService.Detail(id)
 	if err != nil {
 		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
 
-	s.ApiResponse(c, global.Success, pageData)
+	s.ApiResponse(c, global.Success, user)
 }
 
 // Delete 删除

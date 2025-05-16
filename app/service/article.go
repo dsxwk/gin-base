@@ -69,6 +69,8 @@ func (s *ArticleService) List(req validate.ArticleValidate) (global.PageData, er
 		articleQuery[k].User = m.User
 		articleQuery[k].Category = m.Category
 		articleQuery[k].Tag = m.GetTag()
+		articleQuery[k].CreatedAt = utils.FormatTime(m.CreatedAt)
+		articleQuery[k].UpdatedAt = utils.FormatTime(m.UpdatedAt)
 	}
 
 	pageData.Page = req.Page
@@ -140,23 +142,27 @@ func (this *ArticleService) Update(req model.ArticleQuery) (model.Article, error
 
 // Detail 详情
 // @param: id int64
-// @return: model.Article, error
-func (s *ArticleService) Detail(id int64) (model.Article, error) {
+// @return: model.ArticleQuery, error
+func (s *ArticleService) Detail(id int64) (model.ArticleQuery, error) {
 	var (
 		articleModel model.Article
+		articleQuery model.ArticleQuery
 	)
 
 	err := global.DB.Preload("User", func(db *gorm.DB) *gorm.DB {
 		return db.Select("id, username, full_name, nickname, email, gender, age")
 	}).Preload("Category", func(db *gorm.DB) *gorm.DB {
 		return db.Select("id, name")
-	}).First(&articleModel, id).Error
+	}).First(&articleModel, id).Scan(&articleQuery).Error
 
 	if err != nil {
-		return articleModel, err
+		return articleQuery, err
 	}
 
-	return articleModel, nil
+	articleQuery.CreatedAt = articleModel.CreatedAt.Format("2006-01-02 15:04:05")
+	articleQuery.UpdatedAt = articleModel.UpdatedAt.Format("2006-01-02 15:04:05")
+
+	return articleQuery, nil
 }
 
 // Delete 删除

@@ -168,14 +168,14 @@ func (s *ArticleController) Detail(c *gin.Context) {
 		return
 	}
 
-	articleModel, err := articleService.Detail(id)
+	article, err := articleService.Detail(id)
 	if err != nil {
 		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
 
-	s.ApiResponse(c, global.Success, articleModel)
+	s.ApiResponse(c, global.Success, article)
 }
 
 // Delete 删除

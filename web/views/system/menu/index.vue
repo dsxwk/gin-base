@@ -22,12 +22,12 @@
         </template>
         <template #operation="{row}">
           <div class="flex items-center">
+            <el-button type="primary" size="small" @click="onOpenEditMenu('edit', row)">编辑</el-button>
             <el-popconfirm title="确定删除吗？" @confirm="onTableDelRow(row)">
               <template #reference>
-                <el-button text type="danger">删除</el-button>
+                <el-button size="small" type="danger">删除</el-button>
               </template>
             </el-popconfirm>
-            <el-button text type="primary" @click="onOpenEditMenu('edit', row)">编辑</el-button>
           </div>
         </template>
         <template #dialog>
@@ -59,7 +59,6 @@ const state = reactive({
     header: [
       { key: 'menuType', colWidth: '', title: '菜单类型', type: 'text', isCheck: true,
         render: (scope) => {
-          console.log(scope.row);
           return scope.row?.menuType;
         }
       },
@@ -67,13 +66,6 @@ const state = reactive({
       { key: 'name', colWidth: '', title: '路由名称', type: 'text', isCheck: true },
       { key: 'path', colWidth: '', title: '路由路径', type: 'text', isCheck: true },
       { key: 'redirect', colWidth: '', title: '重定向', type: 'text', isCheck: true },
-      /*{ key: 'icon', colWidth: '', title: '菜单图标', type: 'image', isCheck: true,
-        render: (scope) => {
-          return h('i', {
-            class: scope.row.meta.icon
-          });
-        },
-      },*/
       { key: 'icon', colWidth: '', title: '菜单图标', isCheck: true,
         render: (scope) => {
           return h('el-icon', {
@@ -93,6 +85,8 @@ const state = reactive({
       isSerialNo: true, // 是否显示表格序号
       isSelection: true, // 是否显示表格多选
       isOperate: true, // 是否显示表格操作栏
+      fixed: 'right', // 固定操作列
+      operationWith: 200 // 固定操作列宽度
     },
     // 搜索表单，动态生成（传空数组时，将不显示搜索，注意格式）
     search: [

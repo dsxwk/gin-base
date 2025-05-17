@@ -82,8 +82,8 @@ const state = reactive({
           return getDict(statusDict, scope.row?.gender);
         }
       },
-      {key: 'created_at', colWidth: '', title: '创建时间', type: 'datetime', isCheck: true},
-      {key: 'updated_at', colWidth: '', title: '更新时间', type: 'datetime', isCheck: true},
+      {key: 'created_at', colWidth: '', title: '创建时间', type: 'text', isCheck: true},
+      {key: 'updated_at', colWidth: '', title: '更新时间', type: 'text', isCheck: true},
     ],
     // 配置项（必传）
     config: {

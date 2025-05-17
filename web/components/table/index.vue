@@ -258,8 +258,8 @@ const onPrintTable = () => {
 };
 // 导出
 const onImportTable = () => {
-	if (state.selectlist.length <= 0) return ElMessage.warning('请先选择要导出的数据');
-	table2excel(props.header, state.selectlist, `${themeConfig.value.globalTitle} ${new Date().toLocaleString()}`);
+	if (state.selectList.length <= 0) return ElMessage.warning('请先选择要导出的数据');
+	table2excel(props.header, state.selectList, `${themeConfig.value.globalTitle} ${new Date().toLocaleString()}`);
 };
 // 刷新
 const onRefreshTable = () => {

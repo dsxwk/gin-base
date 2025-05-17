@@ -32,10 +32,10 @@ const { themeConfig } = storeToRefs(storesThemeConfig);
 
 // 重置滚动条高度
 const updateScrollbar = () => {
-	// 更新父级 scrollbar
-	layoutScrollbarRef.value.update();
-	// 更新子级 scrollbar
-	layoutMainRef.value && layoutMainRef.value!.layoutMainScrollbarRef.update();
+  // 更新父级 scrollbar
+  layoutScrollbarRef.value && layoutScrollbarRef.value.update();
+  // 更新子级 scrollbar
+  layoutMainRef.value && layoutMainRef.value.layoutMainScrollbarRef && layoutMainRef.value.layoutMainScrollbarRef.update();
 };
 // 重置滚动条高度，由于组件是异步引入的
 const initScrollBarHeight = () => {

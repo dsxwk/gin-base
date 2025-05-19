@@ -23,8 +23,8 @@
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
 						<el-form-item label="菜单类型">
 							<el-radio-group v-model="state.ruleForm.menuType">
-								<el-radio label="menu">菜单</el-radio>
-								<el-radio label="btn">按钮</el-radio>
+								<el-radio value="menu">菜单</el-radio>
+								<el-radio value="btn">按钮</el-radio>
 							</el-radio-group>
 						</el-form-item>
 					</el-col>
@@ -95,40 +95,40 @@
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 							<el-form-item label="是否隐藏">
 								<el-radio-group v-model="state.ruleForm.meta.isHide">
-									<el-radio :label="true">隐藏</el-radio>
-									<el-radio :label="false">不隐藏</el-radio>
+									<el-radio :value="true">隐藏</el-radio>
+									<el-radio :value="false">不隐藏</el-radio>
 								</el-radio-group>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 							<el-form-item label="页面缓存">
 								<el-radio-group v-model="state.ruleForm.meta.isKeepAlive">
-									<el-radio :label="true">缓存</el-radio>
-									<el-radio :label="false">不缓存</el-radio>
+									<el-radio :value="true">缓存</el-radio>
+									<el-radio :value="false">不缓存</el-radio>
 								</el-radio-group>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 							<el-form-item label="是否固定">
 								<el-radio-group v-model="state.ruleForm.meta.isAffix">
-									<el-radio :label="true">固定</el-radio>
-									<el-radio :label="false">不固定</el-radio>
+									<el-radio :value="true">固定</el-radio>
+									<el-radio :value="false">不固定</el-radio>
 								</el-radio-group>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 							<el-form-item label="是否外链">
 								<el-radio-group v-model="state.ruleForm.isLink" :disabled="state.ruleForm.meta.isIframe">
-									<el-radio :label="true">是</el-radio>
-									<el-radio :label="false">否</el-radio>
+									<el-radio :value="true">是</el-radio>
+									<el-radio :value="false">否</el-radio>
 								</el-radio-group>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 							<el-form-item label="是否内嵌">
 								<el-radio-group v-model="state.ruleForm.meta.isIframe" @change="onSelectIframeChange">
-									<el-radio :label="true">是</el-radio>
-									<el-radio :label="false">否</el-radio>
+									<el-radio :value="true">是</el-radio>
+									<el-radio :value="false">否</el-radio>
 								</el-radio-group>
 							</el-form-item>
 						</el-col>

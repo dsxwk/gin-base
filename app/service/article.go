@@ -69,8 +69,6 @@ func (s *ArticleService) List(req validate.ArticleValidate) (global.PageData, er
 		articleQuery[k].User = m.User
 		articleQuery[k].Category = m.Category
 		articleQuery[k].Tag = m.GetTag()
-		articleQuery[k].CreatedAt = utils.FormatTime(m.CreatedAt)
-		articleQuery[k].UpdatedAt = utils.FormatTime(m.UpdatedAt)
 	}
 
 	pageData.Page = req.Page
@@ -158,9 +156,6 @@ func (s *ArticleService) Detail(id int64) (model.ArticleQuery, error) {
 	if err != nil {
 		return articleQuery, err
 	}
-
-	articleQuery.CreatedAt = articleModel.CreatedAt.Format("2006-01-02 15:04:05")
-	articleQuery.UpdatedAt = articleModel.UpdatedAt.Format("2006-01-02 15:04:05")
 
 	return articleQuery, nil
 }

@@ -15,16 +15,16 @@ const TableNameCategory = "category"
 type Category struct {
 	ID        int64          `gorm:"column:id;type:int(10) unsigned;primaryKey;autoIncrement:true;comment:ID" json:"id"` // ID
 	Name      string         `gorm:"column:name;type:varchar(50);not null;comment:分类名称" json:"name"`                     // 分类名称
-	CreatedAt *time.Time     `gorm:"column:created_at;type:datetime;comment:创建时间" json:"created_at"`                     // 创建时间
-	UpdatedAt *time.Time     `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updated_at"`                     // 更新时间
+	CreatedAt *JsonTime      `gorm:"column:created_at;type:datetime;comment:创建时间" json:"created_at"`                     // 创建时间
+	UpdatedAt *JsonTime      `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updated_at"`                     // 更新时间
 	DeletedAt gorm.DeletedAt `gorm:"column:deleted_at;type:datetime;comment:删除时间" json:"deleted_at"`                     // 删除时间
 }
 
 type CategoryQuery struct {
-	ID        int64  `gorm:"column:id;type:int(10) unsigned;primaryKey;autoIncrement:true;comment:ID" json:"id"` // ID
-	Name      string `gorm:"column:name;type:varchar(50);not null;comment:分类名称" json:"name"`                     // 分类名称
-	CreatedAt string `gorm:"column:created_at;type:datetime;comment:创建时间" json:"created_at"`                     // 创建时间
-	UpdatedAt string `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updated_at"`                     // 更新时间
+	ID        int64     `gorm:"column:id;type:int(10) unsigned;primaryKey;autoIncrement:true;comment:ID" json:"id"` // ID
+	Name      string    `gorm:"column:name;type:varchar(50);not null;comment:分类名称" json:"name"`                     // 分类名称
+	CreatedAt *JsonTime `gorm:"column:created_at;type:datetime;comment:创建时间" json:"created_at"`                     // 创建时间
+	UpdatedAt *JsonTime `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updated_at"`                     // 更新时间
 }
 
 // TableName Category's table name
@@ -34,22 +34,15 @@ func (*Category) TableName() string {
 
 // BeforeCreate 创建之前
 func (s *Category) BeforeCreate(tx *gorm.DB) (err error) {
-	if s.CreatedAt == nil {
-		now := time.Now()
-		s.CreatedAt = &now
-	}
-	if s.UpdatedAt == nil {
-		now := time.Now()
-		s.UpdatedAt = &now
-	}
+	now := JsonTime(time.Now())
+	s.CreatedAt = &now
+	s.UpdatedAt = &now
 	return nil
 }
 
 // BeforeUpdate 更新之前
 func (s *Category) BeforeUpdate(tx *gorm.DB) (err error) {
-	if s.UpdatedAt == nil {
-		now := time.Now()
-		s.UpdatedAt = &now
-	}
+	now := JsonTime(time.Now())
+	s.UpdatedAt = &now
 	return nil
 }

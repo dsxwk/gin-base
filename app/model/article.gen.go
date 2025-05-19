@@ -24,8 +24,8 @@ type Article struct {
 	IsPublish  int64          `gorm:"column:is_publish;type:int(11);not null;comment:是否发布 1=已发布 2=未发布" json:"is_publish"`  // 是否发布 1=已发布 2=未发布
 	Category   *Category      `json:"category" gorm:"foreignkey:category_id;references:id"`                                // 关联分类
 	Tag        *string        `gorm:"column:tag;type:json;comment:标签" json:"tag"`                                          // 标签
-	CreatedAt  *time.Time     `gorm:"column:created_at;type:datetime;comment:创建时间" json:"created_at"`                      // 创建时间
-	UpdatedAt  *time.Time     `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updated_at"`                      // 更新时间
+	CreatedAt  *JsonTime      `gorm:"column:created_at;type:datetime;comment:创建时间" json:"created_at"`                      // 创建时间
+	UpdatedAt  *JsonTime      `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updated_at"`                      // 更新时间
 	DeletedAt  gorm.DeletedAt `gorm:"column:deleted_at;type:datetime;comment:删除时间" json:"deleted_at"`                      // 删除时间
 }
 
@@ -40,8 +40,8 @@ type ArticleQuery struct {
 	IsPublish  int64     `json:"is_publish" comment:"是否发布 1=已发布 2=未发布"`                               // 是否发布 1=已发布 2=未发布
 	Category   *Category `json:"category" gorm:"foreignkey:category_id;references:id" comment:"关联分类"` // 关联分类
 	Tag        []string  `json:"tag" comment:"标签"`                                                    // 标签
-	CreatedAt  string    `gorm:"column:created_at;type:datetime;comment:创建时间" json:"created_at"`      // 创建时间
-	UpdatedAt  string    `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updated_at"`      // 更新时间
+	CreatedAt  *JsonTime `gorm:"column:created_at;type:datetime;comment:创建时间" json:"created_at"`      // 创建时间
+	UpdatedAt  *JsonTime `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updated_at"`      // 更新时间
 }
 
 // TableName Article's table name
@@ -51,23 +51,16 @@ func (*Article) TableName() string {
 
 // BeforeCreate 创建之前
 func (s *Article) BeforeCreate(tx *gorm.DB) (err error) {
-	if s.CreatedAt == nil {
-		now := time.Now()
-		s.CreatedAt = &now
-	}
-	if s.UpdatedAt == nil {
-		now := time.Now()
-		s.UpdatedAt = &now
-	}
+	now := JsonTime(time.Now())
+	s.CreatedAt = &now
+	s.UpdatedAt = &now
 	return nil
 }
 
 // BeforeUpdate 更新之前
 func (s *Article) BeforeUpdate(tx *gorm.DB) (err error) {
-	if s.UpdatedAt == nil {
-		now := time.Now()
-		s.UpdatedAt = &now
-	}
+	now := JsonTime(time.Now())
+	s.UpdatedAt = &now
 	return nil
 }
 

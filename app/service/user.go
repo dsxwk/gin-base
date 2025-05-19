@@ -46,11 +46,6 @@ func (s *UserService) List(req validate.UserValidate, search validate.UserSearch
 		return pageData, err
 	}
 
-	for K, m := range userModel {
-		userQuery[K].CreatedAt = utils.FormatTime(m.CreatedAt)
-		userQuery[K].UpdatedAt = utils.FormatTime(m.UpdatedAt)
-	}
-
 	pageData.Page = req.Page
 	pageData.PageSize = req.PageSize
 	pageData.List = userQuery
@@ -76,7 +71,7 @@ func (s *UserService) Create(req model.User) (model.User, error) {
 // Update 更新
 // @param: req model.User
 // @return: model.User, error
-func (this *UserService) Update(req model.User) (model.User, error) {
+func (s *UserService) Update(req model.User) (model.User, error) {
 	err := global.DB.Updates(&req).Error
 	if err != nil {
 		return req, err
@@ -98,9 +93,6 @@ func (s *UserService) Detail(id int64) (model.UserQuery, error) {
 	if err != nil {
 		return userQuery, err
 	}
-
-	userQuery.CreatedAt = utils.FormatTime(userModel.CreatedAt)
-	userQuery.UpdatedAt = utils.FormatTime(userModel.UpdatedAt)
 
 	return userQuery, nil
 }

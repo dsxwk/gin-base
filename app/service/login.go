@@ -23,7 +23,7 @@ func (s *LoginService) Login(username string, password string) (model.User, erro
 	)
 
 	if err := global.DB.Where("username = ?", username).First(&userModel).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return userModel, errors.New("登录账号错误")
 		}
 	}

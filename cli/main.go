@@ -205,7 +205,7 @@ func createTableStruct(tableName string, path string, camel bool) {
 			if detailType.Name() == "deleted_at" {
 				return "gorm.DeletedAt"
 			}
-			return "*time.Time"
+			return "*JsonTime"
 		},
 		//"timestamp":  func(detailType gorm.ColumnType) (dataType string) { return "string" }, // 添加此行将 timestamp 转换为 string
 		//"date":       func(detailType gorm.ColumnType) (dataType string) { return "string" }, // 添加此行将 date 转换为 string
@@ -250,32 +250,31 @@ func insertHooksIntoModel(path string, tableName string) {
 		fmt.Printf("Error opening file: %v\n", err)
 		return
 	}
-	defer file.Close()
+	defer func(file *os.File) {
+		err = file.Close()
+		if err != nil {
+			fmt.Printf("Error closing file: %v\n", err)
+			return
+		}
+	}(file)
 
 	// 准备钩子方法的内容
 	hooks := fmt.Sprintf(`
 // BeforeCreate 创建之前
 func (s *%s) BeforeCreate(tx *gorm.DB) (err error) {
-	if s.CreatedAt == nil {
-        now := time.Now()
-        s.CreatedAt = &now
-    }
-    if s.UpdatedAt == nil {
-        now := time.Now()
-        s.UpdatedAt = &now
-    }
+    now := JsonTime(time.Now())
+    s.CreatedAt = &now
+    s.UpdatedAt = &now
     return nil
 }
 
 // BeforeUpdate 更新之前
 func (s *%s) BeforeUpdate(tx *gorm.DB) (err error) {
-	if s.UpdatedAt == nil {
-		now := time.Now()
-		s.UpdatedAt = &now
-	}
-	return nil
+    now := JsonTime(time.Now())
+    s.UpdatedAt = &now
+    return nil
 }
-	`, structName, structName)
+`, structName, structName)
 
 	// 将钩子方法写入文件
 	_, err = file.WriteString(hooks)

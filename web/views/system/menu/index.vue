@@ -42,6 +42,7 @@
 import {defineAsyncComponent, reactive, ref, onMounted, h} from 'vue';
 import { ElMessage } from 'element-plus';
 import {menuJson} from '/@/static/menu';
+import SvgIcon from '/@/components/svgIcon/index.vue';
 
 // 引入组件
 const Table = defineAsyncComponent(() => import('/@/components/table/index.vue'));
@@ -68,8 +69,11 @@ const state = reactive({
       { key: 'redirect', colWidth: '', title: '重定向', type: 'text', isCheck: true },
       { key: 'icon', colWidth: '', title: '菜单图标', isCheck: true,
         render: (scope) => {
-          return h('el-icon', {
+          /*return h('el-icon', {
             class: scope.row?.meta?.icon
+          });*/
+          return h(SvgIcon, {
+            name: scope.row?.meta?.icon,
           });
         },
       },

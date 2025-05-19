@@ -1,5 +1,5 @@
 <template>
-  <div class="home-container layout-pd">
+  <div class="container layout-pd">
     home
   </div>
 </template>

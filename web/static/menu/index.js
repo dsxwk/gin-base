@@ -3,6 +3,8 @@ export const menuJson = {
     "type": "adminMenu",
     "data": [
         {
+            "id": 1,
+            "pid": 0,
             "path": "/home",
             "name": "home",
             "component": "home/index",
@@ -18,9 +20,14 @@ export const menuJson = {
                     "common"
                 ],
                 "icon": "iconfont icon-shouye"
-            }
+            },
+            "title": "首页",
+            "menuType": "menu",
+            "children": []
         },
         {
+            "id": 2,
+            "pid": 0,
             "path": "/system",
             "name": "system",
             "component": "layout/routerView/parent",
@@ -35,10 +42,12 @@ export const menuJson = {
                 "roles": [
                     "admin"
                 ],
-                "icon": "iconfont icon-xitongshezhi"
+                "icon": "iconfont icon-xitongshezhi",
             },
             "children": [
                 {
+                    "id": 3,
+                    "pid": 0,
                     "path": "/system/menu",
                     "name": "systemMenu",
                     "component": "system/menu/index",
@@ -53,9 +62,13 @@ export const menuJson = {
                             "admin"
                         ],
                         "icon": "iconfont icon-caidan"
-                    }
+                    },
+                    "title": "菜单管理",
+                    "children": []
                 },
                 {
+                    "id": 4,
+                    "pid": 0,
                     "path": "/system/user",
                     "name": "systemUser",
                     "component": "system/user/index",
@@ -70,9 +83,13 @@ export const menuJson = {
                             "admin"
                         ],
                         "icon": "iconfont icon-icon-"
-                    }
+                    },
+                    "title": "用户管理",
+                    "children": []
                 },
                 {
+                    "id": 5,
+                    "pid": 0,
                     "path": "/system/role",
                     "name": "systemRole",
                     "component": "system/role/index",
@@ -86,8 +103,12 @@ export const menuJson = {
                         "roles": ["admin"],
                         "icon": "ele-ColdDrink",
                     },
+                    "title": "角色管理",
+                    "children": []
                 },
                 {
+                    "id": 6,
+                    "pid": 0,
                     "path": "/system/dic",
                     "name": "systemDic",
                     "component": "system/dic/index",
@@ -101,8 +122,11 @@ export const menuJson = {
                         "roles": ["admin"],
                         "icon": "ele-SetUp",
                     },
-                },
-            ]
-        },
+                    "title": "字典管理",
+                    "children": []
+                }
+            ],
+            "title": "系统设置"
+        }
     ]
 };

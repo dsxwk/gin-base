@@ -5,10 +5,10 @@
       <Table
           ref="tableRef"
           v-bind="state.tableData"
-          class="table-demo"
           @delRow="onTableDelRow"
-          @pageChange="onTablePageChange"
           @sortHeader="onSortHeader"
+          row-key="id"
+          :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
       >
         <template #tools>
           <div class="table-tool">
@@ -31,7 +31,7 @@
           </div>
         </template>
         <template #dialog>
-          <MenuDialog ref="menuDialogRef" @refresh="getTableData()" />
+          <MenuDialog ref="menuDialogRef" @refresh="getTableData(state.tableData.param)" />
         </template>
       </Table>
     </div>
@@ -86,7 +86,8 @@ const state = reactive({
       isSelection: true, // 是否显示表格多选
       isOperate: true, // 是否显示表格操作栏
       fixed: 'right', // 固定操作列
-      operationWith: 200 // 固定操作列宽度
+      operationWith: 200, // 固定操作列宽度
+      isPage: true, // 是否不分页,默认不传或者为false时展示分页,为true时不展示分页
     },
     // 搜索表单，动态生成（传空数组时，将不显示搜索，注意格式）
     search: [
@@ -105,11 +106,8 @@ const state = reactive({
         ],
       },
     ],
-    // 搜索参数（不用传，用于分页、搜索时传给后台的值，`getTableData` 中使用）
-    param: {
-      page: 1,
-      pageSize: 10,
-    },
+    // 搜索参数、搜索时传给后台的值,`getTableData` 中使用）
+    param: {},
     // 打印标题
     printName: 'ginBaseAdmin 表格打印演示',
   },
@@ -123,31 +121,25 @@ const onOpenEditMenu = (type, row) => {
   menuDialogRef.value.openDialog(type, row);
 };
 // 初始化列表数据
-const getTableData = () => {
+const getTableData = async (param) => {
   state.tableData.config.loading = true;
   state.tableData.data = menuJson.data;
-  // 数据总数（模拟，真实从接口取）
-  state.tableData.config.total = state.tableData.data.length;
   setTimeout(() => {
     state.tableData.config.loading = false;
   }, 500);
 };
 // 搜索点击时表单回调
 const onSearch = (data) => {
-  state.tableData.param = Object.assign({}, state.tableData.param, { ...data });
-  tableRef.value.pageReset();
+  const filterData = Object.fromEntries(
+      Object.entries(data).filter(([key, value]) => value !== null && value !== undefined && value !== '')
+  );
+  state.tableData.param = Object.assign({}, state.tableData.param, filterData);
+  getTableData(state.tableData.param);
 };
 // 删除当前项回调
 const onTableDelRow = (row) => {
   ElMessage.success(`删除${row.name}成功！`);
   state.tableData.data = state.tableData.data.filter((item) => item.id !== row.id);
-  // getTableData();
-};
-// 分页改变时回调
-const onTablePageChange = (page) => {
-  state.tableData.param.page = page.page;
-  state.tableData.param.pageSize = page.pageSize;
-  getTableData();
 };
 // 拖动显示列排序回调
 const onSortHeader = (data) => {
@@ -155,7 +147,7 @@ const onSortHeader = (data) => {
 };
 // 页面加载时
 onMounted(() => {
-  getTableData();
+  getTableData(state.tableData.param);
 });
 </script>
 

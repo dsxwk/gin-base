@@ -106,7 +106,7 @@
 				<el-empty description="暂无数据" />
 			</template>
 		</el-table>
-		<div class="table-footer mt15">
+		<div class="table-footer mt15" v-if="!config.isPage">
 			<el-pagination
 				v-model:current-page="state.page.page"
 				v-model:page-size="state.page.pageSize"

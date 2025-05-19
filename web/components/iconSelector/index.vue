@@ -51,7 +51,6 @@
 
 <script setup name="iconSelector">
 import { defineAsyncComponent, ref, reactive, onMounted, nextTick, computed, watch } from 'vue';
-import { TabsPaneContext } from 'element-plus';
 import initIconfont from '/@/utils/getStyleSheets';
 import '/@/theme/iconSelector.scss';
 

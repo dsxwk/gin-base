@@ -12,19 +12,14 @@ export function authDirective(app) {
 	app.directive('auth', {
 		mounted(el, binding) {
 			const stores = useUserInfo();
-			if (!stores.userInfos.authBtnList.some((v) => v === binding.value)) el?.parentNode.removeChild(el);
+			if (!stores.userInfos.authBtnList.includes(binding.value)) el?.parentNode.removeChild(el);
 		},
 	});
 	// 多个权限验证，满足一个则显示（v-auths="[xxx,xxx]"）
 	app.directive('auths', {
 		mounted(el, binding) {
-			let flag = false;
 			const stores = useUserInfo();
-			stores.userInfos.authBtnList.map((val) => {
-				binding.value.map((v) => {
-					if (val === v) flag = true;
-				});
-			});
+			const flag = binding.value.some(v => stores.userInfos.authBtnList.includes(v));
 			if (!flag) el?.parentNode.removeChild(el);
 		},
 	});

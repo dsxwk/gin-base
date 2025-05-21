@@ -23,6 +23,7 @@ func LoadRouters(router *gin.Engine) {
 		user    UserRouter
 		article ArticleRouter
 		cache   CacheRouter
+		menu    MenuRouter
 	)
 
 	// 登录
@@ -37,5 +38,7 @@ func LoadRouters(router *gin.Engine) {
 		article.RegisterRoutes(auth)
 		// 缓存
 		cache.RegisterRoutes(auth)
+		// 菜单
+		menu.RegisterRoutes(auth)
 	}
 }

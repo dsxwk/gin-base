@@ -9,8 +9,10 @@ import (
 	"gorm.io/gen"
 	"gorm.io/gorm"
 	"html/template"
+	"io/ioutil"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 )
 
@@ -167,7 +169,7 @@ func generateFile(templateFile, filename string, function string, method string,
 // generateModel 生成 model
 func generateModel(tableName string, path string, camel bool) {
 	if tableName == "" {
-		fmt.Println("请输入表名,Usage: go run main.go --make=model --tableName=your table name")
+		fmt.Println("请输入表名,Usage: go run ./cli/main.go --make=model --tableName=your table name")
 		return
 	}
 
@@ -244,7 +246,50 @@ func insertHooksIntoModel(path string, tableName string) {
 	// 首字母大写
 	structName = strings.ToUpper(string(structName[0])) + structName[1:]
 
-	// 打开文件
+	// 读取文件内容
+	content, err := ioutil.ReadFile(modelFilePath)
+	if err != nil {
+		fmt.Printf("Error reading file: %v\n", err)
+		return
+	}
+	fileContent := string(content)
+
+	// 检查是否已导入 time 包
+	if !strings.Contains(fileContent, `"time"`) {
+		// 用正则查找 import 块
+		re := regexp.MustCompile(`import\s*\(([^)]*)\)`)
+		if re.MatchString(fileContent) {
+			// 已有多行 import，插入 "time"
+			fileContent = re.ReplaceAllStringFunc(fileContent, func(s string) string {
+				if strings.Contains(s, `"time"`) {
+					return s
+				}
+				return strings.Replace(s, ")", `    "time"`+"\n)", 1)
+			})
+		} else {
+			// 没有多行 import，查找单行 import 或插入新的 import 块
+			if strings.Contains(fileContent, `import "gorm.io/gorm"`) {
+				fileContent = strings.Replace(fileContent, `import "gorm.io/gorm"`, `import (
+    "gorm.io/gorm"
+    "time"
+)`, 1)
+			} else {
+				// 没有 import，插入到 package 后
+				lines := strings.SplitN(fileContent, "\n", 2)
+				if len(lines) > 1 {
+					fileContent = lines[0] + "\nimport (\n    \"time\"\n)\n" + lines[1]
+				}
+			}
+		}
+		// 覆盖写回文件
+		err = ioutil.WriteFile(modelFilePath, []byte(fileContent), 0666)
+		if err != nil {
+			fmt.Printf("Error writing import to file: %v\n", err)
+			return
+		}
+	}
+
+	// 追加钩子方法
 	file, err := os.OpenFile(modelFilePath, os.O_APPEND|os.O_RDWR, 0666)
 	if err != nil {
 		fmt.Printf("Error opening file: %v\n", err)

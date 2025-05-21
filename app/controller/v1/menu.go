@@ -160,7 +160,7 @@ func (s *MenuController) ActionList(c *gin.Context) {
 		menuService service.MenuService
 	)
 
-	menuIDParam := c.Param("menu_id")
+	menuIDParam := c.Param("id")
 	if menuIDParam == "" {
 		s.ApiResponse(c, global.ArgsError, "菜单id参数必传")
 		return
@@ -183,7 +183,7 @@ func (s *MenuController) ActionList(c *gin.Context) {
 }
 
 // ActionCreate 功能创建
-// @Router /api/v1/menu/{menu_id}/action [post]
+// @Router /api/v1/menu/{id}/action [post]
 func (s *MenuController) ActionCreate(c *gin.Context) {
 	var (
 		menuService        service.MenuService
@@ -191,7 +191,7 @@ func (s *MenuController) ActionCreate(c *gin.Context) {
 		req                model.MenuActionQuery
 	)
 
-	menuIDParam := c.Param("menu_id")
+	menuIDParam := c.Param("id")
 	if menuIDParam == "" {
 		s.ApiResponse(c, global.ArgsError, "菜单id参数必传")
 		return
@@ -234,7 +234,7 @@ func (s *MenuController) ActionCreate(c *gin.Context) {
 }
 
 // ActionUpdate 功能更新
-// @Router /api/v1/menu/{menu_id}/action/{id} [put]
+// @Router /api/v1/menu/{id}/action/{action_id} [put]
 func (s *MenuController) ActionUpdate(c *gin.Context) {
 	var (
 		menuService        service.MenuService
@@ -242,7 +242,7 @@ func (s *MenuController) ActionUpdate(c *gin.Context) {
 		req                model.MenuActionQuery
 	)
 
-	menuIDParam := c.Param("menu_id")
+	menuIDParam := c.Param("id")
 	if menuIDParam == "" {
 		s.ApiResponse(c, global.ArgsError, "菜单id参数必传")
 		return
@@ -254,15 +254,15 @@ func (s *MenuController) ActionUpdate(c *gin.Context) {
 		return
 	}
 
-	IDParam := c.Param("id")
+	IDParam := c.Param("action_id")
 	if IDParam == "" {
-		s.ApiResponse(c, global.ArgsError, "id参数必传")
+		s.ApiResponse(c, global.ArgsError, "功能id参数必传")
 		return
 	}
 
 	ID, err := strconv.ParseInt(IDParam, 10, 64)
 	if err != nil {
-		s.ApiResponse(c, global.ArgsError, "id参数格式错误")
+		s.ApiResponse(c, global.ArgsError, "功能id参数格式错误")
 		return
 	}
 
@@ -298,25 +298,25 @@ func (s *MenuController) ActionUpdate(c *gin.Context) {
 }
 
 // ActionDelete 功能删除
-// @Router /api/v1/menu/{menu_id}/action/{id} [delete]
+// @Router /api/v1/menu/{id}/action/{action_id} [delete]
 func (s *MenuController) ActionDelete(c *gin.Context) {
 	var (
 		menuService service.MenuService
 	)
 
-	iDParam := c.Param("id")
+	iDParam := c.Param("action_id")
 	if iDParam == "" {
-		s.ApiResponse(c, global.ArgsError, "id参数必传")
+		s.ApiResponse(c, global.ArgsError, "功能id参数必传")
 		return
 	}
 
 	ID, err := strconv.ParseInt(iDParam, 10, 64)
 	if err != nil {
-		s.ApiResponse(c, global.ArgsError, "id参数格式错误")
+		s.ApiResponse(c, global.ArgsError, "功能id参数格式错误")
 		return
 	}
 
-	menuIDParam := c.Param("menu_id")
+	menuIDParam := c.Param("id")
 	if menuIDParam == "" {
 		s.ApiResponse(c, global.ArgsError, "菜单id参数必传")
 		return

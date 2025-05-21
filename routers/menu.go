@@ -26,14 +26,14 @@ func (r MenuRouter) RegisterRoutes(routerGroup *gin.RouterGroup) {
 	routerGroup.DELETE("/menu/:id", controller.Delete)
 
 	// 功能列表
-	routerGroup.GET("/menu/:menu_id/action", controller.ActionList)
+	routerGroup.GET("/menu/:id/action", controller.ActionList)
 
 	// 功能创建
-	routerGroup.POST("/menu/:menu_id/action", controller.ActionCreate)
+	routerGroup.POST("/menu/:id/action", controller.ActionCreate)
 
 	// 功能更新
-	routerGroup.PUT("/menu/:menu_id/action/:id", controller.ActionUpdate)
+	routerGroup.PUT("/menu/:id/action/:action_id", controller.ActionUpdate)
 
 	// 功能删除
-	routerGroup.DELETE("/menu/:menu_id/action/:id", controller.ActionDelete)
+	routerGroup.DELETE("/menu/:id/action/:action_id", controller.ActionDelete)
 }

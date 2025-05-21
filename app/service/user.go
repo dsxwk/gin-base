@@ -69,8 +69,8 @@ func (s *UserService) Create(req model.User) (model.User, error) {
 }
 
 // Update 更新
-// @param: req model.User
-// @return: model.User, error
+// @param req model.User
+// @return model.User, error
 func (s *UserService) Update(req model.User) (model.User, error) {
 	err := global.DB.Updates(&req).Error
 	if err != nil {
@@ -81,8 +81,8 @@ func (s *UserService) Update(req model.User) (model.User, error) {
 }
 
 // Detail 详情
-// @param: id int64
-// @return: model.UserQuery, error
+// @param id int64
+// @return model.UserQuery, error
 func (s *UserService) Detail(id int64) (model.UserQuery, error) {
 	var (
 		userModel model.User
@@ -98,8 +98,8 @@ func (s *UserService) Detail(id int64) (model.UserQuery, error) {
 }
 
 // Delete 删除
-// @param: id int64
-// @return: model.User, error
+// @param id int64
+// @return model.User, error
 func (s *UserService) Delete(id int64) (model.User, error) {
 	var (
 		userModel model.User

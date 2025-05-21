@@ -17,8 +17,8 @@ type ArticleService struct {
 }
 
 // List 列表
-// @param: req validate.ArticleValidate
-// @return: global.PageData, error
+// @param req validate.ArticleValidate
+// @return global.PageData, error
 func (s *ArticleService) List(req validate.ArticleValidate) (global.PageData, error) {
 	// scan
 	/*type field struct {
@@ -79,8 +79,8 @@ func (s *ArticleService) List(req validate.ArticleValidate) (global.PageData, er
 }
 
 // Create 创建
-// @param: req model.Article
-// @return: model.Article, error
+// @param req model.Article
+// @return model.Article, error
 func (s *ArticleService) Create(req model.ArticleQuery) (model.Article, error) {
 	var (
 		articleModel model.Article
@@ -101,8 +101,8 @@ func (s *ArticleService) Create(req model.ArticleQuery) (model.Article, error) {
 }
 
 // Update 更新
-// @param: req model.Article
-// @return: model.Article, error
+// @param req model.Article
+// @return model.Article, error
 func (this *ArticleService) Update(req model.ArticleQuery) (model.Article, error) {
 	var (
 		articleModel model.Article
@@ -139,8 +139,8 @@ func (this *ArticleService) Update(req model.ArticleQuery) (model.Article, error
 }
 
 // Detail 详情
-// @param: id int64
-// @return: model.ArticleQuery, error
+// @param id int64
+// @return model.ArticleQuery, error
 func (s *ArticleService) Detail(id int64) (model.ArticleQuery, error) {
 	var (
 		articleModel model.Article
@@ -161,8 +161,8 @@ func (s *ArticleService) Detail(id int64) (model.ArticleQuery, error) {
 }
 
 // Delete 删除
-// @param: id int64
-// @return: model.Article, error
+// @param id int64
+// @return model.Article, error
 func (s *ArticleService) Delete(id int64) (model.Article, error) {
 	var (
 		articleModel model.Article

@@ -153,7 +153,6 @@ func (s *UserController) Update(c *gin.Context) {
 func (s *UserController) Detail(c *gin.Context) {
 	var (
 		userService service.UserService
-		req         validate.UserValidate
 	)
 
 	idParam := c.Param("id")
@@ -165,15 +164,6 @@ func (s *UserController) Detail(c *gin.Context) {
 	id, err := strconv.ParseInt(idParam, 10, 64)
 	if err != nil {
 		s.ApiResponse(c, global.ArgsError, "id参数格式错误")
-		return
-	}
-
-	req.ID = id
-
-	// 验证
-	err = validate.GetUserValidate(req, "detail")
-	if err != nil {
-		s.ApiResponse(c, global.ArgsError, err.Error())
 		return
 	}
 
@@ -191,8 +181,7 @@ func (s *UserController) Detail(c *gin.Context) {
 // @Router /v1/user/{id} [delete]
 func (s *UserController) Delete(c *gin.Context) {
 	var (
-		userService  service.UserService
-		userValidate validate.UserValidate
+		userService service.UserService
 	)
 
 	idParam := c.Param("id")
@@ -204,15 +193,6 @@ func (s *UserController) Delete(c *gin.Context) {
 	id, err := strconv.ParseInt(idParam, 10, 64)
 	if err != nil {
 		s.ApiResponse(c, global.ArgsError, "id参数格式错误")
-		return
-	}
-
-	userValidate.ID = id
-
-	// 验证
-	err = validate.GetUserValidate(userValidate, "delete")
-	if err != nil {
-		s.ApiResponse(c, global.ArgsError, err.Error())
 		return
 	}
 

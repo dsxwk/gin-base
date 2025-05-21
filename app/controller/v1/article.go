@@ -143,8 +143,7 @@ func (s *ArticleController) Update(c *gin.Context) {
 // @Router /api/v1/article/{id} [get]
 func (s *ArticleController) Detail(c *gin.Context) {
 	var (
-		articleService  service.ArticleService
-		articleValidate validate.ArticleValidate
+		articleService service.ArticleService
 	)
 
 	idParam := c.Param("id")
@@ -156,15 +155,6 @@ func (s *ArticleController) Detail(c *gin.Context) {
 	id, err := strconv.ParseInt(idParam, 10, 64)
 	if err != nil {
 		s.ApiResponse(c, global.ArgsError, "id参数格式错误")
-		return
-	}
-
-	articleValidate.ID = id
-
-	// 验证
-	err = validate.GetArticleValidate(articleValidate, "detail")
-	if err != nil {
-		s.ApiResponse(c, global.ArgsError, err.Error())
 		return
 	}
 
@@ -182,8 +172,7 @@ func (s *ArticleController) Detail(c *gin.Context) {
 // @Router /api/v1/article/{id} [delete]
 func (s *ArticleController) Delete(c *gin.Context) {
 	var (
-		articleService  service.ArticleService
-		articleValidate validate.ArticleValidate
+		articleService service.ArticleService
 	)
 
 	idParam := c.Param("id")
@@ -195,15 +184,6 @@ func (s *ArticleController) Delete(c *gin.Context) {
 	id, err := strconv.ParseInt(idParam, 10, 64)
 	if err != nil {
 		s.ApiResponse(c, global.ArgsError, "id参数格式错误")
-		return
-	}
-
-	articleValidate.ID = id
-
-	// 验证
-	err = validate.GetArticleValidate(articleValidate, "delete")
-	if err != nil {
-		s.ApiResponse(c, global.ArgsError, err.Error())
 		return
 	}
 

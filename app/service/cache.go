@@ -12,8 +12,9 @@ type CacheService struct {
 }
 
 // SetCache 设置缓存
-// @param: key string, value interface{}, expire time.Duration
-// @return: bool, error
+// @param key string, value interface{}, expire time.Duration
+// @param expire time.Duration
+// @return bool, error
 func (s *CacheService) SetCache(key string, value interface{}, expire time.Duration) (bool, error) {
 	err := global.Cache.SetCache(key, value, expire)
 	if err != nil {
@@ -24,8 +25,8 @@ func (s *CacheService) SetCache(key string, value interface{}, expire time.Durat
 }
 
 // GetCache 获取缓存
-// @param: key string
-// @return: interface{}, bool
+// @param key string
+// @return interface{}, bool
 func (s *CacheService) GetCache(key string) (interface{}, bool) {
 	res, ok := global.Cache.GetCache(key)
 	if ok {
@@ -36,8 +37,8 @@ func (s *CacheService) GetCache(key string) (interface{}, bool) {
 }
 
 // DeleteCache 删除缓存
-// @param: key string
-// @return: bool, error
+// @param key string
+// @return bool, error
 func (s *CacheService) DeleteCache(key string) (bool, error) {
 	err := global.Cache.DeleteCache(key)
 	if err != nil {
@@ -48,8 +49,7 @@ func (s *CacheService) DeleteCache(key string) (bool, error) {
 }
 
 // Send http请求测试
-// @param: none
-// @return: interface{}
+// @return interface{}
 func (s *CacheService) Send() (interface{}, error) {
 	res, err := utils.HttpRequest("put", "http://127.0.0.1:8080/api/v1/article/1", map[string]string{
 		"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDAwNTAwNzAsImlkIjoxfQ.rsULvvOvFb2YO8D5hOHY6eCU9NxfNbYrNmG1VZQx0aw",

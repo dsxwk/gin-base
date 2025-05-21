@@ -316,6 +316,18 @@ func (s *MenuController) ActionDelete(c *gin.Context) {
 		return
 	}
 
+	menuIDParam := c.Param("menu_id")
+	if menuIDParam == "" {
+		s.ApiResponse(c, global.ArgsError, "菜单id参数必传")
+		return
+	}
+
+	menuID, err := strconv.ParseInt(menuIDParam, 10, 64)
+	if err != nil {
+		s.ApiResponse(c, global.ArgsError, "菜单id参数格式错误")
+		return
+	}
+
 	data, err := menuService.ActionDelete(ID, menuID)
 	if err != nil {
 		global.Log.Error(err.Error())

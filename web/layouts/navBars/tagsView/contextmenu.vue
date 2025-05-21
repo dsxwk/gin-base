@@ -1,13 +1,13 @@
 <template>
 	<transition name="el-zoom-in-center">
 		<div
-			aria-hidden="true"
 			class="el-dropdown__popper el-popper is-light is-pure custom-contextmenu"
 			role="tooltip"
 			data-popper-placement="bottom"
 			:style="`top: ${dropdowns.y + 5}px;left: ${dropdowns.x}px;`"
 			:key="Math.random()"
-			v-show="state.isShow"
+      v-show="state.isShow"
+      :aria-hidden="!state.isShow"
 		>
 			<ul class="el-dropdown-menu">
 				<template v-for="(v, k) in state.dropdownList">

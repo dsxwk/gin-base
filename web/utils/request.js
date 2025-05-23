@@ -25,16 +25,19 @@ export default async function request(path, config) {
         NextLoading.done();
 
         if (res?.code === 401) {
+            Session.clear();
             ElMessageBox.confirm(
                 '点击确定跳转至登录', res?.msg, {}
             ).then(
                 () => {
-                    Session.clear();
                     window.location.href = '/';
                 }
             ).catch(
                 () => {
                     ElMessage.info('已取消');
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 100);
                 }
             );
         }

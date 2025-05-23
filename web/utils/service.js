@@ -10,15 +10,17 @@ export default function createService(module, headers = {}) {
     }
 
     Object.entries(module).forEach(([key, value]) => {
-        if (value.token !== undefined && value.token.value) {
-            hds[value?.token.name] = Session.get('token');
-        }
-
         service[key] = async function (params) {
+            // 每次请求都动态获取 token
+            let dynamicHeaders = {...hds};
+            if (value.token !== undefined && value.token.value) {
+                dynamicHeaders[value?.token.name] = Session.get('token');
+            }
+
             const {url, method} = value;
             const config = {
                 method,
-                headers: hds,
+                headers: dynamicHeaders,
             };
             if (method.toUpperCase() === 'POST' || method.toUpperCase() === 'PUT') {
                 config.body = JSON.stringify(params);

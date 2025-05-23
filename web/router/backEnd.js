@@ -1,3 +1,4 @@
+import {nextTick} from 'vue';
 import {useRequestOldRoutes} from '/@/stores/requestOldRoutes';
 import pinia from '/@/stores/index';
 import {Session} from '/@/utils/storage';

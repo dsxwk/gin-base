@@ -13,9 +13,10 @@
 			left: 15px;
 		}
 		.el-tabs__header {
-			display: flex;
+			/*display: flex;
 			justify-content: flex-end;
-			padding: 0 15px;
+			padding: 0 15px;*/
+			padding: 0 15px 0 140px;
 			border-bottom: 1px solid var(--el-border-color-light);
 			margin: 0 !important;
 			.el-tabs__nav-wrap {

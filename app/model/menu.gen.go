@@ -5,6 +5,7 @@
 package model
 
 import (
+	"encoding/json"
 	"gorm.io/gorm"
 	"time"
 )
@@ -13,41 +14,48 @@ const TableNameMenu = "menu"
 
 // Menu 菜单表
 type Menu struct {
-	ID             int64           `gorm:"column:id;type:int(10) unsigned;primaryKey;autoIncrement:true;comment:ID" json:"id"`               // ID
-	Pid            int64           `gorm:"column:pid;type:int(10) unsigned;not null;comment:父级id" json:"pid"`                                // 父级id
-	Title          string          `gorm:"column:title;type:varchar(50);not null;comment:菜单名称" json:"title"`                                 // 菜单名称
-	Name           string          `gorm:"column:name;type:varchar(50);not null;comment:路由名称" json:"name"`                                   // 路由名称
-	Path           string          `gorm:"column:path;type:varchar(50);not null;comment:路由路径" json:"path"`                                   // 路由路径
-	Redirect       string          `gorm:"column:redirect;type:varchar(50);not null;comment:重定向" json:"redirect"`                            // 重定向
-	Icon           string          `gorm:"column:icon;type:varchar(50);not null;comment:菜单图标" json:"icon"`                                   // 菜单图标
-	ComponentAlias string          `gorm:"column:component_alias;type:varchar(100);not null;comment:组件路径" json:"component_alias"`            // 组件路径
-	IsLink         string          `gorm:"column:is_link;type:varchar(255);not null;comment:链接地址" json:"is_link"`                            // 链接地址
-	IsHide         int64           `gorm:"column:is_hide;type:tinyint(3) unsigned;not null;default:1;comment:是否隐藏 1=显示 2=隐藏" json:"is_hide"` // 是否隐藏 1=显示 2=隐藏
-	Status         int64           `gorm:"column:status;type:tinyint(3) unsigned;not null;default:1;comment:状态 1=启用 2=停用" json:"status"`     // 状态 1=启用 2=停用
-	Sort           int64           `gorm:"column:sort;type:int(10) unsigned;not null;comment:排序" json:"sort"`                                // 排序
-	MenuAction     []*MenuAction   `json:"menu_action" gorm:"foreignkey:menu_id;references:id" comment:"菜单方法"`                               // 菜单方法
-	CreatedAt      *JsonTime       `gorm:"column:created_at;type:datetime;comment:创建时间" json:"created_at"`                                   // 创建时间
-	UpdatedAt      *JsonTime       `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updated_at"`                                   // 更新时间
-	DeletedAt      *gorm.DeletedAt `gorm:"column:deleted_at;type:datetime;comment:删除时间" json:"deleted_at"`                                   // 删除时间
+	ID         int64           `gorm:"column:id;type:int(10) unsigned;primaryKey;autoIncrement:true;comment:ID" json:"id"`                 // ID
+	Pid        int64           `gorm:"column:pid;type:int(10) unsigned;not null;comment:父级id" json:"pid"`                                  // 父级id
+	Name       string          `gorm:"column:name;type:varchar(50);not null;comment:路由名称" json:"name"`                                     // 路由名称
+	Path       string          `gorm:"column:path;type:varchar(50);not null;comment:路由路径" json:"path"`                                     // 路由路径
+	Redirect   string          `gorm:"column:redirect;type:varchar(50);not null;comment:重定向" json:"redirect"`                              // 重定向
+	Component  string          `gorm:"column:component;type:varchar(100);not null;comment:组件路径" json:"component"`                          // 组件路径
+	IsLink     int64           `gorm:"column:is_link;type:tinyint(3) unsigned;not null;default:2;comment:是否外链 1=是 2=否 默认=2" json:"isLink"` // 是否外链 1=是 2=否 默认=2
+	Status     int64           `gorm:"column:status;type:tinyint(3) unsigned;not null;default:1;comment:状态 1=启用 2=停用" json:"status"`       // 状态 1=启用 2=停用
+	Sort       int64           `gorm:"column:sort;type:int(10) unsigned;not null;comment:排序" json:"sort"`                                  // 排序
+	Meta       *string         `gorm:"column:meta;type:json;comment:元数据" json:"meta"`                                                      // 元数据
+	MenuAction []*MenuAction   `json:"menuAction" gorm:"foreignkey:menu_id;references:id" comment:"菜单功能"`                                  // 菜单功能
+	CreatedAt  *JsonTime       `gorm:"column:created_at;type:datetime;comment:创建时间" json:"createdAt"`                                      // 创建时间
+	UpdatedAt  *JsonTime       `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updatedAt"`                                      // 更新时间
+	DeletedAt  *gorm.DeletedAt `gorm:"column:deleted_at;type:datetime;comment:删除时间" json:"deletedAt"`                                      // 删除时间
+}
+
+type Meta struct {
+	Title       string   `gorm:"column:title;type:json;comment:菜单名称" json:"title"`
+	Icon        string   `gorm:"column:icon;type:json;comment:菜单图标" json:"icon"`
+	IsHide      bool     `gorm:"column:isHide;type:json;comment:是否隐藏" json:"isHide"`
+	IsKeepAlive bool     `gorm:"column:isKeepAlive;type:json;comment:是否缓存" json:"isKeepAlive"`
+	IsAffix     bool     `gorm:"column:isAffix;type:json;comment:是否固定" json:"isAffix"`
+	IsLink      string   `gorm:"column:isLink;type:json;comment:外链/内嵌时链接地址" json:"isLink"` // 外链/内嵌时链接地址（http:xxx.com），开启外链条件，`1、isLink: 链接地址不为空`
+	IsIframe    bool     `gorm:"column:isIframe;type:json;comment:是否内嵌" json:"isIframe"`   // 是否内嵌，开启条件，`1、isIframe:true 2、isLink：链接地址不为空`
+	Roles       []string `gorm:"column:roles;type:json;comment:菜单角色" json:"roles"`         // 权限标识，取角色管理
 }
 
 type MenuQuery struct {
-	ID             int64         `gorm:"column:id;type:int(10) unsigned;primaryKey;autoIncrement:true;comment:ID" json:"id"`               // ID
-	Pid            int64         `gorm:"column:pid;type:int(10) unsigned;not null;comment:父级id" json:"pid"`                                // 父级id
-	Title          string        `gorm:"column:title;type:varchar(50);not null;comment:菜单名称" json:"title"`                                 // 菜单名称
-	Name           string        `gorm:"column:name;type:varchar(50);not null;comment:路由名称" json:"name"`                                   // 路由名称
-	Path           string        `gorm:"column:path;type:varchar(50);not null;comment:路由路径" json:"path"`                                   // 路由路径
-	Redirect       string        `gorm:"column:redirect;type:varchar(50);not null;comment:重定向" json:"redirect"`                            // 重定向
-	Icon           string        `gorm:"column:icon;type:varchar(50);not null;comment:菜单图标" json:"icon"`                                   // 菜单图标
-	ComponentAlias string        `gorm:"column:component_alias;type:varchar(100);not null;comment:组件路径" json:"component_alias"`            // 组件路径
-	IsLink         string        `gorm:"column:is_link;type:varchar(255);not null;comment:链接地址" json:"is_link"`                            // 链接地址
-	IsHide         int64         `gorm:"column:is_hide;type:tinyint(3) unsigned;not null;default:1;comment:是否隐藏 1=显示 2=隐藏" json:"is_hide"` // 是否隐藏 1=显示 2=隐藏
-	Status         int64         `gorm:"column:status;type:tinyint(3) unsigned;not null;default:1;comment:状态 1=启用 2=停用" json:"status"`     // 状态 1=启用 2=停用
-	Sort           int64         `gorm:"column:sort;type:int(10) unsigned;not null;comment:排序" json:"sort"`                                // 排序
-	MenuAction     []*MenuAction `json:"menu_action" gorm:"foreignkey:menu_id;references:id" comment:"菜单方法"`                               // 菜单方法
-	Children       []MenuQuery   `json:"children" gorm:"-"`
-	CreatedAt      *JsonTime     `gorm:"column:created_at;type:datetime;comment:创建时间" json:"created_at"` // 创建时间
-	UpdatedAt      *JsonTime     `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updated_at"` // 更新时间
+	ID         int64         `gorm:"column:id;type:int(10) unsigned;primaryKey;autoIncrement:true;comment:ID" json:"id"`                 // ID
+	Pid        int64         `gorm:"column:pid;type:int(10) unsigned;not null;comment:父级id" json:"pid"`                                  // 父级idTitle      string      `gorm:"column:title;type:varchar(50);not null;comment:菜单名称" json:"title"`                                   // 菜单名称
+	Name       string        `gorm:"column:name;type:varchar(50);not null;comment:路由名称" json:"name"`                                     // 路由名称
+	Path       string        `gorm:"column:path;type:varchar(50);not null;comment:路由路径" json:"path"`                                     // 路由路径
+	Redirect   string        `gorm:"column:redirect;type:varchar(50);not null;comment:重定向" json:"redirect"`                              // 重定向
+	Component  string        `gorm:"column:component;type:varchar(100);not null;comment:组件路径" json:"component"`                          // 组件路径
+	IsLink     bool          `gorm:"column:is_link;type:tinyint(3) unsigned;not null;default:2;comment:是否外链 1=是 2=否 默认=2" json:"isLink"` // 是否外链 1=是 2=否 默认=2
+	Status     int64         `gorm:"column:status;type:tinyint(3) unsigned;not null;default:1;comment:状态 1=启用 2=停用" json:"status"`       // 状态 1=启用 2=停用
+	Sort       int64         `gorm:"column:sort;type:int(10) unsigned;not null;comment:排序" json:"sort"`                                  // 排序
+	Meta       *Meta         `gorm:"column:meta;type:json;comment:元数据" json:"meta"`                                                      // 元数据
+	MenuAction []*MenuAction `json:"menuAction" gorm:"foreignkey:menu_id;references:id" comment:"菜单功能"`                                  // 菜单功能
+	Children   []MenuQuery   `json:"children" gorm:"-"`
+	CreatedAt  *JsonTime     `gorm:"column:created_at;type:datetime;comment:创建时间" json:"createdAt"` // 创建时间
+	UpdatedAt  *JsonTime     `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updatedAt"` // 更新时间
 }
 
 // TableName Menu's table name
@@ -68,4 +76,55 @@ func (s *Menu) BeforeUpdate(tx *gorm.DB) (err error) {
 	now := JsonTime(time.Now())
 	s.UpdatedAt = &now
 	return nil
+}
+
+// GetMeta 获取元数据
+func (s *Menu) GetMeta() *Meta {
+	if s != nil && s.Meta != nil && *s.Meta != "" {
+		var m Meta
+		if err := json.Unmarshal([]byte(*s.Meta), &m); err == nil {
+			return &m
+		}
+	}
+	return &Meta{}
+}
+
+// SetMeta 设置元数据
+func (s *Menu) SetMeta(meta *Meta) *string {
+	var (
+		model Menu
+	)
+
+	if meta != nil {
+		JSON, _ := json.Marshal(meta)
+		Str := string(JSON)
+		model.Meta = &Str
+	}
+	return model.Meta
+}
+
+// SetIsLink 设置是否链接
+func (s *Menu) SetIsLink(isLink bool) int64 {
+	if isLink {
+		s.IsLink = 1
+	} else {
+		s.IsLink = 2
+	}
+
+	return s.IsLink
+}
+
+// GetIsLink 设置是否链接
+func (s *Menu) GetIsLink() bool {
+	var (
+		isLink bool
+	)
+
+	if s.IsLink == 1 {
+		isLink = true
+	} else {
+		isLink = false
+	}
+
+	return isLink
 }

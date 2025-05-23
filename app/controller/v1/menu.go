@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"fmt"
 	"gin-base/app/model"
 	"gin-base/app/service"
 	"gin-base/app/validate"
@@ -41,19 +42,19 @@ func (s *MenuController) Create(c *gin.Context) {
 		req          model.MenuQuery
 	)
 
-	err := c.ShouldBindQuery(&req)
+	err := c.ShouldBind(&req)
 	if err != nil {
 		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
-
+	fmt.Printf("%+v", req)
 	err = copier.Copy(&menuValidate, &req)
 	if err != nil {
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
-
+	fmt.Printf("%+v", menuValidate)
 	// 验证
 	err = validate.GetMenuValidate(menuValidate, "create")
 	if err != nil {

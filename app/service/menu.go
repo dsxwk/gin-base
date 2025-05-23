@@ -19,18 +19,25 @@ type MenuService struct {
 func (s *MenuService) List() (menus []model.MenuQuery, err error) {
 	var (
 		menuModel []model.Menu
+		menu      model.MenuQuery
 	)
 
 	err = global.DB.Preload("MenuAction", func(db *gorm.DB) *gorm.DB {
 		return db.Order("sort asc").Select("id,menu_id,type,name,is_link,sort,created_at,updated_at")
-	}).Order("sort asc").Find(&menuModel).Scan(&menus).Error
+	}).Order("sort asc").Find(&menuModel).Error
 
 	if err != nil {
 		return menus, err
 	}
 
-	for k, m := range menuModel {
-		menus[k].MenuAction = m.MenuAction
+	for _, m := range menuModel {
+		err = copier.Copy(&menu, &m)
+		if err != nil {
+			return menus, err
+		}
+		menu.Meta = m.GetMeta()
+		menu.MenuAction = m.MenuAction
+		menus = append(menus, menu)
 	}
 
 	menus = s.MenuTree(menus, 0)
@@ -62,6 +69,9 @@ func (s *MenuService) Create(req model.MenuQuery) (menuModel model.Menu, err err
 		return menuModel, err
 	}
 
+	menuModel.Meta = menuModel.SetMeta(req.Meta)
+	menuModel.IsLink = menuModel.SetIsLink(req.IsLink)
+
 	db := global.DB.Create(&menuModel)
 
 	err = db.Error
@@ -80,6 +90,9 @@ func (s *MenuService) Update(req model.MenuQuery) (menuModel model.Menu, err err
 	if err != nil {
 		return menuModel, err
 	}
+
+	menuModel.Meta = menuModel.SetMeta(req.Meta)
+	menuModel.IsLink = menuModel.SetIsLink(req.IsLink)
 
 	err = global.DB.Updates(&menuModel).Error
 	if err != nil {

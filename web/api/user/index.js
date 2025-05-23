@@ -39,7 +39,7 @@ export function userApi() {
                 }
             },
             delete: {
-                name: '更新用户',
+                name: '删除用户',
                 url: '/user/:id',
                 method: 'delete',
                 params: {},

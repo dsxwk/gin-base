@@ -23,6 +23,7 @@
         <template #operation="{row}">
           <div class="flex items-center">
             <el-button type="primary" size="small" @click="onOpenEditMenu('edit', row)">编辑</el-button>
+            <el-button type="primary" size="small" @click="onOpenMenuAction(row)">功能</el-button>
             <el-popconfirm title="确定删除吗？" @confirm="onTableDelRow(row)">
               <template #reference>
                 <el-button size="small" type="danger">删除</el-button>
@@ -32,6 +33,7 @@
         </template>
         <template #dialog>
           <MenuDialog ref="menuDialogRef" @refresh="getTableData(state.tableData.param)" />
+          <ActionDialog ref="menuActionDialogRef" />
         </template>
       </Table>
     </div>
@@ -41,33 +43,44 @@
 <script setup name="systemMenu">
 import {defineAsyncComponent, reactive, ref, onMounted, h} from 'vue';
 import { ElMessage } from 'element-plus';
-import {menuJson} from '/@/static/menu';
+import {menuApi} from '/@/api/menu';
 import SvgIcon from '/@/components/svgIcon/index.vue';
+import {getDict} from '/@/utils/dict.js';
+import {isHideDict, isLinkDict} from '/@/dict/menu';
 
 // 引入组件
 const Table = defineAsyncComponent(() => import('/@/components/table/index.vue'));
 const TableSearch = defineAsyncComponent(() => import('/@/components/table/component/search.vue'));
 const MenuDialog = defineAsyncComponent(() => import('/@/views/system/menu/component/dialog.vue'));
+const ActionDialog = defineAsyncComponent(() => import('/@/views/system/menu/component/actionDialog.vue'));
 
+const api = menuApi();
 // 定义变量内容
 const tableRef = ref();
 const menuDialogRef = ref();
+const menuActionDialogRef = ref();
 const state = reactive({
   tableData: {
     // 列表数据（必传）
     data: [],
     // 表头内容（必传，注意格式）
     header: [
-      { key: 'menuType', colWidth: '', title: '菜单类型', type: 'text', isCheck: true,
+      { key: 'id', colWidth: '', title: 'ID', type: 'text', isCheck: true },
+      { key: 'pid', colWidth: '', title: '父级id', type: 'text', isCheck: true },
+      { key: 'meta.title', colWidth: '', title: '菜单名称', type: 'text', isCheck: true,
         render: (scope) => {
-          return scope.row?.menuType;
+          return scope.row?.meta?.title;
         }
       },
-      { key: 'title', colWidth: '', title: '菜单名称', type: 'text', isCheck: true },
       { key: 'name', colWidth: '', title: '路由名称', type: 'text', isCheck: true },
       { key: 'path', colWidth: '', title: '路由路径', type: 'text', isCheck: true },
+      { key: 'isLink', colWidth: '', title: '是否外链', type: 'text', isCheck: true,
+        render: (scope) => {
+          return getDict(isLinkDict, scope.row?.isLink);
+        }
+      },
       { key: 'redirect', colWidth: '', title: '重定向', type: 'text', isCheck: true },
-      { key: 'icon', colWidth: '', title: '菜单图标', isCheck: true,
+      { key: 'meta.icon', colWidth: '', title: '菜单图标', isCheck: true,
         render: (scope) => {
           /*return h('el-icon', {
             class: scope.row?.meta?.icon
@@ -77,16 +90,20 @@ const state = reactive({
           });
         },
       },
-      { key: 'componentAlias', colWidth: '', title: '组件路径', type: 'text', isCheck: true },
-      { key: 'isLink', colWidth: '', width: '70', height: '40', title: '链接地址', type: 'text', isCheck: true },
-      { key: 'isHide', colWidth: '', width: '70', height: '40', title: '是否隐藏', type: 'select', isCheck: true },
+      { key: 'component', colWidth: '', title: '组件路径', type: 'text', isCheck: true },
+      { key: 'meta.isLink', colWidth: '', width: '70', height: '40', title: '链接地址', type: 'text', isCheck: true },
+      { key: 'meta.isHide', colWidth: '', width: '70', height: '40', title: '是否隐藏', type: 'select', isCheck: true,
+        render: (scope) => {
+          return getDict(isHideDict, scope.row?.meta?.isHide);
+        }
+      },
     ],
     // 配置项（必传）
     config: {
       total: 0, // 列表总数
       loading: true, // loading 加载
       isBorder: true, // 是否显示表格边框
-      isSerialNo: true, // 是否显示表格序号
+      isSerialNo: false, // 是否显示表格序号
       isSelection: true, // 是否显示表格多选
       isOperate: true, // 是否显示表格操作栏
       fixed: 'right', // 固定操作列
@@ -95,12 +112,10 @@ const state = reactive({
     },
     // 搜索表单，动态生成（传空数组时，将不显示搜索，注意格式）
     search: [
-      { label: '菜单类型', prop: 'menuType', placeholder: '请输入菜单类型', required: true, type: 'input' },
-      { label: '菜单名称', prop: 'title', placeholder: '请输入菜单名称', required: false, type: 'input' },
       { label: '路由名称', prop: 'name', placeholder: '请输入路由名称', required: false, type: 'input' },
       {
         label: '是否隐藏',
-        prop: 'isHide',
+        prop: 'meta.isHide',
         placeholder: '请选择',
         required: false,
         type: 'select',
@@ -124,13 +139,16 @@ const onOpenAddMenu = (type) => {
 const onOpenEditMenu = (type, row) => {
   menuDialogRef.value.openDialog(type, row);
 };
+// 菜单功能
+const onOpenMenuAction = (row) => {
+  menuActionDialogRef.value.openDialog(row);
+}
 // 初始化列表数据
 const getTableData = async (param) => {
   state.tableData.config.loading = true;
-  state.tableData.data = menuJson.data;
-  setTimeout(() => {
-    state.tableData.config.loading = false;
-  }, 500);
+  let response = await api.list(param);
+  state.tableData.data = response?.data;
+  state.tableData.config.loading = false;
 };
 // 搜索点击时表单回调
 const onSearch = (data) => {

@@ -96,9 +96,9 @@ export async function setAddRoute() {
  * @description isRequestRoutes 为 true，则开启后端控制路由
  * @returns 返回后端路由菜单数据
  */
-export function getBackEndControlRoutes() {
+export async function getBackEndControlRoutes() {
     // 模拟 admin 与 test
-    return api.getAdminMenu();
+    return await api.list();
 }
 
 /**

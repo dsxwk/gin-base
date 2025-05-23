@@ -1,20 +1,20 @@
-import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router';
+import {createRouter, createWebHashHistory, createWebHistory} from 'vue-router';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import pinia from '/@/stores/index';
-import { staticRoutes, notFoundAndNoPower } from '/@/router/route';
-import { Session } from '/@/utils/storage';
-import { useRoutesList } from '/@/stores/routesList';
-import { useKeepALiveNames } from '/@/stores/keepAliveNames';
-import { storeToRefs } from 'pinia';
-import { initBackEndControlRoutes } from '/@/router/backEnd';
-import { i18n } from '/@/static/i18n/index';
-import { useThemeConfig } from '/@/stores/themeConfig';
+import {staticRoutes, notFoundAndNoPower} from '/@/router/route';
+import {Session} from '/@/utils/storage';
+import {useRoutesList} from '/@/stores/routesList';
+import {useKeepALiveNames} from '/@/stores/keepAliveNames';
+import {storeToRefs} from 'pinia';
+import {initBackEndControlRoutes} from '/@/router/backEnd';
+import {i18n} from '/@/static/i18n/index';
+import {useThemeConfig} from '/@/stores/themeConfig';
 
 // 读取 `/@/stores/themeConfig.js` 是否开启后端控制路由配置
 const storesThemeConfig = useThemeConfig(pinia);
-const { themeConfig } = storeToRefs(storesThemeConfig);
-const { isRequestRoutes } = themeConfig.value;
+const {themeConfig} = storeToRefs(storesThemeConfig);
+const {isRequestRoutes} = themeConfig.value;
 
 /**
  * 创建一个可以被 Vue 应用程序使用的路由实例
@@ -60,7 +60,14 @@ export function formatTwoStageRoutes(arr) {
     const cacheList = [];
     arr.forEach((v) => {
         if (v.path === '/') {
-            newArr.push({ component: v.component, name: v.name, path: v.path, redirect: v.redirect, meta: v.meta, children: [] });
+            newArr.push({
+                component: v.component,
+                name: v.name,
+                path: v.path,
+                redirect: v.redirect,
+                meta: v.meta,
+                children: []
+            });
         } else {
             // 判断是否是动态路由（xx/:id/:name），用于 tagsView 等中使用
             // 修复：https://gitee.com/lyt-top/vue-next-admin/issues/I3YX6G
@@ -68,7 +75,7 @@ export function formatTwoStageRoutes(arr) {
                 v.meta['isDynamic'] = true;
                 v.meta['isDynamicPath'] = v.path;
             }
-            newArr[0].children.push({ ...v });
+            newArr[0].children.push({...v});
             // 存 name 值，keep-alive 中 include 使用，实现路由的缓存
             // 路径：/@/layouts/routerView/parent.vue
             if (newArr[0].meta.isKeepAlive && v.meta.isKeepAlive) {
@@ -83,7 +90,7 @@ export function formatTwoStageRoutes(arr) {
 
 // 路由加载前
 router.beforeEach(async (to, from, next) => {
-    NProgress.configure({ showSpinner: false });
+    NProgress.configure({showSpinner: false});
     if (to.meta.title) NProgress.start();
     document.title = i18n.global.t(to.meta.title) || 'Gin Base 后台管理';
     const token = Session.get('token');
@@ -100,14 +107,14 @@ router.beforeEach(async (to, from, next) => {
             NProgress.done();
         } else {
             const storesRoutesList = useRoutesList(pinia);
-            const { routesList } = storeToRefs(storesRoutesList);
+            const {routesList} = storeToRefs(storesRoutesList);
             if (routesList.value.length === 0) {
                 if (isRequestRoutes) {
                     // 后端控制路由：路由数据初始化，防止刷新时丢失
                     await initBackEndControlRoutes();
                     // 解决刷新时，一直跳 404 页面问题，关联问题 No match found for location with path 'xxx'
                     // to.query 防止页面刷新时，普通路由带参数时，参数丢失。动态路由（xxx/:id/:name"）isDynamic 无需处理
-                    next({ path: to.path, query: to.query });
+                    next({path: to.path, query: to.query});
                 }
             } else {
                 next();

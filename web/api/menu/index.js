@@ -1,19 +1,52 @@
-import {menuJson} from '/@/static/menu/index.js';
-
+import createService from '/@/utils/service.js';
 /**
- * 以下为模拟接口地址，gitee 的不通，就换自己的真实接口地址
+ * 菜单
  *
- * （不建议写成 request.post(xxx)，因为这样 post 时，无法 params 与 data 同时传参）
- *
- * 后端控制菜单模拟json，路径在 https://gitee.com/lyt-top/vue-next-admin-images/tree/master/menu
- * 后端控制路由，isRequestRoutes 为 true，则开启后端控制路由
- * @method getAdminMenu 获取后端动态路由菜单(admin)
- * @method getTestMenu 获取后端动态路由菜单(test)
+ * @method list 菜单列表
  */
 export function menuApi() {
-    return {
-        getAdminMenu: (params) => {
-            return menuJson;
-        },
-    };
+    return createService(
+        {
+            list: {
+                name: '菜单列表',
+                url: '/menu',
+                method: 'get',
+                params: {},
+                token: {
+                    name: 'token',
+                    value: true
+                }
+            },
+            create: {
+                name: '创建菜单',
+                url: '/menu',
+                method: 'post',
+                params: {},
+                token: {
+                    name: 'token',
+                    value: true
+                }
+            },
+            update: {
+                name: '更新菜单',
+                url: '/menu/:id',
+                method: 'put',
+                params: {},
+                token: {
+                    name: 'token',
+                    value: true
+                }
+            },
+            delete: {
+                name: '删除菜单',
+                url: '/menu/:id',
+                method: 'delete',
+                params: {},
+                token: {
+                    name: 'token',
+                    value: true
+                }
+            },
+        }
+    );
 }

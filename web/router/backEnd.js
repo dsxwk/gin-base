@@ -103,15 +103,6 @@ export async function getBackEndControlRoutes() {
 }
 
 /**
- * 重新请求后端路由菜单接口
- * @description 用于菜单管理界面刷新菜单（未进行测试）
- * @description 路径：/src/views/system/menu/component/addMenu.vue
- */
-export async function setBackEndControlRefreshRoutes() {
-    await getBackEndControlRoutes();
-}
-
-/**
  * 后端路由 component 转换
  * @param routes 后端返回的路由表数组
  * @returns 返回处理成函数后的 component

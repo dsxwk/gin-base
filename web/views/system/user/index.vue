@@ -24,10 +24,10 @@
         </template>
         <template #operation="{row}">
           <div class="flex items-center">
-            <el-button v-if="row.id !== 1" size="small" type="primary" @click="onOpenEditUser('edit', row)">编辑</el-button>
-            <el-popconfirm v-if="row.id !== 1" title="确定删除吗？" @confirm="onTableDelRow(row)">
+            <el-button :disabled="row.id === 1" size="small" type="primary" @click="onOpenEditUser('edit', row)">编辑</el-button>
+            <el-popconfirm title="确定删除吗？" @confirm="onTableDelRow(row)">
               <template #reference>
-                <el-button size="small" type="danger">删除</el-button>
+                <el-button :disabled="row.id === 1" size="small" type="danger">删除</el-button>
               </template>
             </el-popconfirm>
           </div>

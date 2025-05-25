@@ -75,6 +75,7 @@ import {useRoutesList} from '/@/stores/routesList';
 import {i18n} from '/@/static/i18n';
 import {userApi} from '/@/api/user';
 import {ElMessage} from 'element-plus';
+import {deepClone} from '/@/utils/other.js';
 
 const props = defineProps({
   row: {
@@ -111,7 +112,17 @@ const state = reactive({
     submitTxt: '',
   },
 });
-
+const defaultForm = {
+  full_name: '',
+  avatar: '',
+  username: '',
+  email: '',
+  password: '',
+  nickname: '',
+  gender: 1,
+  age: 0,
+  status: 1,
+};
 // 获取 pinia 中的路由
 const getData = (routes) => {
   const arr = [];
@@ -135,17 +146,6 @@ const openDialog = (type, row) => {
     state.dialog.title = '修改用户';
     state.dialog.submitTxt = '修 改';
   } else {
-    state.ruleForm = {
-      full_name: '',
-      avatar: '',
-      username: '',
-      email: '',
-      password: '',
-      nickname: '',
-      gender: 1,
-      age: 0,
-      status: 1,
-    };
     state.dialog.title = '新增用户';
     state.dialog.submitTxt = '新 增';
   }
@@ -159,6 +159,7 @@ const openDialog = (type, row) => {
 // 关闭弹窗
 const closeDialog = () => {
   state.dialog.isShowDialog = false;
+  state.ruleForm = deepClone(defaultForm);
 };
 // 取消
 const onCancel = () => {

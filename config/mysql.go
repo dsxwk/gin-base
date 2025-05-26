@@ -8,6 +8,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+	"gorm.io/gorm/schema"
 	"log"
 	"os"
 	"strings"
@@ -37,6 +38,10 @@ func InitMysql() *gorm.DB {
 		DB  *gorm.DB
 	)
 	DB, err = gorm.Open(mysql.Open(config.Mysql.Host), &gorm.Config{
+		// 全局关闭单数化
+		NamingStrategy: schema.NamingStrategy{
+			SingularTable: true,
+		},
 		Logger: logger.New(
 			log.New(os.Stdout, "\r\n", log.LstdFlags), // 设置log输出到控制台
 			logger.Config{

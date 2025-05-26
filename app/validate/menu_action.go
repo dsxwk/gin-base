@@ -11,7 +11,7 @@ type MenuActionValidate struct {
 	MenuID int64  `json:"menu_id" validate:"required" label:"菜单ID"`
 	Type   int64  `json:"type" validate:"required" label:"类型 1=header 2=operation"`
 	Name   string `json:"name" validate:"required" label:"功能名称"`
-	IsLink string `json:"is_link" validate:"required" label:"是否为链接 1=是 2=否"`
+	IsLink string `json:"isLink" validate:"required" label:"是否为链接 1=是 2=否"`
 	Sort   string `json:"sort" validate:"required" label:"排序"`
 }
 

@@ -11,7 +11,7 @@ type UserValidate struct {
 	Page     int    `form:"page" validate:"required|int|gt:0" label:"页码"`
 	PageSize int    `form:"pageSize" validate:"required|int|gt:0" label:"每页数量"`
 	Username string `json:"username" validate:"required" label:"用户名"`
-	FullName string `json:"full_name" validate:"required" label:"姓名"`
+	FullName string `json:"fullName" validate:"required" label:"姓名"`
 	Nickname string `json:"nickname" validate:"required" label:"昵称"`
 	Gender   int    `json:"gender" validate:"required|int" label:"性别"`
 	Password string `json:"password" validate:"required" label:"密码"`
@@ -20,7 +20,7 @@ type UserValidate struct {
 // UserSearch 用户搜索
 type UserSearch struct {
 	Username string `form:"username" validate:"required" label:"用户名"`
-	FullName string `form:"full_name" validate:"required" label:"姓名"`
+	FullName string `form:"fullName" validate:"required" label:"姓名"`
 	Nickname string `form:"nickname" validate:"required" label:"昵称"`
 	Gender   int    `form:"gender" validate:"required|int" label:"性别"`
 }
@@ -28,7 +28,7 @@ type UserSearch struct {
 // UserSearchValidate 用户搜索验证
 type UserSearchValidate struct {
 	Username string `form:"username" validate:"required" label:"用户名"`
-	FullName string `form:"full_name" validate:"required" label:"姓名"`
+	FullName string `form:"fullName" validate:"required" label:"姓名"`
 	Nickname string `form:"nickname" validate:"required" label:"昵称"`
 	Gender   int    `form:"gender" validate:"required|int" label:"性别"`
 }

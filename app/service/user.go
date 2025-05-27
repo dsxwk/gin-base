@@ -17,9 +17,9 @@ type UserService struct {
 // @return: global.PageData, error
 func (s *UserService) List(req validate.UserValidate, search validate.UserSearch) (global.PageData, error) {
 	var (
-		userModel []model.User
-		userQuery []model.UserQuery
-		pageData  global.PageData
+		userModels []model.User
+		users      []model.UserQuery
+		pageData   global.PageData
 	)
 
 	// 获取where条件和参数
@@ -28,7 +28,7 @@ func (s *UserService) List(req validate.UserValidate, search validate.UserSearch
 	// 获取分页默认为第一页，每页10条记录
 	offset, limit := utils.Pagination(req.Page, req.PageSize)
 
-	db := global.DB.Find(&userModel)
+	db := global.DB.Find(&userModels)
 	// 根据 where 子句添加条件
 	if where != "" {
 		db = db.Where(where, args...)
@@ -41,14 +41,23 @@ func (s *UserService) List(req validate.UserValidate, search validate.UserSearch
 	}
 
 	// 执行分页查询
-	err = db.Offset(offset).Limit(limit).Find(&userModel).Scan(&userQuery).Error
+	err = db.
+		Preload("UserRoles").
+		Find(&userModels).
+		Scan(&users).
+		Offset(offset).
+		Limit(limit).Error
 	if err != nil {
 		return pageData, err
 	}
 
+	for i := range users {
+		users[i].UserRoles = userModels[i].UserRoles
+	}
+
 	pageData.Page = req.Page
 	pageData.PageSize = req.PageSize
-	pageData.List = userQuery
+	pageData.List = users
 
 	return pageData, nil
 }

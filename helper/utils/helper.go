@@ -201,36 +201,32 @@ func ToCamelCase(s string) string {
 	return strings.Join(words, "")
 }
 
-// ConvertXStringToInt64Arr *string 转 []int64
-// @param: str *string
-// @return: []int64
-func ConvertXStringToInt64Arr(str *string) []int64 {
-	var (
-		data []int64
-	)
-
+// ConvertToArr 泛型方法 *string 转 []T
+// 示例1 arr1 := ConvertXStringToArr[int64](str)    // *string 转 []int64
+// 示例2 arr2 := ConvertXStringToArr[string](str)   // *string 转 []string
+func ConvertToArr[T any](str *string) []T {
+	var data []T
 	if str != nil {
 		_ = json.Unmarshal([]byte(*str), &data)
-		return data
 	}
-
 	return data
 }
 
-// ConvertXStringToStringArr *string 转 []string
-// @param: str *string
-// @return: []string
-func ConvertXStringToStringArr(str *string) []string {
-	var (
-		data []string
-	)
-
-	if str != nil {
-		_ = json.Unmarshal([]byte(*str), &data)
-		return data
+// ArrayColumn 泛型 提取结构体切片的某字段
+//
+//	示例 type MenuRoles struct {
+//	   Name string
+//	   ID   int64
+//	}
+//
+// names := ArrayColumn(MenuRoles, func(m *MenuRoles) string { return m.Name }) // []string
+// ids := ArrayColumn(MenuRoles, func(m *MenuRoles) int64 { return m.ID })      // []int64
+func ArrayColumn[T any, R any](arr []*T, getter func(*T) R) []R {
+	result := make([]R, 0, len(arr))
+	for _, v := range arr {
+		result = append(result, getter(v))
 	}
-
-	return data
+	return result
 }
 
 // RandomFileName 生成随机文件名

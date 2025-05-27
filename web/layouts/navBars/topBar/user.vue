@@ -182,7 +182,7 @@ const onHandleCommandClick = (path) => {
 			})
 			.catch(() => {});
 	} else if (path === 'wareHouse') {
-		window.open('https://gitee.com/lyt-top/vue-next-admin');
+		window.open('https://gitee.com/dsxwk/gin-base');
 	} else {
 		router.push(path);
 	}

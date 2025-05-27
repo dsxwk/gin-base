@@ -46,31 +46,40 @@ Golang Gin is a lightweight and efficient Golang web framework. It is widely use
 - Swagger
 
 ## Frontend Technologies Used
+- vue-next-admin
 - Vue3
 - Vite
 - Element-Plus
 - Element-Plus-Table
+- ...
+
+### 感谢vue-next-admin提供的前端模版
+项目地址: https://gitee.com/lyt-top/vue-next-admin
 
 ## Go-Base Directory Structure
 ### Backend
 
 ```bash
-├── app                                 # Application
+├── app                                 # Applicant
 │   ├── controller                      # Controller
 │   ├── model                           # Model
 │   ├── service                         # Service
 │   ├── validate                        # Validation
 │   ├── middleware                      # Middleware
 ├── cli                                 # Command
-├── common                              # Common
+├── common                              # Common Module
+│   ├── extend                          # Extend
+│   ├──├── cache                        # Cache
+│   ├──├── event                        # Event
 │   ├── global                          # Global
+│   ├── template                        # Template
 ├── config                              # Configuration
+│   ├── database                        # Database
 ├── docs                                # Documents
-├── database                            # Database
-├── helper                              # Helper
+├── helper                              # Utils
 ├── log                                 # Log
 ├── resource                            # Resource
-├── web                                 # Web
+├── web                                 # Web Service
 ├── routers                             # Router
 ├── vendor                              # Vendor
 ```
@@ -79,17 +88,20 @@ Golang Gin is a lightweight and efficient Golang web framework. It is widely use
 ### Frontend
 
 ```bash
-├── app                                 # Application
-│   ├── modules                         # Modules
-├── components                          # Components
-├── config                              # Configuration
-├── enums                               # Enums
-├── node_modules                        # Node Modules
+├── api                                 # Api
+├── components                          # Modules
+├── dict                                # Dictionary
+├── directive                           # Directive
+├── layouts                             # Layout
 ├── public                              # Public
+├── router                              # Router
+├── static                              # Static Resource
+├── stores                              # Cache
+├── them                                # Them
 ├── docs                                # Documents
-├── routers                             # Router
-├── src                                 # Src
+├── types                               # ts
 ├── utils                               # Utils
+│   ├── error                           # Global Error Handle
 ├── views                               # Views
 ```
 

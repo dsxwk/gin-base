@@ -50,10 +50,15 @@ Golang Gin 是一个轻量级且高效的 Golang Web 框架。它具有高性能
 
 ## 前端使用技术
 
+- vue-next-admin
 - Vue3
 - Vite
 - Element-Plus
 - Element-Plus-Table
+- ...
+
+### 感谢vue-next-admin提供的前端模版
+项目地址: https://gitee.com/lyt-top/vue-next-admin
 
 ## go-base目录结构
 
@@ -66,10 +71,14 @@ Golang Gin 是一个轻量级且高效的 Golang Web 框架。它具有高性能
 │   ├── middleware                      # 中间件
 ├── cli                                 # 命令行
 ├── common                              # 公共模块
+│   ├── extend                          # 扩展
+│   ├──├── cache                        # 缓存
+│   ├──├── event                        # 事件
 │   ├── global                          # 全局变量
+│   ├── template                        # 模版
 ├── config                              # 配置文件
+│   ├── database                        # 数据库测试文件
 ├── docs                                # 文档
-├── database                            # 测试数据库文件
 ├── helper                              # 工具类
 ├── log                                 # 日志文件
 ├── resource                            # 静态资源
@@ -82,17 +91,20 @@ Golang Gin 是一个轻量级且高效的 Golang Web 框架。它具有高性能
 ## 目录结构
 
 ```bash
-├── app                                 # 应用
-│   ├── modules                         # 模块
+├── api                                 # 请求接口
 ├── components                          # 组件
-├── config                              # 配置
-├── enums                               # 枚举
-├── node_modules                        # npm包
-├── public                              # 静态资源
+├── dict                                # 字典
+├── directive                           # 指令
+├── layouts                             # 布局
+├── public                              # 公共资源
+├── router                              # 路由
+├── static                              # 静态资源
+├── stores                              # 缓存
+├── them                                # 主题
 ├── docs                                # 文档
-├── routers                             # 路由
-├── src                                 # 核心js源码
+├── types                               # ts
 ├── utils                               # 工具助手类
+│   ├── error                           # 全局错误处理
 ├── views                               # 视图文件
 ```
 

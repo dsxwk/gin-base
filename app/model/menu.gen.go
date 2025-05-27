@@ -25,6 +25,7 @@ type Menu struct {
 	Sort       int64           `gorm:"column:sort;type:int(10) unsigned;not null;comment:排序" json:"sort"`                                  // 排序
 	Meta       *string         `gorm:"column:meta;type:json;comment:元数据" json:"meta"`                                                      // 元数据
 	MenuAction []*MenuAction   `json:"menuAction" gorm:"foreignkey:menu_id;references:id" comment:"菜单功能"`                                  // 菜单功能
+	MenuRoles  []*MenuRoles    `json:"menuRoles" gorm:"foreignkey:menu_id;references:id" comment:"菜单角色"`                                   // 菜单角色
 	CreatedAt  *JsonTime       `gorm:"column:created_at;type:datetime;comment:创建时间" json:"createdAt"`                                      // 创建时间
 	UpdatedAt  *JsonTime       `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updatedAt"`                                      // 更新时间
 	DeletedAt  *gorm.DeletedAt `gorm:"column:deleted_at;type:datetime;comment:删除时间" json:"deletedAt"`                                      // 删除时间
@@ -53,6 +54,7 @@ type MenuQuery struct {
 	Sort       int64         `gorm:"column:sort;type:int(10) unsigned;not null;comment:排序" json:"sort"`                                  // 排序
 	Meta       *Meta         `gorm:"column:meta;type:json;comment:元数据" json:"meta"`                                                      // 元数据
 	MenuAction []*MenuAction `json:"menuAction" gorm:"foreignkey:menu_id;references:id" comment:"菜单功能"`                                  // 菜单功能
+	MenuRoles  []*MenuRoles  `json:"menuRoles" gorm:"foreignkey:menu_id;references:id" comment:"菜单角色"`                                   // 菜单角色
 	Children   []MenuQuery   `json:"children" gorm:"-"`
 	CreatedAt  *JsonTime     `gorm:"column:created_at;type:datetime;comment:创建时间" json:"createdAt"` // 创建时间
 	UpdatedAt  *JsonTime     `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updatedAt"` // 更新时间

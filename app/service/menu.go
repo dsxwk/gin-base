@@ -22,9 +22,15 @@ func (s *MenuService) List() (menus []model.MenuQuery, err error) {
 		menu      model.MenuQuery
 	)
 
-	err = global.DB.Preload("MenuAction", func(db *gorm.DB) *gorm.DB {
-		return db.Order("sort asc").Select("id,menu_id,type,name,is_link,sort,created_at,updated_at")
-	}).Order("sort asc").Find(&menuModel).Error
+	err = global.DB.
+		Preload("MenuAction", func(db *gorm.DB) *gorm.DB {
+			return db.Preload("ActionRoles").
+				Order("sort asc").
+				Select("id,menu_id,type,name,is_link,sort,created_at,updated_at")
+		}).
+		Preload("MenuAction.ActionRoles").
+		Order("sort asc").
+		Find(&menuModel).Error
 
 	if err != nil {
 		return menus, err

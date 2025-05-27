@@ -63,9 +63,19 @@
           </el-col>
           <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
             <el-form-item label="权限标识">
-              <el-select v-model="state.ruleForm.meta.roles" multiple placeholder="取角色管理" clearable class="w100">
-                <el-option label="admin" value="admin"></el-option>
-                <el-option label="common" value="common"></el-option>
+              <el-select
+                  v-model="state.ruleForm.meta.roles"
+                  multiple
+                  placeholder="请选择角色"
+                  clearable
+                  class="w100"
+              >
+                <el-option
+                    v-for="item in state.roles"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                />
               </el-select>
             </el-form-item>
           </el-col>
@@ -177,6 +187,16 @@ const dialogFormRef = ref();
 const stores = useRoutesList();
 const { routesList } = storeToRefs(stores);
 const state = reactive({
+  roles: [
+    {
+      "id": 1,
+      "name": "admin"
+    },
+    {
+      "id": 2,
+      "name": "test"
+    }
+  ],
 	// 参数请参考 `/router/route.js` 中的 `dynamicRoutes` 路由菜单格式
 	ruleForm: {
     menuSuperior: [], // 上级菜单
@@ -218,8 +238,8 @@ const getData = (routes) => {
 	return arr;
 };
 // 递归查找父级 path 数组
-function findMenuPathById(menuData, targetId, pathArr = []) {
-  for (const item of menuData) {
+function findMenuPathById(data, targetId, pathArr = []) {
+  for (const item of data) {
     const newPathArr = [...pathArr, item.path];
     if (item.id === targetId) {
       return newPathArr;
@@ -232,8 +252,8 @@ function findMenuPathById(menuData, targetId, pathArr = []) {
   return [];
 }
 // 递归查找菜单项
-function findMenuByPath(menuData, path) {
-  for (const item of menuData) {
+function findMenuByPath(data, path) {
+  for (const item of data) {
     if (item.path === path) return item;
     if (item.children && item.children.length) {
       const found = findMenuByPath(item.children, path);
@@ -246,8 +266,12 @@ function findMenuByPath(menuData, path) {
 const openDialog = (type, row) => {
 	if (type === 'edit') {
     Object.keys(state.ruleForm).forEach(key => {
-      if (row.hasOwnProperty(key) || key === 'id') {
-        state.ruleForm[key] = row[key];
+      if (row.hasOwnProperty(key)) {
+        if (typeof state.ruleForm[key] === 'object' && state.ruleForm[key] !== null) {
+          Object.assign(state.ruleForm[key], row[key]);
+        } else {
+          state.ruleForm[key] = row[key];
+        }
       }
     });
     // 设置上级菜单默认选中
@@ -269,6 +293,7 @@ const openDialog = (type, row) => {
 const closeDialog = () => {
 	state.dialog.isShowDialog = false;
   state.ruleForm = deepClone(defaultForm);
+  dialogFormRef.value && dialogFormRef.value.resetFields();
 };
 // 是否内嵌下拉改变
 const onSelectIframeChange = () => {
@@ -299,9 +324,9 @@ const onSubmit = async () => {
     msg = '更新成功';
   }
   ElMessage.success(msg);
-  closeDialog(); // 关闭弹窗
+  closeDialog();
 	emit('refresh');
-  await initBackEndControlRoutes() // 刷新菜单
+  await initBackEndControlRoutes();
 };
 // 页面加载时
 onMounted(() => {

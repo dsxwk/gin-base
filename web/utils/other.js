@@ -113,7 +113,7 @@ export const globalComponentSize = () => {
 export function deepClone(obj) {
 	let newObj;
 	try {
-		newObj = obj.push ? [] : {};
+		newObj = Array.isArray(obj) ? [] : {};
 	} catch (error) {
 		newObj = {};
 	}

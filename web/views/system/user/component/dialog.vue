@@ -138,8 +138,12 @@ const getData = (routes) => {
 const openDialog = (type, row) => {
   if (type === 'edit') {
     Object.keys(state.ruleForm).forEach(key => {
-      if (row.hasOwnProperty(key) || key === 'id') {
-        state.ruleForm[key] = row[key];
+      if (row.hasOwnProperty(key)) {
+        if (typeof state.ruleForm[key] === 'object' && state.ruleForm[key] !== null) {
+          Object.assign(state.ruleForm[key], row[key]);
+        } else {
+          state.ruleForm[key] = row[key];
+        }
       }
     });
     delete state.ruleForm['password'];
@@ -160,6 +164,7 @@ const openDialog = (type, row) => {
 const closeDialog = () => {
   state.dialog.isShowDialog = false;
   state.ruleForm = deepClone(defaultForm);
+  dialogFormRef.value && dialogFormRef.value.resetFields();
 };
 // 取消
 const onCancel = () => {

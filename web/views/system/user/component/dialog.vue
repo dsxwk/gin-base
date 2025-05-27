@@ -95,7 +95,7 @@ const {routesList} = storeToRefs(stores);
 const state = reactive({
   // 参数请参考 `/src/router/route.ts` 中的 `dynamicRoutes` 路由菜单格式
   ruleForm: {
-    full_name: '',
+    fullName: '',
     avatar: '',
     username: '',
     email: '',
@@ -113,7 +113,7 @@ const state = reactive({
   },
 });
 const defaultForm = {
-  full_name: '',
+  fullName: '',
   avatar: '',
   username: '',
   email: '',

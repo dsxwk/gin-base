@@ -63,7 +63,7 @@ const state = reactive({
     // 表头内容（必传，注意格式）
     header: [
       {key: 'id', colWidth: '', title: 'ID', type: 'text', isCheck: true},
-      {key: 'full_name', colWidth: '', title: '姓名', type: 'text', isCheck: true},
+      {key: 'fullName', colWidth: '', title: '姓名', type: 'text', isCheck: true},
       {key: 'avatar', colWidth: '', title: '头像', type: 'image', isCheck: true},
       {key: 'username', colWidth: '', title: '用户名', type: 'text', isCheck: true},
       {key: 'email', colWidth: '', title: '邮箱', type: 'text', isCheck: true},
@@ -82,8 +82,8 @@ const state = reactive({
           return getDict(statusDict, scope.row?.gender);
         }
       },
-      {key: 'created_at', colWidth: '', title: '创建时间', type: 'text', isCheck: true},
-      {key: 'updated_at', colWidth: '', title: '更新时间', type: 'text', isCheck: true},
+      {key: 'createdAt', colWidth: '', title: '创建时间', type: 'text', isCheck: true},
+      {key: 'updatedAt', colWidth: '', title: '更新时间', type: 'text', isCheck: true},
     ],
     // 配置项（必传）
     config: {
@@ -98,7 +98,7 @@ const state = reactive({
     },
     // 搜索表单，动态生成（传空数组时，将不显示搜索，注意格式）
     search: [
-      {label: '姓名', prop: 'full_name', placeholder: '请输入姓名', required: true, type: 'input'},
+      {label: '姓名', prop: 'fullName', placeholder: '请输入姓名', required: true, type: 'input'},
       {label: '用户名', prop: 'username', placeholder: '请输入用户名', required: false, type: 'input'},
       {
         label: '性别',
@@ -113,7 +113,7 @@ const state = reactive({
       },
       {
         label: '创建时间',
-        prop: 'created_at',
+        prop: 'createdAt',
         placeholder: '请选择',
         required: false,
         type: 'date',

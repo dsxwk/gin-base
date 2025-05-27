@@ -6,6 +6,7 @@ import (
 	"gin-base/app/model"
 	"gin-base/common"
 	"gin-base/common/global"
+	"gin-base/helper/utils"
 	"github.com/jinzhu/copier"
 	"gorm.io/gorm"
 )
@@ -23,6 +24,7 @@ func (s *MenuService) List() (menus []model.MenuQuery, err error) {
 	)
 
 	err = global.DB.
+		Preload("MenuRoles").
 		Preload("MenuAction", func(db *gorm.DB) *gorm.DB {
 			return db.Preload("ActionRoles").
 				Order("sort asc").
@@ -42,6 +44,7 @@ func (s *MenuService) List() (menus []model.MenuQuery, err error) {
 			return menus, err
 		}
 		menu.Meta = m.GetMeta()
+		menu.MenuRoles = m.MenuRoles
 		menu.MenuAction = m.MenuAction
 		menus = append(menus, menu)
 	}
@@ -60,6 +63,7 @@ func (s *MenuService) MenuTree(menus []model.MenuQuery, pid int64) (tree []model
 		if menu.Pid == pid {
 			children := s.MenuTree(menus, menu.ID)
 			menu.Children = children
+			menu.Meta.Roles = utils.ArrayColumn(menu.MenuRoles, func(m *model.MenuRoles) string { return m.Name })
 			tree = append(tree, menu)
 		}
 	}

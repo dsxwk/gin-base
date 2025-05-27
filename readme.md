@@ -53,8 +53,8 @@ Golang Gin is a lightweight and efficient Golang web framework. It is widely use
 - Element-Plus-Table
 - ...
 
-### 感谢vue-next-admin提供的前端模版
-项目地址: https://gitee.com/lyt-top/vue-next-admin
+### Thank you for providing the front-end template by vue-next-admin
+Project Address: https://gitee.com/lyt-top/vue-next-admin
 
 ## Go-Base Directory Structure
 ### Backend
@@ -322,7 +322,7 @@ func (this *ArticleService) Update(req model.ArticleQuery) (model.Article, error
 
 ## Cache usage Support for memory caching and Redis caching needs to be specified in YAML
 ```yaml
-# 缓存
+# Cache
 cache:
   type: "redis"  # memory OR "redis"
   redis:

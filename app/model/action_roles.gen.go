@@ -9,26 +9,26 @@ import (
 	"time"
 )
 
-const TableNameRoleActions = "role_actions"
+const TableNameRoleActions = "action_roles"
 
-// RoleActions 角色功能表
-type RoleActions struct {
+// ActionRoles 功能角色表
+type ActionRoles struct {
 	ID        int64           `gorm:"column:id;type:int(10) unsigned;primaryKey;autoIncrement:true;comment:ID" json:"id"` // ID
-	RoleID    int64           `gorm:"column:role_id;type:int(10) unsigned;not null;comment:角色id" json:"roleId"`           // 角色id
 	ActionID  int64           `gorm:"column:action_id;type:int(10) unsigned;not null;comment:功能id" json:"actionId"`       // 功能id
-	Name      string          `gorm:"column:name;type:varchar(30);not null;comment:功能名称" json:"name"`                     // 功能名称
+	RoleID    int64           `gorm:"column:role_id;type:int(10) unsigned;not null;comment:角色id" json:"roleId"`           // 角色id
+	Name      string          `gorm:"column:name;type:varchar(30);not null;comment:功能名称" json:"name"`                     // 角色名称
 	CreatedAt *JsonTime       `gorm:"column:created_at;type:datetime;comment:创建时间" json:"createdAt"`                      // 创建时间
 	UpdatedAt *JsonTime       `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updatedAt"`                      // 更新时间
 	DeletedAt *gorm.DeletedAt `gorm:"column:deleted_at;type:datetime;comment:删除时间" json:"deletedAt"`                      // 删除时间
 }
 
-// TableName RoleActions's table name
-func (*RoleActions) TableName() string {
+// TableName ActionRoles's table name
+func (*ActionRoles) TableName() string {
 	return TableNameRoleActions
 }
 
 // BeforeCreate 创建之前
-func (s *RoleActions) BeforeCreate(tx *gorm.DB) (err error) {
+func (s *ActionRoles) BeforeCreate(tx *gorm.DB) (err error) {
 	now := JsonTime(time.Now())
 	s.CreatedAt = &now
 	s.UpdatedAt = &now
@@ -36,7 +36,7 @@ func (s *RoleActions) BeforeCreate(tx *gorm.DB) (err error) {
 }
 
 // BeforeUpdate 更新之前
-func (s *RoleActions) BeforeUpdate(tx *gorm.DB) (err error) {
+func (s *ActionRoles) BeforeUpdate(tx *gorm.DB) (err error) {
 	now := JsonTime(time.Now())
 	s.UpdatedAt = &now
 	return nil

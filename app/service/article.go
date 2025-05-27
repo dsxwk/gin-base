@@ -60,7 +60,11 @@ func (s *ArticleService) List(req validate.ArticleValidate) (global.PageData, er
 	}
 
 	// 执行分页查询
-	err = db.Offset(offset).Limit(limit).Find(&articleModel).Scan(&articleQuery).Error
+	err = db.
+		Find(&articleModel).
+		Scan(&articleQuery).
+		Offset(offset).
+		Limit(limit).Error
 	if err != nil {
 		return pageData, err
 	}

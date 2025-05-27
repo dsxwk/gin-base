@@ -63,7 +63,7 @@ func (s *MenuService) MenuTree(menus []model.MenuQuery, pid int64) (tree []model
 		if menu.Pid == pid {
 			children := s.MenuTree(menus, menu.ID)
 			menu.Children = children
-			menu.Meta.Roles = utils.ArrayColumn(menu.MenuRoles, func(m *model.MenuRoles) string { return m.Name })
+			menu.Meta.Roles = utils.ArrayColumn(menu.MenuRoles, func(m *model.MenuRoles) int64 { return m.RoleID })
 			tree = append(tree, menu)
 		}
 	}
@@ -74,6 +74,10 @@ func (s *MenuService) MenuTree(menus []model.MenuQuery, pid int64) (tree []model
 // @param req model.MenuQuery
 // @return menuModel model.Menu, err error
 func (s *MenuService) Create(req model.MenuQuery) (menuModel model.Menu, err error) {
+	var (
+		menuRoles []model.MenuRoles
+	)
+
 	err = copier.Copy(&menuModel, &req)
 	if err != nil {
 		return menuModel, err
@@ -82,12 +86,24 @@ func (s *MenuService) Create(req model.MenuQuery) (menuModel model.Menu, err err
 	menuModel.Meta = menuModel.SetMeta(req.Meta)
 	menuModel.IsLink = menuModel.SetIsLink(req.IsLink)
 
-	db := global.DB.Create(&menuModel)
-
-	err = db.Error
+	tx := global.DB.Begin()
+	err = tx.Create(&menuModel).Error
 	if err != nil {
 		return menuModel, err
 	}
+
+	for _, v := range req.Meta.Roles {
+		menuRoles = append(menuRoles, model.MenuRoles{
+			MenuID: menuModel.ID,
+			RoleID: v,
+		})
+	}
+
+	err = tx.Create(&menuRoles).Error
+	if err != nil {
+		return menuModel, err
+	}
+	tx.Commit()
 
 	return menuModel, nil
 }
@@ -96,6 +112,18 @@ func (s *MenuService) Create(req model.MenuQuery) (menuModel model.Menu, err err
 // @param req model.Menu
 // @return menuModel model.Menu, err error
 func (s *MenuService) Update(req model.MenuQuery) (menuModel model.Menu, err error) {
+	var (
+		menuRole  model.MenuRoles
+		menuRoles []model.MenuRoles
+	)
+
+	for _, v := range req.Meta.Roles {
+		menuRoles = append(menuRoles, model.MenuRoles{
+			MenuID: req.ID,
+			RoleID: v,
+		})
+	}
+
 	err = copier.Copy(&menuModel, &req)
 	if err != nil {
 		return menuModel, err
@@ -104,10 +132,22 @@ func (s *MenuService) Update(req model.MenuQuery) (menuModel model.Menu, err err
 	menuModel.Meta = menuModel.SetMeta(req.Meta)
 	menuModel.IsLink = menuModel.SetIsLink(req.IsLink)
 
-	err = global.DB.Updates(&menuModel).Error
+	tx := global.DB.Begin()
+	err = tx.Updates(&menuModel).Error
 	if err != nil {
 		return menuModel, err
 	}
+
+	err = tx.Where("menu_id", req.ID).Delete(&menuRole).Error
+	if err != nil {
+		return menuModel, err
+	}
+
+	err = tx.Create(&menuRoles).Error
+	if err != nil {
+		return menuModel, err
+	}
+	tx.Commit()
 
 	return menuModel, nil
 }

@@ -6,14 +6,14 @@ import (
 )
 
 type Meta struct {
-	Title       string   `json:"title" validate:"required" label:"菜单名称"`
-	Icon        string   `json:"icon:icon" validate:"required" label:"菜单图标"`
-	IsHide      bool     `json:"isHide:isHide" validate:"required" label:"是否隐藏"`
-	IsKeepAlive bool     `json:"isKeepAlive" validate:"required" label:"是否缓存"`
-	IsAffix     bool     `json:"isAffix" validate:"required" label:"是否固定"`
-	IsLink      string   `json:"isLink" validate:"required" label:"外链/内嵌时链接地址"` // 外链/内嵌时链接地址（http:xxx.com），开启外链条件，`1、isLink: 链接地址不为空`
-	IsIframe    bool     `json:"isIframe" validate:"required" label:"是否内嵌"`     // 是否内嵌，开启条件，`1、isIframe:true 2、isLink：链接地址不为空`
-	Roles       []string `json:"roles" validate:"required" label:"菜单角色"`        // 权限标识，取角色管理
+	Title       string  `json:"title" validate:"required" label:"菜单名称"`
+	Icon        string  `json:"icon:icon" validate:"required" label:"菜单图标"`
+	IsHide      bool    `json:"isHide:isHide" validate:"required" label:"是否隐藏"`
+	IsKeepAlive bool    `json:"isKeepAlive" validate:"required" label:"是否缓存"`
+	IsAffix     bool    `json:"isAffix" validate:"required" label:"是否固定"`
+	IsLink      string  `json:"isLink" validate:"required" label:"外链/内嵌时链接地址"` // 外链/内嵌时链接地址（http:xxx.com），开启外链条件，`1、isLink: 链接地址不为空`
+	IsIframe    bool    `json:"isIframe" validate:"required" label:"是否内嵌"`     // 是否内嵌，开启条件，`1、isIframe:true 2、isLink：链接地址不为空`
+	Roles       []int64 `json:"roles" validate:"required" label:"菜单角色"`        // 权限标识，取角色管理
 }
 
 // MenuValidate 菜单请求验证
@@ -44,8 +44,8 @@ func GetMenuValidate(data MenuValidate, scene string) error {
 func (s MenuValidate) ConfigValidation(v *validator.Validation) {
 	v.WithScenes(validator.SValues{
 		"list":   []string{},
-		"create": []string{"Name", "Path", "Meta.Title"},
-		"update": []string{"ID", "Name", "Path", "Meta.Title"},
+		"create": []string{"Name", "Path", "Meta.Title", "Meta.Roles"},
+		"update": []string{"ID", "Name", "Path", "Meta.Title", "Meta.Roles"},
 		"delete": []string{"ID"},
 	})
 }
@@ -61,9 +61,10 @@ func (s MenuValidate) Messages() map[string]string {
 // Translates 你可以自定义字段翻译
 func (s MenuValidate) Translates() map[string]string {
 	return validator.MS{
-		"ID":    "ID",
-		"PID":   "父级ID",
-		"Title": "菜单名称",
-		"Name":  "路由名称",
+		"ID":         "ID",
+		"PID":        "父级ID",
+		"Meta.Title": "菜单名称",
+		"Name":       "路由名称",
+		"Meta.Roles": "菜单角色",
 	}
 }

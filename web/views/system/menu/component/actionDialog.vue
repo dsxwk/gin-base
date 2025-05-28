@@ -10,7 +10,7 @@
         >
           <template #tools>
             <div class="table-tool">
-              <el-button size="default" type="primary">
+              <el-button size="default" type="primary" @click="onOpenAdd('add')">
                 <el-icon>
                   <ele-FolderAdd/>
                 </el-icon>
@@ -28,6 +28,9 @@
               </el-popconfirm>
             </div>
           </template>
+          <template #dialog>
+            <ActionOperationDialog ref="dialogRef" :row="actionListRow"/>
+          </template>
         </Table>
       </div>
     </el-dialog>
@@ -41,6 +44,7 @@ import {menuApi} from '/@/api/menu';
 
 // 引入组件
 const Table = defineAsyncComponent(() => import('/@/components/table/index.vue'));
+const ActionOperationDialog = defineAsyncComponent(() => import('/@/views/system/menu/component/ActionOperationDialog.vue'));
 
 const api = menuApi();
 const props = defineProps({
@@ -50,6 +54,8 @@ const props = defineProps({
     default: () => ({})
   }
 });
+const dialogRef = ref();
+const actionListRow = ref();
 const tableMenuActionRef = ref();
 const state = reactive({
   tableData: {
@@ -103,6 +109,10 @@ const state = reactive({
     submitTxt: '',
   },
 });
+// 打开新增弹窗
+const onOpenAdd = (type) => {
+  dialogRef.value.openDialog(type);
+};
 // 分页改变时回调
 const onTablePageChange = (page) => {
   state.tableData.param.page = page.page;

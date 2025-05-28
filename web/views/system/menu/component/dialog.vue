@@ -137,10 +137,10 @@
 </template>
 
 <script setup name="systemMenuDialog">
-import { defineAsyncComponent, reactive, onMounted, ref } from 'vue';
-import { storeToRefs } from 'pinia';
-import { useRoutesList } from '/@/stores/routesList';
-import { i18n } from '/@/static/i18n';
+import {defineAsyncComponent, onMounted, reactive, ref} from 'vue';
+import {storeToRefs} from 'pinia';
+import {useRoutesList} from '/@/stores/routesList';
+import {i18n} from '/@/static/i18n';
 import {ElMessage} from "element-plus";
 import {menuApi} from '/@/api/menu';
 import {initBackEndControlRoutes} from '/@/router/backEnd.js';
@@ -187,16 +187,7 @@ const dialogFormRef = ref();
 const stores = useRoutesList();
 const { routesList } = storeToRefs(stores);
 const state = reactive({
-  roles: [
-    {
-      "id": 1,
-      "name": "admin"
-    },
-    {
-      "id": 2,
-      "name": "test"
-    }
-  ],
+  roles: [],
 	// 参数请参考 `/router/route.js` 中的 `dynamicRoutes` 路由菜单格式
 	ruleForm: {
     menuSuperior: [], // 上级菜单
@@ -314,6 +305,16 @@ const onSubmit = async () => {
   } else {
     state.ruleForm.pid = 0; // 顶级菜单
   }
+
+  state.ruleForm.menuRoles = state.ruleForm.meta.roles.map(roleId => {
+    const role = state.roles.find(r => r.id === roleId);
+    return {
+      menuId: props.row.id ?? 0,
+      roleId: roleId,
+      name: role ? role.name : ''
+    };
+  });
+
   let msg = '';
   if (state.dialog.type === 'add') {
     await api.create(state.ruleForm);
@@ -328,11 +329,16 @@ const onSubmit = async () => {
 	emit('refresh');
   await initBackEndControlRoutes();
 };
+// 获取角色
+const getRoles = async () => {
+  const data = await api.roleList({page:1, pageSize: 10, isPage: false});
+  state.roles = data.data;
+};
 // 页面加载时
 onMounted(() => {
+  getRoles();
 	state.menuData = getData(routesList.value);
 });
-
 // 暴露变量
 defineExpose({
 	openDialog,

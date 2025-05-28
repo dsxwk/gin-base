@@ -1,15 +1,16 @@
 import createService from '/@/utils/service.js';
+
 /**
- * 菜单
+ * 角色
  *
- * @method list 菜单列表
+ * @method list 角色列表
  */
-export function menuApi() {
+export function roleApi() {
     return createService(
         {
             list: {
-                name: '菜单列表',
-                url: '/menu',
+                name: '角色列表',
+                url: '/role',
                 method: 'get',
                 params: {},
                 token: {
@@ -18,8 +19,8 @@ export function menuApi() {
                 }
             },
             create: {
-                name: '创建菜单',
-                url: '/menu',
+                name: '创建角色',
+                url: '/role',
                 method: 'post',
                 params: {},
                 token: {
@@ -28,8 +29,8 @@ export function menuApi() {
                 }
             },
             update: {
-                name: '更新菜单',
-                url: '/menu/:id',
+                name: '更新角色',
+                url: '/role/:id',
                 method: 'put',
                 params: {},
                 token: {
@@ -38,19 +39,9 @@ export function menuApi() {
                 }
             },
             delete: {
-                name: '删除菜单',
-                url: '/menu/:id',
+                name: '删除角色',
+                url: '/role/:id',
                 method: 'delete',
-                params: {},
-                token: {
-                    name: 'token',
-                    value: true
-                }
-            },
-            roleList: {
-                name: '角色列表',
-                url: '/role',
-                method: 'get',
                 params: {},
                 token: {
                     name: 'token',

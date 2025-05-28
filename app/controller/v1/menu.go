@@ -155,7 +155,7 @@ func (s *MenuController) Delete(c *gin.Context) {
 }
 
 // ActionList 功能列表
-// @Router /api/v1/menu/{menu_id}/action [get]
+// @Router /api/v1/menu/{id}/action [get]
 func (s *MenuController) ActionList(c *gin.Context) {
 	var (
 		menuService service.MenuService

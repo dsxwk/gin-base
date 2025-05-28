@@ -21,6 +21,7 @@ func (s *ArticleController) List(c *gin.Context) {
 	var (
 		articleService service.ArticleService
 		req            validate.ArticleValidate
+		pageData       global.PageData
 	)
 
 	err := c.ShouldBindQuery(&req)
@@ -37,7 +38,13 @@ func (s *ArticleController) List(c *gin.Context) {
 		return
 	}
 
-	pageData, err := articleService.List(req)
+	err = copier.Copy(&pageData, &req)
+	if err != nil {
+		global.Log.Error(err.Error())
+		s.ApiResponse(c, global.SystemError, err.Error())
+	}
+
+	pageData, err = articleService.List(pageData)
 	if err != nil {
 		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())

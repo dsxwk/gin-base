@@ -22,6 +22,7 @@ func (s *UserController) List(c *gin.Context) {
 		userService service.UserService
 		req         validate.UserValidate
 		search      validate.UserSearch
+		pageData    global.PageData
 	)
 
 	err := c.ShouldBindQuery(&req)
@@ -46,7 +47,13 @@ func (s *UserController) List(c *gin.Context) {
 		return
 	}
 
-	pageData, err := userService.List(req, search)
+	err = copier.Copy(&pageData, &req)
+	if err != nil {
+		global.Log.Error(err.Error())
+		s.ApiResponse(c, global.SystemError, err.Error())
+	}
+
+	pageData, err = userService.List(pageData, search)
 	if err != nil {
 		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())

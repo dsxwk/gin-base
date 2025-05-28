@@ -9,6 +9,7 @@ import (
 type RoleValidate struct {
 	Page     int    `form:"page" validate:"required|int|gt:0" label:"页码"`
 	PageSize int    `form:"pageSize" validate:"required|int|gt:0" label:"每页数量"`
+	IsPage   *bool  `form:"isPage" validate:"required|bool" label:"是否分页"`
 	ID       int64  `json:"id" validate:"required" label:"ID"`
 	Name     string `json:"name" validate:"required" label:"角色名称"`
 	Desc     string `json:"desc" validate:"required" label:"描述"`

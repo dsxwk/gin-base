@@ -253,51 +253,54 @@ func (s *Article) SetTag(tag []string) *string {
 ### 设置器和获取器的使用
 ```go
 // List 列表
-// @param: req validate.ArticleValidate
-// @return: global.PageData, error
-func (s *ArticleService) List(req validate.ArticleValidate) (global.PageData, error) {
-	var (
-		articleModel []model.Article
-		articleQuery []model.ArticleQuery
-		pageData     global.PageData
-		//fields       []field
-	)
-
-	// 获取分页默认为第一页，每页10条记录
-	offset, limit := utils.Pagination(req.Page, req.PageSize)
-
-	// join
-	//db := global.DB.Joins("LEFT JOIN user ON article.uid = user.id LEFT JOIN category ON article.category_id = category.id").Select("article.*, user.username, category.name").Find(&articleModel).scan(&fields)
-
-	db := global.DB.Preload("User", func(db *gorm.DB) *gorm.DB {
-		return db.Select("id, username, full_name, nickname, email, gender, age")
-	}).Preload("Category", func(db *gorm.DB) *gorm.DB {
-		return db.Select("id, name")
-	}).Find(&articleModel)
-
-	// 获取总记录数
-	err := db.Count(&pageData.Total).Error
-	if err != nil {
-		return pageData, err
-	}
-
-	// 执行分页查询
-	err = db.Offset(offset).Limit(limit).Find(&articleModel).Scan(&articleQuery).Error
-	if err != nil {
-		return pageData, err
-	}
-
-	for k, m := range articleModel {
-		articleQuery[k].User = m.User
-		articleQuery[k].Category = m.Category
-		articleQuery[k].Tag = m.GetTag()
-	}
-
-	pageData.Page = req.Page
-	pageData.PageSize = req.PageSize
-	pageData.List = articleQuery
-
-	return pageData, nil
+// @param pageData global.PageData
+// @return global.PageData, error
+func (s *ArticleService) List(pageData global.PageData) (global.PageData, error) {
+    var (
+        articleModel []model.Article
+        articleQuery []model.ArticleQuery
+    )
+    
+    // 获取分页默认为第一页，每页10条记录
+    offset, limit := utils.Pagination(pageData.Page, pageData.PageSize)
+    
+    // join
+    // db := global.DB.Joins("LEFT JOIN user ON article.uid = user.id LEFT JOIN category ON article.category_id = category.id").Select("article.*, user.username, category.name").Find(&articleModel)
+    
+    db := global.DB.
+    Preload("User", func(db *gorm.DB) *gorm.DB {
+        return db.Select("id, username, full_name, nickname, email, gender, age")
+    }).Preload("Category", func(db *gorm.DB) *gorm.DB {
+        return db.Select("id, name")
+    }).
+    Find(&articleModel)
+    
+    // 获取总记录数
+    err := db.Count(&pageData.Total).Error
+    if err != nil {
+        return pageData, err
+    }
+    
+    // 执行分页查询
+    err = db.Offset(offset).
+        Limit(limit).
+        Find(&articleModel).Error
+    if err != nil {
+        return pageData, err
+    }
+    
+    err = copier.Copy(&articleQuery, &articleModel)
+    if err != nil {
+        return pageData, err
+    }
+    
+    for k, m := range articleModel {
+        articleQuery[k].Tag = m.GetTag()
+    }
+    
+    pageData.List = articleQuery
+    
+    return pageData, nil
 }
 
 // Update 更新

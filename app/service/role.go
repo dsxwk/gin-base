@@ -12,23 +12,18 @@ type RoleService struct {
 	common.BaseService
 }
 
-// Your Function Name Your Description
-// @param YourParam string
-// @return bool
-func (s *RoleService) List(req validate.RoleValidate, search validate.RoleSearchValidate) (global.PageData, error) {
+// List 角色列表
+// @param pageData global.PageData, search validate.RoleSearchValidate
+// @return interface{}, error
+func (s *RoleService) List(pageData global.PageData, search validate.RoleSearchValidate) (interface{}, error) {
 	var (
-		roleModels []model.Roles
-		roles      []model.RolesQuery
-		pageData   global.PageData
+		roles []model.RolesQuery
 	)
 
 	// 获取where条件和参数
 	where, args := utils.BuildWhereClause(search, "form")
 
-	// 获取分页默认为第一页，每页10条记录
-	offset, limit := utils.Pagination(req.Page, req.PageSize)
-
-	db := global.DB.Find(&roleModels)
+	db := global.DB.Model(&model.Roles{}).Find(&roles)
 	// 根据 where 子句添加条件
 	if where != "" {
 		db = db.Where(where, args...)
@@ -40,18 +35,22 @@ func (s *RoleService) List(req validate.RoleValidate, search validate.RoleSearch
 		return pageData, err
 	}
 
-	// 执行分页查询
-	err = db.Find(&roleModels).
-		Scan(&roles).
-		Offset(offset).
-		Limit(limit).Error
-	if err != nil {
-		return pageData, err
+	if pageData.IsPage == nil || *pageData.IsPage {
+		// 获取分页默认为第一页，每页10条记录
+		offset, limit := utils.Pagination(pageData.Page, pageData.PageSize)
+		// 执行分页查询
+		err = db.Offset(offset).
+			Limit(limit).
+			Find(&roles).Error
+		if err != nil {
+			return pageData, err
+		}
 	}
 
-	pageData.Page = req.Page
-	pageData.PageSize = req.PageSize
-	pageData.List = roles
+	if pageData.IsPage == nil || *pageData.IsPage {
+		pageData.List = roles
+		return pageData, nil
+	}
 
-	return pageData, nil
+	return roles, nil
 }

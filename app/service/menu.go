@@ -19,8 +19,7 @@ type MenuService struct {
 // @return bool
 func (s *MenuService) List() (menus []model.MenuQuery, err error) {
 	var (
-		menuModel []model.Menu
-		menu      model.MenuQuery
+		menuModels []model.Menu
 	)
 
 	err = global.DB.
@@ -32,21 +31,21 @@ func (s *MenuService) List() (menus []model.MenuQuery, err error) {
 		}).
 		Preload("MenuAction.ActionRoles").
 		Order("sort asc").
-		Find(&menuModel).Error
+		Find(&menuModels).Error
 
 	if err != nil {
 		return menus, err
 	}
+	err = copier.Copy(&menus, &menuModels)
+	if err != nil {
+		return menus, err
+	}
 
-	for _, m := range menuModel {
-		err = copier.Copy(&menu, &m)
-		if err != nil {
-			return menus, err
-		}
-		menu.Meta = m.GetMeta()
-		menu.MenuRoles = m.MenuRoles
-		menu.MenuAction = m.MenuAction
-		menus = append(menus, menu)
+	for k, m := range menuModels {
+		menus[k].IsLink = m.GetIsLink()
+		menus[k].Meta = m.GetMeta()
+		menus[k].MenuRoles = m.MenuRoles
+		menus[k].MenuAction = m.MenuAction
 	}
 
 	menus = s.MenuTree(menus, 0)

@@ -95,6 +95,7 @@ const state = reactive({
       isOperate: true, // 是否显示表格操作栏
       isPrintTool: true, // 是否显示打印工具
       isExcelTool: true, // 是否显示导出Excel工具
+      isRefresh: true, // 是否显示刷新
       fixed: 'right', // 固定操作列
       operationWith: 200, // 固定操作列宽度
       isPage: true, // 是否显示分页

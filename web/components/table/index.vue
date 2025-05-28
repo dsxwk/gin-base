@@ -7,7 +7,7 @@
       <div class="table-header-right-tool">
         <SvgIcon v-if="config.isPrintTool" name="iconfont icon-dayin" :size="19" title="打印" @click="onPrintTable" />
         <SvgIcon v-if="config.isExcelTool" name="iconfont icon-yunxiazai_o" :size="22" title="导出" @click="onImportTable" />
-        <SvgIcon name="iconfont icon-shuaxin" :size="22" title="刷新" @click="onRefreshTable" />
+        <SvgIcon v-if="config.isRefresh" name="iconfont icon-shuaxin" :size="22" title="刷新" @click="onRefreshTable" />
         <el-popover
             placement="top-end"
             trigger="click"

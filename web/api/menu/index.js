@@ -57,6 +57,16 @@ export function menuApi() {
                     value: true
                 }
             },
+            actionList: {
+                name: '功能列表',
+                url: '/menu/:id/action',
+                method: 'get',
+                params: {},
+                token: {
+                    name: 'token',
+                    value: true
+                }
+            },
         }
     );
 }

@@ -5,8 +5,8 @@
         <slot name="tools"></slot>
       </div>
       <div class="table-header-right-tool">
-        <SvgIcon name="iconfont icon-dayin" :size="19" title="打印" @click="onPrintTable" />
-        <SvgIcon name="iconfont icon-yunxiazai_o" :size="22" title="导出" @click="onImportTable" />
+        <SvgIcon v-if="config.isPrintTool" name="iconfont icon-dayin" :size="19" title="打印" @click="onPrintTable" />
+        <SvgIcon v-if="config.isExcelTool" name="iconfont icon-yunxiazai_o" :size="22" title="导出" @click="onImportTable" />
         <SvgIcon name="iconfont icon-shuaxin" :size="22" title="刷新" @click="onRefreshTable" />
         <el-popover
             placement="top-end"
@@ -106,7 +106,7 @@
 				<el-empty description="暂无数据" />
 			</template>
 		</el-table>
-		<div class="table-footer mt15" v-if="!config.isPage">
+		<div class="table-footer mt15" v-if="config.isPage">
 			<el-pagination
 				v-model:current-page="state.page.page"
 				v-model:page-size="state.page.pageSize"

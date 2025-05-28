@@ -1,12 +1,13 @@
 <template>
   <div class="table-demo-container layout-padding">
     <div class="table-demo-padding layout-padding-view layout-padding-auto">
-      <TableSearch :search="state.tableData.search" @search="onSearch" />
+      <TableSearch :search="state.tableData.search" @search="onSearch"/>
       <Table
           ref="tableRef"
           v-bind="state.tableData"
           @delRow="onTableDelRow"
           @sortHeader="onSortHeader"
+          @pageChange="onTablePageChange"
           row-key="id"
           :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
       >
@@ -14,7 +15,7 @@
           <div class="table-tool">
             <el-button size="default" type="primary" @click="onOpenAddMenu('add')">
               <el-icon>
-                <ele-FolderAdd />
+                <ele-FolderAdd/>
               </el-icon>
               新增菜单
             </el-button>
@@ -33,7 +34,7 @@
         </template>
         <template #dialog>
           <MenuDialog ref="menuDialogRef" @refresh="getTableData(state.tableData.param)" :row="listRow"/>
-          <ActionDialog ref="menuActionDialogRef" />
+          <ActionDialog ref="menuActionDialogRef" :row="actionListRow"/>
         </template>
       </Table>
     </div>
@@ -41,10 +42,11 @@
 </template>
 
 <script setup name="systemMenu">
-import {defineAsyncComponent, reactive, ref, onMounted, h} from 'vue';
-import { ElMessage } from 'element-plus';
+import {defineAsyncComponent, h, onMounted, reactive, ref} from 'vue';
+import {ElMessage} from 'element-plus';
 import {menuApi} from '/@/api/menu';
 import SvgIcon from '/@/components/svgIcon/index.vue';
+import {i18n} from '/@/static/i18n';
 import {getDict} from '/@/utils/dict.js';
 import {isHideDict, isLinkDict} from '/@/dict/menu';
 
@@ -60,28 +62,23 @@ const tableRef = ref();
 const menuDialogRef = ref();
 const menuActionDialogRef = ref();
 const listRow = ref();
+const actionListRow = ref();
 const state = reactive({
   tableData: {
     // 列表数据（必传）
     data: [],
     // 表头内容（必传，注意格式）
     header: [
-      { key: 'id', colWidth: '', title: 'ID', type: 'text', isCheck: true },
-      { key: 'pid', colWidth: '', title: '父级id', type: 'text', isCheck: true },
-      { key: 'meta.title', colWidth: '', title: '菜单名称', type: 'text', isCheck: true,
+      {key: 'id', colWidth: '', title: 'ID', type: 'text', isCheck: true},
+      {key: 'pid', colWidth: '', title: '父级id', type: 'text', isCheck: true},
+      {
+        key: 'meta.title', colWidth: '', title: '菜单名称', type: 'text', isCheck: true,
         render: (scope) => {
-          return scope.row?.meta?.title;
+          return i18n.global.t(scope.row?.meta?.title || '');
         }
       },
-      { key: 'name', colWidth: '', title: '路由名称', type: 'text', isCheck: true },
-      { key: 'path', colWidth: '', title: '路由路径', type: 'text', isCheck: true },
-      { key: 'isLink', colWidth: '', title: '是否外链', type: 'text', isCheck: true,
-        render: (scope) => {
-          return getDict(isLinkDict, scope.row?.isLink);
-        }
-      },
-      { key: 'redirect', colWidth: '', title: '重定向', type: 'text', isCheck: true },
-      { key: 'meta.icon', colWidth: '', title: '菜单图标', isCheck: true,
+      {
+        key: 'meta.icon', colWidth: '', title: '菜单图标', isCheck: true,
         render: (scope) => {
           /*return h('el-icon', {
             class: scope.row?.meta?.icon
@@ -91,13 +88,25 @@ const state = reactive({
           });
         },
       },
-      { key: 'component', colWidth: '', title: '组件路径', type: 'text', isCheck: true },
-      { key: 'meta.isLink', colWidth: '', width: '70', height: '40', title: '链接地址', type: 'text', isCheck: true },
-      { key: 'meta.isHide', colWidth: '', width: '70', height: '40', title: '是否隐藏', type: 'select', isCheck: true,
+      {key: 'path', colWidth: '', title: '路由路径', type: 'text', isCheck: true},
+      {key: 'name', colWidth: '', title: '路由名称', type: 'text', isCheck: true},
+      {key: 'redirect', colWidth: '', title: '重定向', type: 'text', isCheck: true},
+      {
+        key: 'isLink', colWidth: '', title: '是否外链', type: 'text', isCheck: true,
+        render: (scope) => {
+          return getDict(isLinkDict, scope.row?.isLink);
+        }
+      },
+      {key: 'component', colWidth: '', title: '组件路径', type: 'text', isCheck: true},
+      {key: 'meta.isLink', colWidth: '', width: '70', height: '40', title: '链接地址', type: 'text', isCheck: true},
+      {
+        key: 'meta.isHide', colWidth: '', width: '70', height: '40', title: '是否隐藏', type: 'select', isCheck: true,
         render: (scope) => {
           return getDict(isHideDict, scope.row?.meta?.isHide);
         }
       },
+      {key: 'createdAt', colWidth: '', title: '创建时间', type: 'text', isCheck: true},
+      {key: 'updatedAt', colWidth: '', title: '更新时间', type: 'text', isCheck: true},
     ],
     // 配置项（必传）
     config: {
@@ -107,13 +116,15 @@ const state = reactive({
       isSerialNo: false, // 是否显示表格序号
       isSelection: true, // 是否显示表格多选
       isOperate: true, // 是否显示表格操作栏
+      isPrintTool: true, // 是否显示打印工具
+      isExcelTool: true, // 是否显示导出Excel工具
       fixed: 'right', // 固定操作列
       operationWith: 200, // 固定操作列宽度
-      isPage: true, // 是否不分页,默认不传或者为false时展示分页,为true时不展示分页
+      isPage: false, // 是否显示分页
     },
     // 搜索表单，动态生成（传空数组时，将不显示搜索，注意格式）
     search: [
-      { label: '路由名称', prop: 'name', placeholder: '请输入路由名称', required: false, type: 'input' },
+      {label: '路由名称', prop: 'name', placeholder: '请输入路由名称', required: false, type: 'input'},
       {
         label: '是否隐藏',
         prop: 'meta.isHide',
@@ -121,8 +132,8 @@ const state = reactive({
         required: false,
         type: 'select',
         options: [
-          { label: '隐藏', value: true },
-          { label: '不隐藏', value: false },
+          {label: '隐藏', value: true},
+          {label: '不隐藏', value: false},
         ],
       },
     ],
@@ -143,6 +154,7 @@ const onOpenEditMenu = (type, row) => {
 };
 // 菜单功能
 const onOpenMenuAction = (row) => {
+  actionListRow.value = row;
   menuActionDialogRef.value.openDialog(row);
 }
 // 初始化列表数据
@@ -158,6 +170,12 @@ const onSearch = (data) => {
       Object.entries(data).filter(([key, value]) => value !== null && value !== undefined && value !== '')
   );
   state.tableData.param = Object.assign({}, state.tableData.param, filterData);
+  getTableData(state.tableData.param);
+};
+// 分页改变时回调
+const onTablePageChange = (page) => {
+  state.tableData.param.page = page.page;
+  state.tableData.param.pageSize = page.pageSize;
   getTableData(state.tableData.param);
 };
 // 删除当前项回调
@@ -179,6 +197,7 @@ onMounted(() => {
 .table-demo-container {
   .table-demo-padding {
     padding: 15px;
+
     .table-demo {
       flex: 1;
       overflow: hidden;

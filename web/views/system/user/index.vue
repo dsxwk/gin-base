@@ -93,8 +93,11 @@ const state = reactive({
       isSerialNo: false, // 是否显示表格序号
       isSelection: true, // 是否显示表格多选
       isOperate: true, // 是否显示表格操作栏
+      isPrintTool: true, // 是否显示打印工具
+      isExcelTool: true, // 是否显示导出Excel工具
       fixed: 'right', // 固定操作列
-      operationWith: 200 // 固定操作列宽度
+      operationWith: 200, // 固定操作列宽度
+      isPage: true, // 是否显示分页
     },
     // 搜索表单，动态生成（传空数组时，将不显示搜索，注意格式）
     search: [

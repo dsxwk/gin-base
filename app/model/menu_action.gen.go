@@ -14,7 +14,7 @@ const TableNameMenuAction = "menu_action"
 // MenuAction 菜单功能表
 type MenuAction struct {
 	ID          int64           `gorm:"column:id;type:int(10) unsigned;primaryKey;autoIncrement:true;comment:ID" json:"id"`                  // ID
-	MenuID      int64           `gorm:"column:menu_id;type:int(10) unsigned;not null;comment:菜单id" json:"menu_id"`                           // 菜单id
+	MenuID      int64           `gorm:"column:menu_id;type:int(10) unsigned;not null;comment:菜单id" json:"menuId"`                            // 菜单id
 	Type        int64           `gorm:"column:type;type:tinyint(3) unsigned;not null;default:1;comment:类型 1=header 2=operation" json:"type"` // 类型 1=header 2=operation
 	Name        string          `gorm:"column:name;type:varchar(30);not null;comment:功能名称" json:"name"`                                      // 功能名称
 	IsLink      int64           `gorm:"column:is_link;type:tinyint(3) unsigned;not null;default:2;comment:是否为链接 1=是 2=否" json:"isLink"`      // 是否为链接 1=是 2=否
@@ -27,7 +27,7 @@ type MenuAction struct {
 
 type MenuActionQuery struct {
 	ID          int64          `gorm:"column:id;type:int(10) unsigned;primaryKey;autoIncrement:true;comment:ID" json:"id"`                  // ID
-	MenuID      int64          `gorm:"column:menu_id;type:int(10) unsigned;not null;comment:菜单id" json:"menu_id"`                           // 菜单id
+	MenuID      int64          `gorm:"column:menu_id;type:int(10) unsigned;not null;comment:菜单id" json:"menuId"`                            // 菜单id
 	Type        int64          `gorm:"column:type;type:tinyint(3) unsigned;not null;default:1;comment:类型 1=header 2=operation" json:"type"` // 类型 1=header 2=operation
 	Name        string         `gorm:"column:name;type:varchar(30);not null;comment:功能名称" json:"name"`                                      // 功能名称
 	IsLink      int64          `gorm:"column:is_link;type:tinyint(3) unsigned;not null;default:2;comment:是否为链接 1=是 2=否" json:"isLink"`      // 是否为链接 1=是 2=否

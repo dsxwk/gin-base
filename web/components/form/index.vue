@@ -1,5 +1,6 @@
 <script setup>
-import {ref} from 'vue'
+import {ref} from 'vue';
+import IconSelector from '/@/components/iconSelector/index.vue';
 
 const props = defineProps({
   model: Object,
@@ -25,7 +26,13 @@ const resolveComponent = (item) => {
     switch: 'el-switch',
     date: 'el-date-picker',
     datetime: 'el-date-picker',
+    cascader: 'el-cascader',
+    inputNumber: 'el-input-number',
+    slider: 'el-slider',
+    time: 'el-time-picker',
     upload: 'el-upload',
+    // 自定义组件
+    icon: IconSelector,
   }
 
   if (item.type === 'textarea') {

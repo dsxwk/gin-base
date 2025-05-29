@@ -67,10 +67,11 @@ func (s *MenuService) Create(m model.Menu) (model.Menu, error) {
 		return m, err
 	}
 
-	for _, v := range m.Meta.Roles {
+	for _, v := range m.MenuRoles {
 		menuRoles = append(menuRoles, model.MenuRoles{
 			MenuID: m.ID,
-			RoleID: v,
+			RoleID: v.RoleID,
+			Name:   v.Name,
 		})
 	}
 
@@ -92,10 +93,11 @@ func (s *MenuService) Update(m model.Menu) (model.Menu, error) {
 		menuRoles []model.MenuRoles
 	)
 
-	for _, v := range m.Meta.Roles {
+	for _, v := range m.MenuRoles {
 		menuRoles = append(menuRoles, model.MenuRoles{
 			MenuID: m.ID,
-			RoleID: v,
+			RoleID: v.RoleID,
+			Name:   v.Name,
 		})
 	}
 

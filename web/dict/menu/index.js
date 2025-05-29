@@ -12,8 +12,8 @@ export const isLinkDict = [
  * @type {[{label: string, value: boolean},{label: string, value: boolean}]}
  */
 export const isHideDict = [
-    { label: '是', value: true },
-    { label: '否', value: false }
+    { label: '隐藏', value: true },
+    { label: '不隐藏', value: false }
 ];
 
 /**
@@ -32,4 +32,31 @@ export const actionIsLinkEnum = [
 export const actionTypeDict = [
     { label: 'header', value: 1 },
     { label: 'operation', value: 2 },
+];
+
+/**
+ * 页面缓存
+ * @type {[{label: string, value: boolean},{label: string, value: boolean}]}
+ */
+export const isKeepAliveDict = [
+    { label: '缓存', value: true },
+    { label: '不缓存', value: false },
+];
+
+/**
+ * 是否固定
+ * @type {[{label: string, value: boolean},{label: string, value: boolean}]}
+ */
+export const isAffix = [
+    { label: '固定', value: true },
+    { label: '不固定', value: false },
+];
+
+/**
+ * 是否内嵌
+ * @type {[{label: string, value: boolean},{label: string, value: boolean}]}
+ */
+export const isIframe = [
+    { label: '是', value: true },
+    { label: '否', value: false },
 ];

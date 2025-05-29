@@ -1,99 +1,35 @@
 <template>
   <div class="system-menu-dialog-container">
     <el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="769px">
-      <el-form ref="dialogFormRef" :model="state.ruleForm" size="default" label-width="80px">
-        <el-row :gutter="35">
-          <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-            <el-form-item label="姓名">
-              <el-input v-model="state.ruleForm.full_name" placeholder="请输入姓名" clearable></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-            <el-form-item label="性别">
-              <el-radio-group v-model.number="state.ruleForm.gender">
-                <el-radio :value="1">男</el-radio>
-                <el-radio :value="2">女</el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-            <el-form-item label="头像">
-              <el-input v-model="state.ruleForm.avatar" placeholder="" clearable></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-            <el-form-item label="用户角色">
-              <el-select
-                  v-model="state.selectedRoleIds"
-                  multiple
-                  placeholder="请选择角色"
-                  clearable
-                  class="w100"
-              >
-                <el-option
-                    v-for="item in state.roles"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.id"
-                />
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-            <el-form-item label="用户名">
-              <el-input v-model="state.ruleForm.username" placeholder="请输入用户名" clearable></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-            <el-form-item label="邮箱">
-              <el-input v-model="state.ruleForm.email" placeholder="" clearable></el-input>
-            </el-form-item>
-          </el-col>
-          <template v-if="state.dialog.type === 'add'">
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-              <el-form-item label="密码">
-                <el-input v-model="state.ruleForm.password" placeholder="" clearable></el-input>
-              </el-form-item>
-            </el-col>
-          </template>
-          <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-            <el-form-item label="昵称">
-              <el-input v-model="state.ruleForm.nickname" placeholder="" clearable></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-            <el-form-item label="年龄">
-              <el-input v-model.number="state.ruleForm.age" placeholder="" clearable></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-            <el-form-item label="状态">
-              <el-radio-group v-model.number="state.ruleForm.status">
-                <el-radio :value="1">启用</el-radio>
-                <el-radio :value="2">停用</el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
+      <ConfigForm
+          ref="dialogFormRef"
+          :model="state.ruleForm"
+          :form-config="formData"
+          :rules="rules"
+          :form-props="{
+            labelWidth: '80px',
+            size: 'default'
+          }"
+      >
+      </ConfigForm>
       <template #footer>
-				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">{{ state.dialog.submitTxt }}</el-button>
-				</span>
+        <span class="dialog-footer">
+          <el-button @click="onCancel" size="default">取 消</el-button>
+          <el-button type="primary" @click="onSubmit" size="default">{{ state.dialog.submitTxt }}</el-button>
+        </span>
       </template>
     </el-dialog>
   </div>
 </template>
 
 <script setup name="systemUserDialog">
-import {reactive, onMounted, ref, nextTick} from 'vue';
+import {computed, onMounted, reactive, ref} from 'vue';
 import {storeToRefs} from 'pinia';
 import {useRoutesList} from '/@/stores/routesList';
 import {i18n} from '/@/static/i18n';
 import {userApi} from '/@/api/user';
 import {ElMessage} from 'element-plus';
-import {deepClone} from '/@/utils/other.js';
+import ConfigForm from '/@/components/form/index.vue';
 
 const props = defineProps({
   row: {
@@ -101,19 +37,16 @@ const props = defineProps({
     required: true,
     default: () => ({})
   }
-})
-const api = userApi();
-// 定义子组件向父组件传值/事件
+});
 const emit = defineEmits(['refresh']);
-
-// 定义变量内容
 const dialogFormRef = ref();
 const stores = useRoutesList();
 const {routesList} = storeToRefs(stores);
+const api = userApi();
+
 const state = reactive({
   roles: [],
   selectedRoleIds: [],
-  // 参数请参考 `/src/router/route.ts` 中的 `dynamicRoutes` 路由菜单格式
   ruleForm: {
     fullName: '',
     avatar: '',
@@ -124,31 +57,130 @@ const state = reactive({
     gender: 1,
     age: 0,
     status: 1,
-    userRoles: [],
+    userRoles: []
   },
   dialog: {
     isShowDialog: false,
     type: '',
     title: '',
-    submitTxt: '',
-  },
+    submitTxt: ''
+  }
 });
-const defaultForm = {
-  fullName: '',
-  avatar: '',
-  username: '',
-  email: '',
-  password: '',
-  nickname: '',
-  gender: 1,
-  age: 0,
-  status: 1,
-  userRoles: [],
-};
-// 获取 pinia 中的路由
+
+const formData = computed(() => [
+  {
+    label: '姓名',
+    prop: 'fullName',
+    type: 'input',
+    attrs: {
+      placeholder: '请输入姓名',
+      clearable: true
+    }
+  },
+  {
+    label: '性别',
+    prop: 'gender',
+    type: 'radio',
+    options: [
+      {
+        label: '男',
+        value: 1
+      },
+      {
+        label: '女',
+        value: 2
+      }
+    ]
+  },
+  {
+    label: '头像',
+    prop: 'avatar',
+    type: 'input',
+    attrs: {
+      placeholder: '',
+      clearable: true
+    }
+  },
+  {
+    label: '用户角色',
+    prop: 'userRoles',
+    type: 'select',
+    options: state.roles.map(role => ({label: role.name, value: role.id})),
+    attrs: {
+      multiple: true,
+      clearable: true,
+      placeholder: '请选择角色',
+      class: 'w100'
+    }
+  },
+  {
+    label: '用户名',
+    prop: 'username',
+    type: 'input',
+    attrs: {
+      placeholder: '请输入用户名',
+      clearable: true
+    }
+  },
+  {
+    label: '邮箱',
+    prop: 'email',
+    type: 'input',
+    attrs: {
+      placeholder: '请输入邮箱',
+      clearable: true
+    }
+  },
+  {
+    label: '密码',
+    prop: 'password',
+    type: 'input',
+    hidden: state.dialog.type !== 'add',
+    attrs: {
+      placeholder: '请输入密码',
+      clearable: true
+    }
+  },
+  {
+    label: '昵称',
+    prop: 'nickname',
+    type: 'input',
+    attrs: {
+      placeholder: '请输入昵称',
+      clearable: true
+    }
+  },
+  {
+    label: '年龄',
+    prop: 'age',
+    type: 'input',
+    attrs: {
+      type: 'number',
+      placeholder: '请输入年龄',
+      clearable: true
+    }
+  },
+  {
+    label: '状态',
+    prop: 'status',
+    type: 'radio',
+    options: [
+      {
+        label: '启用',
+        value: 1
+      },
+      {
+        label: '停用',
+        value: 2
+      }
+    ]
+  }
+]);
+
+const rules = {};
 const getData = (routes) => {
   const arr = [];
-  routes.map((val) => {
+  routes.forEach((val) => {
     val['title'] = i18n.global.t(val.meta?.title);
     arr.push({...val});
     if (val.children) getData(val.children);
@@ -156,7 +188,6 @@ const getData = (routes) => {
   return arr;
 };
 
-// 打开弹窗
 const openDialog = (type, row) => {
   if (type === 'edit') {
     Object.keys(state.ruleForm).forEach(key => {
@@ -174,28 +205,35 @@ const openDialog = (type, row) => {
     state.dialog.title = '修改用户';
     state.dialog.submitTxt = '修 改';
   } else {
+    state.ruleForm = {
+      fullName: '',
+      avatar: '',
+      username: '',
+      email: '',
+      password: '',
+      nickname: '',
+      gender: 1,
+      age: 0,
+      status: 1,
+      userRoles: []
+    }
+    state.selectedRoleIds = [];
     state.dialog.title = '新增用户';
     state.dialog.submitTxt = '新 增';
   }
   state.dialog.type = type;
   state.dialog.isShowDialog = true;
-  // 清空表单，此项需加表单验证才能使用
-  nextTick(() => {
-    dialogFormRef.value && dialogFormRef.value.resetFields();
-  });
 };
-// 关闭弹窗
+
 const closeDialog = () => {
   state.dialog.isShowDialog = false;
-  state.ruleForm = deepClone(defaultForm);
   state.selectedRoleIds = [];
-  dialogFormRef.value && dialogFormRef.value.resetFields();
 };
-// 取消
+
 const onCancel = () => {
   closeDialog();
 };
-// 提交
+
 const onSubmit = async () => {
   state.ruleForm.userRoles = state.selectedRoleIds.map(roleId => {
     const role = state.roles.find(r => r.id === roleId);
@@ -219,18 +257,23 @@ const onSubmit = async () => {
   closeDialog();
   emit('refresh');
 };
-// 获取角色
+
 const getRoles = async () => {
-  const data = await api.roleList({page:1, pageSize: 10, isPage: false});
+  const data = await api.roleList({page: 1, pageSize: 10, isPage: false});
   state.roles = data.data;
 };
-// 页面加载时
+
 onMounted(() => {
   getRoles();
   state.menuData = getData(routesList.value);
 });
-// 暴露变量
-defineExpose({
-  openDialog,
-});
+
+defineExpose({openDialog});
 </script>
+
+<style scoped>
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+</style>

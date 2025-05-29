@@ -163,43 +163,26 @@ go run ./cli/main.go --make=middleware  --fileName=/routers/test
 package model
 
 import (
-	"encoding/json"
 	"gorm.io/gorm"
-	"time"
 )
 
 const TableNameArticle = "article"
 
 // Article mapped from table <article>
 type Article struct {
-	ID         int64          `gorm:"column:id;type:int(10) unsigned;primaryKey;autoIncrement:true;comment:ID" json:"id"`  // ID
-	UID        int64          `gorm:"column:uid;type:int(11);not null;comment:用户id" json:"uid"`                            // 用户id
-	User       *User          `json:"user" gorm:"foreignkey:uid;references:id"`                                            // 关联用户
-	Title      string         `gorm:"column:title;type:varchar(50);not null;comment:标题" json:"title"`                      // 标题
-	Content    string         `gorm:"column:content;type:varchar(255);not null;comment:内容" json:"content"`                 // 内容
-	CategoryID int64          `gorm:"column:category_id;type:int(11);not null;comment:分类id" json:"category_id"`            // 分类id
-	DataSource int64          `gorm:"column:data_source;type:int(11);not null;comment:数据来源 1=文章库 2=自建" json:"data_source"` // 数据来源 1=文章库 2=自建
-	IsPublish  int64          `gorm:"column:is_publish;type:int(11);not null;comment:是否发布 1=已发布 2=未发布" json:"is_publish"`  // 是否发布 1=已发布 2=未发布
-	Category   *Category      `json:"category" gorm:"foreignkey:category_id;references:id"`                                // 关联分类
-	Tag        *string        `gorm:"column:tag;type:json;comment:标签" json:"tag"`                                          // 标签
-	CreatedAt  *JsonTime      `gorm:"column:created_at;type:datetime;comment:创建时间" json:"created_at"`                      // 创建时间
-	UpdatedAt  *JsonTime      `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updated_at"`                      // 更新时间
-	DeletedAt  gorm.DeletedAt `gorm:"column:deleted_at;type:datetime;comment:删除时间" json:"deleted_at"`                      // 删除时间
-}
-
-type ArticleQuery struct {
-	ID         int64     `json:"id" comment:"ID"`                                                     // ID
-	UID        int64     `json:"uid" comment:"用户id"`                                                  // 用户id
-	User       *User     `json:"user" gorm:"foreignkey:uid;references:id" comment:"关联用户"`             // 关联用户
-	Title      string    `json:"title" comment:"标题"`                                                  // 标题
-	Content    string    `json:"content" comment:"内容"`                                                // 内容
-	CategoryID int64     `json:"category_id" comment:"分类id"`                                          // 分类id
-	DataSource int64     `json:"data_source" comment:"数据来源 1=文章库 2=自建"`                               // 数据来源 1=文章库 2=自建
-	IsPublish  int64     `json:"is_publish" comment:"是否发布 1=已发布 2=未发布"`                               // 是否发布 1=已发布 2=未发布
-	Category   *Category `json:"category" gorm:"foreignkey:category_id;references:id" comment:"关联分类"` // 关联分类
-	Tag        []string  `json:"tag" comment:"标签"`                                                    // 标签
-	CreatedAt  *JsonTime `gorm:"column:created_at;type:datetime;comment:创建时间" json:"created_at"`      // 创建时间
-	UpdatedAt  *JsonTime `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updated_at"`      // 更新时间
+	ID         int64          `gorm:"column:id;type:int(10) unsigned;primaryKey;autoIncrement:true;comment:ID" json:"id"` // ID
+	UID        int64          `gorm:"column:uid;type:int(11);not null;comment:用户id" json:"uid"`                           // 用户id
+	User       *User          `json:"user" gorm:"foreignkey:uid;references:id"`                                           // 关联用户
+	Title      string         `gorm:"column:title;type:varchar(50);not null;comment:标题" json:"title"`                     // 标题
+	Content    string         `gorm:"column:content;type:varchar(255);not null;comment:内容" json:"content"`                // 内容
+	CategoryID int64          `gorm:"column:category_id;type:int(11);not null;comment:分类id" json:"categoryId"`            // 分类id
+	DataSource int64          `gorm:"column:data_source;type:int(11);not null;comment:数据来源 1=文章库 2=自建" json:"dataSource"` // 数据来源 1=文章库 2=自建
+	IsPublish  int64          `gorm:"column:is_publish;type:int(11);not null;comment:是否发布 1=已发布 2=未发布" json:"IsPublish"`  // 是否发布 1=已发布 2=未发布
+	Category   *Category      `json:"category" gorm:"foreignkey:category_id;references:id"`                               // 关联分类
+	Tag        JsonString     `gorm:"column:tag;type:json;comment:标签" json:"tag"`                                         // 标签
+	CreatedAt  *JsonTime      `gorm:"column:created_at;type:datetime;comment:创建时间" json:"createdAt"`                      // 创建时间
+	UpdatedAt  *JsonTime      `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updatedAt"`                      // 更新时间
+	DeletedAt  gorm.DeletedAt `gorm:"column:deleted_at;type:datetime;comment:删除时间" json:"deletedAt"`                      // 删除时间
 }
 
 // TableName Article's table name
@@ -207,20 +190,6 @@ func (*Article) TableName() string {
 	return TableNameArticle
 }
 
-// BeforeCreate 创建之前
-func (s *Article) BeforeCreate(tx *gorm.DB) (err error) {
-	now := JsonTime(time.Now())
-	s.CreatedAt = &now
-	s.UpdatedAt = &now
-	return nil
-}
-
-// BeforeUpdate 更新之前
-func (s *Article) BeforeUpdate(tx *gorm.DB) (err error) {
-	now := JsonTime(time.Now())
-	s.UpdatedAt = &now
-	return nil
-}
 ```
 
 ## 设置器和获取器
@@ -250,82 +219,6 @@ func (s *Article) SetTag(tag []string) *string {
 }
 ```
 
-### 设置器和获取器的使用
-```go
-// List 列表
-// @param pageData global.PageData
-// @return global.PageData, error
-func (s *ArticleService) List(pageData global.PageData) (global.PageData, error) {
-    var (
-        articleModel []model.Article
-        articleQuery []model.ArticleQuery
-    )
-    
-    // 获取分页默认为第一页，每页10条记录
-    offset, limit := utils.Pagination(pageData.Page, pageData.PageSize)
-    
-    // join
-    // db := global.DB.Joins("LEFT JOIN user ON article.uid = user.id LEFT JOIN category ON article.category_id = category.id").Select("article.*, user.username, category.name").Find(&articleModel)
-    
-    db := global.DB.
-    Preload("User", func(db *gorm.DB) *gorm.DB {
-        return db.Select("id, username, full_name, nickname, email, gender, age")
-    }).Preload("Category", func(db *gorm.DB) *gorm.DB {
-        return db.Select("id, name")
-    }).
-    Find(&articleModel)
-    
-    // 获取总记录数
-    err := db.Count(&pageData.Total).Error
-    if err != nil {
-        return pageData, err
-    }
-    
-    // 执行分页查询
-    err = db.Offset(offset).
-        Limit(limit).
-        Find(&articleModel).Error
-    if err != nil {
-        return pageData, err
-    }
-    
-    err = copier.Copy(&articleQuery, &articleModel)
-    if err != nil {
-        return pageData, err
-    }
-    
-    for k, m := range articleModel {
-        articleQuery[k].Tag = m.GetTag()
-    }
-    
-    pageData.List = articleQuery
-    
-    return pageData, nil
-}
-
-// Update 更新
-// @param: req model.Article
-// @return: model.Article, error
-func (this *ArticleService) Update(req model.ArticleQuery) (model.Article, error) {
-    var (
-        articleModel model.Article
-    )
-    
-    err := copier.Copy(&articleModel, &req)
-    if err != nil {
-        return articleModel, err
-    }
-    articleModel.Tag = articleModel.SetTag(req.Tag)
-    
-    err = global.DB.Updates(&articleModel).Error
-    if err != nil {
-        return articleModel, err
-    }
-    
-    return articleModel, nil
-}
-```
-
 ## 缓存使用 支持内存缓存和redis缓存需要在yaml当中指定
 ```yaml
 # 缓存
@@ -351,7 +244,9 @@ type CacheService struct {
 }
 
 // SetCache 设置缓存
-// @param: key string, value interface{}, expire time.Duration
+// @param key string
+// @param value interface{}
+// @param expire time.Duration
 // @return: bool, error
 func (s *CacheService) SetCache(key string, value interface{}, expire time.Duration) (bool, error) {
 	err := global.Cache.SetCache(key, value, expire)
@@ -408,26 +303,23 @@ type LoginService struct {
 }
 
 // Login 登录
-// @param: username string, password string
-// @return: model.User, error
-func (s *LoginService) Login(username string, password string) (model.User, error) {
-	var (
-		userModel model.User
-	)
-
-	if err := global.DB.Where("username = ?", username).First(&userModel).Error; err != nil {
+// @param username string
+// @param password string
+// @return m model.User, error
+func (s *LoginService) Login(username string, password string) (m model.User, err error) {
+	if err := global.DB.Where("username = ?", username).First(&m).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return userModel, errors.New("登录账号错误")
 		}
 	}
 
-	check := utils.BcryptCheck(password, userModel.Password)
+	check := utils.BcryptCheck(password, m.Password)
 	if !check {
-		return userModel, errors.New("登录密码错误")
+		return m, errors.New("登录密码错误")
 	}
 
-	if userModel.Status != 1 {
-		return userModel, errors.New("账号已被禁用")
+	if m.Status != 1 {
+		return m, errors.New("账号已被禁用")
 	}
 
 	// 发布事件
@@ -440,7 +332,7 @@ func (s *LoginService) Login(username string, password string) (model.User, erro
 	}
 	global.Event.Publish(event)
 
-	return userModel, nil
+	return m, nil
 }
 
 ```

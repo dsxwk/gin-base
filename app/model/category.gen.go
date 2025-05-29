@@ -6,7 +6,6 @@ package model
 
 import (
 	"gorm.io/gorm"
-	"time"
 )
 
 const TableNameCategory = "category"
@@ -20,29 +19,7 @@ type Category struct {
 	DeletedAt gorm.DeletedAt `gorm:"column:deleted_at;type:datetime;comment:删除时间" json:"deletedAt"`                      // 删除时间
 }
 
-type CategoryQuery struct {
-	ID        int64     `gorm:"column:id;type:int(10) unsigned;primaryKey;autoIncrement:true;comment:ID" json:"id"` // ID
-	Name      string    `gorm:"column:name;type:varchar(50);not null;comment:分类名称" json:"name"`                     // 分类名称
-	CreatedAt *JsonTime `gorm:"column:created_at;type:datetime;comment:创建时间" json:"createdAt"`                      // 创建时间
-	UpdatedAt *JsonTime `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updatedAt"`                      // 更新时间
-}
-
 // TableName Category's table name
 func (*Category) TableName() string {
 	return TableNameCategory
-}
-
-// BeforeCreate 创建之前
-func (s *Category) BeforeCreate(tx *gorm.DB) (err error) {
-	now := JsonTime(time.Now())
-	s.CreatedAt = &now
-	s.UpdatedAt = &now
-	return nil
-}
-
-// BeforeUpdate 更新之前
-func (s *Category) BeforeUpdate(tx *gorm.DB) (err error) {
-	now := JsonTime(time.Now())
-	s.UpdatedAt = &now
-	return nil
 }

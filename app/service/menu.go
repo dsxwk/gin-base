@@ -7,7 +7,6 @@ import (
 	"gin-base/common"
 	"gin-base/common/global"
 	"gin-base/helper/utils"
-	"github.com/jinzhu/copier"
 	"gorm.io/gorm"
 )
 
@@ -17,11 +16,7 @@ type MenuService struct {
 
 // List 列表
 // @return bool
-func (s *MenuService) List() (menus []model.MenuQuery, err error) {
-	var (
-		menuModels []model.Menu
-	)
-
+func (s *MenuService) List() (models []model.Menu, err error) {
 	err = global.DB.
 		Preload("MenuRoles").
 		Preload("MenuAction", func(db *gorm.DB) *gorm.DB {
@@ -31,33 +26,22 @@ func (s *MenuService) List() (menus []model.MenuQuery, err error) {
 		}).
 		Preload("MenuAction.ActionRoles").
 		Order("sort asc").
-		Find(&menuModels).Error
+		Find(&models).Error
 
 	if err != nil {
-		return menus, err
-	}
-	err = copier.Copy(&menus, &menuModels)
-	if err != nil {
-		return menus, err
+		return models, err
 	}
 
-	for k, m := range menuModels {
-		menus[k].IsLink = m.GetIsLink()
-		menus[k].Meta = m.GetMeta()
-		menus[k].MenuRoles = m.MenuRoles
-		menus[k].MenuAction = m.MenuAction
-	}
+	models = s.MenuTree(models, 0)
 
-	menus = s.MenuTree(menus, 0)
-
-	return menus, nil
+	return models, nil
 }
 
 // MenuTree 数据子集递归
-// @param menus []model.MenuQuery
+// @param menus []model.Menu
 // @param pid int64
-// @return tree []model.MenuQuery
-func (s *MenuService) MenuTree(menus []model.MenuQuery, pid int64) (tree []model.MenuQuery) {
+// @return tree []model.Menu
+func (s *MenuService) MenuTree(menus []model.Menu, pid int64) (tree []model.Menu) {
 	for _, menu := range menus {
 		if menu.Pid == pid {
 			children := s.MenuTree(menus, menu.ID)
@@ -70,174 +54,144 @@ func (s *MenuService) MenuTree(menus []model.MenuQuery, pid int64) (tree []model
 }
 
 // Create 创建
-// @param req model.MenuQuery
-// @return menuModel model.Menu, err error
-func (s *MenuService) Create(req model.MenuQuery) (menuModel model.Menu, err error) {
+// @param m model.Menu
+// @return model.Menu, error
+func (s *MenuService) Create(m model.Menu) (model.Menu, error) {
 	var (
 		menuRoles []model.MenuRoles
 	)
 
-	err = copier.Copy(&menuModel, &req)
-	if err != nil {
-		return menuModel, err
-	}
-
-	menuModel.Meta = menuModel.SetMeta(req.Meta)
-	menuModel.IsLink = menuModel.SetIsLink(req.IsLink)
-
 	tx := global.DB.Begin()
-	err = tx.Create(&menuModel).Error
+	err := tx.Create(&m).Error
 	if err != nil {
-		return menuModel, err
+		return m, err
 	}
 
-	for _, v := range req.Meta.Roles {
+	for _, v := range m.Meta.Roles {
 		menuRoles = append(menuRoles, model.MenuRoles{
-			MenuID: menuModel.ID,
+			MenuID: m.ID,
 			RoleID: v,
 		})
 	}
 
 	err = tx.Create(&menuRoles).Error
 	if err != nil {
-		return menuModel, err
+		return m, err
 	}
 	tx.Commit()
 
-	return menuModel, nil
+	return m, nil
 }
 
 // Update 更新
-// @param req model.Menu
-// @return menuModel model.Menu, err error
-func (s *MenuService) Update(req model.MenuQuery) (menuModel model.Menu, err error) {
+// @param m model.Menu
+// @return model.Menu, error
+func (s *MenuService) Update(m model.Menu) (model.Menu, error) {
 	var (
 		menuRole  model.MenuRoles
 		menuRoles []model.MenuRoles
 	)
 
-	for _, v := range req.Meta.Roles {
+	for _, v := range m.Meta.Roles {
 		menuRoles = append(menuRoles, model.MenuRoles{
-			MenuID: req.ID,
+			MenuID: m.ID,
 			RoleID: v,
 		})
 	}
 
-	err = copier.Copy(&menuModel, &req)
-	if err != nil {
-		return menuModel, err
-	}
-
-	menuModel.Meta = menuModel.SetMeta(req.Meta)
-	menuModel.IsLink = menuModel.SetIsLink(req.IsLink)
-
 	tx := global.DB.Begin()
-	err = tx.Updates(&menuModel).Error
+	err := tx.Updates(&m).Error
 	if err != nil {
-		return menuModel, err
+		return m, err
 	}
 
-	err = tx.Where("menu_id", req.ID).Delete(&menuRole).Error
+	err = tx.Where("menu_id", m.ID).Delete(&menuRole).Error
 	if err != nil {
-		return menuModel, err
+		return m, err
 	}
 
 	err = tx.Create(&menuRoles).Error
 	if err != nil {
-		return menuModel, err
+		return m, err
 	}
 	tx.Commit()
 
-	return menuModel, nil
+	return m, nil
 }
 
 // Delete 删除
 // @param id int64
-// @return menuModel model.Menu, err error
-func (s *MenuService) Delete(id int64) (menuModel model.Menu, err error) {
-	err = global.DB.Delete(&menuModel, id).Error
+// @return m model.Menu, err error
+func (s *MenuService) Delete(id int64) (m model.Menu, err error) {
+	err = global.DB.Delete(&m, id).Error
 	if err != nil {
-		return menuModel, err
+		return m, err
 	}
 
-	return menuModel, nil
+	return m, nil
 }
 
 // ActionList 功能列表
 // @param menuId int64
-// @return actionQuery []model.MenuActionQuery, err error
-func (s *MenuService) ActionList(menuId int64) (actionQuery []model.MenuActionQuery, err error) {
-	var (
-		menuActionModels []model.MenuAction
-	)
-
+// @return models []model.MenuAction, err error
+func (s *MenuService) ActionList(menuId int64) (models []model.MenuAction, err error) {
 	err = global.DB.
 		Where("menu_id = ?", menuId).
 		Order("sort asc").
-		Find(&menuActionModels).
-		Scan(&actionQuery).
+		Find(&models).
 		Error
 	if err != nil {
-		return actionQuery, err
+		return models, err
 	}
 
-	return actionQuery, nil
+	return models, nil
 }
 
 // ActionCreate 功能创建
-// @param req model.MenuActionQuery
-// @return menuActionModel model.MenuAction, err error
-func (s *MenuService) ActionCreate(req model.MenuActionQuery) (menuActionModel model.MenuAction, err error) {
-	err = copier.Copy(&menuActionModel, &req)
+// @param m model.MenuAction
+// @return model.MenuAction, error
+func (s *MenuService) ActionCreate(m model.MenuAction) (model.MenuAction, error) {
+	db := global.DB.Create(&m)
+
+	err := db.Error
 	if err != nil {
-		return menuActionModel, err
+		return m, err
 	}
 
-	db := global.DB.Create(&menuActionModel)
-
-	err = db.Error
-	if err != nil {
-		return menuActionModel, err
-	}
-
-	return menuActionModel, nil
+	return m, nil
 }
 
 // ActionUpdate 功能更新
-// @param req model.MenuActionQuery
-// @return menuActionModel model.MenuAction, err error
-func (s *MenuService) ActionUpdate(req model.MenuActionQuery) (menuActionModel model.MenuAction, err error) {
-	err = copier.Copy(&menuActionModel, &req)
+// @param m model.MenuAction
+// @return model.MenuAction, error
+func (s *MenuService) ActionUpdate(m model.MenuAction) (model.MenuAction, error) {
+	err := global.DB.Updates(&m).Error
 	if err != nil {
-		return menuActionModel, err
+		return m, err
 	}
 
-	err = global.DB.Updates(&menuActionModel).Error
-	if err != nil {
-		return menuActionModel, err
-	}
-
-	return menuActionModel, nil
+	return m, nil
 }
 
 // ActionDelete 功能删除
 // @param id int64
-// @return menuActionModel model.MenuAction, err error
-func (s *MenuService) ActionDelete(id int64, menuID int64) (menuActionModel model.MenuAction, err error) {
-	if err = global.DB.Where("id = ?", id).First(&menuActionModel).Error; err != nil {
+// @param menuID int64
+// @return m model.MenuAction, err error
+func (s *MenuService) ActionDelete(id int64, menuID int64) (m model.MenuAction, err error) {
+	if err = global.DB.Where("id = ?", id).First(&m).Error; err != nil {
 		if !errors.Is(err, gorm.ErrRecordNotFound) {
-			return menuActionModel, err
+			return m, err
 		}
 	}
 
-	if menuActionModel.MenuID != menuID {
-		return menuActionModel, fmt.Errorf("删除失败,该功能id【%d】不属于该菜单id【%d】", id, menuID)
+	if m.MenuID != menuID {
+		return m, fmt.Errorf("删除失败,该功能id【%d】不属于该菜单id【%d】", id, menuID)
 	}
 
-	err = global.DB.Delete(&menuActionModel, id).Error
+	err = global.DB.Delete(&m, id).Error
 	if err != nil {
-		return menuActionModel, err
+		return m, err
 	}
 
-	return menuActionModel, nil
+	return m, nil
 }

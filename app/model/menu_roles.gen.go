@@ -6,7 +6,6 @@ package model
 
 import (
 	"gorm.io/gorm"
-	"time"
 )
 
 const TableNameMenuRoles = "menu_roles"
@@ -25,19 +24,4 @@ type MenuRoles struct {
 // TableName MenuRoles's table name
 func (*MenuRoles) TableName() string {
 	return TableNameMenuRoles
-}
-
-// BeforeCreate 创建之前
-func (s *MenuRoles) BeforeCreate(tx *gorm.DB) (err error) {
-	now := JsonTime(time.Now())
-	s.CreatedAt = &now
-	s.UpdatedAt = &now
-	return nil
-}
-
-// BeforeUpdate 更新之前
-func (s *MenuRoles) BeforeUpdate(tx *gorm.DB) (err error) {
-	now := JsonTime(time.Now())
-	s.UpdatedAt = &now
-	return nil
 }

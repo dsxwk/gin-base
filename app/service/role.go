@@ -13,17 +13,18 @@ type RoleService struct {
 }
 
 // List 角色列表
-// @param pageData global.PageData, search validate.RoleSearchValidate
+// @param pageData global.PageData
+// @param search validate.RoleSearchValidate
 // @return interface{}, error
 func (s *RoleService) List(pageData global.PageData, search validate.RoleSearchValidate) (interface{}, error) {
 	var (
-		roles []model.RolesQuery
+		models []model.Roles
 	)
 
 	// 获取where条件和参数
 	where, args := utils.BuildWhereClause(search, "form")
 
-	db := global.DB.Model(&model.Roles{}).Find(&roles)
+	db := global.DB.Model(&model.Roles{}).Find(&models)
 	// 根据 where 子句添加条件
 	if where != "" {
 		db = db.Where(where, args...)
@@ -41,16 +42,16 @@ func (s *RoleService) List(pageData global.PageData, search validate.RoleSearchV
 		// 执行分页查询
 		err = db.Offset(offset).
 			Limit(limit).
-			Find(&roles).Error
+			Find(&models).Error
 		if err != nil {
 			return pageData, err
 		}
 	}
 
 	if pageData.IsPage == nil || *pageData.IsPage {
-		pageData.List = roles
+		pageData.List = models
 		return pageData, nil
 	}
 
-	return roles, nil
+	return models, nil
 }

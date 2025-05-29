@@ -6,7 +6,6 @@ package model
 
 import (
 	"gorm.io/gorm"
-	"time"
 )
 
 const TableNameMenuAction = "menu_action"
@@ -25,34 +24,7 @@ type MenuAction struct {
 	DeletedAt   *gorm.DeletedAt `gorm:"column:deleted_at;type:datetime;comment:删除时间" json:"deletedAt"`                                       // 删除时间
 }
 
-type MenuActionQuery struct {
-	ID          int64          `gorm:"column:id;type:int(10) unsigned;primaryKey;autoIncrement:true;comment:ID" json:"id"`                  // ID
-	MenuID      int64          `gorm:"column:menu_id;type:int(10) unsigned;not null;comment:菜单id" json:"menuId"`                            // 菜单id
-	Type        int64          `gorm:"column:type;type:tinyint(3) unsigned;not null;default:1;comment:类型 1=header 2=operation" json:"type"` // 类型 1=header 2=operation
-	Name        string         `gorm:"column:name;type:varchar(30);not null;comment:功能名称" json:"name"`                                      // 功能名称
-	IsLink      int64          `gorm:"column:is_link;type:tinyint(3) unsigned;not null;default:2;comment:是否为链接 1=是 2=否" json:"isLink"`      // 是否为链接 1=是 2=否
-	Sort        int64          `gorm:"column:sort;type:int(10) unsigned;not null;comment:排序" json:"sort"`                                   // 排序
-	ActionRoles []*ActionRoles `gorm:"foreignKey:action_id;references:id" json:"actionRoles"`                                               // 功能角色
-	CreatedAt   *JsonTime      `gorm:"column:created_at;type:datetime;comment:创建时间" json:"createdAt"`                                       // 创建时间
-	UpdatedAt   *JsonTime      `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updatedAt"`                                       // 更新时间
-}
-
 // TableName MenuAction's table name
 func (*MenuAction) TableName() string {
 	return TableNameMenuAction
-}
-
-// BeforeCreate 创建之前
-func (s *MenuAction) BeforeCreate(tx *gorm.DB) (err error) {
-	now := JsonTime(time.Now())
-	s.CreatedAt = &now
-	s.UpdatedAt = &now
-	return nil
-}
-
-// BeforeUpdate 更新之前
-func (s *MenuAction) BeforeUpdate(tx *gorm.DB) (err error) {
-	now := JsonTime(time.Now())
-	s.UpdatedAt = &now
-	return nil
 }

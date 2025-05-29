@@ -15,26 +15,23 @@ type LoginService struct {
 }
 
 // Login 登录
-// @param username string, password string
-// @return model.User, error
-func (s *LoginService) Login(username string, password string) (model.User, error) {
-	var (
-		userModel model.User
-	)
-
-	if err := global.DB.Where("username = ?", username).First(&userModel).Error; err != nil {
+// @param username string
+// @param password string
+// @return m model.User, error
+func (s *LoginService) Login(username string, password string) (m model.User, err error) {
+	if err = global.DB.Where("username = ?", username).First(&m).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return userModel, errors.New("登录账号错误")
+			return m, errors.New("登录账号错误")
 		}
 	}
 
-	check := utils.BcryptCheck(password, userModel.Password)
+	check := utils.BcryptCheck(password, m.Password)
 	if !check {
-		return userModel, errors.New("登录密码错误")
+		return m, errors.New("登录密码错误")
 	}
 
-	if userModel.Status != 1 {
-		return userModel, errors.New("账号已被禁用")
+	if m.Status != 1 {
+		return m, errors.New("账号已被禁用")
 	}
 
 	// 发布事件
@@ -47,5 +44,5 @@ func (s *LoginService) Login(username string, password string) (model.User, erro
 	}
 	global.Event.Publish(e)
 
-	return userModel, nil
+	return m, nil
 }

@@ -5,9 +5,10 @@
 package model
 
 import (
+	"database/sql/driver"
 	"encoding/json"
+	"fmt"
 	"gorm.io/gorm"
-	"time"
 )
 
 const TableNameMenu = "menu"
@@ -20,15 +21,16 @@ type Menu struct {
 	Path       string          `gorm:"column:path;type:varchar(50);not null;comment:路由路径" json:"path"`                                     // 路由路径
 	Redirect   string          `gorm:"column:redirect;type:varchar(50);not null;comment:重定向" json:"redirect"`                              // 重定向
 	Component  string          `gorm:"column:component;type:varchar(100);not null;comment:组件路径" json:"component"`                          // 组件路径
-	IsLink     int64           `gorm:"column:is_link;type:tinyint(3) unsigned;not null;default:2;comment:是否外链 1=是 2=否 默认=2" json:"isLink"` // 是否外链 1=是 2=否 默认=2
+	IsLink     BoolInt64       `gorm:"column:is_link;type:tinyint(3) unsigned;not null;default:2;comment:是否外链 1=是 2=否 默认=2" json:"isLink"` // 是否外链 1=是 2=否 默认=2
 	Status     int64           `gorm:"column:status;type:tinyint(3) unsigned;not null;default:1;comment:状态 1=启用 2=停用" json:"status"`       // 状态 1=启用 2=停用
 	Sort       int64           `gorm:"column:sort;type:int(10) unsigned;not null;comment:排序" json:"sort"`                                  // 排序
-	Meta       *string         `gorm:"column:meta;type:json;comment:元数据" json:"meta"`                                                      // 元数据
+	Meta       Meta            `gorm:"column:meta;type:json;comment:元数据" json:"meta"`                                                      // 元数据
 	MenuAction []*MenuAction   `json:"menuAction" gorm:"foreignkey:menu_id;references:id" comment:"菜单功能"`                                  // 菜单功能
 	MenuRoles  []*MenuRoles    `json:"menuRoles" gorm:"foreignkey:menu_id;references:id" comment:"菜单角色"`                                   // 菜单角色
-	CreatedAt  *JsonTime       `gorm:"column:created_at;type:datetime;comment:创建时间" json:"createdAt"`                                      // 创建时间
-	UpdatedAt  *JsonTime       `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updatedAt"`                                      // 更新时间
-	DeletedAt  *gorm.DeletedAt `gorm:"column:deleted_at;type:datetime;comment:删除时间" json:"deletedAt"`                                      // 删除时间
+	Children   []Menu          `json:"children" gorm:"-"`
+	CreatedAt  *JsonTime       `gorm:"column:created_at;type:datetime;comment:创建时间" json:"createdAt"` // 创建时间
+	UpdatedAt  *JsonTime       `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updatedAt"` // 更新时间
+	DeletedAt  *gorm.DeletedAt `gorm:"column:deleted_at;type:datetime;comment:删除时间" json:"deletedAt"` // 删除时间
 }
 
 type Meta struct {
@@ -42,91 +44,29 @@ type Meta struct {
 	Roles       []int64 `gorm:"column:roles;type:json;comment:菜单角色" json:"roles"`         // 权限标识，取角色管理
 }
 
-type MenuQuery struct {
-	ID         int64         `gorm:"column:id;type:int(10) unsigned;primaryKey;autoIncrement:true;comment:ID" json:"id"`                 // ID
-	Pid        int64         `gorm:"column:pid;type:int(10) unsigned;not null;comment:父级id" json:"pid"`                                  // 父级idTitle      string      `gorm:"column:title;type:varchar(50);not null;comment:菜单名称" json:"title"`                                   // 菜单名称
-	Name       string        `gorm:"column:name;type:varchar(50);not null;comment:路由名称" json:"name"`                                     // 路由名称
-	Path       string        `gorm:"column:path;type:varchar(50);not null;comment:路由路径" json:"path"`                                     // 路由路径
-	Redirect   string        `gorm:"column:redirect;type:varchar(50);not null;comment:重定向" json:"redirect"`                              // 重定向
-	Component  string        `gorm:"column:component;type:varchar(100);not null;comment:组件路径" json:"component"`                          // 组件路径
-	IsLink     bool          `gorm:"column:is_link;type:tinyint(3) unsigned;not null;default:2;comment:是否外链 1=是 2=否 默认=2" json:"isLink"` // 是否外链 1=是 2=否 默认=2
-	Status     int64         `gorm:"column:status;type:tinyint(3) unsigned;not null;default:1;comment:状态 1=启用 2=停用" json:"status"`       // 状态 1=启用 2=停用
-	Sort       int64         `gorm:"column:sort;type:int(10) unsigned;not null;comment:排序" json:"sort"`                                  // 排序
-	Meta       *Meta         `gorm:"column:meta;type:json;comment:元数据" json:"meta"`                                                      // 元数据
-	MenuAction []*MenuAction `json:"menuAction" gorm:"foreignkey:menu_id;references:id" comment:"菜单功能"`                                  // 菜单功能
-	MenuRoles  []*MenuRoles  `json:"menuRoles" gorm:"foreignkey:menu_id;references:id" comment:"菜单角色"`                                   // 菜单角色
-	Children   []MenuQuery   `json:"children" gorm:"-"`
-	CreatedAt  *JsonTime     `gorm:"column:created_at;type:datetime;comment:创建时间" json:"createdAt"` // 创建时间
-	UpdatedAt  *JsonTime     `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updatedAt"` // 更新时间
-}
-
 // TableName Menu's table name
 func (*Menu) TableName() string {
 	return TableNameMenu
 }
 
-// BeforeCreate 创建之前
-func (s *Menu) BeforeCreate(tx *gorm.DB) (err error) {
-	now := JsonTime(time.Now())
-	s.CreatedAt = &now
-	s.UpdatedAt = &now
-	return nil
+func (m Meta) Value() (driver.Value, error) {
+	return json.Marshal(m)
 }
 
-// BeforeUpdate 更新之前
-func (s *Menu) BeforeUpdate(tx *gorm.DB) (err error) {
-	now := JsonTime(time.Now())
-	s.UpdatedAt = &now
-	return nil
-}
-
-// GetMeta 获取元数据
-func (s *Menu) GetMeta() *Meta {
-	if s != nil && s.Meta != nil && *s.Meta != "" {
-		var m Meta
-		if err := json.Unmarshal([]byte(*s.Meta), &m); err == nil {
-			return &m
-		}
+// 实现 sql.Scanner 接口（用于从数据库读取）
+func (m *Meta) Scan(value interface{}) error {
+	if value == nil {
+		*m = Meta{}
+		return nil
 	}
-	return &Meta{}
-}
-
-// SetMeta 设置元数据
-func (s *Menu) SetMeta(meta *Meta) *string {
-	var (
-		model Menu
-	)
-
-	if meta != nil {
-		JSON, _ := json.Marshal(meta)
-		Str := string(JSON)
-		model.Meta = &Str
+	var data []byte
+	switch v := value.(type) {
+	case string:
+		data = []byte(v)
+	case []byte:
+		data = v
+	default:
+		return fmt.Errorf("cannot scan type %T into Meta", value)
 	}
-	return model.Meta
-}
-
-// SetIsLink 设置是否链接
-func (s *Menu) SetIsLink(isLink bool) int64 {
-	if isLink {
-		s.IsLink = 1
-	} else {
-		s.IsLink = 2
-	}
-
-	return s.IsLink
-}
-
-// GetIsLink 设置是否链接
-func (s *Menu) GetIsLink() bool {
-	var (
-		isLink bool
-	)
-
-	if s.IsLink == 1 {
-		isLink = true
-	} else {
-		isLink = false
-	}
-
-	return isLink
+	return json.Unmarshal(data, m)
 }

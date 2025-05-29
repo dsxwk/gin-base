@@ -13,11 +13,12 @@ type UserService struct {
 }
 
 // List 列表
-// @param: pageData global.PageData, search validate.UserSearch
+// @param: pageData global.PageData
+// @param: search validate.UserSearch
 // @return: global.PageData, error
 func (s *UserService) List(pageData global.PageData, search validate.UserSearch) (global.PageData, error) {
 	var (
-		users []model.UserQuery
+		models []model.User
 	)
 
 	// 获取where条件和参数
@@ -26,7 +27,7 @@ func (s *UserService) List(pageData global.PageData, search validate.UserSearch)
 	// 获取分页默认为第一页，每页10条记录
 	offset, limit := utils.Pagination(pageData.Page, pageData.PageSize)
 
-	db := global.DB.Model(&model.User{}).Find(&users)
+	db := global.DB.Model(&model.User{}).Find(&models)
 	// 根据 where 子句添加条件
 	if where != "" {
 		db = db.Where(where, args...)
@@ -43,72 +44,63 @@ func (s *UserService) List(pageData global.PageData, search validate.UserSearch)
 		Preload("UserRoles").
 		Offset(offset).
 		Limit(limit).
-		Find(&users).Error
+		Find(&models).Error
 	if err != nil {
 		return pageData, err
 	}
 
-	pageData.List = users
+	pageData.List = models
 
 	return pageData, nil
 }
 
 // Create 创建
-// @param: req model.User
+// @param: m model.User
 // @return: model.User, error
-func (s *UserService) Create(req model.User) (model.User, error) {
+func (s *UserService) Create(m model.User) (model.User, error) {
 	// 处理密码
-	req.Password = utils.BcryptHash(req.Password)
+	m.Password = utils.BcryptHash(m.Password)
 
-	err := global.DB.Create(&req).Error
+	err := global.DB.Create(&m).Error
 	if err != nil {
-		return req, err
+		return m, err
 	}
 
-	return req, nil
+	return m, nil
 }
 
 // Update 更新
-// @param req model.User
+// @param m model.User
 // @return model.User, error
-func (s *UserService) Update(req model.User) (model.User, error) {
-	err := global.DB.Updates(&req).Error
+func (s *UserService) Update(m model.User) (model.User, error) {
+	err := global.DB.Updates(&m).Error
 	if err != nil {
-		return req, err
+		return m, err
 	}
 
-	return req, nil
+	return m, nil
 }
 
 // Detail 详情
 // @param id int64
-// @return model.UserQuery, error
-func (s *UserService) Detail(id int64) (model.UserQuery, error) {
-	var (
-		userModel model.User
-		userQuery model.UserQuery
-	)
-
-	err := global.DB.First(&userModel, id).Scan(&userQuery).Error
+// @return m model.UserQuery, err error
+func (s *UserService) Detail(id int64) (m model.User, err error) {
+	err = global.DB.First(&m, id).Error
 	if err != nil {
-		return userQuery, err
+		return m, err
 	}
 
-	return userQuery, nil
+	return m, nil
 }
 
 // Delete 删除
 // @param id int64
-// @return model.User, error
-func (s *UserService) Delete(id int64) (model.User, error) {
-	var (
-		userModel model.User
-	)
-
-	err := global.DB.Delete(&userModel, id).Error
+// @return m model.User, err error
+func (s *UserService) Delete(id int64) (m model.User, err error) {
+	err = global.DB.Delete(&m, id).Error
 	if err != nil {
-		return userModel, err
+		return m, err
 	}
 
-	return userModel, nil
+	return m, nil
 }

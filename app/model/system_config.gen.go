@@ -6,7 +6,6 @@ package model
 
 import (
 	"gorm.io/gorm"
-	"time"
 )
 
 const TableNameSystemConfig = "system_config"
@@ -25,34 +24,7 @@ type SystemConfig struct {
 	DeletedAt    gorm.DeletedAt `gorm:"column:deleted_at;type:datetime;comment:删除时间" json:"deletedAt"`                                             // 删除时间
 }
 
-type SystemConfigQuery struct {
-	ID           int64     `gorm:"column:id;type:smallint(5) unsigned;primaryKey;autoIncrement:true;comment:id" json:"id"`                    // id
-	CnName       string    `gorm:"column:cn_name;type:varchar(60);not null;comment:中文名称" json:"cnName"`                                       // 中文名称
-	EnName       string    `gorm:"column:en_name;type:varchar(60);not null;comment:英文名称" json:"enName"`                                       // 英文名称
-	DefaultValue string    `gorm:"column:default_value;type:varchar(200);not null;comment:默认值" json:"defaultValue"`                           // 默认值
-	OptionValue  string    `gorm:"column:option_value;type:varchar(200);not null;comment:可选值" json:"optionValue"`                             // 可选值
-	Type         int64     `gorm:"column:type;type:tinyint(1);not null;default:1;comment:配置类型 1=输入框 2=单选 3=复选 4=下拉菜单 5=文本域 6=附件" json:"type"` // 配置类型 1=输入框 2=单选 3=复选 4=下拉菜单 5=文本域 6=附件
-	Category     int64     `gorm:"column:category;type:tinyint(1);not null;default:1;comment:配置分类 1=基本信息 2=联系方式 3=seo设置" json:"category"`     // 配置分类 1=基本信息 2=联系方式 3=seo设置
-	CreatedAt    *JsonTime `gorm:"column:created_at;type:datetime;comment:创建时间" json:"createdAt"`                                             // 创建时间
-	UpdatedAt    *JsonTime `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updatedAt"`                                             // 更新时间
-}
-
 // TableName SystemConfig's table name
 func (*SystemConfig) TableName() string {
 	return TableNameSystemConfig
-}
-
-// BeforeCreate 创建之前
-func (s *SystemConfig) BeforeCreate(tx *gorm.DB) (err error) {
-	now := JsonTime(time.Now())
-	s.CreatedAt = &now
-	s.UpdatedAt = &now
-	return nil
-}
-
-// BeforeUpdate 更新之前
-func (s *SystemConfig) BeforeUpdate(tx *gorm.DB) (err error) {
-	now := JsonTime(time.Now())
-	s.UpdatedAt = &now
-	return nil
 }

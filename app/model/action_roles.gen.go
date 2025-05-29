@@ -6,7 +6,6 @@ package model
 
 import (
 	"gorm.io/gorm"
-	"time"
 )
 
 const TableNameRoleActions = "action_roles"
@@ -25,19 +24,4 @@ type ActionRoles struct {
 // TableName ActionRoles's table name
 func (*ActionRoles) TableName() string {
 	return TableNameRoleActions
-}
-
-// BeforeCreate 创建之前
-func (s *ActionRoles) BeforeCreate(tx *gorm.DB) (err error) {
-	now := JsonTime(time.Now())
-	s.CreatedAt = &now
-	s.UpdatedAt = &now
-	return nil
-}
-
-// BeforeUpdate 更新之前
-func (s *ActionRoles) BeforeUpdate(tx *gorm.DB) (err error) {
-	now := JsonTime(time.Now())
-	s.UpdatedAt = &now
-	return nil
 }

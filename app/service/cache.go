@@ -12,7 +12,8 @@ type CacheService struct {
 }
 
 // SetCache 设置缓存
-// @param key string, value interface{}, expire time.Duration
+// @param key string
+// @param value interface{}
 // @param expire time.Duration
 // @return bool, error
 func (s *CacheService) SetCache(key string, value interface{}, expire time.Duration) (bool, error) {

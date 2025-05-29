@@ -96,7 +96,7 @@ func generateFile(templateFile, filename string, function string, method string,
 
 	// 设置默认值
 	if function == "" {
-		function = "Your Function Name"
+		function = "FunctionName"
 	}
 
 	if method == "" {
@@ -108,7 +108,7 @@ func generateFile(templateFile, filename string, function string, method string,
 	}
 
 	if router == "" {
-		router = "Your Router"
+		router = "RouterName"
 	}
 
 	// 确保目录存在
@@ -202,6 +202,7 @@ func createTableStruct(tableName string, path string, camel bool) {
 		"mediumint": func(detailType gorm.ColumnType) (dataType string) { return "int64" },
 		"bigint":    func(detailType gorm.ColumnType) (dataType string) { return "int64" },
 		"int":       func(detailType gorm.ColumnType) (dataType string) { return "int64" },
+		"json":      func(detailType gorm.ColumnType) (dataType string) { return "JsonString" },
 		"datetime": func(detailType gorm.ColumnType) (dataType string) {
 			// 针对 deleted_at 字段特殊处理
 			if detailType.Name() == "deleted_at" {
@@ -289,44 +290,44 @@ func insertHooksIntoModel(path string, tableName string) {
 		}
 	}
 
-	// 追加钩子方法
-	file, err := os.OpenFile(modelFilePath, os.O_APPEND|os.O_RDWR, 0666)
-	if err != nil {
-		fmt.Printf("Error opening file: %v\n", err)
-		return
-	}
-	defer func(file *os.File) {
-		err = file.Close()
-		if err != nil {
-			fmt.Printf("Error closing file: %v\n", err)
-			return
-		}
-	}(file)
-
-	// 准备钩子方法的内容
-	hooks := fmt.Sprintf(`
-// BeforeCreate 创建之前
-func (s *%s) BeforeCreate(tx *gorm.DB) (err error) {
-    now := JsonTime(time.Now())
-    s.CreatedAt = &now
-    s.UpdatedAt = &now
-    return nil
-}
-
-// BeforeUpdate 更新之前
-func (s *%s) BeforeUpdate(tx *gorm.DB) (err error) {
-    now := JsonTime(time.Now())
-    s.UpdatedAt = &now
-    return nil
-}
-`, structName, structName)
-
-	// 将钩子方法写入文件
-	_, err = file.WriteString(hooks)
-	if err != nil {
-		fmt.Printf("Error writing hooks to file: %v\n", err)
-		return
-	}
-
-	fmt.Println("钩子方法已插入到模型文件:", modelFilePath)
+	//	// 追加钩子方法
+	//	file, err := os.OpenFile(modelFilePath, os.O_APPEND|os.O_RDWR, 0666)
+	//	if err != nil {
+	//		fmt.Printf("Error opening file: %v\n", err)
+	//		return
+	//	}
+	//	defer func(file *os.File) {
+	//		err = file.Close()
+	//		if err != nil {
+	//			fmt.Printf("Error closing file: %v\n", err)
+	//			return
+	//		}
+	//	}(file)
+	//
+	//	// 准备钩子方法的内容
+	//	hooks := fmt.Sprintf(`
+	//// BeforeCreate 创建之前
+	//func (s *%s) BeforeCreate(tx *gorm.DB) (err error) {
+	//    now := JsonTime(time.Now())
+	//    s.CreatedAt = &now
+	//    s.UpdatedAt = &now
+	//    return nil
+	//}
+	//
+	//// BeforeUpdate 更新之前
+	//func (s *%s) BeforeUpdate(tx *gorm.DB) (err error) {
+	//    now := JsonTime(time.Now())
+	//    s.UpdatedAt = &now
+	//    return nil
+	//}
+	//`, structName, structName)
+	//
+	//	// 将钩子方法写入文件
+	//	_, err = file.WriteString(hooks)
+	//	if err != nil {
+	//		fmt.Printf("Error writing hooks to file: %v\n", err)
+	//		return
+	//	}
+	//
+	//	fmt.Println("钩子方法已插入到模型文件:", modelFilePath)
 }

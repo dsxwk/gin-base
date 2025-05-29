@@ -1,7 +1,6 @@
 package v1
 
 import (
-	"fmt"
 	"gin-base/app/model"
 	"gin-base/app/service"
 	"gin-base/app/validate"
@@ -39,7 +38,7 @@ func (s *MenuController) Create(c *gin.Context) {
 	var (
 		menuService  service.MenuService
 		menuValidate validate.MenuValidate
-		req          model.MenuQuery
+		req          model.Menu
 	)
 
 	err := c.ShouldBind(&req)
@@ -48,13 +47,13 @@ func (s *MenuController) Create(c *gin.Context) {
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
-	fmt.Printf("%+v", req)
+
 	err = copier.Copy(&menuValidate, &req)
 	if err != nil {
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
-	fmt.Printf("%+v", menuValidate)
+
 	// 验证
 	err = validate.GetMenuValidate(menuValidate, "create")
 	if err != nil {
@@ -78,7 +77,7 @@ func (s *MenuController) Update(c *gin.Context) {
 	var (
 		menuService  service.MenuService
 		menuValidate validate.MenuValidate
-		req          model.MenuQuery
+		req          model.Menu
 	)
 
 	idParam := c.Param("id")
@@ -189,7 +188,7 @@ func (s *MenuController) ActionCreate(c *gin.Context) {
 	var (
 		menuService        service.MenuService
 		menuActionValidate validate.MenuActionValidate
-		req                model.MenuActionQuery
+		req                model.MenuAction
 	)
 
 	menuIDParam := c.Param("id")
@@ -240,7 +239,7 @@ func (s *MenuController) ActionUpdate(c *gin.Context) {
 	var (
 		menuService        service.MenuService
 		menuActionValidate validate.MenuActionValidate
-		req                model.MenuActionQuery
+		req                model.MenuAction
 	)
 
 	menuIDParam := c.Param("id")

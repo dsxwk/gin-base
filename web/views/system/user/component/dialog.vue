@@ -30,6 +30,7 @@ import {i18n} from '/@/static/i18n';
 import {userApi} from '/@/api/user';
 import {ElMessage} from 'element-plus';
 import ConfigForm from '/@/components/form/index.vue';
+import {genderDict, statusDict} from '/@/dict/user';
 
 const props = defineProps({
   row: {
@@ -81,16 +82,9 @@ const formData = computed(() => [
     label: '性别',
     prop: 'gender',
     type: 'radio',
-    options: [
-      {
-        label: '男',
-        value: 1
-      },
-      {
-        label: '女',
-        value: 2
-      }
-    ]
+    options: () => {
+      return genderDict;
+    }
   },
   {
     label: '头像',
@@ -164,16 +158,9 @@ const formData = computed(() => [
     label: '状态',
     prop: 'status',
     type: 'radio',
-    options: [
-      {
-        label: '启用',
-        value: 1
-      },
-      {
-        label: '停用',
-        value: 2
-      }
-    ]
+    options: () => {
+      return statusDict;
+    }
   }
 ]);
 

@@ -58,13 +58,32 @@ func (s *UserService) List(pageData global.PageData, search validate.UserSearch)
 // @param: m model.User
 // @return: model.User, error
 func (s *UserService) Create(m model.User) (model.User, error) {
+	var (
+		userRoles []model.UserRoles
+	)
+
 	// 处理密码
 	m.Password = utils.BcryptHash(m.Password)
 
-	err := global.DB.Create(&m).Error
+	tx := global.DB.Begin()
+	err := tx.Create(&m).Error
 	if err != nil {
 		return m, err
 	}
+
+	for _, v := range m.UserRoles {
+		userRoles = append(userRoles, model.UserRoles{
+			UserID: m.ID,
+			RoleID: v.RoleID,
+			Name:   v.Name,
+		})
+	}
+
+	err = tx.Create(&userRoles).Error
+	if err != nil {
+		return m, err
+	}
+	tx.Commit()
 
 	return m, nil
 }
@@ -73,10 +92,34 @@ func (s *UserService) Create(m model.User) (model.User, error) {
 // @param m model.User
 // @return model.User, error
 func (s *UserService) Update(m model.User) (model.User, error) {
-	err := global.DB.Updates(&m).Error
+	var (
+		userRoles []model.UserRoles
+	)
+
+	for _, v := range m.UserRoles {
+		userRoles = append(userRoles, model.UserRoles{
+			UserID: m.ID,
+			RoleID: v.RoleID,
+			Name:   v.Name,
+		})
+	}
+
+	tx := global.DB.Begin()
+	err := tx.Updates(&m).Error
 	if err != nil {
 		return m, err
 	}
+
+	err = tx.Where("user_id", m.ID).Delete(&model.UserRoles{}).Error
+	if err != nil {
+		return m, err
+	}
+
+	err = tx.Create(&userRoles).Error
+	if err != nil {
+		return m, err
+	}
+	tx.Commit()
 
 	return m, nil
 }
@@ -85,7 +128,9 @@ func (s *UserService) Update(m model.User) (model.User, error) {
 // @param id int64
 // @return m model.UserQuery, err error
 func (s *UserService) Detail(id int64) (m model.User, err error) {
-	err = global.DB.First(&m, id).Error
+	err = global.DB.
+		Preload("UserRoles").
+		First(&m, id).Error
 	if err != nil {
 		return m, err
 	}

@@ -48,6 +48,16 @@ export function userApi() {
                     value: true
                 }
             },
+            roleList: {
+                name: '角色列表',
+                url: '/role',
+                method: 'get',
+                params: {},
+                token: {
+                    name: 'token',
+                    value: true
+                }
+            },
         }
     );
 }

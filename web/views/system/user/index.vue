@@ -76,10 +76,14 @@ const state = reactive({
         }
       },
       {key: 'age', colWidth: '', width: '70', height: '40', title: '年龄', type: 'text', isCheck: true},
-      {
-        key: 'status', colWidth: '', width: '70', height: '40', title: '状态', isCheck: true,
+      {key: 'status', colWidth: '', width: '70', height: '40', title: '状态', isCheck: true,
         render: (scope) => {
           return getDict(statusDict, scope.row?.gender);
+        }
+      },
+      {key: 'userRoles', colWidth: '', width: '70', height: '40', title: '用户角色', isCheck: true,
+        render: (scope) => {
+          return scope.row?.userRoles?.length > 0 ? scope.row?.userRoles.map(item => item.name).join(',') : '';
         }
       },
       {key: 'createdAt', colWidth: '', title: '创建时间', type: 'text', isCheck: true},

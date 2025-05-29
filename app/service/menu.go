@@ -89,7 +89,6 @@ func (s *MenuService) Create(m model.Menu) (model.Menu, error) {
 // @return model.Menu, error
 func (s *MenuService) Update(m model.Menu) (model.Menu, error) {
 	var (
-		menuRole  model.MenuRoles
 		menuRoles []model.MenuRoles
 	)
 
@@ -107,7 +106,7 @@ func (s *MenuService) Update(m model.Menu) (model.Menu, error) {
 		return m, err
 	}
 
-	err = tx.Where("menu_id", m.ID).Delete(&menuRole).Error
+	err = tx.Where("menu_id", m.ID).Delete(&model.MenuRoles{}).Error
 	if err != nil {
 		return m, err
 	}

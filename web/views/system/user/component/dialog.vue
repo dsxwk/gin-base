@@ -22,6 +22,24 @@
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+            <el-form-item label="用户角色">
+              <el-select
+                  v-model="state.selectedRoleIds"
+                  multiple
+                  placeholder="请选择角色"
+                  clearable
+                  class="w100"
+              >
+                <el-option
+                    v-for="item in state.roles"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
             <el-form-item label="用户名">
               <el-input v-model="state.ruleForm.username" placeholder="请输入用户名" clearable></el-input>
             </el-form-item>
@@ -93,6 +111,8 @@ const dialogFormRef = ref();
 const stores = useRoutesList();
 const {routesList} = storeToRefs(stores);
 const state = reactive({
+  roles: [],
+  selectedRoleIds: [],
   // 参数请参考 `/src/router/route.ts` 中的 `dynamicRoutes` 路由菜单格式
   ruleForm: {
     fullName: '',
@@ -104,6 +124,7 @@ const state = reactive({
     gender: 1,
     age: 0,
     status: 1,
+    userRoles: [],
   },
   dialog: {
     isShowDialog: false,
@@ -122,6 +143,7 @@ const defaultForm = {
   gender: 1,
   age: 0,
   status: 1,
+  userRoles: [],
 };
 // 获取 pinia 中的路由
 const getData = (routes) => {
@@ -146,6 +168,8 @@ const openDialog = (type, row) => {
         }
       }
     });
+    // 设置角色 ID 数组用于 select 默认选中
+    state.selectedRoleIds = row.userRoles?.map(item => item.roleId) || [];
     delete state.ruleForm['password'];
     state.dialog.title = '修改用户';
     state.dialog.submitTxt = '修 改';
@@ -164,6 +188,7 @@ const openDialog = (type, row) => {
 const closeDialog = () => {
   state.dialog.isShowDialog = false;
   state.ruleForm = deepClone(defaultForm);
+  state.selectedRoleIds = [];
   dialogFormRef.value && dialogFormRef.value.resetFields();
 };
 // 取消
@@ -172,6 +197,15 @@ const onCancel = () => {
 };
 // 提交
 const onSubmit = async () => {
+  state.ruleForm.userRoles = state.selectedRoleIds.map(roleId => {
+    const role = state.roles.find(r => r.id === roleId);
+    return {
+      userId: props.row.id ?? 0,
+      roleId: roleId,
+      name: role ? role.name : ''
+    };
+  });
+
   let msg = '';
   if (state.dialog.type === 'add') {
     await api.create(state.ruleForm);
@@ -185,11 +219,16 @@ const onSubmit = async () => {
   closeDialog();
   emit('refresh');
 };
+// 获取角色
+const getRoles = async () => {
+  const data = await api.roleList({page:1, pageSize: 10, isPage: false});
+  state.roles = data.data;
+};
 // 页面加载时
 onMounted(() => {
+  getRoles();
   state.menuData = getData(routesList.value);
 });
-
 // 暴露变量
 defineExpose({
   openDialog,

@@ -94,15 +94,35 @@ const emit = defineEmits(['update:model'])
 </script>
 
 <template>
-  <el-form :model="computedMap" ref="formRef" :rules="rules" v-bind="formProps">
-    <el-row :gutter="gutter">
-      <template v-for="(item, index) in formConfig" :key="index">
-        <el-col :span="item.span || 12" v-if="!item.hidden" class="mb20">
-          <el-form-item :label="item.label" :prop="item.prop" :rules="item.rules">
+  <el-form
+      :model="computedMap"
+      ref="formRef"
+      :rules="rules"
+      v-bind="formProps"
+  >
+    <el-row
+        :gutter="gutter"
+    >
+      <template
+          v-for="(item, index) in formConfig"
+          :key="index"
+      >
+        <el-col
+            v-if="!item.hidden"
+            :span="item.span || 12"
+            class="mb20"
+        >
+          <el-form-item
+              :label="item.label"
+              :prop="item.prop"
+              :rules="item.rules"
+          >
             <component
                 v-if="!item.slot"
                 :is="resolveComponent(item)"
                 v-model="computedMap[parseFiled(item.prop)]"
+                :props="item.props"
+                :options="item.type === 'cascader' ? getOptions(item) : undefined"
                 v-bind="item.attrs"
                 v-on="item.events || {}"
             >
@@ -129,14 +149,22 @@ const emit = defineEmits(['update:model'])
                   />
                 </template>
               </template>
-
               <!-- cascader 默认插槽 -->
-              <template v-if="item.type === 'cascader' && item.slotDefault" #default="slotProps">
-                <component :is="item.slotDefault" v-bind="slotProps" />
+              <template
+                  v-if="item.type === 'cascader' && item.slotDefault"
+                  #default="{ node, data }"
+              >
+                <component
+                    :is="item.slotDefault"
+                    :node="node"
+                    :data="data"
+                />
               </template>
             </component>
-
-            <slot v-else :name="item.slot" />
+            <slot
+                v-else
+                :name="item.slot"
+            />
           </el-form-item>
         </el-col>
       </template>

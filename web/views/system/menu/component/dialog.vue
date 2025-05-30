@@ -23,16 +23,16 @@
 </template>
 
 <script setup name="systemMenuDialog">
-import {onMounted, reactive, ref, computed, h} from 'vue';
+import {onMounted, reactive, ref, markRaw} from 'vue';
 import {storeToRefs} from 'pinia';
 import {useRoutesList} from '/@/stores/routesList';
 import {i18n} from '/@/static/i18n';
-import {ElMessage} from "element-plus";
+import {ElMessage} from 'element-plus';
 import {menuApi} from '/@/api/menu';
 import {initBackEndControlRoutes} from '/@/router/backEnd.js';
-import ConfigForm from "/@/components/form/index.vue";
-import {isAffixDict, isHideDict, isIframeDict, isKeepAliveDict} from "/@/dict/menu/index.js";
-import {set} from "lodash-es";
+import ConfigForm from '/@/components/form/index.vue';
+import {isAffixDict, isHideDict, isIframeDict, isKeepAliveDict} from '/@/dict/menu';
+import CascaderLabel from '/@/components/form/CascaderLabel.vue';
 
 const props = defineProps({
   row: {
@@ -88,25 +88,20 @@ const formData = ref([
     label: '上级菜单',
     prop: 'menuSuperior',
     type: 'cascader',
+    options: () => {
+      return state.menuData;
+    },
+    props: {
+      checkStrictly: true,
+      value: 'path',
+      label: 'title',
+    },
     attrs: {
-      options: state.menuData,
-      props: {
-        checkStrictly: true,
-        value: 'path',
-        label: 'title',
-      },
       placeholder: '请选择上级菜单',
       clearable: true,
       class: 'w100',
     },
-    slotTemplate: {
-      render(node, data) {
-        return h('span', {}, [
-          data.title,
-          !node.isLeaf ? ` (${data.children.length})` : '',
-        ])
-      },
-    },
+    slotDefault: markRaw(CascaderLabel),
   },
   {
     label: '菜单名称',
@@ -394,8 +389,4 @@ onMounted(() => {
 defineExpose({
 	openDialog,
 });
-const onUpdateModelValue = (val, index, filed) => {
-  console.log(val, index, filed);
-  set(formData.value[index], filed, val);
-}
 </script>

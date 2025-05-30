@@ -47,7 +47,7 @@ export const isKeepAliveDict = [
  * 是否固定
  * @type {[{label: string, value: boolean},{label: string, value: boolean}]}
  */
-export const isAffix = [
+export const isAffixDict = [
     { label: '固定', value: true },
     { label: '不固定', value: false },
 ];
@@ -56,7 +56,7 @@ export const isAffix = [
  * 是否内嵌
  * @type {[{label: string, value: boolean},{label: string, value: boolean}]}
  */
-export const isIframe = [
+export const isIframeDict = [
     { label: '是', value: true },
     { label: '否', value: false },
 ];

@@ -21,7 +21,6 @@
     </el-dialog>
   </div>
 </template>
-
 <script setup name="systemUserDialog">
 import {computed, onMounted, reactive, ref} from 'vue';
 import {storeToRefs} from 'pinia';
@@ -82,9 +81,7 @@ const formData = computed(() => [
     label: '性别',
     prop: 'gender',
     type: 'radio',
-    options: () => {
-      return genderDict;
-    }
+    options: genderDict
   },
   {
     label: '头像',
@@ -158,10 +155,8 @@ const formData = computed(() => [
     label: '状态',
     prop: 'status',
     type: 'radio',
-    options: () => {
-      return statusDict;
-    }
-  }
+    options: statusDict
+  },
 ]);
 
 const rules = {};

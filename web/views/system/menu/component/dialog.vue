@@ -3,7 +3,7 @@
 		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="769px">
       <ConfigForm
           ref="dialogFormRef"
-          :model="state.ruleForm"
+          v-model:model="state.ruleForm"
           :form-config="formData"
           :rules="rules"
           :form-props="{
@@ -183,13 +183,15 @@ const formData = ref([
     prop: 'meta.roles',
     type: 'select',
     col: 12,
+    options: () => {
+      return state.roles.map(role => ({label: role.name, value: role.id}));
+    },
     attrs: {
       placeholder: '请选择角色',
       multiple: true,
       clearable: true,
       class: 'w100'
     },
-    options: state.roles.map(role => ({label: role.name, value: role.id})),
   },
   {
     label: '菜单排序',

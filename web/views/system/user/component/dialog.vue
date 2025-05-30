@@ -3,7 +3,7 @@
     <el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="769px">
       <ConfigForm
           ref="dialogFormRef"
-          :model="state.ruleForm"
+          v-model:model="state.ruleForm"
           :form-config="formData"
           :rules="rules"
           :form-props="{

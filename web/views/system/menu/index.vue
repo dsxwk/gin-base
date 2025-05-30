@@ -3,6 +3,7 @@
     <div class="table-demo-padding layout-padding-view layout-padding-auto">
       <TableSearch :search="state.tableData.search" @search="onSearch"/>
       <Table
+          dev
           ref="tableRef"
           v-bind="state.tableData"
           @delRow="onTableDelRow"

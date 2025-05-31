@@ -31,7 +31,11 @@ const props = defineProps({
 });
 
 const formRef = ref(null);
-defineExpose({formRef});
+defineExpose({
+  formRef,
+  resetFields: () => formRef.value?.resetFields?.(),
+  validate: (...args) => formRef.value?.validate?.(...args),
+});
 
 const resolveComponent = (item) => {
   const map = {
@@ -116,6 +120,7 @@ const emit = defineEmits(['update:model'])
               :label="item.label"
               :prop="item.prop"
               :rules="item.rules"
+              :label-width="item.labelWidth || undefined"
           >
             <component
                 v-if="!item.slot"

@@ -1,19 +1,40 @@
 <template>
   <div class="system-menu-dialog-container">
     <el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="769px">
-      <el-form ref="dialogFormRef" :model="state.ruleForm" size="default" label-width="80px">
-        systemMenuActionOperationDialog
-      </el-form>
+      <ConfigForm
+          ref="dialogFormRef"
+          v-model:model="state.ruleForm"
+          :form-config="formData"
+          :rules="rules"
+          :form-props="{
+            labelWidth: '80px',
+            size: 'default'
+          }"
+      >
+      </ConfigForm>
+      <template #footer>
+				<span class="dialog-footer">
+					<el-button @click="onCancel" size="default">取 消</el-button>
+					<el-button type="primary" @click="onSubmit" size="default">{{ state.dialog.submitTxt }}</el-button>
+				</span>
+      </template>
     </el-dialog>
   </div>
 </template>
-<script setup  name="systemMenuActionOperationDialog">
-import {onMounted, ref, reactive, nextTick} from 'vue';
+<script setup name="systemMenuActionOperationDialog">
+import {nextTick, onMounted, reactive, ref} from 'vue';
 import {ElMessage} from 'element-plus';
-import {deepClone} from '/@/utils/other.js';
+import ConfigForm from "/@/components/form/index.vue";
+import {actionTypeDict} from '/@/dict/menu';
 
 const state = reactive({
-  ruleForm: {},
+  ruleForm: {
+    menuId: "", // 菜单id
+    type: "", // 类型 1=header 2=operation
+    name: "", // 功能名称
+    isLink: false, // 是否为链接 1=是 2=否
+    sort: 0, // 排序
+  },
   dialog: {
     isShowDialog: false,
     type: '',
@@ -21,7 +42,87 @@ const state = reactive({
     submitTxt: '',
   },
 });
-const defaultForm = {};
+
+const formData = ref([
+  {
+    label: "菜单id",
+    prop: "menuId",
+    type: "input",
+    attrs: {
+      placeholder: "请输入菜单id",
+      clearable: true
+    },
+    rules: [
+      {
+        required: true,
+        message: "请输入菜单id",
+        trigger: "blur"
+      },
+    ],
+  },
+  {
+    label: "类型",
+    prop: "type",
+    type: "select",
+    options: actionTypeDict,
+    attrs: {
+      placeholder: "请选择类型",
+      clearable: true
+    },
+    rules: [
+      {
+        required: true,
+        message: "请选择类型",
+        trigger: "blur"
+      }
+    ]
+  },
+  {
+    label: "功能名称",
+    prop: "name",
+    type: "input",
+    attrs: {
+      placeholder: "请输入功能名称",
+      clearable: true
+    },
+    rules: [
+      {
+        required: true,
+        message: "请输入功能名称",
+        trigger: "blur"
+      },
+    ],
+  },
+  {
+    label: "是否为链接",
+    prop: "isLink",
+    type: "switch",
+    labelWidth: "120px",
+    attrs: {
+      placeholder: "请选择是否为链接",
+      clearable: true
+    },
+    rules: [
+      {
+        required: true,
+        message: "请选择是否为链接",
+        trigger: "blur"
+      },
+    ],
+  },
+  {
+    label: "排序",
+    prop: "sort",
+    type: "input",
+    attrs: {
+      placeholder: "请输入排序",
+      clearable: true
+    },
+    rules: [],
+  }
+]);
+
+const rules = {};
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
 
@@ -55,8 +156,6 @@ const openDialog = (type, row) => {
 // 关闭弹窗
 const closeDialog = () => {
   state.dialog.isShowDialog = false;
-  state.ruleForm = deepClone(defaultForm);
-  dialogFormRef.value && dialogFormRef.value.resetFields();
 };
 // 取消
 const onCancel = () => {
@@ -64,19 +163,18 @@ const onCancel = () => {
 };
 // 提交
 const onSubmit = async () => {
-  let msg = '';
-  if (state.dialog.type === 'add') {
-    msg = '创建成功';
-  } else {
-    msg = '更新成功';
-  }
-  ElMessage.success(msg);
-  closeDialog();
-  emit('refresh');
+  dialogFormRef.value.validate(async (valid) => {
+    if (!valid) return;
+
+    let msg = state.dialog.type === 'add' ? '创建成功' : '更新成功';
+    ElMessage.success(msg);
+    closeDialog();
+    emit('refresh');
+  });
 };
 // 页面加载时
 onMounted(() => {
-  
+
 });
 // 暴露变量
 defineExpose({

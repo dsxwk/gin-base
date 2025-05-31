@@ -23,7 +23,7 @@
 </template>
 
 <script setup name="systemMenuDialog">
-import {onMounted, reactive, ref, markRaw} from 'vue';
+import {onMounted, reactive, ref, markRaw, nextTick} from 'vue';
 import {storeToRefs} from 'pinia';
 import {useRoutesList} from '/@/stores/routesList';
 import {i18n} from '/@/static/i18n';
@@ -83,6 +83,11 @@ const state = reactive({
 		submitTxt: '',
 	},
 });
+// 是否内嵌下拉改变
+const onSelectIframeChange = () => {
+  if (state.ruleForm.meta.isIframe) state.ruleForm.isLink = true;
+  else state.ruleForm.isLink = false;
+};
 const formData = ref([
   {
     label: '上级菜单',
@@ -111,7 +116,14 @@ const formData = ref([
     attrs: {
       placeholder: '格式：message.router.xxx',
       clearable: true
-    }
+    },
+    rules: [
+      {
+        required: true,
+        message: "请输入菜单名称",
+        trigger: "blur"
+      },
+    ]
   },
   {
     label: '路由名称',
@@ -121,7 +133,14 @@ const formData = ref([
     attrs: {
       placeholder: '路由中的 name 值',
       clearable: true
-    }
+    },
+    rules: [
+      {
+        required: true,
+        message: "请输入路由名称",
+        trigger: "blur"
+      },
+    ]
   },
   {
     label: '路由路径',
@@ -131,7 +150,14 @@ const formData = ref([
     attrs: {
       placeholder: '路由中的 path 值',
       clearable: true
-    }
+    },
+    rules: [
+      {
+        required: true,
+        message: "请输入路由路径",
+        trigger: "blur"
+      },
+    ]
   },
   {
     label: '重定向',
@@ -160,7 +186,14 @@ const formData = ref([
     attrs: {
       placeholder: '请输入组件路径',
       clearable: true
-    }
+    },
+    rules: [
+      {
+        required: true,
+        message: "请输入组件路径",
+        trigger: "blur"
+      },
+    ]
   },
   {
     label: '链接地址',
@@ -174,7 +207,7 @@ const formData = ref([
     }
   },
   {
-    label: '权限标识',
+    label: '菜单角色',
     prop: 'meta.roles',
     type: 'select',
     col: 12,
@@ -239,7 +272,7 @@ const formData = ref([
     type: 'radio',
     col: 12,
     attrs: {
-      // onChange: onSelectIframeChange
+      onChange: onSelectIframeChange
     },
     options: isIframeDict
   }
@@ -327,15 +360,14 @@ const openDialog = (type, row) => {
 	}
 	state.dialog.type = type;
 	state.dialog.isShowDialog = true;
+  // 清空表单，此项需加表单验证才能使用
+  nextTick(() => {
+    dialogFormRef.value && dialogFormRef.value.resetFields();
+  });
 };
 // 关闭弹窗
 const closeDialog = () => {
 	state.dialog.isShowDialog = false;
-};
-// 是否内嵌下拉改变
-const onSelectIframeChange = () => {
-	if (state.ruleForm.meta.isIframe) state.ruleForm.isLink = true;
-	else state.ruleForm.isLink = false;
 };
 // 取消
 const onCancel = () => {
@@ -361,19 +393,23 @@ const onSubmit = async () => {
     };
   });
 
-  let msg = '';
-  if (state.dialog.type === 'add') {
-    await api.create(state.ruleForm);
-    msg = '创建成功';
-  } else {
-    state.ruleForm.id = props.row.id;
-    await api.update(state.ruleForm);
-    msg = '更新成功';
-  }
-  ElMessage.success(msg);
-  closeDialog();
-	emit('refresh');
-  await initBackEndControlRoutes();
+  dialogFormRef.value.validate(async (valid) => {
+    if (!valid) return;
+
+    let msg = '';
+    if (state.dialog.type === 'add') {
+      await api.create(state.ruleForm);
+      msg = '创建成功';
+    } else {
+      state.ruleForm.id = props.row.id;
+      await api.update(state.ruleForm);
+      msg = '更新成功';
+    }
+    ElMessage.success(msg);
+    closeDialog();
+    emit('refresh');
+    await initBackEndControlRoutes();
+  });
 };
 // 获取角色
 const getRoles = async () => {

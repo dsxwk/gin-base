@@ -4,7 +4,7 @@
       <ConfigForm
           ref="dialogFormRef"
           v-model:model="state.ruleForm"
-          :form-config="formData"
+          :form-config="getFormData()"
           :rules="rules"
           :form-props="{
             labelWidth: '80px',
@@ -22,7 +22,7 @@
   </div>
 </template>
 <script setup name="systemUserDialog">
-import {computed, onMounted, reactive, ref} from 'vue';
+import {nextTick, onMounted, reactive, ref} from 'vue';
 import {storeToRefs} from 'pinia';
 import {useRoutesList} from '/@/stores/routesList';
 import {i18n} from '/@/static/i18n';
@@ -61,104 +61,133 @@ const state = reactive({
   },
   dialog: {
     isShowDialog: false,
-    type: '',
+    type: 'add',
     title: '',
     submitTxt: ''
   }
 });
 
-const formData = computed(() => [
-  {
-    label: '姓名',
-    prop: 'fullName',
-    type: 'input',
-    attrs: {
-      placeholder: '请输入姓名',
-      clearable: true
-    }
-  },
-  {
-    label: '性别',
-    prop: 'gender',
-    type: 'radio',
-    options: genderDict
-  },
-  {
-    label: '头像',
-    prop: 'avatar',
-    type: 'input',
-    attrs: {
-      placeholder: '',
-      clearable: true
-    }
-  },
-  {
-    label: '用户角色',
-    prop: 'userRoles',
-    type: 'select',
-    options: state.roles.map(role => ({label: role.name, value: role.id})),
-    attrs: {
-      multiple: true,
-      clearable: true,
-      placeholder: '请选择角色',
-      class: 'w100'
-    }
-  },
-  {
-    label: '用户名',
-    prop: 'username',
-    type: 'input',
-    attrs: {
-      placeholder: '请输入用户名',
-      clearable: true
-    }
-  },
-  {
-    label: '邮箱',
-    prop: 'email',
-    type: 'input',
-    attrs: {
-      placeholder: '请输入邮箱',
-      clearable: true
-    }
-  },
-  {
-    label: '密码',
-    prop: 'password',
-    type: 'input',
-    hidden: state.dialog.type !== 'add',
-    attrs: {
-      placeholder: '请输入密码',
-      clearable: true
-    }
-  },
-  {
-    label: '昵称',
-    prop: 'nickname',
-    type: 'input',
-    attrs: {
-      placeholder: '请输入昵称',
-      clearable: true
-    }
-  },
-  {
-    label: '年龄',
-    prop: 'age',
-    type: 'input',
-    attrs: {
-      type: 'number',
-      placeholder: '请输入年龄',
-      clearable: true
-    }
-  },
-  {
-    label: '状态',
-    prop: 'status',
-    type: 'radio',
-    options: statusDict
-  },
-]);
-
+const getFormData = () => {
+  return [
+    {
+      label: '用户名',
+      prop: 'username',
+      type: 'input',
+      attrs: {
+        placeholder: '请输入用户名',
+        clearable: true
+      },
+      rules: [
+        {
+          required: true,
+          message: '请输入用户名',
+          trigger: 'blur'
+        }
+      ]
+    },
+    {
+      label: '姓名',
+      prop: 'fullName',
+      type: 'input',
+      attrs: {
+        placeholder: '请输入姓名',
+        clearable: true
+      },
+      rules: [
+        {
+          required: true,
+          message: '请输入用姓名',
+          trigger: 'blur'
+        }
+      ]
+    },
+    {
+      label: '性别',
+      prop: 'gender',
+      type: 'radio',
+      options: genderDict
+    },
+    {
+      label: '头像',
+      prop: 'avatar',
+      type: 'input',
+      attrs: {
+        placeholder: '请输入头像地址',
+        clearable: true
+      }
+    },
+    {
+      label: '用户角色',
+      prop: 'userRoles',
+      type: 'select',
+      options: state.roles.map(role => ({label: role.name, value: role.id})),
+      attrs: {
+        multiple: true,
+        clearable: true,
+        placeholder: '请选择角色',
+        class: 'w100'
+      }
+    },
+    {
+      label: '邮箱',
+      prop: 'email',
+      type: 'input',
+      attrs: {
+        placeholder: '请输入邮箱',
+        clearable: true
+      }
+    },
+    {
+      label: '密码',
+      prop: 'password',
+      type: 'input',
+      hidden: state.dialog.type !== 'add',
+      attrs: {
+        placeholder: '请输入密码',
+        clearable: true
+      },
+      rules: [
+        {
+          required: true,
+          message: '请输入密码',
+          trigger: 'blur'
+        }
+      ]
+    },
+    {
+      label: '昵称',
+      prop: 'nickname',
+      type: 'input',
+      attrs: {
+        placeholder: '请输入昵称',
+        clearable: true
+      },
+      rules: [
+        {
+          required: true,
+          message: '请输入昵称',
+          trigger: 'blur'
+        }
+      ]
+    },
+    {
+      label: '年龄',
+      prop: 'age',
+      type: 'input',
+      attrs: {
+        type: 'number',
+        placeholder: '请输入年龄',
+        clearable: true
+      }
+    },
+    {
+      label: '状态',
+      prop: 'status',
+      type: 'radio',
+      options: statusDict
+    },
+  ];
+};
 const rules = {};
 const getData = (routes) => {
   const arr = [];
@@ -205,6 +234,10 @@ const openDialog = (type, row) => {
   }
   state.dialog.type = type;
   state.dialog.isShowDialog = true;
+  // 清空表单，此项需加表单验证才能使用
+  nextTick(() => {
+    dialogFormRef.value && dialogFormRef.value.resetFields();
+  });
 };
 
 const closeDialog = () => {
@@ -226,18 +259,22 @@ const onSubmit = async () => {
     };
   });
 
-  let msg = '';
-  if (state.dialog.type === 'add') {
-    await api.create(state.ruleForm);
-    msg = '创建成功';
-  } else {
-    state.ruleForm.id = props.row.id;
-    await api.update(state.ruleForm);
-    msg = '更新成功';
-  }
-  ElMessage.success(msg);
-  closeDialog();
-  emit('refresh');
+  dialogFormRef.value.validate(async (valid) => {
+    if (!valid) return;
+
+    let msg = '';
+    if (state.dialog.type === 'add') {
+      await api.create(state.ruleForm);
+      msg = '创建成功';
+    } else {
+      state.ruleForm.id = props.row.id;
+      await api.update(state.ruleForm);
+      msg = '更新成功';
+    }
+    ElMessage.success(msg);
+    closeDialog();
+    emit('refresh');
+  });
 };
 
 const getRoles = async () => {

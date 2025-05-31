@@ -79,10 +79,13 @@ func (s *UserService) Create(m model.User) (model.User, error) {
 		})
 	}
 
-	err = tx.Create(&userRoles).Error
-	if err != nil {
-		return m, err
+	if userRoles != nil {
+		err = tx.Create(&userRoles).Error
+		if err != nil {
+			return m, err
+		}
 	}
+
 	tx.Commit()
 
 	return m, nil
@@ -115,10 +118,13 @@ func (s *UserService) Update(m model.User) (model.User, error) {
 		return m, err
 	}
 
-	err = tx.Create(&userRoles).Error
-	if err != nil {
-		return m, err
+	if userRoles != nil {
+		err = tx.Create(&userRoles).Error
+		if err != nil {
+			return m, err
+		}
 	}
+
 	tx.Commit()
 
 	return m, nil

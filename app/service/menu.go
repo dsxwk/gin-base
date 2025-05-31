@@ -75,10 +75,13 @@ func (s *MenuService) Create(m model.Menu) (model.Menu, error) {
 		})
 	}
 
-	err = tx.Create(&menuRoles).Error
-	if err != nil {
-		return m, err
+	if menuRoles != nil {
+		err = tx.Create(&menuRoles).Error
+		if err != nil {
+			return m, err
+		}
 	}
+
 	tx.Commit()
 
 	return m, nil
@@ -111,10 +114,13 @@ func (s *MenuService) Update(m model.Menu) (model.Menu, error) {
 		return m, err
 	}
 
-	err = tx.Create(&menuRoles).Error
-	if err != nil {
-		return m, err
+	if menuRoles != nil {
+		err = tx.Create(&menuRoles).Error
+		if err != nil {
+			return m, err
+		}
 	}
+
 	tx.Commit()
 
 	return m, nil

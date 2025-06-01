@@ -30,7 +30,7 @@
             </div>
           </template>
           <template #dialog>
-            <ActionOperationDialog ref="dialogRef" :row="actionListRow"/>
+            <ActionOperationDialog ref="dialogRef" :actionListRow="actionListRow"/>
           </template>
         </Table>
       </div>

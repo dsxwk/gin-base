@@ -30,7 +30,7 @@ import {menuApi} from '/@/api/menu';
 
 const api = menuApi();
 const props = defineProps({
-  row: {
+  actionListRow: {
     type: Object,
     required: true,
     default: () => ({})
@@ -123,7 +123,7 @@ const formData = ref([
   {
     label: "排序",
     prop: "sort",
-    type: "input",
+    type: "input-number",
     attrs: {
       placeholder: "请输入排序",
       clearable: true
@@ -140,6 +140,7 @@ const emit = defineEmits(['refresh']);
 const dialogFormRef = ref();
 // 打开弹窗
 const openDialog = (type, row) => {
+  state.ruleForm.menuId = props.actionListRow.menuId;
   if (type === 'edit') {
     Object.keys(state.ruleForm).forEach(key => {
       if (row.hasOwnProperty(key)) {
@@ -153,9 +154,9 @@ const openDialog = (type, row) => {
     state.dialog.title = '修改功能';
     state.dialog.submitTxt = '修 改';
   } else {
-    console.log(row);
     state.ruleForm = {
-      menuId: "", // 菜单id
+      id: props.actionListRow.menuId,
+      menuId: props.actionListRow.menuId, // 菜单id
       type: "", // 类型 1=header 2=operation
       name: "", // 功能名称
       isLink: false, // 是否为链接 1=是 2=否
@@ -189,13 +190,14 @@ const onSubmit = async () => {
       await api.createAction(state.ruleForm);
       msg = '创建成功';
     } else {
-      state.ruleForm.id = props.row.id;
-      // await api.updateAction(state.ruleForm);
+      state.ruleForm.id = props.actionListRow.menuId;
+      state.ruleForm.actionId = props.actionListRow.id;
+      await api.updateAction(state.ruleForm);
       msg = '更新成功';
     }
     ElMessage.success(msg);
     closeDialog();
-    emit('refresh');
+    // emit('refresh');
   });
 };
 // 页面加载时

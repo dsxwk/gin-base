@@ -16,7 +16,7 @@ type MenuAction struct {
 	MenuID      int64           `gorm:"column:menu_id;type:int(10) unsigned;not null;comment:菜单id" json:"menuId"`                            // 菜单id
 	Type        int64           `gorm:"column:type;type:tinyint(3) unsigned;not null;default:1;comment:类型 1=header 2=operation" json:"type"` // 类型 1=header 2=operation
 	Name        string          `gorm:"column:name;type:varchar(30);not null;comment:功能名称" json:"name"`                                      // 功能名称
-	IsLink      int64           `gorm:"column:is_link;type:tinyint(3) unsigned;not null;default:2;comment:是否为链接 1=是 2=否" json:"isLink"`      // 是否为链接 1=是 2=否
+	IsLink      BoolInt64       `gorm:"column:is_link;type:tinyint(3) unsigned;not null;default:2;comment:是否为链接 1=是 2=否" json:"isLink"`      // 是否为链接 1=是 2=否
 	Sort        int64           `gorm:"column:sort;type:int(10) unsigned;not null;comment:排序" json:"sort"`                                   // 排序
 	ActionRoles []*ActionRoles  `gorm:"foreignKey:action_id;references:id" json:"actionRoles"`                                               // 功能角色
 	CreatedAt   *JsonTime       `gorm:"column:created_at;type:datetime;comment:创建时间" json:"createdAt"`                                       // 创建时间

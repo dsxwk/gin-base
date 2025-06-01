@@ -26,7 +26,16 @@ import {nextTick, onMounted, reactive, ref} from 'vue';
 import {ElMessage} from 'element-plus';
 import ConfigForm from "/@/components/form/index.vue";
 import {actionTypeDict} from '/@/dict/menu';
+import {menuApi} from '/@/api/menu';
 
+const api = menuApi();
+const props = defineProps({
+  row: {
+    type: Object,
+    required: true,
+    default: () => ({})
+  }
+});
 const state = reactive({
   ruleForm: {
     menuId: "", // 菜单id
@@ -49,6 +58,7 @@ const formData = ref([
     prop: "menuId",
     type: "input",
     attrs: {
+      disabled: true,
       placeholder: "请输入菜单id",
       clearable: true
     },
@@ -143,6 +153,14 @@ const openDialog = (type, row) => {
     state.dialog.title = '修改功能';
     state.dialog.submitTxt = '修 改';
   } else {
+    console.log(row);
+    state.ruleForm = {
+      menuId: "", // 菜单id
+      type: "", // 类型 1=header 2=operation
+      name: "", // 功能名称
+      isLink: false, // 是否为链接 1=是 2=否
+      sort: 0, // 排序
+    };
     state.dialog.title = '新增功能';
     state.dialog.submitTxt = '新 增';
   }
@@ -166,7 +184,15 @@ const onSubmit = async () => {
   dialogFormRef.value.validate(async (valid) => {
     if (!valid) return;
 
-    let msg = state.dialog.type === 'add' ? '创建成功' : '更新成功';
+    let msg = '';
+    if (state.dialog.type === 'add') {
+      await api.createAction(state.ruleForm);
+      msg = '创建成功';
+    } else {
+      state.ruleForm.id = props.row.id;
+      // await api.updateAction(state.ruleForm);
+      msg = '更新成功';
+    }
     ElMessage.success(msg);
     closeDialog();
     emit('refresh');

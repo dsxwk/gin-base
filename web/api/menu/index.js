@@ -67,6 +67,36 @@ export function menuApi() {
                     value: true
                 }
             },
+            createAction: {
+                name: '新增功能',
+                url: '/menu/:id/action',
+                method: 'post',
+                params: {},
+                token: {
+                    name: 'token',
+                    value: true
+                }
+            },
+            updateAction: {
+                name: '修改功能',
+                url: '/menu/:id/action/:actionId',
+                method: 'put',
+                params: {},
+                token: {
+                    name: 'token',
+                    value: true
+                }
+            },
+            deleteAction: {
+                name: '删除功能',
+                url: '/menu/:id/action/:actionId',
+                method: 'delete',
+                params: {},
+                token: {
+                    name: 'token',
+                    value: true
+                }
+            },
         }
     );
 }

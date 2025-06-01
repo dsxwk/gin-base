@@ -7,6 +7,7 @@
             v-bind="state.tableData"
             class="table-demo"
             @pageChange="onTablePageChange"
+            @delRow="onTableDelRow"
         >
           <template #tools>
             <div class="table-tool">
@@ -20,8 +21,8 @@
           </template>
           <template #operation="{row}">
             <div class="flex items-center">
-              <el-button type="primary" size="small">编辑</el-button>
-              <el-popconfirm title="确定删除吗？">
+              <el-button type="primary" size="small" @click="onOpenEdit('edit', row)">编辑</el-button>
+              <el-popconfirm title="确定删除吗？" @confirm="onTableDelRow(row)">
                 <template #reference>
                   <el-button size="small" type="danger">删除</el-button>
                 </template>
@@ -41,6 +42,7 @@ import {defineAsyncComponent, reactive, ref} from 'vue';
 import {getDict} from "/@/utils/dict.js";
 import {actionIsLinkEnum, actionTypeDict} from '/@/dict/menu/index.js';
 import {menuApi} from '/@/api/menu';
+import {ElMessage} from 'element-plus';
 
 // 引入组件
 const Table = defineAsyncComponent(() => import('/@/components/table/index.vue'));
@@ -125,9 +127,15 @@ const openDialog = (row) => {
   getTableData(state.tableData.param);
   state.dialog.isShowDialog = true;
 };
-// 关闭弹窗
-const closeDialog = () => {
-  state.dialog.isShowDialog = false;
+const onOpenEdit = (type, row) => {
+  actionListRow.value = row;
+  dialogRef.value.openDialog(type, row);
+};
+// 删除当前项回调
+const onTableDelRow = async (row) => {
+  await api.deleteAction({id: row.menuId, actionId: row.id});
+  ElMessage.success(`删除成功！`);
+  state.tableData.data = state.tableData.data.filter((item) => item.id !== row.id);
 };
 // 初始化列表数据
 const getTableData = async (param) => {

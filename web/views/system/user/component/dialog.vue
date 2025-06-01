@@ -227,7 +227,7 @@ const openDialog = (type, row) => {
       age: 0,
       status: 1,
       userRoles: []
-    }
+    };
     state.selectedRoleIds = [];
     state.dialog.title = '新增用户';
     state.dialog.submitTxt = '新 增';

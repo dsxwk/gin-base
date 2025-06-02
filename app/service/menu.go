@@ -205,7 +205,7 @@ func (s *MenuService) ActionDelete(id int64, menuID int64) (m model.MenuAction, 
 
 // ActionDetail 功能详情
 // @param id int64
-// @return m model.UserQuery, err error
+// @m model.MenuAction, err error
 func (s *MenuService) ActionDetail(id int64) (m model.MenuAction, err error) {
 	err = global.DB.
 		First(&m, id).Error

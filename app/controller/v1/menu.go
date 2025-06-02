@@ -345,9 +345,9 @@ func (s *MenuController) ActionDetail(c *gin.Context) {
 		menuService service.MenuService
 	)
 
-	idParam := c.Param("id")
+	idParam := c.Param("actionId")
 	if idParam == "" {
-		s.ApiResponse(c, global.ArgsError, "id参数必传")
+		s.ApiResponse(c, global.ArgsError, "功能id参数必传")
 		return
 	}
 

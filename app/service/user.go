@@ -132,7 +132,7 @@ func (s *UserService) Update(m model.User) (model.User, error) {
 
 // Detail 详情
 // @param id int64
-// @return m model.UserQuery, err error
+// @return m model.User, err error
 func (s *UserService) Detail(id int64) (m model.User, err error) {
 	err = global.DB.
 		Preload("UserRoles").

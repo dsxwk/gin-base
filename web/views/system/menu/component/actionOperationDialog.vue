@@ -30,9 +30,13 @@ import {menuApi} from '/@/api/menu';
 
 const api = menuApi();
 const props = defineProps({
-  actionListRow: {
-    type: Object,
+  menuId: {
+    type: Number,
     required: true,
+    default: 0
+  },
+  row: {
+    type: Object,
     default: () => ({})
   }
 });
@@ -123,8 +127,9 @@ const formData = ref([
   {
     label: "排序",
     prop: "sort",
-    type: "input-number",
+    type: "inputNumber",
     attrs: {
+      type: "number",
       placeholder: "请输入排序",
       clearable: true
     },
@@ -139,9 +144,10 @@ const emit = defineEmits(['refresh']);
 // 定义变量内容
 const dialogFormRef = ref();
 // 打开弹窗
-const openDialog = (type, row) => {
-  state.ruleForm.menuId = props.actionListRow.menuId;
+const openDialog = async (type, row) => {
+  state.ruleForm.menuId = props.menuId;
   if (type === 'edit') {
+    state.ruleForm = await detail(row.id);
     Object.keys(state.ruleForm).forEach(key => {
       if (row.hasOwnProperty(key)) {
         if (typeof state.ruleForm[key] === 'object' && state.ruleForm[key] !== null) {
@@ -154,26 +160,25 @@ const openDialog = (type, row) => {
     state.dialog.title = '修改功能';
     state.dialog.submitTxt = '修 改';
   } else {
-    state.ruleForm = {
-      id: props.actionListRow.menuId,
-      menuId: props.actionListRow.menuId, // 菜单id
-      type: "", // 类型 1=header 2=operation
-      name: "", // 功能名称
-      isLink: false, // 是否为链接 1=是 2=否
-      sort: 0, // 排序
-    };
     state.dialog.title = '新增功能';
     state.dialog.submitTxt = '新 增';
   }
   state.dialog.type = type;
   state.dialog.isShowDialog = true;
   // 清空表单，此项需加表单验证才能使用
-  nextTick(() => {
+  await nextTick(() => {
     dialogFormRef.value && dialogFormRef.value.resetFields();
   });
 };
 // 关闭弹窗
 const closeDialog = () => {
+  state.ruleForm = {
+    menuId: props.menuId, // 菜单id
+    type: "", // 类型 1=header 2=operation
+    name: "", // 功能名称
+    isLink: false, // 是否为链接 1=是 2=否
+    sort: 0, // 排序
+  };
   state.dialog.isShowDialog = false;
 };
 // 取消
@@ -190,15 +195,20 @@ const onSubmit = async () => {
       await api.createAction(state.ruleForm);
       msg = '创建成功';
     } else {
-      state.ruleForm.id = props.actionListRow.menuId;
-      state.ruleForm.actionId = props.actionListRow.id;
+      state.ruleForm.menuId = props.menuId;
+      state.ruleForm.actionId = props.row.id;
       await api.updateAction(state.ruleForm);
       msg = '更新成功';
     }
     ElMessage.success(msg);
     closeDialog();
-    // emit('refresh');
+    emit('refresh');
   });
+};
+// 功能详情
+const detail = async (id) => {
+  const res = await api.actionDetail({id: id, menuId: props.menuId});
+  return res.data;
 };
 // 页面加载时
 onMounted(() => {

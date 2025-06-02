@@ -34,8 +34,8 @@
           </div>
         </template>
         <template #dialog>
-          <MenuDialog ref="menuDialogRef" @refresh="getTableData(state.tableData.param)" :row="listRow"/>
-          <ActionDialog ref="menuActionDialogRef" :row="actionListRow"/>
+          <MenuDialog ref="menuDialogRef" @refresh="getTableData(state.tableData.param)" :row="listRow" :menuId="menuId"/>
+          <ActionDialog ref="menuActionDialogRef" :menuId="menuId" />
         </template>
       </Table>
     </div>
@@ -62,8 +62,8 @@ const api = menuApi();
 const tableRef = ref();
 const menuDialogRef = ref();
 const menuActionDialogRef = ref();
+const menuId = ref();
 const listRow = ref();
-const actionListRow = ref();
 const state = reactive({
   tableData: {
     // 列表数据（必传）
@@ -156,7 +156,7 @@ const onOpenEditMenu = (type, row) => {
 };
 // 菜单功能
 const onOpenMenuAction = (row) => {
-  actionListRow.value = row;
+  menuId.value = row.id;
   menuActionDialogRef.value.openDialog(row);
 }
 // 初始化列表数据

@@ -30,7 +30,7 @@
             </div>
           </template>
           <template #dialog>
-            <ActionOperationDialog ref="dialogRef" :actionListRow="actionListRow"/>
+            <ActionOperationDialog ref="dialogRef" @refresh="getTableData(state.tableData.param)" :row="listRow" :menuId="props.menuId"/>
           </template>
         </Table>
       </div>
@@ -50,14 +50,14 @@ const ActionOperationDialog = defineAsyncComponent(() => import('/@/views/system
 
 const api = menuApi();
 const props = defineProps({
-  row: {
-    type: Object,
+  menuId: {
+    type: Number,
     required: true,
-    default: () => ({})
+    default: 0
   }
 });
+const listRow = ref();
 const dialogRef = ref();
-const actionListRow = ref();
 const tableMenuActionRef = ref();
 const state = reactive({
   tableData: {
@@ -123,17 +123,17 @@ const onTablePageChange = (page) => {
 };
 // 打开弹窗
 const openDialog = (row) => {
-  state.tableData.param.id = row.id;
+  state.tableData.param.menuId = row.id;
   getTableData(state.tableData.param);
   state.dialog.isShowDialog = true;
 };
 const onOpenEdit = (type, row) => {
-  actionListRow.value = row;
+  listRow.value = row;
   dialogRef.value.openDialog(type, row);
 };
 // 删除当前项回调
 const onTableDelRow = async (row) => {
-  await api.deleteAction({id: row.menuId, actionId: row.id});
+  await api.deleteAction({menuId: row.menuId, actionId: row.id});
   ElMessage.success(`删除成功！`);
   state.tableData.data = state.tableData.data.filter((item) => item.id !== row.id);
 };

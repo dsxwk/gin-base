@@ -59,7 +59,7 @@ export function menuApi() {
             },
             actionList: {
                 name: '功能列表',
-                url: '/menu/:id/action',
+                url: '/menu/:menuId/action',
                 method: 'get',
                 params: {},
                 token: {
@@ -69,7 +69,7 @@ export function menuApi() {
             },
             createAction: {
                 name: '新增功能',
-                url: '/menu/:id/action',
+                url: '/menu/:menuId/action',
                 method: 'post',
                 params: {},
                 token: {
@@ -79,7 +79,7 @@ export function menuApi() {
             },
             updateAction: {
                 name: '修改功能',
-                url: '/menu/:id/action/:actionId',
+                url: '/menu/:menuId/action/:id',
                 method: 'put',
                 params: {},
                 token: {
@@ -89,7 +89,7 @@ export function menuApi() {
             },
             deleteAction: {
                 name: '删除功能',
-                url: '/menu/:id/action/:actionId',
+                url: '/menu/:menuId/action/:id',
                 method: 'delete',
                 params: {},
                 token: {
@@ -97,6 +97,16 @@ export function menuApi() {
                     value: true
                 }
             },
+            actionDetail: {
+                name: '功能详情',
+                url: '/menu/:menuId/action/:id',
+                method: 'get',
+                params: {},
+                token: {
+                    name: 'token',
+                    value: true
+                }
+            }
         }
     );
 }

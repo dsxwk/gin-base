@@ -32,8 +32,11 @@ func (r MenuRouter) RegisterRoutes(routerGroup *gin.RouterGroup) {
 	routerGroup.POST("/menu/:id/action", controller.ActionCreate)
 
 	// 功能更新
-	routerGroup.PUT("/menu/:id/action/:action_id", controller.ActionUpdate)
+	routerGroup.PUT("/menu/:id/action/:actionId", controller.ActionUpdate)
 
 	// 功能删除
-	routerGroup.DELETE("/menu/:id/action/:action_id", controller.ActionDelete)
+	routerGroup.DELETE("/menu/:id/action/:actionId", controller.ActionDelete)
+
+	// 功能详情
+	routerGroup.GET("/menu/:id/action/:actionId", controller.ActionDetail)
 }

@@ -234,7 +234,7 @@ func (s *MenuController) ActionCreate(c *gin.Context) {
 }
 
 // ActionUpdate 功能更新
-// @Router /api/v1/menu/{id}/action/{action_id} [put]
+// @Router /api/v1/menu/{id}/action/{actionId} [put]
 func (s *MenuController) ActionUpdate(c *gin.Context) {
 	var (
 		menuService        service.MenuService
@@ -298,7 +298,7 @@ func (s *MenuController) ActionUpdate(c *gin.Context) {
 }
 
 // ActionDelete 功能删除
-// @Router /api/v1/menu/{id}/action/{action_id} [delete]
+// @Router /api/v1/menu/{id}/action/{actionId} [delete]
 func (s *MenuController) ActionDelete(c *gin.Context) {
 	var (
 		menuService service.MenuService
@@ -336,4 +336,33 @@ func (s *MenuController) ActionDelete(c *gin.Context) {
 	}
 
 	s.ApiResponse(c, global.Success, "删除成功", data)
+}
+
+// ActionDetail 功能详情
+// @Router /api/v1/menu/{id}/action/{actionId} [get]
+func (s *MenuController) ActionDetail(c *gin.Context) {
+	var (
+		menuService service.MenuService
+	)
+
+	idParam := c.Param("id")
+	if idParam == "" {
+		s.ApiResponse(c, global.ArgsError, "id参数必传")
+		return
+	}
+
+	id, err := strconv.ParseInt(idParam, 10, 64)
+	if err != nil {
+		s.ApiResponse(c, global.ArgsError, "id参数格式错误")
+		return
+	}
+
+	data, err := menuService.ActionDetail(id)
+	if err != nil {
+		global.Log.Error(err.Error())
+		s.ApiResponse(c, global.SystemError, err.Error())
+		return
+	}
+
+	s.ApiResponse(c, global.Success, data)
 }

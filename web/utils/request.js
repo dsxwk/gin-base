@@ -1,6 +1,8 @@
 import {NextLoading} from '/@/utils/loading';
-import {ElMessage, ElMessageBox} from 'element-plus';
+import {ElMessage} from 'element-plus';
 import {Session} from '/@/utils/storage';
+import pnotify from '/@/utils/pnotify/alert.js';
+import pnotifyConfirm from '/@/utils/pnotify/confirm.js';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -26,8 +28,8 @@ export default async function request(path, config) {
 
         if (res?.code === 401) {
             Session.clear();
-            ElMessageBox.confirm(
-                '点击确定跳转至登录', res?.msg, {}
+            pnotifyConfirm.notice(
+                '点击确定跳转至登录'
             ).then(
                 () => {
                     window.location.href = '/';
@@ -41,6 +43,8 @@ export default async function request(path, config) {
                 }
             );
         }
+
+        pnotify.error(res?.msg);
 
         return Promise.reject(res);
     }

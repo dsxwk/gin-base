@@ -9,10 +9,8 @@ import (
 	"gorm.io/gen"
 	"gorm.io/gorm"
 	"html/template"
-	"io/ioutil"
 	"os"
 	"path/filepath"
-	"regexp"
 	"strings"
 )
 
@@ -193,6 +191,7 @@ func createTableStruct(tableName string, path string, camel bool) {
 		FieldSignable:     false,
 		FieldWithIndexTag: false,
 		FieldWithTypeTag:  true,
+		ModelPkgPath:      "model",
 	})
 
 	g.UseDB(global.DB)
@@ -234,100 +233,100 @@ func createTableStruct(tableName string, path string, camel bool) {
 	g.Execute()
 
 	// 修改文件，插入钩子方法
-	insertHooksIntoModel(path, tableName)
+	// insertHooksIntoModel(path, tableName)
 
 	_ = os.RemoveAll(path)
 }
 
 // insertHooksIntoModel 插入钩子方法到生成的模型文件
-func insertHooksIntoModel(path string, tableName string) {
-	// 确保路径和文件名正确
-	modelFilePath := filepath.Join(config.GetRootPath(), "app", "model", tableName+".gen.go")
-	structName := utils.ToCamelCase(tableName)
-	// 首字母大写
-	structName = strings.ToUpper(string(structName[0])) + structName[1:]
-
-	// 读取文件内容
-	content, err := ioutil.ReadFile(modelFilePath)
-	if err != nil {
-		fmt.Printf("Error reading file: %v\n", err)
-		return
-	}
-	fileContent := string(content)
-
-	// 检查是否已导入 time 包
-	if !strings.Contains(fileContent, `"time"`) {
-		// 用正则查找 import 块
-		re := regexp.MustCompile(`import\s*\(([^)]*)\)`)
-		if re.MatchString(fileContent) {
-			// 已有多行 import，插入 "time"
-			fileContent = re.ReplaceAllStringFunc(fileContent, func(s string) string {
-				if strings.Contains(s, `"time"`) {
-					return s
-				}
-				return strings.Replace(s, ")", `    "time"`+"\n)", 1)
-			})
-		} else {
-			// 没有多行 import，查找单行 import 或插入新的 import 块
-			if strings.Contains(fileContent, `import "gorm.io/gorm"`) {
-				fileContent = strings.Replace(fileContent, `import "gorm.io/gorm"`, `import (
-    "gorm.io/gorm"
-    "time"
-)`, 1)
-			} else {
-				// 没有 import，插入到 package 后
-				lines := strings.SplitN(fileContent, "\n", 2)
-				if len(lines) > 1 {
-					fileContent = lines[0] + "\nimport (\n    \"time\"\n)\n" + lines[1]
-				}
-			}
-		}
-		// 覆盖写回文件
-		err = ioutil.WriteFile(modelFilePath, []byte(fileContent), 0666)
-		if err != nil {
-			fmt.Printf("Error writing import to file: %v\n", err)
-			return
-		}
-	}
-
-	//	// 追加钩子方法
-	//	file, err := os.OpenFile(modelFilePath, os.O_APPEND|os.O_RDWR, 0666)
-	//	if err != nil {
-	//		fmt.Printf("Error opening file: %v\n", err)
-	//		return
-	//	}
-	//	defer func(file *os.File) {
-	//		err = file.Close()
-	//		if err != nil {
-	//			fmt.Printf("Error closing file: %v\n", err)
-	//			return
-	//		}
-	//	}(file)
-	//
-	//	// 准备钩子方法的内容
-	//	hooks := fmt.Sprintf(`
-	//// BeforeCreate 创建之前
-	//func (s *%s) BeforeCreate(tx *gorm.DB) (err error) {
-	//    now := JsonTime(time.Now())
-	//    s.CreatedAt = &now
-	//    s.UpdatedAt = &now
-	//    return nil
-	//}
-	//
-	//// BeforeUpdate 更新之前
-	//func (s *%s) BeforeUpdate(tx *gorm.DB) (err error) {
-	//    now := JsonTime(time.Now())
-	//    s.UpdatedAt = &now
-	//    return nil
-	//}
-	//`, structName, structName)
-	//
-	//	// 将钩子方法写入文件
-	//	_, err = file.WriteString(hooks)
-	//	if err != nil {
-	//		fmt.Printf("Error writing hooks to file: %v\n", err)
-	//		return
-	//	}
-	//
-	//	fmt.Println("钩子方法已插入到模型文件:", modelFilePath)
-}
+//func insertHooksIntoModel(path string, tableName string) {
+//	// 确保路径和文件名正确
+//	modelFilePath := filepath.Join(config.GetRootPath(), "app", "model", tableName+".gen.go")
+//	structName := utils.ToCamelCase(tableName)
+//	// 首字母大写
+//	structName = strings.ToUpper(string(structName[0])) + structName[1:]
+//
+//	// 读取文件内容
+//	content, err := ioutil.ReadFile(modelFilePath)
+//	if err != nil {
+//		fmt.Printf("Error reading file: %v\n", err)
+//		return
+//	}
+//	fileContent := string(content)
+//
+//	// 检查是否已导入 time 包
+//	if !strings.Contains(fileContent, `"time"`) {
+//		// 用正则查找 import 块
+//		re := regexp.MustCompile(`import\s*\(([^)]*)\)`)
+//		if re.MatchString(fileContent) {
+//			// 已有多行 import，插入 "time"
+//			fileContent = re.ReplaceAllStringFunc(fileContent, func(s string) string {
+//				if strings.Contains(s, `"time"`) {
+//					return s
+//				}
+//				return strings.Replace(s, ")", `    "time"`+"\n)", 1)
+//			})
+//		} else {
+//			// 没有多行 import，查找单行 import 或插入新的 import 块
+//			if strings.Contains(fileContent, `import "gorm.io/gorm"`) {
+//				fileContent = strings.Replace(fileContent, `import "gorm.io/gorm"`, `import (
+//    "gorm.io/gorm"
+//    "time"
+//)`, 1)
+//			} else {
+//				// 没有 import，插入到 package 后
+//				lines := strings.SplitN(fileContent, "\n", 2)
+//				if len(lines) > 1 {
+//					fileContent = lines[0] + "\nimport (\n    \"time\"\n)\n" + lines[1]
+//				}
+//			}
+//		}
+//		// 覆盖写回文件
+//		err = ioutil.WriteFile(modelFilePath, []byte(fileContent), 0666)
+//		if err != nil {
+//			fmt.Printf("Error writing import to file: %v\n", err)
+//			return
+//		}
+//	}
+//
+//	//	// 追加钩子方法
+//	//	file, err := os.OpenFile(modelFilePath, os.O_APPEND|os.O_RDWR, 0666)
+//	//	if err != nil {
+//	//		fmt.Printf("Error opening file: %v\n", err)
+//	//		return
+//	//	}
+//	//	defer func(file *os.File) {
+//	//		err = file.Close()
+//	//		if err != nil {
+//	//			fmt.Printf("Error closing file: %v\n", err)
+//	//			return
+//	//		}
+//	//	}(file)
+//	//
+//	//	// 准备钩子方法的内容
+//	//	hooks := fmt.Sprintf(`
+//	//// BeforeCreate 创建之前
+//	//func (s *%s) BeforeCreate(tx *gorm.DB) (err error) {
+//	//    now := JsonTime(time.Now())
+//	//    s.CreatedAt = &now
+//	//    s.UpdatedAt = &now
+//	//    return nil
+//	//}
+//	//
+//	//// BeforeUpdate 更新之前
+//	//func (s *%s) BeforeUpdate(tx *gorm.DB) (err error) {
+//	//    now := JsonTime(time.Now())
+//	//    s.UpdatedAt = &now
+//	//    return nil
+//	//}
+//	//`, structName, structName)
+//	//
+//	//	// 将钩子方法写入文件
+//	//	_, err = file.WriteString(hooks)
+//	//	if err != nil {
+//	//		fmt.Printf("Error writing hooks to file: %v\n", err)
+//	//		return
+//	//	}
+//	//
+//	//	fmt.Println("钩子方法已插入到模型文件:", modelFilePath)
+//}

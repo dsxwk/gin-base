@@ -208,6 +208,7 @@ func (s *MenuService) ActionDelete(id int64, menuID int64) (m model.MenuAction, 
 // @m model.MenuAction, err error
 func (s *MenuService) ActionDetail(id int64) (m model.MenuAction, err error) {
 	err = global.DB.
+		Preload("ActionRoles").
 		First(&m, id).Error
 	if err != nil {
 		return m, err

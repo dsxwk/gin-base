@@ -41,12 +41,15 @@ const props = defineProps({
   }
 });
 const state = reactive({
+  roles: [],
+  selectedRoleIds: [],
   ruleForm: {
     menuId: "", // 菜单id
     type: "", // 类型 1=header 2=operation
     name: "", // 功能名称
     isLink: false, // 是否为链接 1=是 2=否
     sort: 0, // 排序
+    actionRoles: [], // 功能角色
   },
   dialog: {
     isShowDialog: false,
@@ -125,6 +128,21 @@ const formData = ref([
     ],
   },
   {
+    label: '功能角色',
+    prop: 'actionRoles',
+    type: 'select',
+    col: 12,
+    options: () => {
+      return state.roles.map(role => ({label: role.name, value: role.id}));
+    },
+    attrs: {
+      placeholder: '请选择角色',
+      multiple: true,
+      clearable: true,
+      class: 'w100'
+    },
+  },
+  {
     label: "排序",
     prop: "sort",
     type: "inputNumber",
@@ -151,6 +169,7 @@ const openDialog = async (type, row) => {
     name: "", // 功能名称
     isLink: false, // 是否为链接 1=是 2=否
     sort: 0, // 排序
+    actionRoles: [],
   };
   if (type === 'edit') {
     const data = await detail(row.id);
@@ -159,9 +178,12 @@ const openDialog = async (type, row) => {
         state.ruleForm[key] = data[key];
       }
     });
+    // 设置角色 ID 数组用于 select 默认选中
+    state.selectedRoleIds = state.ruleForm.actionRoles?.map(item => item.roleId) || [];
     state.dialog.title = '修改功能';
     state.dialog.submitTxt = '修 改';
   } else {
+    state.selectedRoleIds = [];
     state.dialog.title = '新增功能';
     state.dialog.submitTxt = '新 增';
   }
@@ -174,6 +196,7 @@ const openDialog = async (type, row) => {
 };
 // 关闭弹窗
 const closeDialog = () => {
+  state.selectedRoleIds = [];
   state.dialog.isShowDialog = false;
 };
 // 取消
@@ -182,6 +205,15 @@ const onCancel = () => {
 };
 // 提交
 const onSubmit = async () => {
+  state.ruleForm.actionRoles = state.ruleForm.actionRoles.map(roleId => {
+    const role = state.roles.find(r => r.id === roleId);
+    return {
+      menuId: props.menuId ?? 0,
+      roleId: roleId,
+      name: role ? role.name : ''
+    };
+  });
+
   dialogFormRef.value.validate(async (valid) => {
     if (!valid) return;
 
@@ -207,9 +239,14 @@ const detail = async (id) => {
 
   return res.data;
 };
+// 获取角色
+const getRoles = async () => {
+  const data = await api.roleList({page:1, pageSize: 10, isPage: false});
+  state.roles = data.data;
+};
 // 页面加载时
 onMounted(() => {
-
+  getRoles();
 });
 // 暴露变量
 defineExpose({

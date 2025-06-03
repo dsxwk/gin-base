@@ -106,6 +106,11 @@ const state = reactive({
           return getDict(isHideDict, scope.row?.meta?.isHide);
         }
       },
+      {key: 'menuRoles', colWidth: '', width: '70', height: '40', title: '菜单角色', isCheck: true,
+        render: (scope) => {
+          return scope.row?.menuRoles?.length > 0 ? scope.row?.menuRoles.map(item => item.name).join(',') : '';
+        }
+      },
       {key: 'createdAt', colWidth: '', title: '创建时间', type: 'text', isCheck: true},
       {key: 'updatedAt', colWidth: '', title: '更新时间', type: 'text', isCheck: true},
     ],

@@ -79,6 +79,11 @@ const state = reactive({
         }
       },
       { key: 'sort', colWidth: '', title: '排序', type: 'text', isCheck: true },
+      {key: 'actionRoles', colWidth: '', width: '70', height: '40', title: '功能角色', isCheck: true,
+        render: (scope) => {
+          return scope.row?.actionRoles?.length > 0 ? scope.row?.actionRoles.map(item => item.name).join(',') : '';
+        }
+      },
       {key: 'createdAt', colWidth: '', title: '创建时间', type: 'text', isCheck: true},
       {key: 'updatedAt', colWidth: '', title: '更新时间', type: 'text', isCheck: true},
     ],

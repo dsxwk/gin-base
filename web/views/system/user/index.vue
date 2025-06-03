@@ -154,11 +154,7 @@ const getTableData = async (param) => {
 };
 // 搜索点击时表单回调
 const onSearch = (data) => {
-  const filterData = Object.fromEntries(
-      Object.entries(data).filter(([key, value]) => value !== null && value !== undefined && value !== '')
-  );
-  state.tableData.param = Object.assign({}, state.tableData.param, filterData);
-  getTableData(state.tableData.param);
+  state.tableData.param = Object.assign({}, state.tableData.param, data);
   tableRef.value.pageReset();
 };
 // 删除当前项回调

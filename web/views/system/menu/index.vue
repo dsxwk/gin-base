@@ -168,10 +168,7 @@ const getTableData = async (param) => {
 };
 // 搜索点击时表单回调
 const onSearch = (data) => {
-  const filterData = Object.fromEntries(
-      Object.entries(data).filter(([key, value]) => value !== null && value !== undefined && value !== '')
-  );
-  state.tableData.param = Object.assign({}, state.tableData.param, filterData);
+  state.tableData.param = Object.assign({}, state.tableData.param, data);
   getTableData(state.tableData.param);
 };
 // 分页改变时回调

@@ -69,7 +69,13 @@ const onSearch = (formEl) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      emit('search', state.form);
+      // 过滤掉无效的搜索条件
+      const filterForm = Object.fromEntries(
+          Object.entries(state.form).filter(([key, value]) => {
+            return value !== null && value !== undefined && value !== '' && !(Array.isArray(value) && value.length === 0);
+          })
+      );
+      emit('search', filterForm);
     } else {
       return false;
     }

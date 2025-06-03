@@ -1,6 +1,6 @@
 <template>
   <div class="system-menu-dialog-container">
-    <el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="769px">
+    <el-dialog :title="state.dialog.title" v-if="state.dialog.isShowDialog" v-model="state.dialog.isShowDialog" width="769px">
       <ConfigForm
           ref="dialogFormRef"
           v-model:model="state.ruleForm"
@@ -200,14 +200,22 @@ const getData = (routes) => {
 };
 
 const openDialog = (type, row) => {
+  state.ruleForm = {
+    fullName: '',
+    avatar: '',
+    username: '',
+    email: '',
+    password: '',
+    nickname: '',
+    gender: 1,
+    age: 0,
+    status: 1,
+    userRoles: []
+  };
   if (type === 'edit') {
-    Object.keys(state.ruleForm).forEach(key => {
+    Object.keys(state.ruleForm).forEach((key) => {
       if (row.hasOwnProperty(key)) {
-        if (typeof state.ruleForm[key] === 'object' && state.ruleForm[key] !== null) {
-          Object.assign(state.ruleForm[key], row[key]);
-        } else {
-          state.ruleForm[key] = row[key];
-        }
+        state.ruleForm[key] = row[key];
       }
     });
     // 设置角色 ID 数组用于 select 默认选中
@@ -216,18 +224,6 @@ const openDialog = (type, row) => {
     state.dialog.title = '修改用户';
     state.dialog.submitTxt = '修 改';
   } else {
-    state.ruleForm = {
-      fullName: '',
-      avatar: '',
-      username: '',
-      email: '',
-      password: '',
-      nickname: '',
-      gender: 1,
-      age: 0,
-      status: 1,
-      userRoles: []
-    };
     state.selectedRoleIds = [];
     state.dialog.title = '新增用户';
     state.dialog.submitTxt = '新 增';

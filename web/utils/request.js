@@ -29,7 +29,8 @@ export default async function request(path, config) {
         if (res?.code === 401) {
             Session.clear();
             pnotifyConfirm.notice(
-                '点击确定跳转至登录'
+                '点击确定跳转至登录',
+                res?.msg
             ).then(
                 () => {
                     window.location.href = '/';

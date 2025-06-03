@@ -1,6 +1,6 @@
 <template>
 	<div class="system-menu-dialog-container">
-		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="769px">
+		<el-dialog :title="state.dialog.title" v-if="state.dialog.isShowDialog" v-model="state.dialog.isShowDialog" width="769px">
       <ConfigForm
           ref="dialogFormRef"
           v-model:model="state.ruleForm"
@@ -315,14 +315,31 @@ function findMenuByPath(data, path) {
 }
 // 打开弹窗
 const openDialog = (type, row) => {
-	if (type === 'edit') {
-    Object.keys(state.ruleForm).forEach(key => {
+  state.ruleForm = {
+    menuSuperior: [], // 上级菜单
+    name: '', // 路由名称
+    component: '', // 组件路径
+    componentAlias: '', // 组件路径别名
+    isLink: false, // 是否外链
+    sort: 0, // 菜单排序
+    path: '', // 路由路径
+    redirect: '', // 路由重定向，有子集 children 时
+    meta: {
+      title: '', // 菜单名称
+      icon: '', // 菜单图标
+      isHide: false, // 是否隐藏
+      isKeepAlive: true, // 是否缓存
+      isAffix: false, // 是否固定
+      isLink: '', // 外链/内嵌时链接地址（http:xxx.com），开启外链条件，`1、isLink: 链接地址不为空`
+      isIframe: false, // 是否内嵌，开启条件，`1、isIframe:true 2、isLink：链接地址不为空`
+      roles: [], // 权限标识，取角色管理
+    },
+    btnPower: '', // 菜单类型为按钮时，权限标识
+  };
+  if (type === 'edit') {
+    Object.keys(state.ruleForm).forEach((key) => {
       if (row.hasOwnProperty(key)) {
-        if (typeof state.ruleForm[key] === 'object' && state.ruleForm[key] !== null) {
-          Object.assign(state.ruleForm[key], row[key]);
-        } else {
-          state.ruleForm[key] = row[key];
-        }
+        state.ruleForm[key] = row[key];
       }
     });
     // 设置上级菜单默认选中
@@ -334,27 +351,6 @@ const openDialog = (type, row) => {
 		state.dialog.title = '修改菜单';
 		state.dialog.submitTxt = '修 改';
 	} else {
-    state.ruleForm = {
-      menuSuperior: [], // 上级菜单
-      name: '', // 路由名称
-      component: '', // 组件路径
-      componentAlias: '', // 组件路径别名
-      isLink: false, // 是否外链
-      sort: 0, // 菜单排序
-      path: '', // 路由路径
-      redirect: '', // 路由重定向，有子集 children 时
-      meta: {
-        title: '', // 菜单名称
-        icon: '', // 菜单图标
-        isHide: false, // 是否隐藏
-        isKeepAlive: true, // 是否缓存
-        isAffix: false, // 是否固定
-        isLink: '', // 外链/内嵌时链接地址（http:xxx.com），开启外链条件，`1、isLink: 链接地址不为空`
-        isIframe: false, // 是否内嵌，开启条件，`1、isIframe:true 2、isLink：链接地址不为空`
-        roles: [], // 权限标识，取角色管理
-      },
-      btnPower: '', // 菜单类型为按钮时，权限标识
-    };
 		state.dialog.title = '新增菜单';
 		state.dialog.submitTxt = '新 增';
 	}

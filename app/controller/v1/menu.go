@@ -254,7 +254,7 @@ func (s *MenuController) ActionUpdate(c *gin.Context) {
 		return
 	}
 
-	IDParam := c.Param("action_id")
+	IDParam := c.Param("actionId")
 	if IDParam == "" {
 		s.ApiResponse(c, global.ArgsError, "功能id参数必传")
 		return
@@ -304,7 +304,7 @@ func (s *MenuController) ActionDelete(c *gin.Context) {
 		menuService service.MenuService
 	)
 
-	iDParam := c.Param("action_id")
+	iDParam := c.Param("actionId")
 	if iDParam == "" {
 		s.ApiResponse(c, global.ArgsError, "功能id参数必传")
 		return

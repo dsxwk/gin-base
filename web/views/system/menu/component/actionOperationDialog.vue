@@ -1,6 +1,6 @@
 <template>
   <div class="system-menu-dialog-container">
-    <el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="769px">
+    <el-dialog :title="state.dialog.title" v-if="state.dialog.isShowDialog" v-model="state.dialog.isShowDialog" width="769px">
       <ConfigForm
           ref="dialogFormRef"
           v-model:model="state.ruleForm"
@@ -145,16 +145,18 @@ const emit = defineEmits(['refresh']);
 const dialogFormRef = ref();
 // 打开弹窗
 const openDialog = async (type, row) => {
-  state.ruleForm.menuId = props.menuId;
+  state.ruleForm = {
+    menuId: props.menuId, // 菜单id
+    type: "", // 类型 1=header 2=operation
+    name: "", // 功能名称
+    isLink: false, // 是否为链接 1=是 2=否
+    sort: 0, // 排序
+  };
   if (type === 'edit') {
-    state.ruleForm = await detail(row.id);
-    Object.keys(state.ruleForm).forEach(key => {
-      if (row.hasOwnProperty(key)) {
-        if (typeof state.ruleForm[key] === 'object' && state.ruleForm[key] !== null) {
-          Object.assign(state.ruleForm[key], row[key]);
-        } else {
-          state.ruleForm[key] = row[key];
-        }
+    const data = await detail(row.id);
+    Object.keys(state.ruleForm).forEach((key) => {
+      if (data.hasOwnProperty(key)) {
+        state.ruleForm[key] = data[key];
       }
     });
     state.dialog.title = '修改功能';
@@ -172,13 +174,6 @@ const openDialog = async (type, row) => {
 };
 // 关闭弹窗
 const closeDialog = () => {
-  state.ruleForm = {
-    menuId: props.menuId, // 菜单id
-    type: "", // 类型 1=header 2=operation
-    name: "", // 功能名称
-    isLink: false, // 是否为链接 1=是 2=否
-    sort: 0, // 排序
-  };
   state.dialog.isShowDialog = false;
 };
 // 取消
@@ -196,6 +191,7 @@ const onSubmit = async () => {
       msg = '创建成功';
     } else {
       state.ruleForm.menuId = props.menuId;
+      state.ruleForm.id = props.row.id;
       state.ruleForm.actionId = props.row.id;
       await api.updateAction(state.ruleForm);
       msg = '更新成功';
@@ -208,6 +204,7 @@ const onSubmit = async () => {
 // 功能详情
 const detail = async (id) => {
   const res = await api.actionDetail({id: id, menuId: props.menuId});
+
   return res.data;
 };
 // 页面加载时

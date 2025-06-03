@@ -1,6 +1,6 @@
 <template>
   <div class="system-menu-dialog-container">
-    <el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="769px">
+    <el-dialog :title="state.dialog.title" v-if="state.dialog.isShowDialog" v-model="state.dialog.isShowDialog" width="769px">
       <div class="table-demo-padding layout-padding-view layout-padding-auto">
         <Table
             ref="tableMenuActionRef"
@@ -92,7 +92,7 @@ const state = reactive({
       isOperate: true, // 是否显示表格操作栏
       isPrintTool: false, // 是否显示打印工具
       isExcelTool: false, // 是否显示导出Excel工具
-      isRefresh: false, // 是否显示刷新
+      isRefresh: true, // 是否显示刷新
       fixed: 'right', // 固定操作列
       operationWith: 200, // 固定操作列宽度
       isPage: false, // 是否显示分页
@@ -133,12 +133,13 @@ const onOpenEdit = (type, row) => {
 };
 // 删除当前项回调
 const onTableDelRow = async (row) => {
-  await api.deleteAction({menuId: row.menuId, actionId: row.id});
+  await api.deleteAction({id: row.id, menuId: row.menuId, actionId: row.id});
   ElMessage.success(`删除成功！`);
   state.tableData.data = state.tableData.data.filter((item) => item.id !== row.id);
 };
 // 初始化列表数据
 const getTableData = async (param) => {
+  param.menuId = param.menuId ?? props.menuId;
   const data = await api.actionList(param);
   state.tableData.data = data.data;
   state.tableData.config.loading = false;

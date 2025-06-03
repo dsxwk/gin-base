@@ -10,7 +10,6 @@ import (
 	"log"
 	"math/rand"
 	"reflect"
-	"regexp"
 	"strings"
 	"time"
 )
@@ -90,24 +89,6 @@ func KeyIsExist(data map[string]interface{}, key string) bool {
 	return exists
 }
 
-// CamelToSnake 驼峰转下划线
-// @param: field string
-// @return: string
-func CamelToSnake(field string) string {
-	// 使用正则表达式匹配大写字母
-	reg := regexp.MustCompile("[A-Z]")
-
-	// 将匹配到的大写字母替换为下划线+小写字母
-	snake := reg.ReplaceAllStringFunc(field, func(match string) string {
-		return "_" + strings.ToLower(match)
-	})
-
-	// 去掉开头可能的下划线
-	snake = strings.TrimPrefix(snake, "_")
-
-	return snake
-}
-
 // CamelToSnakeMap 驼峰键名数据转下划线键名数据
 // @param: data map[string]interface{}
 // @return: map[string]interface{}
@@ -169,6 +150,9 @@ func BuildWhereClause(filters interface{}, tag string) (string, []interface{}) {
 			if columnName == "" {
 				columnName = field.Name
 			}
+
+			// 将驼峰命名转换为蛇形命名
+			columnName = CamelToSnake(columnName)
 
 			// 根据字段类型构建查询条件
 			switch value.Kind() {

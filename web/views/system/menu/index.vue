@@ -173,7 +173,13 @@ const getTableData = async (param) => {
 };
 // 搜索点击时表单回调
 const onSearch = (data) => {
-  state.tableData.param = Object.assign({}, state.tableData.param, data);
+  Object.entries(data).forEach(([key, value]) => {
+    if (value !== undefined) {
+      state.tableData.param[key] = value;
+    } else {
+      delete state.tableData.param[key];
+    }
+  });
   getTableData(state.tableData.param);
 };
 // 分页改变时回调

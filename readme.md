@@ -313,7 +313,7 @@ type LoginService struct {
 // @param password string
 // @return m model.User, error
 func (s *LoginService) Login(username string, password string) (m model.User, err error) {
-	if err := global.DB.Where("username = ?", username).First(&m).Error; err != nil {
+	if err = global.DB.Where("username = ?", username).First(&m).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return m, errors.New("Login account error")
 		}

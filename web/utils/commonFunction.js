@@ -64,3 +64,7 @@ export default function () {
 		copyText,
 	};
 }
+
+export function sprintf(template, ...args) {
+	return template.replace(/%s/g, () => args.shift());
+}

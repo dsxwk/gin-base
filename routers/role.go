@@ -15,4 +15,12 @@ func (r RoleRouter) RegisterRoutes(routerGroup *gin.RouterGroup) {
 
 	// 列表
 	routerGroup.GET("/role", controller.List)
+	// 创建
+	routerGroup.POST("/role", controller.Create)
+	// 更新
+	routerGroup.PUT("/role/:id", controller.Update)
+	// 删除
+	routerGroup.DELETE("/role/:id", controller.Delete)
+	// 详情
+	routerGroup.GET("/role/:id", controller.Detail)
 }

@@ -55,3 +55,52 @@ func (s *RoleService) List(pageData global.PageData, search validate.RoleSearchV
 
 	return models, nil
 }
+
+// Create 创建
+// @param: m model.Roles
+// @return: model.Roles, error
+func (s *RoleService) Create(m model.Roles) (model.Roles, error) {
+	err := global.DB.Create(&m).Error
+	if err != nil {
+		return m, err
+	}
+
+	return m, nil
+}
+
+// Update 更新
+// @param m model.Roles
+// @return model.Roles, error
+func (s *RoleService) Update(m model.Roles) (model.Roles, error) {
+	err := global.DB.Updates(&m).Error
+	if err != nil {
+		return m, err
+	}
+
+	return m, nil
+}
+
+// Detail 详情
+// @param id int64
+// @return m model.Roles, err error
+func (s *RoleService) Detail(id int64) (m model.Roles, err error) {
+	err = global.DB.
+		First(&m, id).Error
+	if err != nil {
+		return m, err
+	}
+
+	return m, nil
+}
+
+// Delete 删除
+// @param id int64
+// @return m model.Roles, err error
+func (s *RoleService) Delete(id int64) (m model.Roles, err error) {
+	err = global.DB.Delete(&m, id).Error
+	if err != nil {
+		return m, err
+	}
+
+	return m, nil
+}

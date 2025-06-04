@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"gin-base/common"
 	"gin-base/common/global"
 	"gin-base/config"
 	"gin-base/helper/utils"
@@ -14,45 +15,65 @@ import (
 	"strings"
 )
 
-type Options struct {
-	Make        string // 文件类型
-	Function    string // 函数方法
-	Method      string // 请求方法
-	Router      string // 路由
-	Description string // 函数方法描述或注释
-	TableName   string // 模型对应的表名
-	Path        string // 模型生成路径
-	Camel       bool   // 是否驼峰命名
-	FileName    string // 生成的文件名
+type CliCommand struct {
+	common.BaseCommand
 }
+
+type Options struct {
+	Make        string // 文件类型 controller|model|router ...
+	Function    string // 函数方法 List|Create ...
+	Method      string // 请求方法 get|post ...
+	Router      string // 路由 /v1/user ...
+	Description string // 函数方法描述或注释 列表|创建 ...
+	Table       string // 模型对应的表名 user|article ...
+	File        string // 路径文件 /v1/user ... 注：将在对应的类型目录下生成 v1/user.go 文件,如为controller 则生成 root/app/controller/v1/user.go 文件
+	Camel       bool   // 是否驼峰命名
+}
+
+var (
+	rootPath = config.GetRootPath()
+)
 
 func main() {
 	var (
+		s            CliCommand
 		opts         Options
 		templateFile string
-		rootPath     = config.GetRootPath()
 	)
 
-	pflag.StringVarP(&opts.Make, "make", "m", "", "文件类型(示例：controller|model|service|validate|middleware|router)")
-	pflag.StringVarP(&opts.Function, "function", "f", "", "函数方法(示例：create)")
-	pflag.StringVarP(&opts.Method, "method", "e", "", "请求方法(示例：get)")
+	// 检查命令是否提供
+	if len(os.Args) < 2 {
+		fmt.Println("Usage: go run ./cli/main.go <command> [--file=<path>]")
+		return
+	}
+
+	// 获取主命令（如 make:controller 或 make:model）
+	command := os.Args[1]
+	if !strings.HasPrefix(command, "make:") {
+		fmt.Println("Error: Command must start with 'make:'")
+		return
+	}
+
+	opts.Make = strings.TrimPrefix(command, "make:") // 文件类型(示例：controller|model|service|validate|middleware|router)
+
+	pflag.StringVarP(&opts.Function, "func", "c", "", "函数方法(示例：create)")
+	pflag.StringVarP(&opts.Method, "method", "m", "", "请求方法(示例：get)")
 	pflag.StringVarP(&opts.Router, "router", "r", "", "路由(示例：/v1/user)")
-	pflag.StringVarP(&opts.Description, "description", "d", "", "函数方法描述或注释")
-	pflag.StringVarP(&opts.TableName, "tableName", "t", "", "模型对应的表名(示例：user)")
-	pflag.StringVarP(&opts.Path, "path", "p", "", "模型生成路径(默认可不传)")
-	pflag.BoolVarP(&opts.Camel, "camel", "c", false, "是否驼峰命名(示例：true 默认为false)")
-	pflag.StringVarP(&opts.FileName, "fileName", "i", "", "生成的文件名(示例：/app/controller/v1/test)")
+	pflag.StringVarP(&opts.Description, "desc", "d", "", "函数方法描述或注释")
+	pflag.StringVarP(&opts.Table, "table", "t", "", "模型对应的表名(示例：user)")
+	pflag.StringVarP(&opts.File, "file", "f", "", "生成的路径文件(示例：v1/test)")
+	pflag.BoolVarP(&opts.Camel, "camel", "l", false, "是否驼峰命名(示例：true 默认为false)")
 
 	pflag.Parse()
 
 	if opts.Make == "" {
-		fmt.Println("请输入正确的文件类型,Usage: go run ./cli/main.go --make=<controller|model|service|validate|middleware|router>")
+		fmt.Println("请输入正确的命令,Usage: go run ./cli/main.go make:controller|model|service|validate|middleware|router")
 		return
 	}
 
 	switch opts.Make {
 	case "model":
-		generateModel(opts.TableName, opts.Path, opts.Camel)
+		s.generateModel(opts.Table, opts.File, opts.Camel)
 		break
 	case "controller", "service", "validate", "middleware", "router":
 		templateFile = filepath.Join(rootPath, "common", "template", opts.Make+".tpl")
@@ -62,24 +83,44 @@ func main() {
 		return
 	}
 
-	if opts.Make == "model" && opts.TableName == "" {
-		fmt.Println("请输入模型对应的表名,Usage: go run ./cli/main.go --make=" + opts.Make + " --tableName=your table name")
+	if opts.Make == "model" && opts.Table == "" {
+		fmt.Println("请输入模型对应的表名,Usage: go run ./cli/main.go make:" + opts.Make + " --table=YourTable")
 		return
 	}
 
-	if opts.Make != "model" && opts.FileName == "" {
-		fmt.Println("请输入文件名,Usage: go run ./cli/main.go --make=" + opts.Make + " --fileName=/app/your path/your file name")
+	if opts.Make != "model" && opts.File == "" {
+		fmt.Println("请输入文件名,Usage: go run ./cli/main.go make:" + opts.Make + " --file=YourPath")
 		return
 	}
 
-	if err := generateFile(templateFile, opts.FileName, opts.Function, opts.Method, opts.Router, opts.Description); err != nil {
+	if opts.File != "" {
+		opts.File = s.getMakePath(opts.File, opts.Make)
+	}
+
+	if err := s.generateFile(templateFile, opts); err != nil {
 		fmt.Println(err.Error())
 		return
 	}
 }
 
+// getMakePath 获取make文件路径
+func (s CliCommand) getMakePath(file string, cType string) string {
+	if !strings.HasSuffix(file, "/") {
+		file = "/" + file
+	}
+
+	switch cType {
+	case "router":
+		file = filepath.Join("/app", "routers", file)
+	default:
+		file = filepath.Join("/app", cType, file)
+	}
+
+	return file
+}
+
 // generateFile 生成模版文件
-func generateFile(templateFile, filename string, function string, method string, router string, description string) error {
+func (s CliCommand) generateFile(templateFile string, opts Options) error {
 	// 加载模板文件
 	fmt.Printf("Loading template file: %s\n", templateFile)
 	tmpl, err := template.ParseFiles(templateFile)
@@ -89,32 +130,32 @@ func generateFile(templateFile, filename string, function string, method string,
 	}
 
 	// 提取包名（即文件路径中的最后一个目录作为包名）
-	packageName := filepath.Base(filepath.Dir(filename))
+	packageName := filepath.Base(filepath.Dir(opts.File))
 	fmt.Printf("Detected package name: %s\n", packageName)
 
 	// 设置默认值
-	if function == "" {
-		function = "FunctionName"
+	if opts.Function == "" {
+		opts.Function = "YourFuncName"
 	}
 
-	if method == "" {
-		method = "get"
+	if opts.Method == "" {
+		opts.Method = "get"
 	}
 
-	if description == "" {
-		description = "Your Description"
+	if opts.Description == "" {
+		opts.Description = "YourDesc"
 	}
 
-	if router == "" {
-		router = "RouterName"
+	if opts.Router == "" {
+		opts.Router = "YourRouterName"
 	}
 
 	// 确保目录存在
-	dir := filepath.Dir(filename)
+	dir := filepath.Dir(rootPath + opts.File)
 	fmt.Printf("Checking if directory exists: %s\n", dir)
 
 	// 使用 os.Stat 检查目录是否存在
-	if _, err := os.Stat(dir); os.IsNotExist(err) {
+	if _, err = os.Stat(dir); os.IsNotExist(err) {
 		fmt.Printf("Directory does not exist. Creating: %s\n", dir)
 		if err = os.MkdirAll(dir, os.ModePerm); err != nil {
 			fmt.Println("Failed to create directory:", err.Error())
@@ -125,14 +166,19 @@ func generateFile(templateFile, filename string, function string, method string,
 	}
 
 	// 创建文件
-	filePath := filepath.Join(config.GetRootPath(), filename+".go")
-	fmt.Printf("Creating file: %s\n", filePath)
-	file, err := os.Create(filePath)
+	file := filepath.Join(rootPath, opts.File+".go")
+	fmt.Printf("Creating file: %s\n", file)
+	f, err := os.Create(file)
 	if err != nil {
 		fmt.Println("Failed to create file:", err.Error())
 		return err
 	}
-	defer file.Close()
+	defer func(f *os.File) {
+		err = f.Close()
+		if err != nil {
+			fmt.Println("Failed to close file:", err.Error())
+		}
+	}(f)
 
 	// 准备数据
 	data := struct {
@@ -143,16 +189,16 @@ func generateFile(templateFile, filename string, function string, method string,
 		Method      string
 		Description string
 	}{
-		Package:     packageName,                            // 提取的包名
-		Name:        strings.Title(filepath.Base(filename)), // 控制器名称（首字母大写）
-		Function:    function,                               // 如果为空，使用默认值
-		Router:      router,                                 // 如果为空，使用默认值
-		Method:      method,                                 // 如果为空，使用默认值
-		Description: description,                            // 如果为空，使用默认值
+		Package:     packageName,                             // 提取的包名
+		Name:        strings.Title(filepath.Base(opts.File)), // 控制器名称（首字母大写）
+		Function:    opts.Function,                           // 如果为空，使用默认值
+		Router:      opts.Router,                             // 如果为空，使用默认值
+		Method:      opts.Method,                             // 如果为空，使用默认值
+		Description: opts.Description,                        // 如果为空，使用默认值
 	}
 
 	// 执行模板并写入文件
-	err = tmpl.Execute(file, data)
+	err = tmpl.Execute(f, data)
 	if err != nil {
 		fmt.Println("Error executing template:", err.Error())
 		return err
@@ -160,38 +206,52 @@ func generateFile(templateFile, filename string, function string, method string,
 		fmt.Println("Template executed and content written to file.")
 	}
 
-	fmt.Println(filePath + " 生成成功!")
+	fmt.Println(file + " 生成成功!")
 	return nil
 }
 
 // generateModel 生成 model
-func generateModel(tableName string, path string, camel bool) {
-	if tableName == "" {
-		fmt.Println("请输入表名,Usage: go run ./cli/main.go --make=model --tableName=your table name")
+func (s CliCommand) generateModel(table string, file string, camel bool) {
+	if table == "" {
+		fmt.Println("请输入表名,Usage: go run ./cli/main.go make:model --table=YourTable")
 		return
 	}
 
-	if path == "" {
-		path = filepath.Join(config.GetRootPath() + "/app/temp")
-	}
-	createTableStruct(tableName, path, camel)
+	s.createTableStruct(table, file, camel)
 
-	fmt.Println(tableName + " 表结构体生成成功!")
+	fmt.Println(table + " 表结构体生成成功!")
 }
 
 // createTableStruct 生成表结构体
-// @param tableName 表名
+// @param table 表名
 // @param path 生成路径
-func createTableStruct(tableName string, path string, camel bool) {
+func (s CliCommand) createTableStruct(table string, file string, camel bool) {
+	var (
+		outPath  = filepath.Join(rootPath + "/app/temp")
+		fileName string
+	)
+	if file != "" {
+		lastSlash := strings.LastIndex(file, "/")
+		if lastSlash == -1 {
+			fileName = file
+			file = ""
+		} else {
+			fileName = file[lastSlash+1:]
+			file = file[:lastSlash]
+		}
+	}
+
+	file = filepath.Join(rootPath, "app", "model", file)
+
 	g := gen.NewGenerator(gen.Config{
-		OutPath:           path,
+		OutPath:           outPath,
 		Mode:              gen.WithDefaultQuery,
 		FieldNullable:     true,
 		FieldCoverable:    false,
 		FieldSignable:     false,
 		FieldWithIndexTag: false,
 		FieldWithTypeTag:  true,
-		ModelPkgPath:      "model",
+		ModelPkgPath:      file,
 	})
 
 	g.UseDB(global.DB)
@@ -207,10 +267,11 @@ func createTableStruct(tableName string, path string, camel bool) {
 			if detailType.Name() == "deleted_at" {
 				return "gorm.DeletedAt"
 			}
+
 			return "*JsonTime"
 		},
-		//"timestamp":  func(detailType gorm.ColumnType) (dataType string) { return "string" }, // 添加此行将 timestamp 转换为 string
-		//"date":       func(detailType gorm.ColumnType) (dataType string) { return "string" }, // 添加此行将 date 转换为 string
+		// "timestamp":  func(detailType gorm.ColumnType) (dataType string) { return "string" }, // 添加此行将 timestamp 转换为 string
+		// "date":       func(detailType gorm.ColumnType) (dataType string) { return "string" }, // 添加此行将 date 转换为 string
 	}
 
 	// 要先于`ApplyBasic`执行
@@ -225,7 +286,7 @@ func createTableStruct(tableName string, path string, camel bool) {
 
 	// 创建模型的结构体,生成文件在 model 目录; 先创建的结果会被后面创建的覆盖
 	// 这里创建个别模型仅仅是为了拿到`*generate.QueryStructMeta`类型对象用于后面的模型关联操作中
-	TargetTable := g.GenerateModel(tableName)
+	TargetTable := g.GenerateModel(table)
 
 	// 创建模型的方法,生成文件在 query 目录; 先创建结果不会被后创建的覆盖
 	g.ApplyBasic(TargetTable)
@@ -233,16 +294,211 @@ func createTableStruct(tableName string, path string, camel bool) {
 	g.Execute()
 
 	// 修改文件，插入钩子方法
-	// insertHooksIntoModel(path, tableName)
+	// s.insertHooksIntoModel(table)
 
-	_ = os.RemoveAll(path)
+	// 修改文件名
+	if file != filepath.Join(rootPath, "app", "model") || fileName != "" {
+		s.modelHooks(table, file, fileName)
+	}
+
+	_ = os.RemoveAll(outPath)
 }
 
-// insertHooksIntoModel 插入钩子方法到生成的模型文件
-//func insertHooksIntoModel(path string, tableName string) {
+// modelHooks 修改文件名以及更新模型
+func (s CliCommand) modelHooks(table string, file string, fileName string) {
+	// 修改文件名
+	oldFilePath := filepath.Join(file, table+".gen.go")
+	newFilePath := filepath.Join(file, fileName+".gen.go")
+	// 检查旧文件是否存在
+	if _, err := os.Stat(oldFilePath); os.IsNotExist(err) {
+		fmt.Printf("File %s does not exist, skipping rename.\n", oldFilePath)
+	} else {
+		// 重命名文件
+		err := os.Rename(oldFilePath, newFilePath)
+		if err != nil {
+			fmt.Printf("Failed to rename file: %v\n", err)
+		} else {
+			fmt.Printf("Renamed %s to %s\n", oldFilePath, newFilePath)
+		}
+	}
+
+	// 检查 gorm.go 文件是否存在
+	gormFilePath := filepath.Join(file, "gorm.go")
+	if _, err := os.Stat(gormFilePath); os.IsNotExist(err) {
+		var (
+			packageName string
+		)
+		// 将路径中的 '\' 替换为 '/'
+		file = strings.ReplaceAll(file, "\\", "/")
+		lastSlash := strings.LastIndex(file, "/")
+		if lastSlash == -1 {
+			packageName = file
+		} else {
+			packageName = file[lastSlash+1:]
+		}
+
+		// 创建 gorm.go 文件并写入内容
+		content := `package ` + packageName + `
+
+import (
+	"database/sql/driver"
+	"encoding/json"
+	"fmt"
+	"strconv"
+	"time"
+)
+
+type JsonTime time.Time
+
+type JsonString []string
+
+type JsonInt64 []int64
+
+type BoolInt64 bool
+
+// MarshalJSON 模型时间格式化公共方法
+func (t *JsonTime) MarshalJSON() ([]byte, error) {
+	if t == nil {
+		return []byte(` + `""` + `), nil
+	}
+	formatted := fmt.Sprintf("\"%s\"", time.Time(*t).Format("2006-01-02 15:04:05"))
+	return []byte(formatted), nil
+}
+
+func (t JsonTime) Value() (driver.Value, error) {
+	return time.Time(t), nil
+}
+
+func (t *JsonTime) Scan(value interface{}) error {
+	if value == nil {
+		*t = JsonTime(time.Time{})
+		return nil
+	}
+	switch v := value.(type) {
+	case time.Time:
+		*t = JsonTime(v)
+		return nil
+	case []byte:
+		tt, err := time.Parse("2006-01-02 15:04:05", string(v))
+		if err != nil {
+			return err
+		}
+		*t = JsonTime(tt)
+		return nil
+	case string:
+		tt, err := time.Parse("2006-01-02 15:04:05", v)
+		if err != nil {
+			return err
+		}
+		*t = JsonTime(tt)
+		return nil
+	default:
+		return fmt.Errorf("cannot convert %v to timestamp", value)
+	}
+}
+
+func (j JsonString) Value() (driver.Value, error) {
+	return json.Marshal(j)
+}
+
+func (j *JsonString) Scan(value interface{}) error {
+	if value == nil {
+		*j = JsonString{}
+		return nil
+	}
+	var bytes []byte
+	switch v := value.(type) {
+	case string:
+		bytes = []byte(v)
+	case []byte:
+		bytes = v
+	default:
+		return fmt.Errorf("cannot scan %T into JsonString", value)
+	}
+	return json.Unmarshal(bytes, j)
+}
+
+func (j JsonInt64) Value() (driver.Value, error) {
+	return json.Marshal(j)
+}
+
+func (j *JsonInt64) Scan(value interface{}) error {
+	if value == nil {
+		*j = JsonInt64{}
+		return nil
+	}
+	var bytes []byte
+	switch v := value.(type) {
+	case string:
+		bytes = []byte(v)
+	case []byte:
+		bytes = v
+	default:
+		return fmt.Errorf("cannot scan %T into JsonInt64", value)
+	}
+	return json.Unmarshal(bytes, j)
+}
+
+// Value 写入数据库时：true → 1，false → 2
+func (b BoolInt64) Value() (driver.Value, error) {
+	if b {
+		return 1, nil
+	}
+	return 2, nil
+}
+
+// Scan 读取数据库时：1 → true，2 → false（默认 false）
+func (b *BoolInt64) Scan(value interface{}) error {
+	if value == nil {
+		*b = false
+		return nil
+	}
+	var v int64
+	switch val := value.(type) {
+	case int64:
+		v = val
+	case int:
+		v = int64(val)
+	case int32:
+		v = int64(val)
+	case uint8:
+		v = int64(val)
+	case []byte:
+		i, err := strconv.Atoi(string(val))
+		if err != nil {
+			return err
+		}
+		v = int64(i)
+	case string:
+		i, err := strconv.Atoi(val)
+		if err != nil {
+			return err
+		}
+		v = int64(i)
+	default:
+		return fmt.Errorf("unsupported Scan type for BoolInt12: %T", value)
+	}
+
+	*b = v == 1
+	return nil
+}
+`
+		err = os.WriteFile(gormFilePath, []byte(content), 0644)
+		if err != nil {
+			fmt.Printf("Failed to create file %s: %v\n", gormFilePath, err)
+		} else {
+			fmt.Printf("Created file %s with default content.\n", gormFilePath)
+		}
+	} else {
+		fmt.Printf("File %s already exists, skipping creation.\n", gormFilePath)
+	}
+}
+
+//// insertHooksIntoModel 插入钩子方法到生成的模型文件
+//func (s CliCommand) insertHooksIntoModel(table string) {
 //	// 确保路径和文件名正确
-//	modelFilePath := filepath.Join(config.GetRootPath(), "app", "model", tableName+".gen.go")
-//	structName := utils.ToCamelCase(tableName)
+//	modelFilePath := filepath.Join(rootPath, "app", "model", table+".gen.go")
+//	structName := utils.ToCamelCase(table)
 //	// 首字母大写
 //	structName = strings.ToUpper(string(structName[0])) + structName[1:]
 //
@@ -270,8 +526,8 @@ func createTableStruct(tableName string, path string, camel bool) {
 //			// 没有多行 import，查找单行 import 或插入新的 import 块
 //			if strings.Contains(fileContent, `import "gorm.io/gorm"`) {
 //				fileContent = strings.Replace(fileContent, `import "gorm.io/gorm"`, `import (
-//    "gorm.io/gorm"
-//    "time"
+//   "gorm.io/gorm"
+//   "time"
 //)`, 1)
 //			} else {
 //				// 没有 import，插入到 package 后
@@ -289,44 +545,44 @@ func createTableStruct(tableName string, path string, camel bool) {
 //		}
 //	}
 //
-//	//	// 追加钩子方法
-//	//	file, err := os.OpenFile(modelFilePath, os.O_APPEND|os.O_RDWR, 0666)
-//	//	if err != nil {
-//	//		fmt.Printf("Error opening file: %v\n", err)
-//	//		return
-//	//	}
-//	//	defer func(file *os.File) {
-//	//		err = file.Close()
-//	//		if err != nil {
-//	//			fmt.Printf("Error closing file: %v\n", err)
-//	//			return
-//	//		}
-//	//	}(file)
-//	//
-//	//	// 准备钩子方法的内容
-//	//	hooks := fmt.Sprintf(`
-//	//// BeforeCreate 创建之前
-//	//func (s *%s) BeforeCreate(tx *gorm.DB) (err error) {
-//	//    now := JsonTime(time.Now())
-//	//    s.CreatedAt = &now
-//	//    s.UpdatedAt = &now
-//	//    return nil
-//	//}
-//	//
-//	//// BeforeUpdate 更新之前
-//	//func (s *%s) BeforeUpdate(tx *gorm.DB) (err error) {
-//	//    now := JsonTime(time.Now())
-//	//    s.UpdatedAt = &now
-//	//    return nil
-//	//}
-//	//`, structName, structName)
-//	//
-//	//	// 将钩子方法写入文件
-//	//	_, err = file.WriteString(hooks)
-//	//	if err != nil {
-//	//		fmt.Printf("Error writing hooks to file: %v\n", err)
-//	//		return
-//	//	}
-//	//
-//	//	fmt.Println("钩子方法已插入到模型文件:", modelFilePath)
+//		// 追加钩子方法
+//		file, err := os.OpenFile(modelFilePath, os.O_APPEND|os.O_RDWR, 0666)
+//		if err != nil {
+//			fmt.Printf("Error opening file: %v\n", err)
+//			return
+//		}
+//		defer func(file *os.File) {
+//			err = file.Close()
+//			if err != nil {
+//				fmt.Printf("Error closing file: %v\n", err)
+//				return
+//			}
+//		}(file)
+//
+//		// 准备钩子方法的内容
+//		hooks := fmt.Sprintf(`
+//	// BeforeCreate 创建之前
+//	func (s *%s) BeforeCreate(tx *gorm.DB) (err error) {
+//	   now := JsonTime(time.Now())
+//	   s.CreatedAt = &now
+//	   s.UpdatedAt = &now
+//	   return nil
+//	}
+//
+//	// BeforeUpdate 更新之前
+//	func (s *%s) BeforeUpdate(tx *gorm.DB) (err error) {
+//	   now := JsonTime(time.Now())
+//	   s.UpdatedAt = &now
+//	   return nil
+//	}
+//	`, structName, structName)
+//
+//		// 将钩子方法写入文件
+//		_, err = file.WriteString(hooks)
+//		if err != nil {
+//			fmt.Printf("Error writing hooks to file: %v\n", err)
+//			return
+//		}
+//
+//		fmt.Println("钩子方法已插入到模型文件:", modelFilePath)
 //}

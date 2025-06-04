@@ -1,7 +1,7 @@
 <template>
   <div class="table-demo-container layout-padding">
     <div class="table-demo-padding layout-padding-view layout-padding-auto">
-      <TableSearch v-if="state.tableData.search" :search="state.tableData.search" @search="onSearch"/>
+      <TableSearch :search="state.tableData.search" @search="onSearch"/>
       <Table
           ref="tableRef"
           v-bind="state.tableData"

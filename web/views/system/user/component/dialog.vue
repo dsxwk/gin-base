@@ -246,7 +246,7 @@ const onCancel = () => {
 };
 
 const onSubmit = async () => {
-  state.ruleForm.userRoles = state.selectedRoleIds.map(roleId => {
+  state.ruleForm.userRoles = state.ruleForm.userRoles.map(roleId => {
     const role = state.roles.find(r => r.id === roleId);
     return {
       userId: props.row.id ?? 0,

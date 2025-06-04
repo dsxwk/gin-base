@@ -10,6 +10,24 @@ import other from '/@/utils/other';
 import '/@/theme/index.scss';
 import * as ElementPlusIconsVue from '@element-plus/icons-vue';
 
+// ECharts 按需引入
+import { use } from 'echarts/core'
+import { CanvasRenderer } from 'echarts/renderers'
+import { LineChart } from 'echarts/charts'
+import { TooltipComponent, GridComponent, LegendComponent, TitleComponent } from 'echarts/components'
+
+// 注册 ECharts 需要的组件
+use([
+    CanvasRenderer,
+    LineChart,
+    TooltipComponent,
+    GridComponent,
+    LegendComponent,
+    TitleComponent
+]);
+
+import VueECharts from 'vue-echarts'
+
 const app = createApp(App);
 directive(app);
 other.elSvg(app);
@@ -18,6 +36,7 @@ other.elSvg(app);
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component);
 }
+app.component('v-chart', VueECharts);
 app.config.errorHandler = errorHandler;
 
 if (import.meta.env.VITE_V_CONSOLE === 'true' && /Mobi|Android/i.test(navigator.userAgent)) {

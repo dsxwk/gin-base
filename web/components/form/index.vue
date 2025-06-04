@@ -1,5 +1,5 @@
 <script setup>
-import {computed, defineAsyncComponent, ref, defineEmits} from 'vue';
+import {computed, defineAsyncComponent, ref} from 'vue';
 import {cloneDeep, get, set} from 'lodash-es';
 
 const IconSelector = defineAsyncComponent(() => import('/@/components/iconSelector/index.vue'));

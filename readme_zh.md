@@ -128,30 +128,30 @@ npm run dev
 ### 命令行生成
 
 ```bash
-# 公共参数 --make=<model|controller|service|validate|middleware>
+# 命令 make:<model|controller|service|validate|middleware>
 # 生成模型 
-# --tableName=<user(你的表名)> --camel=true|false(true:生成驼峰字段,false:生成下划线字段)
-go run ./cli/main.go --make=model --tableName=user --camel=true
+# --table=<user(你的表名)> --camel=true|false(true:生成驼峰字段,false:生成下划线字段) --file=<admin/test(生成的文件路径)>
+go run ./cli/main.go make:model --table=user --camel=true --file=admin/test
 
 # 生成控制器
-# --fileName=</app/controller/v1/test(生成的文件路径)> --function=<List|Create|Update|Delete|Detail ...(方法名称)> --method=<get|post|put|delete(请求方式)> --router=</v1/user(访问路由)> --description=<方法注释>
-go run ./cli/main.go --make=controller  --fileName=/app/controller/v1/test --function=List --method=get --router=/v1/list --description=测试
+# --file=<v1/test(生成的文件路径)> --func=<List|Create|Update|Delete|Detail ...(方法名称)> --method=<get|post|put|delete(请求方式)> --router=</v1/user(访问路由)> --desc=<方法注释>
+go run ./cli/main.go make:controller --file=v1/test --func=List --method=get --router=/v1/list --desc=测试
 
 # 生成服务
-# --fileName=</app/service/test(生成的文件路径)> --function=<List|Create|Update|Delete|Detail ...(方法名称)> --description=<方法注释>
-go run ./cli/main.go --make=service  --fileName=/app/service/test --function=List --description=测试
+# --file=<admin/test(生成的文件路径)> --func=<List|Create|Update|Delete|Detail ...(方法名称)> --desc=<方法注释>
+go run ./cli/main.go make:service --file=admin/test --func=List --desc=测试
 
 # 生成验证器
-# --fileName=</app/validate/test(生成的文件路径)> --description=<方法注释>
-go run ./cli/main.go --make=validate  --fileName=/app/validate/test --description=测试
+# --file=<test(生成的文件路径)> --desc=<方法注释>
+go run ./cli/main.go make:validate --file=test --desc=测试
 
 # 生成中间件
-# --fileName=</app/middleware/test(生成的文件路径)> --description=<方法注释>
-go run ./cli/main.go --make=middleware  --fileName=/app/middleware/test --description=测试 
+# --file=<admin/test(生成的文件路径)> --desc=<方法注释>
+go run ./cli/main.go make:middleware --file=admin/test --desc=测试 
 
 # 生成路由
-# --fileName=</routers/test(生成的文件路径)>
-go run ./cli/main.go --make=middleware  --fileName=/routers/test
+# --fileName=<admin/test(生成的文件路径)>
+go run ./cli/main.go make=router  --file=admin/test
 ```
 ### 生成模型结构示例
 
@@ -194,28 +194,37 @@ func (*Article) TableName() string {
 
 ## 设置器和获取器
 ```go
-// GetTag 获取标签
-func (s *Article) GetTag() []string {
-	if s != nil && s.Tag != nil {
-		var tagJson []string
-		json.Unmarshal([]byte(*s.Tag), &tagJson)
-		return tagJson
-	}
-	return nil
+type Meta struct {
+Title       string  `gorm:"column:title;type:json;comment:菜单名称" json:"title"`
+Icon        string  `gorm:"column:icon;type:json;comment:菜单图标" json:"icon"`
+IsHide      bool    `gorm:"column:isHide;type:json;comment:是否隐藏" json:"isHide"`
+IsKeepAlive bool    `gorm:"column:isKeepAlive;type:json;comment:是否缓存" json:"isKeepAlive"`
+IsAffix     bool    `gorm:"column:isAffix;type:json;comment:是否固定" json:"isAffix"`
+IsLink      string  `gorm:"column:isLink;type:json;comment:外链/内嵌时链接地址" json:"isLink"` // 外链/内嵌时链接地址（http:xxx.com），开启外链条件，`1、isLink: 链接地址不为空`
+IsIframe    bool    `gorm:"column:isIframe;type:json;comment:是否内嵌" json:"isIframe"`   // 是否内嵌，开启条件，`1、isIframe:true 2、isLink：链接地址不为空`
+Roles       []int64 `gorm:"column:roles;type:json;comment:菜单角色" json:"roles"`         // 权限标识，取角色管理
 }
 
-// SetTag 设置标签
-func (s *Article) SetTag(tag []string) *string {
-	var (
-		model Article
-	)
+func (m Meta) Value() (driver.Value, error) {
+return json.Marshal(m)
+}
 
-	if tag != nil {
-		tagJSON, _ := json.Marshal(tag)
-		tagStr := string(tagJSON)
-		model.Tag = &tagStr
-	}
-	return model.Tag
+// 实现 sql.Scanner 接口（用于从数据库读取）
+func (m *Meta) Scan(value interface{}) error {
+if value == nil {
+*m = Meta{}
+return nil
+}
+var data []byte
+switch v := value.(type) {
+case string:
+data = []byte(v)
+case []byte:
+data = v
+default:
+return fmt.Errorf("cannot scan type %T into Meta", value)
+}
+return json.Unmarshal(data, m)
 }
 ```
 

@@ -125,30 +125,30 @@ npm run dev
 ### Command Generation
 
 ```bash
-# Common Parameters --make=<model|controller|service|validate|middleware>
+# Command make:<model|controller|service|validate|middleware>
 # Generative Model 
-# --tableName=<user(your table name)> --camel=true|false(true:Generate camel hump field,false:Generate underline field)
-go run ./cli/main.go --make=model --tableName=user --camel=true
+# --table=<user(your table name)> --camel=true|false(true:Generate camel hump field,false:Generate underline field) --file=<admin/test(The generated file path)>
+go run ./cli/main.go make:model --table=user --camel=true --file=admin/test
 
 # Generative Controller
-# --fileName=</app/controller/v1/test(The generated file path)> --function=<List|Create|Update|Delete|Detail ...(Action name)> --method=<get|post|put|delete(request method)> --router=</v1/user(access route)> --description=<Action annotation>
-go run ./cli/main.go --make=controller  --fileName=/app/controller/v1/test --function=List --method=get --router=/v1/list --description=test
+# --file=<v1/test(The generated file path)> --func=<List|Create|Update|Delete|Detail ...(Action name)> --method=<get|post|put|delete(request method)> --router=</v1/user(access route)> --desc=<Action annotation>
+go run ./cli/main.go make:controller --file=v1/test --func=List --method=get --router=/v1/list --desc=test
 
 # Generative Service
-# --fileName=</app/service/test(The generated file path)> --function=<List|Create|Update|Delete|Detail ...(Action name)> --description=<Action annotation>
-go run ./cli/main.go --make=service  --fileName=/app/service/test --function=List --description=test
+# --file=<admin/test(The generated file path)> --func=<List|Create|Update|Delete|Detail ...(Action name)> --desc=<Action annotation>
+go run ./cli/main.go make:service --file=admin/test --func=List --desc=test
 
 # Generative validate
-# --fileName=</app/validate/test(The generated file path)> --description=<Action annotation>
-go run ./cli/main.go --make=validate  --fileName=/app/validate/test --description=test
+# --file=<test(The generated file path)> --desc=<Action annotation>
+go run ./cli/main.go make:validate --file=test --desc=test
 
 # Generative Middleware
-# --fileName=</app/middleware/test(The generated file path)> --description=<Action annotation>
-go run ./cli/main.go --make=middleware  --fileName=/app/middleware/test --description=test 
+# --file=<admin/test(The generated file path)> --desc=<Action annotation>
+go run ./cli/main.go make:middleware  --file=admin/test --desc=test 
 
 # Generative Router
-# --fileName=</routers/test(The generated file path)>
-go run ./cli/main.go --make=router  --fileName=/routers/test
+# --file=<admin/test(The generated file path)>
+go run ./cli/main.go make:router  --file=admin/test
 ```
 ### Example of Generating a Model Structure
 
@@ -191,28 +191,37 @@ func (*Article) TableName() string {
 
 ## Setter and Getter
 ```go
-// GetTag Get tags
-func (s *Article) GetTag() []string {
-	if s != nil && s.Tag != nil {
-		var tagJson []string
-		json.Unmarshal([]byte(*s.Tag), &tagJson)
-		return tagJson
-	}
-	return nil
+type Meta struct {
+Title       string  `gorm:"column:title;type:json;comment:菜单名称" json:"title"`
+Icon        string  `gorm:"column:icon;type:json;comment:菜单图标" json:"icon"`
+IsHide      bool    `gorm:"column:isHide;type:json;comment:是否隐藏" json:"isHide"`
+IsKeepAlive bool    `gorm:"column:isKeepAlive;type:json;comment:是否缓存" json:"isKeepAlive"`
+IsAffix     bool    `gorm:"column:isAffix;type:json;comment:是否固定" json:"isAffix"`
+IsLink      string  `gorm:"column:isLink;type:json;comment:外链/内嵌时链接地址" json:"isLink"` // 外链/内嵌时链接地址（http:xxx.com），开启外链条件，`1、isLink: 链接地址不为空`
+IsIframe    bool    `gorm:"column:isIframe;type:json;comment:是否内嵌" json:"isIframe"`   // 是否内嵌，开启条件，`1、isIframe:true 2、isLink：链接地址不为空`
+Roles       []int64 `gorm:"column:roles;type:json;comment:菜单角色" json:"roles"`         // 权限标识，取角色管理
 }
 
-// SetTag Set tags
-func (s *Article) SetTag(tag []string) *string {
-	var (
-		model Article
-	)
+func (m Meta) Value() (driver.Value, error) {
+return json.Marshal(m)
+}
 
-	if tag != nil {
-		tagJSON, _ := json.Marshal(tag)
-		tagStr := string(tagJSON)
-		model.Tag = &tagStr
-	}
-	return model.Tag
+// Implement the sql.Scanner interface (for reading from the database)
+func (m *Meta) Scan(value interface{}) error {
+if value == nil {
+*m = Meta{}
+return nil
+}
+var data []byte
+switch v := value.(type) {
+case string:
+data = []byte(v)
+case []byte:
+data = v
+default:
+return fmt.Errorf("cannot scan type %T into Meta", value)
+}
+return json.Unmarshal(data, m)
 }
 ```
 

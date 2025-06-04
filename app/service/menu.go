@@ -95,14 +95,6 @@ func (s *MenuService) Update(m model.Menu) (model.Menu, error) {
 		menuRoles []model.MenuRoles
 	)
 
-	for _, v := range m.MenuRoles {
-		menuRoles = append(menuRoles, model.MenuRoles{
-			MenuID: m.ID,
-			RoleID: v.RoleID,
-			Name:   v.Name,
-		})
-	}
-
 	tx := global.DB.Begin()
 	err := tx.Updates(&m).Error
 	if err != nil {
@@ -112,6 +104,14 @@ func (s *MenuService) Update(m model.Menu) (model.Menu, error) {
 	err = tx.Where("menu_id", m.ID).Delete(&model.MenuRoles{}).Error
 	if err != nil {
 		return m, err
+	}
+
+	for _, v := range m.MenuRoles {
+		menuRoles = append(menuRoles, model.MenuRoles{
+			MenuID: m.ID,
+			RoleID: v.RoleID,
+			Name:   v.Name,
+		})
 	}
 
 	if menuRoles != nil {
@@ -130,10 +130,49 @@ func (s *MenuService) Update(m model.Menu) (model.Menu, error) {
 // @param id int64
 // @return m model.Menu, err error
 func (s *MenuService) Delete(id int64) (m model.Menu, err error) {
-	err = global.DB.Delete(&m, id).Error
+	var (
+		menuActions []model.MenuAction
+		actionRoles []model.ActionRoles
+	)
+
+	tx := global.DB.Begin()
+	err = tx.Delete(&m, id).Error
 	if err != nil {
 		return m, err
 	}
+
+	// 菜单角色
+	err = tx.Where("menu_id", id).Delete(&model.MenuRoles{}).Error
+	if err != nil {
+		return m, err
+	}
+
+	// 菜单功能
+	err = tx.Where("menu_id", id).Find(&menuActions).Error
+	if err != nil {
+		if !errors.Is(err, gorm.ErrRecordNotFound) {
+			return m, err
+		}
+	}
+	err = tx.Where("menu_id", id).Delete(&model.MenuAction{}).Error
+	if err != nil {
+		return m, err
+	}
+
+	// 功能角色
+	if menuActions != nil {
+		var menuActionIds []int64
+		for _, v := range menuActions {
+			menuActionIds = append(menuActionIds, v.ID)
+		}
+
+		err = tx.Where("menu_action_id in (?)", menuActionIds).Delete(&actionRoles).Error
+		if err != nil {
+			return m, err
+		}
+	}
+
+	tx.Commit()
 
 	return m, nil
 }
@@ -158,12 +197,32 @@ func (s *MenuService) ActionList(menuId int64) (models []model.MenuAction, err e
 // @param m model.MenuAction
 // @return model.MenuAction, error
 func (s *MenuService) ActionCreate(m model.MenuAction) (model.MenuAction, error) {
-	db := global.DB.Create(&m)
+	var (
+		actionRoles []model.ActionRoles
+	)
 
-	err := db.Error
+	tx := global.DB.Begin()
+	err := tx.Create(&m).Error
 	if err != nil {
 		return m, err
 	}
+
+	for _, v := range m.ActionRoles {
+		actionRoles = append(actionRoles, model.ActionRoles{
+			ActionID: m.ID,
+			RoleID:   v.RoleID,
+			Name:     v.Name,
+		})
+	}
+
+	if actionRoles != nil {
+		err = tx.Create(&actionRoles).Error
+		if err != nil {
+			return m, err
+		}
+	}
+
+	tx.Commit()
 
 	return m, nil
 }
@@ -172,10 +231,37 @@ func (s *MenuService) ActionCreate(m model.MenuAction) (model.MenuAction, error)
 // @param m model.MenuAction
 // @return model.MenuAction, error
 func (s *MenuService) ActionUpdate(m model.MenuAction) (model.MenuAction, error) {
-	err := global.DB.Updates(&m).Error
+	var (
+		actionRoles []model.ActionRoles
+	)
+
+	tx := global.DB.Begin()
+	err := tx.Updates(&m).Error
 	if err != nil {
 		return m, err
 	}
+
+	for _, v := range m.ActionRoles {
+		actionRoles = append(actionRoles, model.ActionRoles{
+			ActionID: m.ID,
+			RoleID:   v.RoleID,
+			Name:     v.Name,
+		})
+	}
+
+	err = tx.Where("action_id", m.ID).Delete(&model.ActionRoles{}).Error
+	if err != nil {
+		return m, err
+	}
+
+	if actionRoles != nil {
+		err = tx.Create(&actionRoles).Error
+		if err != nil {
+			return m, err
+		}
+	}
+
+	tx.Commit()
 
 	return m, nil
 }
@@ -195,10 +281,19 @@ func (s *MenuService) ActionDelete(id int64, menuID int64) (m model.MenuAction, 
 		return m, fmt.Errorf("删除失败,该功能id【%d】不属于该菜单id【%d】", id, menuID)
 	}
 
-	err = global.DB.Delete(&m, id).Error
+	tx := global.DB.Begin()
+	err = tx.Delete(&m, id).Error
 	if err != nil {
 		return m, err
 	}
+
+	// 功能角色
+	err = tx.Where("action_id", id).Delete(&model.ActionRoles{}).Error
+	if err != nil {
+		return m, err
+	}
+
+	tx.Commit()
 
 	return m, nil
 }

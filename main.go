@@ -59,7 +59,7 @@ func main() {
 	}
 
 	// 全局日志中间件
-	router.Use(middleware.LoggerMiddleware())
+	router.Use(middleware.Logger{}.LoggerMiddleware())
 
 	// 注册所有事件
 	global.Event.RegisterAllEvent(onEventReceived)

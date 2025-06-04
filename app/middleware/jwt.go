@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"fmt"
+	"gin-base/common"
 	"gin-base/common/global"
 	"gin-base/config"
 	"github.com/dgrijalva/jwt-go"
@@ -10,12 +11,14 @@ import (
 )
 
 type Jwt struct {
+	common.BaseMiddleware
 }
 
 var (
 	Config = config.InitConfig()
 )
 
+// JwtMiddleware jwt中间件
 func (s Jwt) JwtMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.Request.Header.Get("token")

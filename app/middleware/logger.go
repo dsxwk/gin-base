@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"bytes"
+	"gin-base/common"
 	"gin-base/common/extend/context"
 	"gin-base/common/global"
 	"gin-base/config"
@@ -10,8 +11,12 @@ import (
 	"net/http"
 )
 
+type Logger struct {
+	common.BaseMiddleware
+}
+
 // LoggerMiddleware 全局日志中间件
-func LoggerMiddleware() gin.HandlerFunc {
+func (s Logger) LoggerMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var (
 			params string

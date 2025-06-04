@@ -85,7 +85,8 @@ const onSearch = (formEl) => {
 const onReset = (formEl) => {
   if (!formEl) return;
   formEl.resetFields();
-  emit('search', state.form);
+  // emit('search', state.form);
+  emit('search', {});
 };
 // 初始化 form 字段，取自父组件 search.prop
 const initFormField = () => {

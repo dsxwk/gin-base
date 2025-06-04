@@ -48,6 +48,16 @@ export function roleApi() {
                     value: true
                 }
             },
+            detail: {
+                name: '角色详情',
+                url: '/role/:id',
+                method: 'get',
+                params: {},
+                token: {
+                    name: 'token',
+                    value: true
+                }
+            }
         }
     );
 }

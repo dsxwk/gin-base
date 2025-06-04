@@ -78,7 +78,7 @@ const state = reactive({
       {key: 'age', colWidth: '', width: '70', height: '40', title: '年龄', type: 'text', isCheck: true},
       {key: 'status', colWidth: '', width: '70', height: '40', title: '状态', isCheck: true,
         render: (scope) => {
-          return getDict(statusDict, scope.row?.gender);
+          return getDict(statusDict, scope.row?.status);
         }
       },
       {key: 'userRoles', colWidth: '', width: '70', height: '40', title: '用户角色', isCheck: true,
@@ -114,10 +114,7 @@ const state = reactive({
         placeholder: '请选择',
         required: false,
         type: 'select',
-        options: [
-          {label: '男', value: 1},
-          {label: '女', value: 2},
-        ],
+        options: genderDict,
       },
       {
         label: '创建时间',

@@ -127,7 +127,7 @@
 </template>
 
 <script setup name="netxTable">
-import {reactive, onMounted, computed, nextTick, ref, useSlots} from 'vue';
+import {reactive, computed, nextTick, ref, useSlots} from 'vue';
 import { ElMessage } from 'element-plus';
 import printJs from 'print-js';
 import table2excel from 'js-table2excel';

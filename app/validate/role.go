@@ -15,9 +15,10 @@ type RoleValidate struct {
 	Desc     string `json:"desc" validate:"required" label:"描述"`
 }
 
-// RoleSearchValidate 用户搜索验证
+// RoleSearchValidate 角色搜索验证
 type RoleSearchValidate struct {
-	Name string `form:"name" validate:"required" label:"角色名称"`
+	Name   string `form:"name" validate:"required" label:"角色名称"`
+	Status int64  `form:"status" validate:"required" label:"角色状态 1=启用 2=禁用"`
 }
 
 // GetRoleValidate 请求验证

@@ -30,7 +30,7 @@ type LoginController struct {
 func (s *LoginController) Login(c *gin.Context) {
 	var (
 		loginService  = service.LoginService{}
-		loginValidate validate.LoginValidate
+		loginValidate validate.Login
 		jwt           middleware.Jwt
 	)
 
@@ -42,7 +42,7 @@ func (s *LoginController) Login(c *gin.Context) {
 	}
 
 	// 验证
-	err = validate.GetLoginValidate(loginValidate, "login")
+	err = validate.Login{}.GetValidate(loginValidate, "login")
 	if err != nil {
 		s.ApiResponse(c, global.ArgsError, err.Error())
 		return
@@ -132,10 +132,10 @@ func (s *LoginController) GetCaptcha(c *gin.Context) {
 // @Router /api/v1/captcha [post]
 func (s *LoginController) CheckCaptcha(c *gin.Context) {
 	var (
-		req validate.LoginValidate
+		loginValidate validate.Login
 	)
 
-	err := c.ShouldBind(&req)
+	err := c.ShouldBind(&loginValidate)
 	if err != nil {
 		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
@@ -143,16 +143,17 @@ func (s *LoginController) CheckCaptcha(c *gin.Context) {
 	}
 
 	// 验证
-	err = validate.GetLoginValidate(req, "verify")
+	err = validate.Login{}.GetValidate(loginValidate, "verify")
 	if err != nil {
 		s.ApiResponse(c, global.ArgsError, err.Error())
 		return
 	}
 
-	s.ApiResponse(c, global.Success, s.verify(req.CaptchaID, req.Code))
+	s.ApiResponse(c, global.Success, s.verify(loginValidate.CaptchaID, loginValidate.Code))
 }
 
 // verify 验证
+// @return bool
 func (s *LoginController) verify(captchaId, value string) bool {
 	return base64Captcha.DefaultMemStore.Verify(captchaId, value, true)
 }

@@ -37,7 +37,7 @@ func (s *MenuController) List(c *gin.Context) {
 func (s *MenuController) Create(c *gin.Context) {
 	var (
 		menuService  service.MenuService
-		menuValidate validate.MenuValidate
+		menuValidate validate.Menu
 		req          model.Menu
 	)
 
@@ -55,7 +55,7 @@ func (s *MenuController) Create(c *gin.Context) {
 	}
 
 	// 验证
-	err = validate.GetMenuValidate(menuValidate, "create")
+	err = validate.Menu{}.GetValidate(menuValidate, "create")
 	if err != nil {
 		s.ApiResponse(c, global.ArgsError, err.Error())
 		return
@@ -76,7 +76,7 @@ func (s *MenuController) Create(c *gin.Context) {
 func (s *MenuController) Update(c *gin.Context) {
 	var (
 		menuService  service.MenuService
-		menuValidate validate.MenuValidate
+		menuValidate validate.Menu
 		req          model.Menu
 	)
 
@@ -108,7 +108,7 @@ func (s *MenuController) Update(c *gin.Context) {
 	}
 
 	// 验证
-	err = validate.GetMenuValidate(menuValidate, "update")
+	err = validate.Menu{}.GetValidate(menuValidate, "update")
 	if err != nil {
 		s.ApiResponse(c, global.ArgsError, err.Error())
 		return
@@ -187,7 +187,7 @@ func (s *MenuController) ActionList(c *gin.Context) {
 func (s *MenuController) ActionCreate(c *gin.Context) {
 	var (
 		menuService        service.MenuService
-		menuActionValidate validate.MenuActionValidate
+		menuActionValidate validate.MenuAction
 		req                model.MenuAction
 	)
 
@@ -218,7 +218,7 @@ func (s *MenuController) ActionCreate(c *gin.Context) {
 	}
 
 	// 验证
-	err = validate.GetMenuActionValidate(menuActionValidate, "create")
+	err = validate.MenuAction{}.GetValidate(menuActionValidate, "create")
 	if err != nil {
 		s.ApiResponse(c, global.ArgsError, err.Error())
 		return
@@ -238,7 +238,7 @@ func (s *MenuController) ActionCreate(c *gin.Context) {
 func (s *MenuController) ActionUpdate(c *gin.Context) {
 	var (
 		menuService        service.MenuService
-		menuActionValidate validate.MenuActionValidate
+		menuActionValidate validate.MenuAction
 		req                model.MenuAction
 	)
 
@@ -281,7 +281,7 @@ func (s *MenuController) ActionUpdate(c *gin.Context) {
 		return
 	}
 
-	err = validate.GetMenuActionValidate(menuActionValidate, "update")
+	err = validate.MenuAction{}.GetValidate(menuActionValidate, "update")
 	if err != nil {
 		s.ApiResponse(c, global.ArgsError, err.Error())
 		return

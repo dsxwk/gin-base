@@ -16,8 +16,8 @@ type Meta struct {
 	Roles       []int64 `json:"roles" validate:"required" label:"菜单角色"`        // 权限标识，取角色管理
 }
 
-// MenuValidate 菜单请求验证
-type MenuValidate struct {
+// Menu 菜单请求验证
+type Menu struct {
 	ID       int64  `json:"id" validate:"required" label:"ID"`
 	PID      int64  `json:"pid" validate:"required" label:"父级ID"`
 	Name     string `json:"name" validate:"required" label:"路由名称"`
@@ -28,8 +28,8 @@ type MenuValidate struct {
 	Meta     Meta   `json:"meta" validate:"required" label:"元数据"`
 }
 
-// GetMenuValidate 请求验证
-func GetMenuValidate(data MenuValidate, scene string) error {
+// GetValidate 请求验证
+func (s Menu) GetValidate(data Menu, scene string) error {
 	v := validator.Struct(data, scene)
 	if !v.Validate(scene) {
 		return errors.New(v.Errors.One())
@@ -41,7 +41,7 @@ func GetMenuValidate(data MenuValidate, scene string) error {
 // ConfigValidation 配置验证
 // - 定义验证场景
 // - 也可以添加验证设置
-func (s MenuValidate) ConfigValidation(v *validator.Validation) {
+func (s Menu) ConfigValidation(v *validator.Validation) {
 	v.WithScenes(validator.SValues{
 		"list":   []string{},
 		"create": []string{"Name", "Path", "Meta.Title", "Meta.Roles"},
@@ -51,7 +51,7 @@ func (s MenuValidate) ConfigValidation(v *validator.Validation) {
 }
 
 // Messages 您可以自定义验证器错误消息
-func (s MenuValidate) Messages() map[string]string {
+func (s Menu) Messages() map[string]string {
 	return validator.MS{
 		"required": "字段 {field} 必填",
 		"int":      "字段 {field} 必须为整数",
@@ -59,7 +59,7 @@ func (s MenuValidate) Messages() map[string]string {
 }
 
 // Translates 你可以自定义字段翻译
-func (s MenuValidate) Translates() map[string]string {
+func (s Menu) Translates() map[string]string {
 	return validator.MS{
 		"ID":         "ID",
 		"PID":        "父级ID",

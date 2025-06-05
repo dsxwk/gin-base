@@ -110,7 +110,6 @@ const router = useRouter();
 const stores = useUserInfo();
 const storesThemeConfig = useThemeConfig();
 const { userInfos } = storeToRefs(stores);
-console.log('userInfos', userInfos);
 const { themeConfig } = storeToRefs(storesThemeConfig);
 const searchRef = ref();
 const state = reactive({

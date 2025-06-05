@@ -29,7 +29,7 @@ type LoginController struct {
 // @Router /api/v1/login [post]
 func (s *LoginController) Login(c *gin.Context) {
 	var (
-		loginService  = service.LoginService{}
+		loginService  service.LoginService
 		loginValidate validate.Login
 		jwt           middleware.Jwt
 	)

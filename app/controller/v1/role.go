@@ -19,13 +19,13 @@ type RoleController struct {
 // @Router /api/v1/role [get]
 func (s *RoleController) List(c *gin.Context) {
 	var (
-		roleService service.RoleService
-		req         validate.RoleValidate
-		search      validate.RoleSearchValidate
-		pageData    global.PageData
+		roleService  service.RoleService
+		roleValidate validate.Role
+		search       validate.RoleSearchValidate
+		pageData     global.PageData
 	)
 
-	err := c.ShouldBindQuery(&req)
+	err := c.ShouldBindQuery(&roleValidate)
 	if err != nil {
 		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
@@ -41,13 +41,13 @@ func (s *RoleController) List(c *gin.Context) {
 	}
 
 	// 验证
-	err = validate.GetRoleValidate(req, "list")
+	err = validate.Role{}.GetValidate(roleValidate, "list")
 	if err != nil {
 		s.ApiResponse(c, global.ArgsError, err.Error())
 		return
 	}
 
-	err = copier.Copy(&pageData, &req)
+	err = copier.Copy(&pageData, &roleValidate)
 	if err != nil {
 		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
@@ -68,7 +68,7 @@ func (s *RoleController) List(c *gin.Context) {
 func (s *RoleController) Create(c *gin.Context) {
 	var (
 		roleService  service.RoleService
-		roleValidate validate.RoleValidate
+		roleValidate validate.Role
 		req          model.Roles
 	)
 
@@ -86,7 +86,7 @@ func (s *RoleController) Create(c *gin.Context) {
 	}
 
 	// 验证
-	err = validate.GetRoleValidate(roleValidate, "create")
+	err = validate.Role{}.GetValidate(roleValidate, "create")
 	if err != nil {
 		s.ApiResponse(c, global.ArgsError, err.Error())
 		return
@@ -107,7 +107,7 @@ func (s *RoleController) Create(c *gin.Context) {
 func (s *RoleController) Update(c *gin.Context) {
 	var (
 		roleService  service.RoleService
-		roleValidate validate.RoleValidate
+		roleValidate validate.Role
 		req          model.Roles
 	)
 
@@ -139,7 +139,7 @@ func (s *RoleController) Update(c *gin.Context) {
 	}
 
 	// 验证
-	err = validate.GetRoleValidate(roleValidate, "update")
+	err = validate.Role{}.GetValidate(roleValidate, "update")
 	if err != nil {
 		s.ApiResponse(c, global.ArgsError, err.Error())
 		return

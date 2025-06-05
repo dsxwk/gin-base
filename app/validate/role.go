@@ -5,8 +5,8 @@ import (
 	validator "github.com/gookit/validate"
 )
 
-// RoleValidate Your Description
-type RoleValidate struct {
+// Role Your Description
+type Role struct {
 	Page     int    `form:"page" validate:"required|int|gt:0" label:"页码"`
 	PageSize int    `form:"pageSize" validate:"required|int|gt:0" label:"每页数量"`
 	IsPage   *bool  `form:"isPage" validate:"required|bool" label:"是否分页"`
@@ -21,8 +21,8 @@ type RoleSearchValidate struct {
 	Status int64  `form:"status" validate:"required" label:"角色状态 1=启用 2=禁用"`
 }
 
-// GetRoleValidate 请求验证
-func GetRoleValidate(data RoleValidate, scene string) error {
+// GetValidate 请求验证
+func (s Role) GetValidate(data Role, scene string) error {
 	v := validator.Struct(data, scene)
 	if !v.Validate(scene) {
 		return errors.New(v.Errors.One())
@@ -34,7 +34,7 @@ func GetRoleValidate(data RoleValidate, scene string) error {
 // ConfigValidation 配置验证
 // - 定义验证场景
 // - 也可以添加验证设置
-func (s RoleValidate) ConfigValidation(v *validator.Validation) {
+func (s Role) ConfigValidation(v *validator.Validation) {
 	v.WithScenes(validator.SValues{
 		"list":   []string{"Page", "PageSize"},
 		"create": []string{"Name"},
@@ -45,7 +45,7 @@ func (s RoleValidate) ConfigValidation(v *validator.Validation) {
 }
 
 // Messages 您可以自定义验证器错误消息
-func (s RoleValidate) Messages() map[string]string {
+func (s Role) Messages() map[string]string {
 	return validator.MS{
 		"required":    "字段 {field} 必填",
 		"int":         "字段 {field} 必须为整数",
@@ -55,7 +55,7 @@ func (s RoleValidate) Messages() map[string]string {
 }
 
 // Translates 你可以自定义字段翻译
-func (s RoleValidate) Translates() map[string]string {
+func (s Role) Translates() map[string]string {
 	return validator.MS{
 		"Page":     "页码",
 		"PageSize": "每页数量",

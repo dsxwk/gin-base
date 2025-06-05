@@ -6,15 +6,15 @@ import (
 	"time"
 )
 
-// CacheValidate 缓存验证
-type CacheValidate struct {
+// Cache 缓存验证
+type Cache struct {
 	Key    string        `json:"key" form:"key" validate:"required" label:"键"`
 	Value  interface{}   `json:"value" validate:"required" label:"值"`
 	Expire time.Duration `json:"expire" validate:"required" label:"过期时间"`
 }
 
-// GetCacheValidate 请求验证
-func GetCacheValidate(data CacheValidate, scene string) error {
+// GetValidate 请求验证
+func (s Cache) GetValidate(data Cache, scene string) error {
 	v := validator.Struct(data, scene)
 	if !v.Validate(scene) {
 		return errors.New(v.Errors.One())
@@ -26,7 +26,7 @@ func GetCacheValidate(data CacheValidate, scene string) error {
 // ConfigValidation 配置验证
 // - 定义验证场景
 // - 也可以添加验证设置
-func (s CacheValidate) ConfigValidation(v *validator.Validation) {
+func (s Cache) ConfigValidation(v *validator.Validation) {
 	v.WithScenes(validator.SValues{
 		"setCache":    []string{"Key", "Value", "Expire"},
 		"getCache":    []string{"Key"},
@@ -36,14 +36,14 @@ func (s CacheValidate) ConfigValidation(v *validator.Validation) {
 }
 
 // Messages 您可以自定义验证器错误消息
-func (s CacheValidate) Messages() map[string]string {
+func (s Cache) Messages() map[string]string {
 	return validator.MS{
 		"required": "字段 {field} 必填",
 	}
 }
 
 // Translates 你可以自定义字段翻译
-func (s CacheValidate) Translates() map[string]string {
+func (s Cache) Translates() map[string]string {
 	return validator.MS{
 		"Key":    "键",
 		"Value":  "值",

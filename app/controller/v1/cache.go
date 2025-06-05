@@ -17,11 +17,11 @@ type CacheController struct {
 // @Router /api/v1/cache [post]
 func (s *CacheController) SetCache(c *gin.Context) {
 	var (
-		cacheService service.CacheService
-		req          validate.CacheValidate
+		cacheService  service.CacheService
+		cacheValidate validate.Cache
 	)
 
-	err := c.ShouldBind(&req)
+	err := c.ShouldBind(&cacheValidate)
 	if err != nil {
 		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
@@ -29,13 +29,13 @@ func (s *CacheController) SetCache(c *gin.Context) {
 	}
 
 	// 验证
-	err = validate.GetCacheValidate(req, "setCache")
+	err = validate.Cache{}.GetValidate(cacheValidate, "setCache")
 	if err != nil {
 		s.ApiResponse(c, global.ArgsError, err.Error())
 		return
 	}
 
-	res, err := cacheService.SetCache(req.Key, req.Value, (req.Expire)*time.Second)
+	res, err := cacheService.SetCache(cacheValidate.Key, cacheValidate.Value, (cacheValidate.Expire)*time.Second)
 	if err != nil {
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
@@ -48,11 +48,11 @@ func (s *CacheController) SetCache(c *gin.Context) {
 // @Router /api/v1/cache [get]
 func (s *CacheController) GetCache(c *gin.Context) {
 	var (
-		cacheService service.CacheService
-		req          validate.CacheValidate
+		cacheService  service.CacheService
+		cacheValidate validate.Cache
 	)
 
-	err := c.ShouldBindQuery(&req)
+	err := c.ShouldBindQuery(&cacheValidate)
 	if err != nil {
 		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
@@ -60,13 +60,13 @@ func (s *CacheController) GetCache(c *gin.Context) {
 	}
 
 	// 验证
-	err = validate.GetCacheValidate(req, "getCache")
+	err = validate.Cache{}.GetValidate(cacheValidate, "getCache")
 	if err != nil {
 		s.ApiResponse(c, global.ArgsError, err.Error())
 		return
 	}
 
-	res, _ := cacheService.GetCache(req.Key)
+	res, _ := cacheService.GetCache(cacheValidate.Key)
 
 	s.ApiResponse(c, global.Success, res)
 }
@@ -75,11 +75,11 @@ func (s *CacheController) GetCache(c *gin.Context) {
 // @Router /api/v1/cache [delete]
 func (s *CacheController) DeleteCache(c *gin.Context) {
 	var (
-		cacheService service.CacheService
-		req          validate.CacheValidate
+		cacheService  service.CacheService
+		cacheValidate validate.Cache
 	)
 
-	err := c.ShouldBindQuery(&req)
+	err := c.ShouldBindQuery(&cacheValidate)
 	if err != nil {
 		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
@@ -87,13 +87,13 @@ func (s *CacheController) DeleteCache(c *gin.Context) {
 	}
 
 	// 验证
-	err = validate.GetCacheValidate(req, "deleteCache")
+	err = validate.Cache{}.GetValidate(cacheValidate, "deleteCache")
 	if err != nil {
 		s.ApiResponse(c, global.ArgsError, err.Error())
 		return
 	}
 
-	res, err := cacheService.DeleteCache(req.Key)
+	res, err := cacheService.DeleteCache(cacheValidate.Key)
 	if err != nil {
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return

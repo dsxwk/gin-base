@@ -3,6 +3,7 @@ package model
 import (
 	"database/sql/driver"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strconv"
 	"time"
@@ -15,6 +16,8 @@ type JsonString []string
 type JsonInt64 []int64
 
 type BoolInt64 bool
+
+type JsonMap map[string]interface{}
 
 // MarshalJSON 模型时间格式化公共方法
 func (t *JsonTime) MarshalJSON() ([]byte, error) {
@@ -141,4 +144,23 @@ func (b *BoolInt64) Scan(value interface{}) error {
 
 	*b = v == 1
 	return nil
+}
+
+func (j *JsonMap) Scan(value interface{}) error {
+	if value == nil {
+		*j = make(JsonMap)
+		return nil
+	}
+	bytes, ok := value.([]byte)
+	if !ok {
+		return errors.New("JsonMap: Scan source is not []byte")
+	}
+	return json.Unmarshal(bytes, j)
+}
+
+func (j JsonMap) Value() (driver.Value, error) {
+	if j == nil {
+		return "{}", nil
+	}
+	return json.Marshal(j)
 }

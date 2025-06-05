@@ -21,7 +21,7 @@ func (s *RoleController) List(c *gin.Context) {
 	var (
 		roleService  service.RoleService
 		roleValidate validate.Role
-		search       validate.RoleSearchValidate
+		search       validate.RoleSearch
 		pageData     global.PageData
 	)
 

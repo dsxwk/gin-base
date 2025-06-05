@@ -15,8 +15,8 @@ type Role struct {
 	Desc     string `json:"desc" validate:"required" label:"描述"`
 }
 
-// RoleSearchValidate 角色搜索验证
-type RoleSearchValidate struct {
+// RoleSearch 角色搜索
+type RoleSearch struct {
 	Name   string `form:"name" validate:"required" label:"角色名称"`
 	Status int64  `form:"status" validate:"required" label:"角色状态 1=启用 2=禁用"`
 }

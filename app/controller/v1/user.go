@@ -19,13 +19,13 @@ type UserController struct {
 // @Router /api/v1/user [get]
 func (s *UserController) List(c *gin.Context) {
 	var (
-		userService service.UserService
-		req         validate.UserValidate
-		search      validate.UserSearch
-		pageData    global.PageData
+		userService  service.UserService
+		userValidate validate.User
+		search       validate.UserSearch
+		pageData     global.PageData
 	)
 
-	err := c.ShouldBindQuery(&req)
+	err := c.ShouldBindQuery(&userValidate)
 	if err != nil {
 		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
@@ -41,13 +41,13 @@ func (s *UserController) List(c *gin.Context) {
 	}
 
 	// 验证
-	err = validate.GetUserValidate(req, "list")
+	err = validate.User{}.GetValidate(userValidate, "list")
 	if err != nil {
 		s.ApiResponse(c, global.ArgsError, err.Error())
 		return
 	}
 
-	err = copier.Copy(&pageData, &req)
+	err = copier.Copy(&pageData, &userValidate)
 	if err != nil {
 		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
@@ -68,7 +68,7 @@ func (s *UserController) List(c *gin.Context) {
 func (s *UserController) Create(c *gin.Context) {
 	var (
 		userService  service.UserService
-		userValidate validate.UserValidate
+		userValidate validate.User
 		req          model.User
 	)
 
@@ -86,7 +86,7 @@ func (s *UserController) Create(c *gin.Context) {
 	}
 
 	// 验证
-	err = validate.GetUserValidate(userValidate, "create")
+	err = validate.User{}.GetValidate(userValidate, "create")
 	if err != nil {
 		s.ApiResponse(c, global.ArgsError, err.Error())
 		return
@@ -107,7 +107,7 @@ func (s *UserController) Create(c *gin.Context) {
 func (s *UserController) Update(c *gin.Context) {
 	var (
 		userService  service.UserService
-		userValidate validate.UserValidate
+		userValidate validate.User
 		req          model.User
 	)
 
@@ -139,7 +139,7 @@ func (s *UserController) Update(c *gin.Context) {
 	}
 
 	// 验证
-	err = validate.GetUserValidate(userValidate, "update")
+	err = validate.User{}.GetValidate(userValidate, "update")
 	if err != nil {
 		s.ApiResponse(c, global.ArgsError, err.Error())
 		return

@@ -5,8 +5,8 @@ import (
 	validator "github.com/gookit/validate"
 )
 
-// UserValidate 用户请求验证
-type UserValidate struct {
+// User 用户请求验证
+type User struct {
 	ID       int64  `json:"id" validate:"required|int|gt:0" label:"ID"`
 	Page     int    `form:"page" validate:"required|int|gt:0" label:"页码"`
 	PageSize int    `form:"pageSize" validate:"required|int|gt:0" label:"每页数量"`
@@ -25,16 +25,8 @@ type UserSearch struct {
 	Gender   int    `form:"gender" validate:"required|int" label:"性别"`
 }
 
-// UserSearchValidate 用户搜索验证
-type UserSearchValidate struct {
-	Username string `form:"username" validate:"required" label:"用户名"`
-	FullName string `form:"fullName" validate:"required" label:"姓名"`
-	Nickname string `form:"nickname" validate:"required" label:"昵称"`
-	Gender   int    `form:"gender" validate:"required|int" label:"性别"`
-}
-
-// GetUserValidate 请求验证
-func GetUserValidate(data UserValidate, scene string) error {
+// GetValidate 请求验证
+func (s User) GetValidate(data User, scene string) error {
 	v := validator.Struct(data, scene)
 	if !v.Validate(scene) {
 		return errors.New(v.Errors.One())
@@ -46,7 +38,7 @@ func GetUserValidate(data UserValidate, scene string) error {
 // ConfigValidation 配置验证
 // - 定义验证场景
 // - 也可以添加验证设置
-func (s UserValidate) ConfigValidation(v *validator.Validation) {
+func (s User) ConfigValidation(v *validator.Validation) {
 	v.WithScenes(validator.SValues{
 		"list":   []string{"Page", "PageSize"},
 		"detail": []string{"ID"},
@@ -57,7 +49,7 @@ func (s UserValidate) ConfigValidation(v *validator.Validation) {
 }
 
 // Messages 您可以自定义验证器错误消息
-func (s UserValidate) Messages() map[string]string {
+func (s User) Messages() map[string]string {
 	return validator.MS{
 		"required":    "字段 {field} 必填",
 		"int":         "字段 {field} 必须为整数",
@@ -67,7 +59,7 @@ func (s UserValidate) Messages() map[string]string {
 }
 
 // Translates 你可以自定义字段翻译
-func (s UserValidate) Translates() map[string]string {
+func (s User) Translates() map[string]string {
 	return validator.MS{
 		"Page":     "页码",
 		"PageSize": "每页数量",

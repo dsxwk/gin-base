@@ -15,7 +15,7 @@ type MenuService struct {
 }
 
 // List 列表
-// @return bool
+// @return models []model.Menu, err error
 func (s *MenuService) List() (models []model.Menu, err error) {
 	err = global.DB.
 		Preload("MenuRoles").

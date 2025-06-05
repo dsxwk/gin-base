@@ -19,12 +19,12 @@ type ArticleController struct {
 // @Router /api/v1/article [get]
 func (s *ArticleController) List(c *gin.Context) {
 	var (
-		articleService service.ArticleService
-		req            validate.ArticleValidate
-		pageData       global.PageData
+		articleService  service.ArticleService
+		articleValidate validate.Article
+		pageData        global.PageData
 	)
 
-	err := c.ShouldBindQuery(&req)
+	err := c.ShouldBindQuery(&articleValidate)
 	if err != nil {
 		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
@@ -32,13 +32,13 @@ func (s *ArticleController) List(c *gin.Context) {
 	}
 
 	// 验证
-	err = validate.GetArticleValidate(req, "list")
+	err = validate.Article{}.GetValidate(articleValidate, "list")
 	if err != nil {
 		s.ApiResponse(c, global.ArgsError, err.Error())
 		return
 	}
 
-	err = copier.Copy(&pageData, &req)
+	err = copier.Copy(&pageData, &articleValidate)
 	if err != nil {
 		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
@@ -59,7 +59,7 @@ func (s *ArticleController) List(c *gin.Context) {
 func (s *ArticleController) Create(c *gin.Context) {
 	var (
 		articleService  service.ArticleService
-		articleValidate validate.ArticleValidate
+		articleValidate validate.Article
 		req             model.Article
 	)
 
@@ -78,7 +78,7 @@ func (s *ArticleController) Create(c *gin.Context) {
 	}
 
 	// 验证
-	err = validate.GetArticleValidate(articleValidate, "create")
+	err = validate.Article{}.GetValidate(articleValidate, "create")
 	if err != nil {
 		s.ApiResponse(c, global.ArgsError, err.Error())
 		return
@@ -99,7 +99,7 @@ func (s *ArticleController) Create(c *gin.Context) {
 func (s *ArticleController) Update(c *gin.Context) {
 	var (
 		articleService  service.ArticleService
-		articleValidate validate.ArticleValidate
+		articleValidate validate.Article
 		req             model.Article
 	)
 
@@ -130,7 +130,7 @@ func (s *ArticleController) Update(c *gin.Context) {
 	}
 
 	// 验证
-	err = validate.GetArticleValidate(articleValidate, "create")
+	err = validate.Article{}.GetValidate(articleValidate, "create")
 	if err != nil {
 		s.ApiResponse(c, global.ArgsError, err.Error())
 		return

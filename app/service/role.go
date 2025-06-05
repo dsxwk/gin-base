@@ -16,7 +16,7 @@ type RoleService struct {
 // @param pageData global.PageData
 // @param search validate.RoleSearchValidate
 // @return interface{}, error
-func (s *RoleService) List(pageData global.PageData, search validate.RoleSearchValidate) (interface{}, error) {
+func (s *RoleService) List(pageData global.PageData, search validate.RoleSearch) (interface{}, error) {
 	var (
 		models []model.Roles
 	)

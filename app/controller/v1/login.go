@@ -99,7 +99,7 @@ func (s *LoginController) generateCharset() string {
 }
 
 // GetCaptcha 获取验证码
-// @Router /api/v1/login/captcha [get]
+// @Router /api/v1/captcha [get]
 func (s *LoginController) GetCaptcha(c *gin.Context) {
 	// 配置验证码
 	driver := base64Captcha.NewDriverString(
@@ -129,6 +129,7 @@ func (s *LoginController) GetCaptcha(c *gin.Context) {
 }
 
 // CheckCaptcha 校验验证码
+// @Router /api/v1/captcha [post]
 func (s *LoginController) CheckCaptcha(c *gin.Context) {
 	var (
 		req validate.LoginValidate

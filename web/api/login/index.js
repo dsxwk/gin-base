@@ -15,6 +15,20 @@ export function loginApi() {
                 params: {},
                 token: {}
             },
+            captcha: {
+                name: '获取验证码',
+                url: '/captcha',
+                method: 'get',
+                params: {},
+                token: {}
+            },
+            verify: {
+                name: '验证验证码',
+                url: '/captcha',
+                method: 'post',
+                params: {},
+                token: {}
+            }
         }
     );
 }

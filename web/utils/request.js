@@ -3,7 +3,6 @@ import {ElMessage} from 'element-plus';
 import {Session} from '/@/utils/storage';
 import pnotify from '/@/utils/pnotify/alert.js';
 import pnotifyConfirm from '/@/utils/pnotify/confirm.js';
-import {sprintf} from '/@/utils/commonFunction.js';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -13,39 +12,17 @@ const API_URL = import.meta.env.VITE_API_URL;
 export default async function request(path, config) {
     NextLoading.start();
 
-    let response, res;
-
-    try {
-        response = await fetch(API_URL + path, config);
-    } catch (error) {
+    const response = await fetch(API_URL + path, config).catch((error) => {
         if (error.message === 'Failed to fetch') {
-            ElMessage.error('获取接口失败');
-        } else if (error.message.includes('timeout')) {
-            ElMessage.error('网络超时');
+            pnotify.error('获取接口失败');
+        } else if (error.message.indexOf('timeout') !== -1) {
+            pnotify.error('网络超时');
         } else if (error.message === 'Network Error') {
-            ElMessage.error('网络连接错误');
-        } else {
-            ElMessage.error(error.message);
+            pnotify.error('网络连接错误');
         }
-        NextLoading.done();
+    });
 
-        return Promise.reject(error);
-    }
-
-    try {
-        res = await response.json();
-    } catch (error) {
-        if (response.status === 404) {
-            ElMessage.error('404 Not Found,接口地址不存在');
-        } else {
-            ElMessage.error(sprintf('http错误码:%s %s', response.status, error));
-        }
-
-        NextLoading.done();
-
-        return Promise.reject(error);
-    }
-
+    const res = await response?.json();
     if (res?.code !== 0) {
         NextLoading.done();
 
@@ -67,8 +44,6 @@ export default async function request(path, config) {
                 }
             );
         }
-
-        pnotify.error(res?.msg);
 
         return Promise.reject(res);
     }

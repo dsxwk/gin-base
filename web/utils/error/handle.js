@@ -1,4 +1,5 @@
-import { ElNotification } from 'element-plus';
+// import {ElNotification} from 'element-plus';
+import pnotify from '/@/utils/pnotify/alert.js';
 
 /**
  * 全局代码错误捕捉
@@ -31,20 +32,30 @@ const errorHandler = (error) => {
             case 401:
                 errorMap[error.code] = '请求未授权';
                 break;
+            case 403:
+                errorMap[error.code] = '禁止访问';
+                break;
+            case 404:
+                errorMap[error.code] = '请求未找到';
+                break;
             case 500:
                 errorMap[error.code] = 'System Error';
+                break;
+            default:
                 break;
         }
     }
 
     let errorName = errorMap[error.name] || errorMap[error.code] || '未知错误';
 
-    ElNotification({
-        title: errorName,
-        message: typeof error === 'string' ? error : error?.msg,
-        type: "error",
-        duration: 3000
-    });
+    pnotify.error(typeof error === 'string' ? error : error?.msg, errorName);
+
+    // ElNotification({
+    //     title: errorName,
+    //     message: typeof error === 'string' ? error : error?.msg,
+    //     type: "error",
+    //     duration: 3000
+    // });
 };
 
 export default errorHandler;

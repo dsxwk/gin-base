@@ -1,7 +1,7 @@
 <template>
 	<el-form size="large" class="login-content-form">
 		<el-form-item class="login-animation1">
-			<el-input text :placeholder="$t('message.mobile.placeholder1')" v-model="state.ruleForm.userName" clearable autocomplete="off">
+			<el-input text :placeholder="$t('message.mobile.placeholder1')" v-model="state.ruleForm.username" clearable autocomplete="off">
 				<template #prefix>
 					<el-icon class="el-input__icon"><ele-Iphone /></el-icon>
         </template>
@@ -35,7 +35,7 @@ import { reactive } from 'vue';
 // 定义变量内容
 const state = reactive({
 	ruleForm: {
-		userName: '',
+		username: '',
 		code: '',
 	},
 });

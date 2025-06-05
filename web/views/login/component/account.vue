@@ -70,6 +70,7 @@ import { Session } from '/@/utils/storage';
 import { formatAxis } from '/@/utils/formatTime';
 import { NextLoading } from '/@/utils/loading';
 import {loginApi} from '/@/api/login';
+import { useUserInfo } from '/@/stores/userInfo';
 
 const api = loginApi();
 // 定义变量内容
@@ -102,6 +103,10 @@ const onLogin = async () => {
 	Session.set('token', response?.data?.token);
 	// 模拟数据，对接接口时，记得删除多余代码及对应依赖的引入。用于 `/src/stores/userInfo.ts` 中不同用户登录判断（模拟数据）
 	Cookies.set('username', response?.data?.user?.username);
+  if (response?.data?.user && response?.data?.userRoles) {
+    response.data.user.roles = response.data.userRoles.map(item => item.name);
+  }
+  await useUserInfo().setUserInfos(response?.data?.user);
 	if (themeConfig.value.isRequestRoutes) {
 		// 模拟后端控制路由，isRequestRoutes 为 true，则开启后端控制路由
 		// 添加完动态路由，再进行 router 跳转，否则可能报错 No match found for location with path "/"

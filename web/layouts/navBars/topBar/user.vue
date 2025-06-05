@@ -64,8 +64,8 @@
     </div>
     <el-dropdown :show-timeout="70" :hide-timeout="50" @command="onHandleCommandClick">
 			<span class="layout-navbars-breadcrumb-user-link">
-				<img :src="userInfos.photo ? userInfos.photo : avatar" class="layout-navbars-breadcrumb-user-link-photo mr5" />
-				{{ userInfos.userName ? 'admin' : userInfos.userName }}
+				<img :src="userInfos.avatar ? userInfos.avatar : avatar" class="layout-navbars-breadcrumb-user-link-photo mr5" />
+				{{ userInfos.username ? 'admin' : userInfos.username }}
 				<el-icon class="el-icon--right">
 					<ele-ArrowDown />
 				</el-icon>
@@ -110,6 +110,7 @@ const router = useRouter();
 const stores = useUserInfo();
 const storesThemeConfig = useThemeConfig();
 const { userInfos } = storeToRefs(stores);
+console.log('userInfos', userInfos);
 const { themeConfig } = storeToRefs(storesThemeConfig);
 const searchRef = ref();
 const state = reactive({

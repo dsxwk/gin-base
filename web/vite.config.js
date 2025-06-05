@@ -65,6 +65,7 @@ export default defineConfig((mode) => {
         define: {
             __NEXT_VERSION__: JSON.stringify(process.env.npm_package_version),
             __NEXT_NAME__: JSON.stringify(process.env.npm_package_name),
+            __BUILD_TIME__: JSON.stringify(new Date().toISOString()), // 构建时间
         },
     };
 });

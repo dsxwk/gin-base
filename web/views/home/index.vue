@@ -1,9 +1,9 @@
 <template>
   <div class="dashboard-container layout-pd">
     <!-- 网站信息 -->
-    <el-row class="website-info-row common-row-gap">
+    <el-row>
       <el-col :span="24">
-        <el-card class="website-info-card">
+        <el-card>
           <div class="website-info-title">网站信息</div>
           <el-table :data="websiteInfo" border style="width: 100%;" class="website-info-table">
             <el-table-column prop="label" label="属性" width="150"></el-table-column>
@@ -14,9 +14,9 @@
     </el-row>
 
     <!-- 快捷入口卡片 -->
-    <el-row :gutter="20" class="dashboard-cards common-row-gap">
-      <el-col :xs="24" :sm="12" :md="8" :lg="6" v-for="card in cards" :key="card.title">
-        <el-card class="dashboard-card">
+    <el-row :gutter="20">
+      <el-col class="mt20" :xs="24" :sm="12" :md="8" :lg="6" v-for="card in cards" :key="card.title">
+        <el-card>
           <div class="card-header">
             <span>{{ card.title }}</span>
             <el-icon :size="32" :color="card.color">
@@ -30,7 +30,7 @@
     </el-row>
 
     <!-- 快捷入口和访问趋势 -->
-    <el-row :gutter="20" class="dashboard-main common-row-gap">
+    <el-row :gutter="20" class="dashboard-main mt20">
       <!-- 快捷入口 -->
       <el-col :xs="24" :sm="12" :md="8">
         <el-card class="dashboard-quick-card">
@@ -92,7 +92,7 @@ const websiteInfo = [
 ];
 
 const quickActions = [
-  {label: '新增用户', type: 'primary', icon: 'el-icon-plus', link: '/system'},
+  {label: '系统设置', type: 'primary', icon: 'el-icon-plus', link: '/system'},
   {label: '菜单管理', type: 'success', icon: 'el-icon-document', link: '/system/menu'},
   {label: '用户管理', type: 'warning', icon: 'el-icon-setting', link: '/system/user'},
   {label: '角色管理', type: 'info', icon: 'el-icon-user', link: '/system/role'},
@@ -111,27 +111,9 @@ const chartOption = ref({
 
 <style scoped>
 .dashboard-container {
-  padding-top: 32px;
-  padding-left: 16px;
-  padding-right: 16px;
-  padding-bottom: 0;
+  padding: 32px 16px 0;
   min-height: 100vh;
   background: #f5f6fa;
-}
-
-.common-row-gap {
-  margin-top: 0;
-  margin-bottom: 0;
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-
-.dashboard-cards {
-  /* 其他样式可保留 */
-}
-
-.dashboard-card {
-  margin-top: 0;
 }
 
 .card-header {
@@ -151,12 +133,6 @@ const chartOption = ref({
 .card-desc {
   color: #909399;
   font-size: 14px;
-}
-
-.website-info-row {
-}
-
-.website-info-card {
 }
 
 .website-info-title {
@@ -209,5 +185,9 @@ const chartOption = ref({
   text-decoration: none;
   display: block;
   width: 100%;
+}
+
+.dashboard-container > .el-row:last-child {
+  margin-bottom: 0;
 }
 </style>

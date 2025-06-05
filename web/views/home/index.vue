@@ -1,5 +1,6 @@
 <template>
   <div class="dashboard-container layout-pd">
+    <!-- 网站信息 -->
     <el-row class="website-info-row common-row-gap">
       <el-col :span="24">
         <el-card class="website-info-card">
@@ -11,8 +12,10 @@
         </el-card>
       </el-col>
     </el-row>
+
+    <!-- 快捷入口卡片 -->
     <el-row :gutter="20" class="dashboard-cards common-row-gap">
-      <el-col :span="6" v-for="card in cards" :key="card.title">
+      <el-col :xs="24" :sm="12" :md="8" :lg="6" v-for="card in cards" :key="card.title">
         <el-card class="dashboard-card">
           <div class="card-header">
             <span>{{ card.title }}</span>
@@ -25,28 +28,35 @@
         </el-card>
       </el-col>
     </el-row>
+
+    <!-- 快捷入口和访问趋势 -->
     <el-row :gutter="20" class="dashboard-main common-row-gap">
-      <el-col :span="8">
+      <!-- 快捷入口 -->
+      <el-col :xs="24" :sm="12" :md="8">
         <el-card class="dashboard-quick-card">
           <template #header>快捷入口</template>
           <div class="quick-actions">
             <el-row :gutter="12">
-              <el-col :span="12" v-for="(action, idx) in quickActions" :key="idx">
-                <el-button
-                    :type="action.type"
-                    :icon="action.icon"
-                    plain
-                    class="quick-action-btn"
-                    style="width: 100%;"
-                >
-                  {{ action.label }}
-                </el-button>
+              <el-col :xs="24" :sm="12" v-for="(action, idx) in quickActions" :key="idx">
+                <router-link :to="action.link" class="quick-action-link">
+                  <el-button
+                      :type="action.type"
+                      :icon="action.icon"
+                      plain
+                      class="quick-action-btn"
+                      style="width: 100%;"
+                  >
+                    {{ action.label }}
+                  </el-button>
+                </router-link>
               </el-col>
             </el-row>
           </div>
         </el-card>
       </el-col>
-      <el-col :span="16">
+
+      <!-- 访问趋势 -->
+      <el-col :xs="24" :sm="12" :md="16">
         <el-card class="dashboard-chart-card">
           <template #header>访问趋势</template>
           <div class="chart-wrapper large-chart">
@@ -60,7 +70,7 @@
 
 <script setup>
 import { ElIcon } from 'element-plus';
-import { User, Document, Setting, Warning, UserFilled } from '@element-plus/icons-vue';
+import { User, Document, Setting, Warning } from '@element-plus/icons-vue';
 import { ref } from 'vue';
 import VChart from 'vue-echarts';
 
@@ -74,17 +84,17 @@ const cards = [
 const websiteInfo = [
   { label: '网站名称', value: 'Gin-Base后台管理系统' },
   { label: '当前版本', value: 'v1.0.0' },
-  { label: '管理员', value: '张三' },
+  { label: '管理员', value: '大师兄' },
   { label: '联系方式', value: 'dsx.email@qq.com' },
   { label: '运行环境', value: '生产环境' }
 ];
 
 const quickActions = [
-  { label: '新增用户', type: 'primary', icon: 'el-icon-plus' },
-  { label: '菜单管理', type: 'success', icon: 'el-icon-document' },
-  { label: '用户管理', type: 'warning', icon: 'el-icon-setting' },
-  { label: '角色管理', type: 'info', icon: 'el-icon-user' },
-  { label: '字典管理', type: 'danger', icon: 'el-icon-warning' }
+  { label: '新增用户', type: 'primary', icon: 'el-icon-plus', link: '/system' },
+  { label: '菜单管理', type: 'success', icon: 'el-icon-document', link: '/system/menu' },
+  { label: '用户管理', type: 'warning', icon: 'el-icon-setting', link: '/system/user' },
+  { label: '角色管理', type: 'info', icon: 'el-icon-user', link: '/system/role' },
+  { label: '字典管理', type: 'danger', icon: 'el-icon-warning', link: '/system/dic' }
 ];
 
 const chartOption = ref({
@@ -175,5 +185,10 @@ const chartOption = ref({
   width: 100%;
   margin-bottom: 12px;
   box-sizing: border-box;
+}
+.quick-action-link {
+  text-decoration: none;
+  display: block;
+  width: 100%;
 }
 </style>

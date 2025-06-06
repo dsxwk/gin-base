@@ -45,7 +45,11 @@ export default async function request(path, config) {
             );
         }
 
+        pnotify.error(res?.msg);
+
         return Promise.reject(res);
+
+        // throw new Error(res?.msg)
     }
 
     NextLoading.done();

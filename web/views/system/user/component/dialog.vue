@@ -232,7 +232,7 @@ const openDialog = async (type, row) => {
   state.dialog.type = type;
   state.dialog.isShowDialog = true;
   // 清空表单，此项需加表单验证才能使用
-  nextTick(() => {
+  await nextTick(() => {
     dialogFormRef.value && dialogFormRef.value.resetFields();
   });
 };

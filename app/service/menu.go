@@ -175,9 +175,23 @@ func (s *MenuService) Detail(id int64) (m model.Menu, err error) {
 // @return m model.Menu, err error
 func (s *MenuService) Delete(id int64) (m model.Menu, err error) {
 	var (
+		detail      model.Menu
 		menuActions []model.MenuAction
 		actionRoles []model.ActionRoles
 	)
+
+	err = global.DB.
+		Where("pid = ?", id).
+		First(&detail).Error
+	if err != nil {
+		if !errors.Is(err, gorm.ErrRecordNotFound) {
+			return m, err
+		}
+	}
+
+	if detail.ID > 0 {
+		return m, errors.New("存在子菜单，无法删除")
+	}
 
 	tx := global.DB.Begin()
 	err = tx.Delete(&m, id).Error

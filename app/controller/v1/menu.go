@@ -124,6 +124,35 @@ func (s *MenuController) Update(c *gin.Context) {
 	s.ApiResponse(c, global.Success, "更新成功", data)
 }
 
+// Detail 详情
+// @Router /api/v1/menu/{id} [get]
+func (s *MenuController) Detail(c *gin.Context) {
+	var (
+		menuService service.MenuService
+	)
+
+	idParam := c.Param("id")
+	if idParam == "" {
+		s.ApiResponse(c, global.ArgsError, "id参数必传")
+		return
+	}
+
+	id, err := strconv.ParseInt(idParam, 10, 64)
+	if err != nil {
+		s.ApiResponse(c, global.ArgsError, "id参数格式错误")
+		return
+	}
+
+	data, err := menuService.Detail(id)
+	if err != nil {
+		global.Log.Error(err.Error())
+		s.ApiResponse(c, global.SystemError, err.Error())
+		return
+	}
+
+	s.ApiResponse(c, global.Success, data)
+}
+
 // Delete 删除
 // @Router /api/v1/menu/{id} [delete]
 func (s *MenuController) Delete(c *gin.Context) {

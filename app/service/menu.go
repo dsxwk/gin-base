@@ -17,6 +17,20 @@ type MenuService struct {
 // List 列表
 // @return models []model.Menu, err error
 func (s *MenuService) List() (models []model.Menu, err error) {
+	models, err = s.All()
+
+	if err != nil {
+		return models, err
+	}
+
+	models = s.MenuTree(models, 0)
+
+	return models, nil
+}
+
+// All 获取所有菜单
+// @return models []model.Menu, err error
+func (s *MenuService) All() (models []model.Menu, err error) {
 	err = global.DB.
 		Preload("MenuRoles").
 		Preload("MenuAction", func(db *gorm.DB) *gorm.DB {
@@ -31,8 +45,6 @@ func (s *MenuService) List() (models []model.Menu, err error) {
 	if err != nil {
 		return models, err
 	}
-
-	models = s.MenuTree(models, 0)
 
 	return models, nil
 }
@@ -122,6 +134,38 @@ func (s *MenuService) Update(m model.Menu) (model.Menu, error) {
 	}
 
 	tx.Commit()
+
+	return m, nil
+}
+
+// Detail 详情
+// @param id int64
+// @return m model.Menu, err error
+func (s *MenuService) Detail(id int64) (m model.Menu, err error) {
+	var (
+		menus []model.Menu
+	)
+
+	menus, err = s.All()
+
+	if err != nil {
+		return m, err
+	}
+
+	err = global.DB.
+		Preload("MenuRoles").
+		Preload("MenuAction", func(db *gorm.DB) *gorm.DB {
+			return db.Preload("ActionRoles").
+				Order("sort asc").
+				Select("id,menu_id,type,name,is_link,sort,created_at,updated_at")
+		}).
+		Preload("MenuAction.ActionRoles").
+		First(&m, id).Error
+	if err != nil {
+		return m, err
+	}
+
+	m.Children = s.MenuTree(menus, m.ID)
 
 	return m, nil
 }

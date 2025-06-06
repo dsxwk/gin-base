@@ -22,6 +22,9 @@ func (r MenuRouter) RegisterRoutes(routerGroup *gin.RouterGroup) {
 	// 更新
 	routerGroup.PUT("/menu/:id", controller.Update)
 
+	// 详情
+	routerGroup.GET("/menu/:id", controller.Detail)
+
 	// 删除
 	routerGroup.DELETE("/menu/:id", controller.Delete)
 

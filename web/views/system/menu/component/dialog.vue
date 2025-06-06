@@ -314,7 +314,7 @@ function findMenuByPath(data, path) {
   return null;
 }
 // 打开弹窗
-const openDialog = (type, row) => {
+const openDialog = async (type, row) => {
   state.ruleForm = {
     menuSuperior: [], // 上级菜单
     name: '', // 路由名称
@@ -337,9 +337,10 @@ const openDialog = (type, row) => {
     btnPower: '', // 菜单类型为按钮时，权限标识
   };
   if (type === 'edit') {
+    const data = await detail(row.id);
     Object.keys(state.ruleForm).forEach((key) => {
-      if (row.hasOwnProperty(key)) {
-        state.ruleForm[key] = row[key];
+      if (data.hasOwnProperty(key)) {
+        state.ruleForm[key] = data[key];
       }
     });
     // 设置上级菜单默认选中
@@ -380,14 +381,14 @@ const onSubmit = async () => {
     state.ruleForm.pid = 0; // 顶级菜单
   }
 
-  state.ruleForm.menuRoles = state.ruleForm.meta.roles.map(roleId => {
+  state.ruleForm.menuRoles = state.ruleForm.meta.roles?.map(roleId => {
     const role = state.roles.find(r => r.id === roleId);
     return {
       menuId: props.row.id ?? 0,
       roleId: roleId,
       name: role ? role.name : ''
     };
-  });
+  }) ?? [];
 
   dialogFormRef.value.validate(async (valid) => {
     if (!valid) return;
@@ -411,6 +412,12 @@ const onSubmit = async () => {
 const getRoles = async () => {
   const data = await api.roleList({page:1, pageSize: 10, isPage: false});
   state.roles = data.data;
+};
+// 详情
+const detail = async (id) => {
+  const res = await api.detail({id: id});
+
+  return res.data;
 };
 // 页面加载时
 onMounted(() => {

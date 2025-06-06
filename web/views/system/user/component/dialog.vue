@@ -199,7 +199,7 @@ const getData = (routes) => {
   return arr;
 };
 
-const openDialog = (type, row) => {
+const openDialog = async (type, row) => {
   state.ruleForm = {
     fullName: '',
     avatar: '',
@@ -213,9 +213,10 @@ const openDialog = (type, row) => {
     userRoles: []
   };
   if (type === 'edit') {
+    const data = await detail(row.id);
     Object.keys(state.ruleForm).forEach((key) => {
-      if (row.hasOwnProperty(key)) {
-        state.ruleForm[key] = row[key];
+      if (data.hasOwnProperty(key)) {
+        state.ruleForm[key] = data[key];
       }
     });
     // 设置角色 ID 数组用于 select 默认选中
@@ -246,14 +247,14 @@ const onCancel = () => {
 };
 
 const onSubmit = async () => {
-  state.ruleForm.userRoles = state.ruleForm.userRoles.map(roleId => {
+  state.ruleForm.userRoles = state.ruleForm.userRoles?.map(roleId => {
     const role = state.roles.find(r => r.id === roleId);
     return {
       userId: props.row.id ?? 0,
       roleId: roleId,
       name: role ? role.name : ''
     };
-  });
+  }) ?? [];
 
   dialogFormRef.value.validate(async (valid) => {
     if (!valid) return;
@@ -277,7 +278,12 @@ const getRoles = async () => {
   const data = await api.roleList({page: 1, pageSize: 10, isPage: false});
   state.roles = data.data;
 };
+// 详情
+const detail = async (id) => {
+  const res = await api.detail({id: id});
 
+  return res.data;
+};
 onMounted(() => {
   getRoles();
   state.menuData = getData(routesList.value);

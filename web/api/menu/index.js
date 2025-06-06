@@ -1,4 +1,5 @@
 import createService from '/@/utils/service.js';
+
 /**
  * 菜单
  *
@@ -31,6 +32,16 @@ export function menuApi() {
                 name: '更新菜单',
                 url: '/menu/:id',
                 method: 'put',
+                params: {},
+                token: {
+                    name: 'token',
+                    value: true
+                }
+            },
+            detail: {
+                name: '菜单详情',
+                url: '/menu/:id',
+                method: 'get',
                 params: {},
                 token: {
                     name: 'token',

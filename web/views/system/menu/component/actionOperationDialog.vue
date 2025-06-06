@@ -205,14 +205,14 @@ const onCancel = () => {
 };
 // 提交
 const onSubmit = async () => {
-  state.ruleForm.actionRoles = state.ruleForm.actionRoles.map(roleId => {
+  state.ruleForm.actionRoles = state.ruleForm.actionRoles?.map(roleId => {
     const role = state.roles.find(r => r.id === roleId);
     return {
       menuId: props.menuId ?? 0,
       roleId: roleId,
       name: role ? role.name : ''
     };
-  });
+  }) ?? [];
 
   dialogFormRef.value.validate(async (valid) => {
     if (!valid) return;

@@ -189,8 +189,9 @@ const onTablePageChange = (page) => {
   getTableData(state.tableData.param);
 };
 // 删除当前项回调
-const onTableDelRow = (row) => {
-  ElMessage.success(`删除${row.name}成功！`);
+const onTableDelRow = async (row) => {
+  await api.delete({id: row.id});
+  ElMessage.success(`删除成功！`);
   state.tableData.data = state.tableData.data.filter((item) => item.id !== row.id);
 };
 // 拖动显示列排序回调

@@ -224,7 +224,7 @@ func (s *MenuService) Delete(id int64) (m model.Menu, err error) {
 			menuActionIds = append(menuActionIds, v.ID)
 		}
 
-		err = tx.Where("menu_action_id in (?)", menuActionIds).Delete(&actionRoles).Error
+		err = tx.Where("action_id in ?", menuActionIds).Delete(&actionRoles).Error
 		if err != nil {
 			return m, err
 		}

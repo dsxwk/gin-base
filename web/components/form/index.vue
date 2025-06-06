@@ -99,7 +99,7 @@ const emit = defineEmits(['update:model'])
 
 <template>
   <el-form
-      :model="computedMap"
+      :model="model"
       ref="formRef"
       :rules="rules"
       v-bind="formProps"

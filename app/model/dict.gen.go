@@ -14,15 +14,17 @@ const TableNameDict = "dict"
 type Dict struct {
 	ID        int64           `gorm:"column:id;type:int(10) unsigned;primaryKey;autoIncrement:true;comment:ID" json:"id"`           // ID
 	Pid       int64           `gorm:"column:pid;type:int(10) unsigned;not null;comment:父级id" json:"pid"`                            // 父级id
-	Name      string          `gorm:"column:name;type:varchar(50);not null;comment:字段名称" json:"name"`                               // 字段名称
+	Name      string          `gorm:"column:name;type:varchar(50);not null;comment:字段名称(英文)" json:"name"`                           // 字段名称(英文)
+	Value     string          `gorm:"column:value;type:varchar(100);not null;comment:字段名称(中文)" json:"value"`                        // 字段名称(中文)
+	Label     string          `gorm:"column:label;type:varchar(100);not null;comment:映射值" json:"label"`                             // 映射值
 	Status    int64           `gorm:"column:status;type:tinyint(3) unsigned;not null;default:1;comment:状态 1=启用 2=停用" json:"status"` // 状态 1=启用 2=停用
 	Sort      int64           `gorm:"column:sort;type:int(10) unsigned;not null;comment:排序" json:"sort"`                            // 排序
 	Extend    *JsonMap        `gorm:"column:extend;type:json;comment:扩展字段" json:"extend"`                                           // 扩展字段
-	Desc      string          `gorm:"column:desc;type:varchar(100);not null;comment:字段描述" json:"desc"`                              // 字段描述
+	Desc      string          `gorm:"column:desc;type:varchar(100);not null;comment:字段描述" json:"desc"`
 	Children  []Dict          `json:"children" gorm:"-"`
-	CreatedAt *JsonTime       `gorm:"column:created_at;type:datetime;comment:创建时间" json:"created_at"` // 创建时间
-	UpdatedAt *JsonTime       `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updated_at"` // 更新时间
-	DeletedAt *gorm.DeletedAt `gorm:"column:deleted_at;type:datetime;comment:删除时间" json:"deleted_at"` // 删除时间
+	CreatedAt *JsonTime       `gorm:"column:created_at;type:datetime;comment:创建时间" json:"createdAt"` // 创建时间
+	UpdatedAt *JsonTime       `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updatedAt"` // 更新时间
+	DeletedAt *gorm.DeletedAt `gorm:"column:deleted_at;type:datetime;comment:删除时间" json:"deletedAt"` // 删除时间
 }
 
 // TableName Dict's table name

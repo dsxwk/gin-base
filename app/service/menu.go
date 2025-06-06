@@ -23,7 +23,7 @@ func (s *MenuService) List() (models []model.Menu, err error) {
 		return models, err
 	}
 
-	models = s.MenuTree(models, 0)
+	models = s.GetTree(models, 0)
 
 	return models, nil
 }
@@ -49,17 +49,17 @@ func (s *MenuService) All() (models []model.Menu, err error) {
 	return models, nil
 }
 
-// MenuTree 数据子集递归
+// GetTree 数据子集递归
 // @param menus []model.Menu
 // @param pid int64
 // @return tree []model.Menu
-func (s *MenuService) MenuTree(menus []model.Menu, pid int64) (tree []model.Menu) {
-	for _, menu := range menus {
-		if menu.Pid == pid {
-			children := s.MenuTree(menus, menu.ID)
-			menu.Children = children
-			menu.Meta.Roles = utils.ArrayColumn(menu.MenuRoles, func(m *model.MenuRoles) int64 { return m.RoleID })
-			tree = append(tree, menu)
+func (s *MenuService) GetTree(menus []model.Menu, pid int64) (tree []model.Menu) {
+	for _, data := range menus {
+		if data.Pid == pid {
+			children := s.GetTree(menus, data.ID)
+			data.Children = children
+			data.Meta.Roles = utils.ArrayColumn(data.MenuRoles, func(m *model.MenuRoles) int64 { return m.RoleID })
+			tree = append(tree, data)
 		}
 	}
 	return tree
@@ -165,7 +165,7 @@ func (s *MenuService) Detail(id int64) (m model.Menu, err error) {
 		return m, err
 	}
 
-	m.Children = s.MenuTree(menus, m.ID)
+	m.Children = s.GetTree(menus, m.ID)
 
 	return m, nil
 }

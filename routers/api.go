@@ -25,6 +25,7 @@ func LoadRouters(router *gin.Engine) {
 		cache   CacheRouter
 		menu    MenuRouter
 		role    RoleRouter
+		dict    DictRouter
 	)
 
 	// 登录
@@ -43,5 +44,7 @@ func LoadRouters(router *gin.Engine) {
 		menu.RegisterRoutes(auth)
 		// 角色
 		role.RegisterRoutes(auth)
+		// 字典
+		dict.RegisterRoutes(auth)
 	}
 }

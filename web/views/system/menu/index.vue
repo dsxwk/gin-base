@@ -50,6 +50,7 @@ import SvgIcon from '/@/components/svgIcon/index.vue';
 import {i18n} from '/@/static/i18n';
 import {getDict} from '/@/utils/dict.js';
 import {isHideDict, isLinkDict} from '/@/dict/menu';
+import {initBackEndControlRoutes} from '/@/router/backEnd.js';
 
 // 引入组件
 const Table = defineAsyncComponent(() => import('/@/components/table/index.vue'));
@@ -193,6 +194,8 @@ const onTableDelRow = async (row) => {
   await api.delete({id: row.id});
   ElMessage.success(`删除成功！`);
   state.tableData.data = state.tableData.data.filter((item) => item.id !== row.id);
+  await getTableData(state.tableData.param);
+  await initBackEndControlRoutes();
 };
 // 拖动显示列排序回调
 const onSortHeader = (data) => {

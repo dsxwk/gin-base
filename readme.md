@@ -388,7 +388,7 @@ func main() {
 	router.Use(Cors())
 
 	// Global log middleware
-	router.Use(middleware.LoggerMiddleware())
+	router.Use(middleware.Logger{}.LoggerMiddleware())
 
 	// Register all events
 	global.Event.RegisterAllEvent(onEventReceived)
@@ -534,11 +534,11 @@ type ArticleController struct {
 // @Router /v1/article [get]
 func (s *ArticleController) List(c *gin.Context) {
 	var (
-		articleService service.ArticleService
-		req            validate.ArticleValidate
+		articleService  service.ArticleService
+		articleValidate validate.Article
 	)
 
-	err := c.ShouldBindQuery(&req)
+	err := c.ShouldBindQuery(&articleValidate)
 	if err != nil {
 		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
@@ -546,13 +546,13 @@ func (s *ArticleController) List(c *gin.Context) {
 	}
 
 	// validate
-	err = validate.GetArticleValidate(req, "list")
+	err = validate.Article{}.GetValidate(articleValidate, "list")
 	if err != nil {
 		s.ApiResponse(c, global.ArgsError, err.Error())
 		return
 	}
 
-	pageData, err := articleService.List(req)
+	pageData, err := articleService.List(articleValidate)
 	if err != nil {
 		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
@@ -573,8 +573,8 @@ import (
 	validator "github.com/gookit/validate"
 )
 
-// ArticleValidate Article Request Validation
-type ArticleValidate struct {
+// Article Article Request Validation
+type Article struct {
 	Page     int    `form:"page" validate:"required|int|gt:0" label:"页码"`
 	PageSize int    `form:"pageSize" validate:"required|int|gt:0" label:"每页数量"`
 	ID       int64  `json:"id" validate:"required" label:"ID"`
@@ -582,9 +582,9 @@ type ArticleValidate struct {
 	Content  string `json:"content" validate:"required" label:"内容"`
 }
 
-// GetArticleValidate
+// GetValidate
 // Request Validation
-func GetArticleValidate(data ArticleValidate, scene string) error {
+func (s Article) GetValidate(data Article, scene string) error {
 	v := validator.Struct(data, scene)
 	if !v.Validate(scene) {
 		return errors.New(v.Errors.One())
@@ -597,7 +597,7 @@ func GetArticleValidate(data ArticleValidate, scene string) error {
 // Configuration Validation
 // - Defining Validation Scenarios
 // - Adding Validation Settings
-func (a ArticleValidate) ConfigValidation(v *validator.Validation) {
+func (s Article) ConfigValidation(v *validator.Validation) {
 	v.WithScenes(validator.SValues{
 		"list":   []string{"Page", "PageSize"},
 		"create": []string{"Title", "Content"}, // []string{"User.FullName", "Title"}
@@ -609,7 +609,7 @@ func (a ArticleValidate) ConfigValidation(v *validator.Validation) {
 
 // Messages 
 // Customizing Validator Error Messages
-func (s ArticleValidate) Messages() map[string]string {
+func (s Article) Messages() map[string]string {
 	return validator.MS{
 		"required":    "Filed {field} Required",
 		"int":         "Filed {field} Must be an integer",
@@ -620,7 +620,7 @@ func (s ArticleValidate) Messages() map[string]string {
 
 // Translates 
 // Customizing Field Translations
-func (s ArticleValidate) Translates() map[string]string {
+func (s Article) Translates() map[string]string {
 	return validator.MS{
 		"Page":     "Page",
 		"PageSize": "Page Size",

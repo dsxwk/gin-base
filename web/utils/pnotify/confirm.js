@@ -9,10 +9,10 @@ const defaultDelay = 2000;
 
 function setOpts(text, type, title, delay, resolve) {
     return {
-        text: text ?? 'Are you sure?',
+        text: text === '' ? 'Are you sure?' : text,
         // icon: 'fas fa-question-circle',
-        type: type ?? 'notice',
-        title: title ?? '提示信息',
+        type: type === '' ? 'notice' : type,
+        title: title === '' ? '提示信息' : title,
         // 时间
         delay: delay ?? 2000,
         hide: false,

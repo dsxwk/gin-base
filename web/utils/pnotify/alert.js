@@ -9,9 +9,9 @@ const defaultDelay = 2000;
 
 function setOpts(text, type, title, delay) {
     return {
-        text: text ?? 'Success',
-        type: type ?? 'success',
-        title: title ?? '提示信息',
+        text: text === '' ? 'Success' : text,
+        type: type === '' ? 'success' : type,
+        title: title === '' ? '提示信息' : title,
         // 时间
         delay: delay ?? 2000,
         modules: new Map([

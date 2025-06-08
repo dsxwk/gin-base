@@ -74,7 +74,7 @@ func main() {
 // onEventReceived 接收事件
 func onEventReceived(event event.Event, timestamp time.Time) {
 	// todo 处理事件
-	fmt.Printf("Event received at %s: name: %s, data: %v\n", timestamp.Format(time.RFC3339), event.Name, event.Data)
+	// fmt.Printf("Event received at %s: name: %s, data: %v\n", timestamp.Format(time.RFC3339), event.Name, event.Data)
 	if event.Name == "send_http" {
 		config.SetHttpLog(event.Data)
 	}

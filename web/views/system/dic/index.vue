@@ -66,7 +66,7 @@ const state = reactive({
       {key: 'pid', colWidth: '', title: '父级id', type: 'text', isCheck: true},
       {key: 'name', colWidth: '140', title: '字典名称(英文)', type: 'text', isCheck: true},
       {key: 'title', colWidth: '140', title: '字典名称(中文)', type: 'text', isCheck: true},
-      {key: 'label', colWidth: '', title: '映射值', type: 'text', isCheck: true},
+      {key: 'value', colWidth: '', title: '映射值', type: 'text', isCheck: true},
       {key: 'extend', colWidth: '100', title: '扩展字段', type: 'text', isCheck: true},
       {key: 'sort', colWidth: '', title: '排序', type: 'text', isCheck: true},
       {key: 'desc', colWidth: '', title: '描述', type: 'text', isCheck: true},

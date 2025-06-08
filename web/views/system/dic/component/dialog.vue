@@ -51,7 +51,7 @@ const state = reactive({
     dictSuperior: [], // 上级字典
     name: '', // 字典名称(英文)
     title: '', // 字典名称(中文)
-    label: '', // 映射值
+    value: '', // 映射值
     sort: 0, // 排序
     extend: {}, // 扩展字段
     desc: "", // 描述
@@ -102,7 +102,7 @@ const formData = ref([
   },
   {
     label: '映射值',
-    prop: 'label',
+    prop: 'value',
     type: 'input',
     col: 12,
     attrs: {
@@ -208,7 +208,7 @@ const openDialog = async (type, row) => {
     dictSuperior: [], // 上级字典
     name: '', // 字典名称(英文)
     title: '', // 字典名称(中文)
-    label: '', // 映射值
+    value: '', // 映射值
     sort: 0, // 排序
     extend: [], // 扩展字段
     desc: "", // 描述

@@ -11,7 +11,7 @@ type Dict struct {
 	PID    int64  `json:"pid" validate:"required" label:"父级ID"`
 	Name   string `json:"name" form:"name" validate:"required" label:"字段名称(英文)"`
 	Title  string `json:"title" validate:"required" label:"字段名称(中文)"`
-	Label  string `json:"label" validate:"required" label:"映射值"`
+	Value  string `json:"value" validate:"required" label:"映射值"`
 	Status int64  `json:"status" validate:"required" label:"状态 1=启用 2=停用"`
 }
 

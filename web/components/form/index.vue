@@ -55,10 +55,6 @@ const resolveComponent = (item) => {
     icon: IconSelector,
   };
 
-  if (item.type === 'textarea') {
-    item.attrs = {type: 'textarea', ...(item.attrs || {})};
-  }
-
   return map[item.type] || 'el-input';
 };
 
@@ -94,6 +90,13 @@ function decodeField(field) {
 const getOptions = (item) => {
   return typeof item.options === 'function' ? item.options() : item.options || []
 };
+const getAttrs = (item) => {
+  let attrs = typeof item.attrs === 'function' ? item.attrs() : (item.attrs || {});
+  if (item.type === 'textarea') {
+    attrs = { ...attrs, type: 'textarea' };
+  }
+  return attrs;
+};
 const emit = defineEmits(['update:model'])
 </script>
 
@@ -128,7 +131,7 @@ const emit = defineEmits(['update:model'])
                 v-model="computedMap[parseFiled(item.prop)]"
                 :props="item.props"
                 :options="item.type === 'cascader' ? getOptions(item) : undefined"
-                v-bind="item.attrs"
+                v-bind="getAttrs(item)"
                 v-on="item.events || {}"
             >
               <!-- 渲染 options -->

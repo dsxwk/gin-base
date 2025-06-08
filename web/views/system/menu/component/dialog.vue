@@ -200,10 +200,12 @@ const formData = ref([
     prop: 'meta.isLink',
     type: 'input',
     col: 12,
-    attrs: {
-      placeholder: '外链/内嵌时链接地址（http:xxx.com）',
-      clearable: true,
-      disabled: !state.ruleForm.isLink
+    attrs: () => {
+      return {
+        placeholder: '外链/内嵌时链接地址（http:xxx.com）',
+        clearable: true,
+        disabled: !state.ruleForm.isLink
+      };
     }
   },
   {

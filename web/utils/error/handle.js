@@ -24,7 +24,7 @@ const errorHandler = (error) => {
         URIError: 'URI错误'
     };
 
-    if (error && error.code) {
+    /*if (error && error.code) {
         switch (error.code) {
             case 400:
                 errorMap[error.code] = '请求错误';
@@ -44,7 +44,7 @@ const errorHandler = (error) => {
             default:
                 break;
         }
-    }
+    }*/
 
     let errorName = errorMap[error.name] || errorMap[error.code] || '未知错误';
 

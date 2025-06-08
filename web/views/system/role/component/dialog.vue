@@ -23,8 +23,6 @@
 </template>
 <script setup name="systemRoleDialog">
 import {nextTick, onMounted, reactive, ref} from 'vue';
-import {storeToRefs} from 'pinia';
-import {useRoutesList} from '/@/stores/routesList';
 import {i18n} from '/@/static/i18n';
 import {roleApi} from '/@/api/role';
 import {ElMessage} from 'element-plus';
@@ -40,8 +38,6 @@ const props = defineProps({
 });
 const emit = defineEmits(['refresh']);
 const dialogFormRef = ref();
-const stores = useRoutesList();
-const {routesList} = storeToRefs(stores);
 const api = roleApi();
 
 const state = reactive({
@@ -95,15 +91,6 @@ const getFormData = () => {
   ];
 };
 const rules = {};
-const getData = (routes) => {
-  const arr = [];
-  routes.forEach((val) => {
-    val['title'] = i18n.global.t(val.meta?.title);
-    arr.push({...val});
-    if (val.children) getData(val.children);
-  });
-  return arr;
-};
 
 const openDialog = async (type, row) => {
   state.ruleForm = {

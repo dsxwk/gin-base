@@ -18,7 +18,7 @@
               <el-icon>
                 <ele-FolderAdd/>
               </el-icon>
-              新增菜单
+              新增字典
             </el-button>
           </div>
         </template>
@@ -64,9 +64,15 @@ const state = reactive({
     header: [
       {key: 'id', colWidth: '', title: 'ID', type: 'text', isCheck: true},
       {key: 'pid', colWidth: '', title: '父级id', type: 'text', isCheck: true},
-      {key: 'name', colWidth: '', title: '字典名称(英文)', type: 'text', isCheck: true},
-      {key: 'createdAt', colWidth: '', title: '创建时间', type: 'text', isCheck: true},
-      {key: 'updatedAt', colWidth: '', title: '更新时间', type: 'text', isCheck: true},
+      {key: 'name', colWidth: '140', title: '字典名称(英文)', type: 'text', isCheck: true},
+      {key: 'title', colWidth: '140', title: '字典名称(中文)', type: 'text', isCheck: true},
+      {key: 'label', colWidth: '', title: '映射值', type: 'text', isCheck: true},
+      {key: 'extend', colWidth: '100', title: '扩展字段', type: 'text', isCheck: true},
+      {key: 'sort', colWidth: '', title: '排序', type: 'text', isCheck: true},
+      {key: 'desc', colWidth: '', title: '描述', type: 'text', isCheck: true},
+      {key: 'status', colWidth: '', title: '状态', type: 'text', isCheck: true},
+      {key: 'createdAt', colWidth: '100', title: '创建时间', type: 'text', isCheck: true},
+      {key: 'updatedAt', colWidth: '100', title: '更新时间', type: 'text', isCheck: true},
     ],
     // 配置项（必传）
     config: {
@@ -104,11 +110,11 @@ const state = reactive({
     printName: 'ginBaseAdmin 表格打印演示',
   },
 });
-// 打开新增菜单弹窗
+// 打开新增弹窗
 const onOpenAddDict = (type) => {
   dictDialogRef.value.openDialog(type);
 };
-// 打开编辑菜单弹窗
+// 打开编辑弹窗
 const onOpenEditDict = (type, row) => {
   listRow.value = row;
   dictDialogRef.value.openDialog(type, row);

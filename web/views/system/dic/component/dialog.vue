@@ -24,9 +24,6 @@
 
 <script setup name="systemDictDialog">
 import {onMounted, reactive, ref, markRaw, nextTick} from 'vue';
-import {storeToRefs} from 'pinia';
-import {useRoutesList} from '/@/stores/routesList';
-import {i18n} from '/@/static/i18n';
 import {ElMessage} from 'element-plus';
 import {dictApi} from '/@/api/dict';
 import ConfigForm from '/@/components/form/index.vue';
@@ -47,14 +44,18 @@ const api = dictApi();
 
 // 定义变量内容
 const dialogFormRef = ref();
-const stores = useRoutesList();
-const { routesList } = storeToRefs(stores);
 const state = reactive({
   roles: [],
 	// 参数请参考 `/router/route.js` 中的 `dynamicRoutes` 路由字典格式
 	ruleForm: {
     dictSuperior: [], // 上级字典
     name: '', // 字典名称(英文)
+    title: '', // 字典名称(中文)
+    label: '', // 映射值
+    sort: 0, // 排序
+    extend: {}, // 扩展字段
+    desc: "", // 描述
+    status: 1, // 状态 1=启用 2=禁用
   },
 	dictData: [], // 上级字典数据
 	dialog: {
@@ -65,6 +66,51 @@ const state = reactive({
 	},
 });
 const formData = ref([
+  {
+    label: '英文名称',
+    prop: 'name',
+    type: 'input',
+    col: 12,
+    attrs: {
+      placeholder: '请输入字典名称(英文)',
+      clearable: true
+    },
+    rules: [
+      {
+        required: true,
+        message: "请输入字典名称(英文)",
+        trigger: "blur"
+      },
+    ]
+  },
+  {
+    label: '中文名称',
+    prop: 'title',
+    type: 'input',
+    col: 12,
+    attrs: {
+      placeholder: '请输入字典名称(中文)',
+      clearable: true
+    },
+    rules: [
+      {
+        required: true,
+        message: "请输入字典名称(中文)",
+        trigger: "blur"
+      },
+    ]
+  },
+  {
+    label: '映射值',
+    prop: 'label',
+    type: 'input',
+    col: 12,
+    attrs: {
+      placeholder: '请输入映射值',
+      clearable: true
+    },
+    rules: []
+  },
   {
     label: '上级字典',
     prop: 'dictSuperior',
@@ -85,23 +131,6 @@ const formData = ref([
     slotDefault: markRaw(CascaderLabel),
   },
   {
-    label: '字典名称(英文)',
-    prop: 'name',
-    type: 'input',
-    col: 12,
-    attrs: {
-      placeholder: '请输入字典名称(英文)',
-      clearable: true
-    },
-    rules: [
-      {
-        required: true,
-        message: "请输入字典名称(英文)",
-        trigger: "blur"
-      },
-    ]
-  },
-  {
     label: '状态',
     prop: 'status',
     type: 'select',
@@ -118,23 +147,36 @@ const formData = ref([
     ],
     attrs: {
       placeholder: '请选择状态',
-      multiple: true,
       clearable: true,
       class: 'w100'
     },
   },
+  {
+    label: '扩展字典',
+    prop: 'extend',
+    type: 'textarea',
+    col: 24,
+    attrs: {
+      placeholder: '请输入扩展字典(json字符串)',
+      clearable: true,
+      class: 'w100',
+      rows: 3
+    },
+  },
+  {
+  label: '描述',
+    prop: 'desc',
+    type: 'textarea',
+    col: 24,
+    attrs: {
+      placeholder: '请输入描述',
+      clearable: true,
+      class: 'w100',
+      rows: 3
+    },
+  }
 ]);
 const rules = {};
-// 获取 pinia 中的路由
-const getData = (routes) => {
-	const arr = [];
-	routes.map((val) => {
-		val['title'] = i18n.global.t(val.meta?.title);
-		arr.push({ ...val });
-		if (val.children) getData(val.children);
-	});
-	return arr;
-};
 // 递归查找父级 path 数组
 function findPathById(data, targetId, pathArr = []) {
   for (const item of data) {
@@ -165,7 +207,12 @@ const openDialog = async (type, row) => {
   state.ruleForm = {
     dictSuperior: [], // 上级字典
     name: '', // 字典名称(英文)
-    status: 1, // 状态 1=启用 0=禁用
+    title: '', // 字典名称(中文)
+    label: '', // 映射值
+    sort: 0, // 排序
+    extend: [], // 扩展字段
+    desc: "", // 描述
+    status: 1, // 状态 1=启用 2=禁用
   };
   if (type === 'edit') {
     const data = await detail(row.id);
@@ -174,6 +221,11 @@ const openDialog = async (type, row) => {
         state.ruleForm[key] = data[key];
       }
     });
+    if (typeof data.extend === 'object' && data.extend !== null) {
+      state.ruleForm.extend = JSON.stringify(data.extend, null, 2);
+    } else {
+      state.ruleForm.extend = data.extend || '';
+    }
     // 设置上级字典默认选中
     if (row.pid) {
       state.ruleForm.dictSuperior = findPathById(state.dictData, row.pid);
@@ -212,6 +264,15 @@ const onSubmit = async () => {
     state.ruleForm.pid = 0; // 顶级字典
   }
 
+  if (state.ruleForm.extend !== '' && typeof state.ruleForm.extend === 'string') {
+    try {
+      state.ruleForm.extend = JSON.parse(state.ruleForm.extend);
+    } catch (e) {
+      ElMessage.error('扩展字典格式错误，请输入合法的 JSON 字符串');
+      return;
+    }
+  }
+
   dialogFormRef.value.validate(async (valid) => {
     if (!valid) return;
 
@@ -235,9 +296,13 @@ const detail = async (id) => {
 
   return res.data;
 };
+const getData = async () => {
+  const data = await api.list();
+  state.dictData = data.data;
+};
 // 页面加载时
 onMounted(() => {
-	state.dictData = getData(routesList.value);
+	getData();
 });
 // 暴露变量
 defineExpose({

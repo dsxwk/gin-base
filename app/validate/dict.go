@@ -10,7 +10,7 @@ type Dict struct {
 	ID     int64  `json:"id" validate:"required" label:"ID"`
 	PID    int64  `json:"pid" validate:"required" label:"父级ID"`
 	Name   string `json:"name" form:"name" validate:"required" label:"字段名称(英文)"`
-	Value  string `json:"value" validate:"required" label:"字段名称(中文)"`
+	Title  string `json:"title" validate:"required" label:"字段名称(中文)"`
 	Label  string `json:"label" validate:"required" label:"映射值"`
 	Status int64  `json:"status" validate:"required" label:"状态 1=启用 2=停用"`
 }
@@ -32,8 +32,8 @@ func (s Dict) ConfigValidation(v *validator.Validation) {
 	v.WithScenes(validator.SValues{
 		"get":    []string{"Name"},
 		"list":   []string{},
-		"create": []string{"Name", "Value", "Status"},
-		"update": []string{"ID", "Name", "Value", "Status"},
+		"create": []string{"Name", "Title", "Status"},
+		"update": []string{"ID", "Name", "Title", "Status"},
 		"detail": []string{"ID"},
 		"delete": []string{"ID"},
 	})

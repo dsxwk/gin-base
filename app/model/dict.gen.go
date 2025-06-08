@@ -15,7 +15,7 @@ type Dict struct {
 	ID        int64           `gorm:"column:id;type:int(10) unsigned;primaryKey;autoIncrement:true;comment:ID" json:"id"`           // ID
 	Pid       int64           `gorm:"column:pid;type:int(10) unsigned;not null;comment:父级id" json:"pid"`                            // 父级id
 	Name      string          `gorm:"column:name;type:varchar(50);not null;comment:字段名称(英文)" json:"name"`                           // 字段名称(英文)
-	Value     string          `gorm:"column:value;type:varchar(100);not null;comment:字段名称(中文)" json:"value"`                        // 字段名称(中文)
+	Title     string          `gorm:"column:title;type:varchar(100);not null;comment:字段名称(中文)" json:"title"`                        // 字段名称(中文)
 	Label     string          `gorm:"column:label;type:varchar(100);not null;comment:映射值" json:"label"`                             // 映射值
 	Status    int64           `gorm:"column:status;type:tinyint(3) unsigned;not null;default:1;comment:状态 1=启用 2=停用" json:"status"` // 状态 1=启用 2=停用
 	Sort      int64           `gorm:"column:sort;type:int(10) unsigned;not null;comment:排序" json:"sort"`                            // 排序

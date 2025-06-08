@@ -1,5 +1,8 @@
 // import {ElNotification} from 'element-plus';
 import pnotify from '/@/utils/pnotify/alert.js';
+import pnotifyConfirm from '/@/utils/pnotify/confirm.js';
+import {Session} from '/@/utils/storage';
+import {ElMessage} from 'element-plus';
 
 /**
  * 全局代码错误捕捉
@@ -24,7 +27,7 @@ const errorHandler = (error) => {
         URIError: 'URI错误'
     };
 
-    /*if (error && error.code) {
+    if (error && error.code) {
         switch (error.code) {
             case 400:
                 errorMap[error.code] = '请求错误';
@@ -44,11 +47,30 @@ const errorHandler = (error) => {
             default:
                 break;
         }
-    }*/
+    }
 
     let errorName = errorMap[error.name] || errorMap[error.code] || '未知错误';
 
     pnotify.error(typeof error === 'string' ? error : error?.msg, errorName);
+
+    if (error?.code === 401) {
+        Session.clear();
+        pnotifyConfirm.notice(
+            '登录已过期, 点击确定跳转至登录',
+            typeof error === 'string' ? error : error?.msg, errorName
+        ).then(
+            () => {
+                window.location.href = '/';
+            }
+        ).catch(
+            () => {
+                ElMessage.info('已取消');
+                setTimeout(function () {
+                    window.location.reload();
+                }, 100);
+            }
+        );
+    }
 
     // ElNotification({
     //     title: errorName,

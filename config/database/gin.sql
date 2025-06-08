@@ -1,7 +1,7 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : 127.0.0.1
+ Source Server         : localhost
  Source Server Type    : MySQL
  Source Server Version : 80012
  Source Host           : 127.0.0.1:3306
@@ -11,7 +11,7 @@
  Target Server Version : 80012
  File Encoding         : 65001
 
- Date: 05/06/2025 16:33:35
+ Date: 08/06/2025 16:16:24
 */
 
 SET NAMES utf8mb4;
@@ -90,7 +90,9 @@ DROP TABLE IF EXISTS `dict`;
 CREATE TABLE `dict`  (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `pid` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '父级id',
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '字段名称',
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '字段名称(英文)',
+  `title` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '字段名称(中文)',
+  `label` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '映射值',
   `status` tinyint(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT '状态 1=启用 2=停用',
   `sort` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '排序',
   `extend` json NULL COMMENT '扩展字段',
@@ -101,11 +103,14 @@ CREATE TABLE `dict`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_pid`(`pid`) USING BTREE,
   INDEX `idx_name`(`name`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '字典表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '字典表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of dict
 -- ----------------------------
+INSERT INTO `dict` VALUES (1, 0, 'gender', '性别', '', 1, 0, '{\"test\": 111, \"test2\": \"test222\"}', '', '2025-06-06 21:48:17', '2025-06-06 21:48:17', NULL);
+INSERT INTO `dict` VALUES (2, 1, 'gender', '男', '1', 1, 0, '{\"a\": 11, \"b\": 22}', '测试', '2025-06-06 21:49:00', '2025-06-08 16:05:39', NULL);
+INSERT INTO `dict` VALUES (3, 1, 'gender', '女', '2', 1, 0, '{\"test\": 111, \"test2\": \"test222\"}', '', '2025-06-06 21:49:10', '2025-06-06 21:49:10', NULL);
 
 -- ----------------------------
 -- Table structure for menu
@@ -127,7 +132,7 @@ CREATE TABLE `menu`  (
   `deleted_at` datetime NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_pid`(`pid`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '菜单表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '菜单表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of menu
@@ -138,6 +143,9 @@ INSERT INTO `menu` VALUES (3, 2, 'systemMenu', '/system/menu', '', 'system/menu/
 INSERT INTO `menu` VALUES (4, 2, 'systemUser', '/system/user', '', 'system/user/index', 2, 1, 0, '{\"icon\": \"iconfont icon-icon-\", \"roles\": [], \"title\": \"message.router.systemUser\", \"isHide\": false, \"isLink\": \"\", \"isAffix\": false, \"isIframe\": false, \"isKeepAlive\": true}', '2025-05-23 23:26:38', '2025-05-25 14:32:17', NULL);
 INSERT INTO `menu` VALUES (5, 2, 'systemRole', '/system/role', '', 'system/role/index', 2, 1, 0, '{\"icon\": \"fa fa-user-circle-o\", \"roles\": [], \"title\": \"message.router.systemRole\", \"isHide\": false, \"isLink\": \"\", \"isAffix\": false, \"isIframe\": false, \"isKeepAlive\": true}', '2025-05-25 14:37:04', '2025-05-25 14:55:29', NULL);
 INSERT INTO `menu` VALUES (6, 2, 'systemDic', '/system/dic', '', 'system/dic/index', 2, 1, 0, '{\"icon\": \"ele-Collection\", \"roles\": [], \"title\": \"message.router.systemDic\", \"isHide\": false, \"isLink\": \"\", \"isAffix\": false, \"isIframe\": false, \"isKeepAlive\": true}', '2025-05-25 14:54:04', '2025-05-25 14:54:04', NULL);
+INSERT INTO `menu` VALUES (7, 6, 'assa', 'sssss', 'sddssd', 'sadasd', 2, 1, 0, '{\"icon\": \"\", \"roles\": [2], \"title\": \"asdsdsdsd\", \"isHide\": false, \"isLink\": \"\", \"isAffix\": false, \"isIframe\": false, \"isKeepAlive\": false}', '2025-06-06 09:19:31', '2025-06-06 10:21:50', '2025-06-06 10:55:59');
+INSERT INTO `menu` VALUES (8, 7, 'sddssd', 'sddssddssdd', 'sdsdsdsd', 'dssdsdsd', 2, 1, 0, '{\"icon\": \"iconfont icon-yunshangchuan_o\", \"roles\": [2], \"title\": \"dssdsd\", \"isHide\": false, \"isLink\": \"\", \"isAffix\": false, \"isIframe\": false, \"isKeepAlive\": true}', '2025-06-06 10:35:00', '2025-06-06 10:35:00', '2025-06-06 10:55:33');
+INSERT INTO `menu` VALUES (9, 6, 'asddsa', 'sadasd', 'asdsadds', 'asddsd', 2, 1, 0, '{\"icon\": \"iconfont icon-yunxiazai_o\", \"roles\": [2], \"title\": \"csdassa\", \"isHide\": false, \"isLink\": \"\", \"isAffix\": false, \"isIframe\": false, \"isKeepAlive\": true}', '2025-06-06 11:01:30', '2025-06-06 11:01:30', '2025-06-06 11:01:42');
 
 -- ----------------------------
 -- Table structure for menu_action
@@ -179,7 +187,7 @@ CREATE TABLE `menu_roles`  (
   `updated_at` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `deleted_at` datetime NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '菜单角色表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 25 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '菜单角色表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of menu_roles
@@ -192,6 +200,12 @@ INSERT INTO `menu_roles` VALUES (5, 5, 1, 'admin', '2025-05-26 17:50:37', '2025-
 INSERT INTO `menu_roles` VALUES (6, 6, 1, 'admin', '2025-05-26 17:50:37', '2025-05-26 17:50:37', NULL);
 INSERT INTO `menu_roles` VALUES (17, 3, 1, 'admin', '2025-05-29 10:39:41', '2025-05-29 10:39:41', '2025-05-29 10:39:41');
 INSERT INTO `menu_roles` VALUES (18, 3, 1, 'admin', '2025-05-29 10:39:41', '2025-05-29 10:39:41', NULL);
+INSERT INTO `menu_roles` VALUES (19, 7, 2, 'test', '2025-06-06 10:21:50', '2025-06-06 10:21:50', '2025-06-06 10:21:50');
+INSERT INTO `menu_roles` VALUES (20, 7, 2, 'test', '2025-06-06 10:21:50', '2025-06-06 10:21:50', '2025-06-06 10:55:59');
+INSERT INTO `menu_roles` VALUES (21, 8, 2, 'test', '2025-06-06 10:35:00', '2025-06-06 10:35:00', '2025-06-06 10:55:33');
+INSERT INTO `menu_roles` VALUES (22, 8, 2, 'test', '2025-06-06 10:35:00', '2025-06-06 10:35:00', '2025-06-06 10:55:33');
+INSERT INTO `menu_roles` VALUES (23, 9, 2, 'test', '2025-06-06 11:01:30', '2025-06-06 11:01:30', '2025-06-06 11:01:42');
+INSERT INTO `menu_roles` VALUES (24, 9, 2, 'test', '2025-06-06 11:01:30', '2025-06-06 11:01:30', '2025-06-06 11:01:42');
 
 -- ----------------------------
 -- Table structure for roles
@@ -206,13 +220,14 @@ CREATE TABLE `roles`  (
   `updated_at` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `deleted_at` datetime NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '角色表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '角色表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of roles
 -- ----------------------------
 INSERT INTO `roles` VALUES (1, 'admin', '超级管理员', 1, '2025-05-26 16:52:43', '2025-05-26 16:52:50', NULL);
 INSERT INTO `roles` VALUES (2, 'test', '测试', 1, '2025-05-28 10:47:22', '2025-05-28 10:47:22', NULL);
+INSERT INTO `roles` VALUES (3, '1111', '1111', 1, '2025-06-06 09:51:06', '2025-06-06 09:51:06', '2025-06-06 09:51:10');
 
 -- ----------------------------
 -- Table structure for system_config
@@ -307,7 +322,7 @@ INSERT INTO `user` VALUES (31, '', 'test13', '李四13', 'ls13@qq.com', '$2a$10$
 INSERT INTO `user` VALUES (32, '', 'test14', '测试14', 'test14@qq.com', '$2a$10$Ww.IvYhlDpNt6Uq07X5W0OswksocMpae9dmaE2TaHclINQoBUF3Fq', '昵称', 1, 22, 1, '2023-09-07 17:48:39', '2023-09-12 09:52:47', '2023-09-12 09:53:12');
 INSERT INTO `user` VALUES (33, '', 'dsx5', '大师兄5', 'dsx5@qq.com', '$2a$10$Y2FUvgUMpMlJ5h/oooH7OOdInCZgheFQaiVkKu0Wx6YcXhiylAT3a', '大师兄1', 1, 0, 1, '2024-07-22 17:34:36', '2024-07-22 17:34:36', NULL);
 INSERT INTO `user` VALUES (34, '', 'admin7', '张三7', 'zs7@qq.com', '$2a$10$OcSkSCBe8D5tGL2ulmJhTe0Xboy/fzwS1H7AdmkJjpQZfeGUHr5S6', 'dsx', 1, 28, 1, '2023-09-05 17:29:36', '2023-09-12 14:47:48', NULL);
-INSERT INTO `user` VALUES (35, '', 'test15', '李四15', 'ls15@qq.com', '$2a$10$kycb2DM8CnubeoWABNPA1O2b0MrQQDqGsEZg8EuqK4G0a63EYDr.2', '昵称22', 1, 1, 1, '2023-09-06 11:38:50', '2023-09-13 09:29:27', NULL);
+INSERT INTO `user` VALUES (35, '', 'test15', '李四15', 'ls15@qq.com', '$2a$10$kycb2DM8CnubeoWABNPA1O2b0MrQQDqGsEZg8EuqK4G0a63EYDr.2', '昵称22', 1, 1, 1, '2023-09-06 11:38:50', '2023-09-13 09:29:27', '2025-06-06 09:50:57');
 INSERT INTO `user` VALUES (36, '', 'test111', '测试16', 'test16@qq.com', '$2a$10$Ww.IvYhlDpNt6Uq07X5W0OswksocMpae9dmaE2TaHclINQoBUF3Fq', '昵称111', 1, 22, 1, '2023-09-07 17:48:39', '2023-09-12 09:52:47', '2023-09-12 09:53:12');
 INSERT INTO `user` VALUES (37, '', 'testlisi', '测试李四', 'testlisi@qq.com', '$2a$10$1ED8aAx2IyYXUczXNh/2h.lAWcZdjXZShKBse6/0UBRDmUG1Y8j5G', '测试李四', 1, 31, 1, '2025-05-16 10:43:32', '2025-05-16 16:34:07', '2025-05-16 16:38:16');
 

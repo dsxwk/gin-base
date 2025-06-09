@@ -11,7 +11,7 @@
  Target Server Version : 80012
  File Encoding         : 65001
 
- Date: 09/06/2025 16:03:32
+ Date: 09/06/2025 16:58:19
 */
 
 SET NAMES utf8mb4;
@@ -143,9 +143,6 @@ INSERT INTO `menu` VALUES (3, 2, 'systemMenu', '/system/menu', '', 'system/menu/
 INSERT INTO `menu` VALUES (4, 2, 'systemUser', '/system/user', '', 'system/user/index', 2, 1, 0, '{\"icon\": \"iconfont icon-icon-\", \"roles\": [], \"title\": \"message.router.systemUser\", \"isHide\": false, \"isLink\": \"\", \"isAffix\": false, \"isIframe\": false, \"isKeepAlive\": true}', '2025-05-23 23:26:38', '2025-05-25 14:32:17', NULL);
 INSERT INTO `menu` VALUES (5, 2, 'systemRole', '/system/role', '', 'system/role/index', 2, 1, 0, '{\"icon\": \"fa fa-user-circle-o\", \"roles\": [], \"title\": \"message.router.systemRole\", \"isHide\": false, \"isLink\": \"\", \"isAffix\": false, \"isIframe\": false, \"isKeepAlive\": true}', '2025-05-25 14:37:04', '2025-05-25 14:55:29', NULL);
 INSERT INTO `menu` VALUES (6, 2, 'systemDic', '/system/dic', '', 'system/dic/index', 2, 1, 0, '{\"icon\": \"ele-Collection\", \"roles\": [], \"title\": \"message.router.systemDic\", \"isHide\": false, \"isLink\": \"\", \"isAffix\": false, \"isIframe\": false, \"isKeepAlive\": true}', '2025-05-25 14:54:04', '2025-05-25 14:54:04', NULL);
-INSERT INTO `menu` VALUES (7, 6, 'assa', 'sssss', 'sddssd', 'sadasd', 2, 1, 0, '{\"icon\": \"\", \"roles\": [2], \"title\": \"asdsdsdsd\", \"isHide\": false, \"isLink\": \"\", \"isAffix\": false, \"isIframe\": false, \"isKeepAlive\": false}', '2025-06-06 09:19:31', '2025-06-06 10:21:50', '2025-06-06 10:55:59');
-INSERT INTO `menu` VALUES (8, 7, 'sddssd', 'sddssddssdd', 'sdsdsdsd', 'dssdsdsd', 2, 1, 0, '{\"icon\": \"iconfont icon-yunshangchuan_o\", \"roles\": [2], \"title\": \"dssdsd\", \"isHide\": false, \"isLink\": \"\", \"isAffix\": false, \"isIframe\": false, \"isKeepAlive\": true}', '2025-06-06 10:35:00', '2025-06-06 10:35:00', '2025-06-06 10:55:33');
-INSERT INTO `menu` VALUES (9, 6, 'asddsa', 'sadasd', 'asdsadds', 'asddsd', 2, 1, 0, '{\"icon\": \"iconfont icon-yunxiazai_o\", \"roles\": [2], \"title\": \"csdassa\", \"isHide\": false, \"isLink\": \"\", \"isAffix\": false, \"isIframe\": false, \"isKeepAlive\": true}', '2025-06-06 11:01:30', '2025-06-06 11:01:30', '2025-06-06 11:01:42');
 
 -- ----------------------------
 -- Table structure for menu_action
@@ -153,6 +150,7 @@ INSERT INTO `menu` VALUES (9, 6, 'asddsa', 'sadasd', 'asdsadds', 'asddsd', 2, 1,
 DROP TABLE IF EXISTS `menu_action`;
 CREATE TABLE `menu_action`  (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `pid` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '父级id',
   `menu_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '菜单id',
   `type` tinyint(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT '类型 1=header 2=operation',
   `btn_type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'btn' COMMENT '按钮类型 text|btn',
@@ -172,11 +170,11 @@ CREATE TABLE `menu_action`  (
 -- ----------------------------
 -- Records of menu_action
 -- ----------------------------
-INSERT INTO `menu_action` VALUES (1, 3, 1, 'btn', 'primary', 'small', 2, '新增菜单', 2, 0, '2025-05-21 10:24:14', '2025-06-03 16:54:37', NULL);
-INSERT INTO `menu_action` VALUES (2, 3, 2, 'btn', 'primary', 'small', 2, '编辑', 2, 0, '2025-05-21 10:30:24', '2025-05-21 10:30:24', NULL);
-INSERT INTO `menu_action` VALUES (3, 3, 2, 'btn', 'primary', 'small', 2, '功能', 2, 0, '2025-05-21 10:30:37', '2025-05-21 10:30:37', NULL);
-INSERT INTO `menu_action` VALUES (4, 3, 2, 'btn', 'danger', 'small', 1, '删除', 2, 0, '2025-05-21 10:30:49', '2025-05-21 10:30:49', NULL);
-INSERT INTO `menu_action` VALUES (5, 3, 1, 'btn', 'primary', 'small', 2, '测试', 2, 0, '2025-06-03 16:48:56', '2025-06-03 16:48:56', '2025-06-03 16:55:38');
+INSERT INTO `menu_action` VALUES (1, 0, 3, 1, 'btn', 'primary', 'small', 2, '新增菜单', 2, 0, '2025-05-21 10:24:14', '2025-06-03 16:54:37', NULL);
+INSERT INTO `menu_action` VALUES (2, 0, 3, 2, 'btn', 'primary', 'small', 2, '编辑', 2, 0, '2025-05-21 10:30:24', '2025-05-21 10:30:24', NULL);
+INSERT INTO `menu_action` VALUES (3, 0, 3, 2, 'btn', 'primary', 'small', 2, '功能', 2, 0, '2025-05-21 10:30:37', '2025-05-21 10:30:37', NULL);
+INSERT INTO `menu_action` VALUES (4, 0, 3, 2, 'btn', 'danger', 'small', 1, '删除', 2, 0, '2025-05-21 10:30:49', '2025-05-21 10:30:49', NULL);
+INSERT INTO `menu_action` VALUES (5, 0, 3, 1, 'btn', 'primary', 'small', 2, '测试', 2, 0, '2025-06-03 16:48:56', '2025-06-03 16:48:56', '2025-06-03 16:55:38');
 
 -- ----------------------------
 -- Table structure for menu_roles

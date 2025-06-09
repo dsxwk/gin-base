@@ -13,6 +13,7 @@ const TableNameMenuAction = "menu_action"
 // MenuAction 菜单功能表
 type MenuAction struct {
 	ID          int64           `gorm:"column:id;type:int(10) unsigned;primaryKey;autoIncrement:true;comment:ID" json:"id"`                  // ID
+	PID         int64           `gorm:"column:pid;type:int(10) unsigned;not null;comment:菜单id" json:"pid"`                                   // 父级id
 	MenuID      int64           `gorm:"column:menu_id;type:int(10) unsigned;not null;comment:菜单id" json:"menuId"`                            // 菜单id
 	Type        int64           `gorm:"column:type;type:tinyint(3) unsigned;not null;default:1;comment:类型 1=header 2=operation" json:"type"` // 类型 1=header 2=operation
 	BtnType     string          `gorm:"column:btn_type;type:varchar(20);not null;default:btn;comment:按钮类型 text|btn" json:"btnType"`          // 按钮类型 text|btn

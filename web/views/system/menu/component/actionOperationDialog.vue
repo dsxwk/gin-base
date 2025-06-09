@@ -45,6 +45,8 @@ const state = reactive({
   roles: [],
   selectedRoleIds: [],
   ruleForm: {
+    superior: [], // 上级
+    pid: 0, // 父级id
     menuId: "", // 菜单id
     type: "", // 类型 1=header 2=operation
     btnType: "", // 按钮类型 text|btn
@@ -245,6 +247,7 @@ const dialogFormRef = ref();
 // 打开弹窗
 const openDialog = async (type, row) => {
   state.ruleForm = {
+    pid: 0, // 父级id
     menuId: props.menuId, // 菜单id
     type: "", // 类型 1=header 2=operation
     btnType: "", // 按钮类型 text|btn

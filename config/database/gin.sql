@@ -1,7 +1,7 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : localhost
+ Source Server         : 127.0.0.1
  Source Server Type    : MySQL
  Source Server Version : 80012
  Source Host           : 127.0.0.1:3306
@@ -11,7 +11,7 @@
  Target Server Version : 80012
  File Encoding         : 65001
 
- Date: 08/06/2025 20:59:03
+ Date: 09/06/2025 16:03:32
 */
 
 SET NAMES utf8mb4;
@@ -57,7 +57,7 @@ CREATE TABLE `article`  (
   `updated_at` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `deleted_at` datetime NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '文章表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '文章表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of article
@@ -76,7 +76,7 @@ CREATE TABLE `category`  (
   `updated_at` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `deleted_at` datetime NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '分类表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '分类表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of category
@@ -103,7 +103,7 @@ CREATE TABLE `dict`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_pid`(`pid`) USING BTREE,
   INDEX `idx_name`(`name`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '字典表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '字典表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of dict
@@ -155,6 +155,10 @@ CREATE TABLE `menu_action`  (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `menu_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '菜单id',
   `type` tinyint(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT '类型 1=header 2=operation',
+  `btn_type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'btn' COMMENT '按钮类型 text|btn',
+  `btn_style` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'primary' COMMENT '按钮样式',
+  `btn_size` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'small' COMMENT '按钮尺寸',
+  `is_confirm` tinyint(3) UNSIGNED NOT NULL DEFAULT 2 COMMENT '是否确认 1=是 2=否',
   `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '功能名称',
   `is_link` tinyint(3) UNSIGNED NOT NULL DEFAULT 2 COMMENT '是否为链接 1=是 2=否',
   `sort` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '排序',
@@ -168,11 +172,11 @@ CREATE TABLE `menu_action`  (
 -- ----------------------------
 -- Records of menu_action
 -- ----------------------------
-INSERT INTO `menu_action` VALUES (1, 3, 1, '新增菜单', 2, 0, '2025-05-21 10:24:14', '2025-06-03 16:54:37', NULL);
-INSERT INTO `menu_action` VALUES (2, 3, 2, '编辑', 2, 0, '2025-05-21 10:30:24', '2025-05-21 10:30:24', NULL);
-INSERT INTO `menu_action` VALUES (3, 3, 2, '功能', 2, 0, '2025-05-21 10:30:37', '2025-05-21 10:30:37', NULL);
-INSERT INTO `menu_action` VALUES (4, 3, 2, '删除', 2, 0, '2025-05-21 10:30:49', '2025-05-21 10:30:49', NULL);
-INSERT INTO `menu_action` VALUES (5, 3, 1, '测试', 2, 0, '2025-06-03 16:48:56', '2025-06-03 16:48:56', '2025-06-03 16:55:38');
+INSERT INTO `menu_action` VALUES (1, 3, 1, 'btn', 'primary', 'small', 2, '新增菜单', 2, 0, '2025-05-21 10:24:14', '2025-06-03 16:54:37', NULL);
+INSERT INTO `menu_action` VALUES (2, 3, 2, 'btn', 'primary', 'small', 2, '编辑', 2, 0, '2025-05-21 10:30:24', '2025-05-21 10:30:24', NULL);
+INSERT INTO `menu_action` VALUES (3, 3, 2, 'btn', 'primary', 'small', 2, '功能', 2, 0, '2025-05-21 10:30:37', '2025-05-21 10:30:37', NULL);
+INSERT INTO `menu_action` VALUES (4, 3, 2, 'btn', 'danger', 'small', 1, '删除', 2, 0, '2025-05-21 10:30:49', '2025-05-21 10:30:49', NULL);
+INSERT INTO `menu_action` VALUES (5, 3, 1, 'btn', 'primary', 'small', 2, '测试', 2, 0, '2025-06-03 16:48:56', '2025-06-03 16:48:56', '2025-06-03 16:55:38');
 
 -- ----------------------------
 -- Table structure for menu_roles
@@ -246,7 +250,7 @@ CREATE TABLE `system_config`  (
   `deleted_at` datetime NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uni_en_name`(`en_name`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '系统配置表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '系统配置表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of system_config

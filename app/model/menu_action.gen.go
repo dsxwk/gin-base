@@ -15,6 +15,10 @@ type MenuAction struct {
 	ID          int64           `gorm:"column:id;type:int(10) unsigned;primaryKey;autoIncrement:true;comment:ID" json:"id"`                  // ID
 	MenuID      int64           `gorm:"column:menu_id;type:int(10) unsigned;not null;comment:菜单id" json:"menuId"`                            // 菜单id
 	Type        int64           `gorm:"column:type;type:tinyint(3) unsigned;not null;default:1;comment:类型 1=header 2=operation" json:"type"` // 类型 1=header 2=operation
+	BtnType     string          `gorm:"column:btn_type;type:varchar(20);not null;default:btn;comment:按钮类型 text|btn" json:"btnType"`          // 按钮类型 text|btn
+	BtnStyle    string          `gorm:"column:btn_style;type:varchar(20);not null;default:primary;comment:按钮样式" json:"btnStyle"`             // 按钮样式
+	BtnSize     string          `gorm:"column:btn_size;type:varchar(20);not null;default:small;comment:按钮尺寸" json:"btnSize"`                 // 按钮尺寸
+	IsConfirm   int64           `gorm:"column:is_confirm;type:tinyint(3) unsigned;not null;default:2;comment:是否确认 1=是 2=否" json:"isConfirm"` // 是否确认 1=是 2=否
 	Name        string          `gorm:"column:name;type:varchar(30);not null;comment:功能名称" json:"name"`                                      // 功能名称
 	IsLink      BoolInt64       `gorm:"column:is_link;type:tinyint(3) unsigned;not null;default:2;comment:是否为链接 1=是 2=否" json:"isLink"`      // 是否为链接 1=是 2=否
 	Sort        int64           `gorm:"column:sort;type:int(10) unsigned;not null;comment:排序" json:"sort"`                                   // 排序

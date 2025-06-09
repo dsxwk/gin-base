@@ -1,6 +1,7 @@
 <template>
   <div class="system-menu-dialog-container">
-    <el-dialog :title="state.dialog.title" v-if="state.dialog.isShowDialog" v-model="state.dialog.isShowDialog" width="769px">
+    <el-dialog :title="state.dialog.title" v-if="state.dialog.isShowDialog" v-model="state.dialog.isShowDialog"
+               width="769px">
       <ConfigForm
           ref="dialogFormRef"
           v-model:model="state.ruleForm"
@@ -22,10 +23,10 @@
   </div>
 </template>
 <script setup name="systemMenuActionOperationDialog">
-import {nextTick, onMounted, reactive, ref} from 'vue';
+import {computed, nextTick, onMounted, reactive, ref} from 'vue';
 import {ElMessage} from 'element-plus';
 import ConfigForm from "/@/components/form/index.vue";
-import {actionTypeDict} from '/@/dict/menu';
+import {actionTypeDict, btnSizeDict, btnStyleDict, btnTypeDict, isConfirmDict} from '/@/dict/menu';
 import {menuApi} from '/@/api/menu';
 
 const api = menuApi();
@@ -46,6 +47,10 @@ const state = reactive({
   ruleForm: {
     menuId: "", // 菜单id
     type: "", // 类型 1=header 2=operation
+    btnType: "", // 按钮类型 text|btn
+    btnStyle: "", // 按钮样式
+    btnSize: "", // 按钮尺寸
+    isConfirm: 2, // 是否确认
     name: "", // 功能名称
     isLink: false, // 是否为链接 1=是 2=否
     sort: 0, // 排序
@@ -59,7 +64,7 @@ const state = reactive({
   },
 });
 
-const formData = ref([
+const formData = computed(() => [
   {
     label: "菜单id",
     prop: "menuId",
@@ -93,6 +98,82 @@ const formData = ref([
         trigger: "blur"
       }
     ]
+  },
+  {
+    label: "按钮类型",
+    prop: "btnType",
+    type: "select",
+    col: 12,
+    options: btnTypeDict,
+    attrs: {
+      placeholder: '请选择按钮类型',
+      clearable: true,
+      class: 'w100'
+    },
+    rules: [
+      {
+        required: true,
+        message: "请输入按钮类型",
+        trigger: "blur"
+      },
+    ],
+  },
+  {
+    label: "按钮样式",
+    prop: "btnStyle",
+    type: "select",
+    col: 12,
+    options: btnStyleDict,
+    attrs: {
+      placeholder: '请选择按钮样式',
+      clearable: true,
+      class: 'w100'
+    },
+    rules: [
+      {
+        required: true,
+        message: "请输入按钮样式",
+        trigger: "blur"
+      },
+    ],
+  },
+  {
+    label: "按钮尺寸",
+    prop: "btnSize",
+    type: "select",
+    col: 12,
+    options: btnSizeDict,
+    attrs: {
+      placeholder: '请选择按钮尺寸',
+      clearable: true,
+      class: 'w100'
+    },
+    rules: [
+      {
+        required: true,
+        message: "请输入按钮尺寸",
+        trigger: "blur"
+      },
+    ],
+  },
+  {
+    label: "是否确认",
+    prop: "isConfirm",
+    type: "select",
+    col: 12,
+    options: isConfirmDict,
+    attrs: {
+      placeholder: '请选择是否确认',
+      clearable: true,
+      class: 'w100'
+    },
+    rules: [
+      {
+        required: true,
+        message: "请输入是否确认",
+        trigger: "blur"
+      },
+    ],
   },
   {
     label: "功能名称",
@@ -166,6 +247,10 @@ const openDialog = async (type, row) => {
   state.ruleForm = {
     menuId: props.menuId, // 菜单id
     type: "", // 类型 1=header 2=operation
+    btnType: "", // 按钮类型 text|btn
+    btnStyle: "", // 按钮样式
+    btnSize: "", // 按钮尺寸
+    isConfirm: 2, // 是否确认
     name: "", // 功能名称
     isLink: false, // 是否为链接 1=是 2=否
     sort: 0, // 排序
@@ -236,12 +321,13 @@ const onSubmit = async () => {
 // 功能详情
 const detail = async (id) => {
   const res = await api.actionDetail({id: id, menuId: props.menuId});
-
-  return res.data;
+  const data = res.data;
+  data.actionRoles = data.actionRoles.map(role => role.roleId);
+  return data;
 };
 // 获取角色
 const getRoles = async () => {
-  const data = await api.roleList({page:1, pageSize: 10, isPage: false});
+  const data = await api.roleList({page: 1, pageSize: 10, isPage: false});
   state.roles = data.data;
 };
 // 页面加载时

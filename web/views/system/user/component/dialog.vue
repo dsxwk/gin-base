@@ -281,8 +281,10 @@ const getRoles = async () => {
 // 详情
 const detail = async (id) => {
   const res = await api.detail({id: id});
+  const data = res.data;
+  data.userRoles = data.userRoles.map(role => role.roleId);
 
-  return res.data;
+  return data;
 };
 onMounted(() => {
   getRoles();

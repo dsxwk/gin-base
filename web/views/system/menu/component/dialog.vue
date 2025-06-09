@@ -31,7 +31,7 @@ import {ElMessage} from 'element-plus';
 import {menuApi} from '/@/api/menu';
 import {initBackEndControlRoutes} from '/@/router/backEnd.js';
 import ConfigForm from '/@/components/form/index.vue';
-import {isAffixDict, isHideDict, isIframeDict, isKeepAliveDict} from '/@/dict/menu';
+import {isAffixDict, isHideDict, isIframeDict, isKeepAliveDict, isLinkDict} from '/@/dict/menu';
 import CascaderLabel from '/@/components/form/CascaderLabel.vue';
 
 const props = defineProps({
@@ -263,10 +263,7 @@ const formData = ref([
     attrs: {
       disabled: state.ruleForm.meta.isIframe
     },
-    options: [
-      { label: '是', value: true },
-      { label: '否', value: false }
-    ]
+    options: isLinkDict
   },
   {
     label: '是否内嵌',

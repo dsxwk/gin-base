@@ -51,13 +51,16 @@ const errorHandler = (error) => {
 
     let errorName = errorMap[error.name] || errorMap[error.code] || '未知错误';
 
-    pnotify.error(typeof error === 'string' ? error : error?.msg, errorName);
+    pnotify.error(
+        typeof error === 'string' ? error : error?.msg,
+        errorName
+    );
 
     if (error?.code === 401) {
         Session.clear();
         pnotifyConfirm.notice(
+            typeof error === 'string' ? error : error?.msg,
             '登录已过期, 点击确定跳转至登录',
-            typeof error === 'string' ? error : error?.msg, errorName
         ).then(
             () => {
                 window.location.href = '/';

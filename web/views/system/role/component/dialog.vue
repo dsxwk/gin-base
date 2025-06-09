@@ -22,8 +22,7 @@
   </div>
 </template>
 <script setup name="systemRoleDialog">
-import {nextTick, onMounted, reactive, ref} from 'vue';
-import {i18n} from '/@/static/i18n';
+import {computed, nextTick, onMounted, reactive, ref} from 'vue';
 import {roleApi} from '/@/api/role';
 import {ElMessage} from 'element-plus';
 import ConfigForm from '/@/components/form/index.vue';
@@ -54,7 +53,7 @@ const state = reactive({
   }
 });
 
-const getFormData = () => {
+const getFormData = computed(() => {
   return [
     {
       label: '角色名称',
@@ -89,7 +88,7 @@ const getFormData = () => {
       options: statusDict
     },
   ];
-};
+});
 const rules = {};
 
 const openDialog = async (type, row) => {

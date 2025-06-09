@@ -60,3 +60,31 @@ export const isIframeDict = [
     { label: '是', value: true },
     { label: '否', value: false },
 ];
+
+// 按钮类型
+export const btnTypeDict = [
+    { label: '按钮', value: 'btn' },
+    { label: '文本', value: 'text' },
+];
+
+// 是否确认
+export const isConfirmDict = [
+    { label: '是', value: 1 },
+    { label: '否', value: 2 },
+];
+
+// 按钮样式
+export const btnStyleDict = [
+    { label: 'primary', value: 'primary' },
+    { label: 'success', value: 'success' },
+    { label: 'warning', value: 'warning' },
+    { label: 'danger', value: 'danger' },
+    { label: 'info', value: 'info' },
+    { label: 'default', value: 'default' },
+];
+
+// 按钮尺寸
+export const btnSizeDict = [
+    { label: 'small', value: 'small' },
+    { label: 'default', value: 'default' },
+];

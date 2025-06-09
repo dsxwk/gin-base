@@ -40,7 +40,7 @@
 <script setup name="systemMenuActionDialog">
 import {defineAsyncComponent, reactive, ref} from 'vue';
 import {getDict} from "/@/utils/dict.js";
-import {actionIsLinkEnum, actionTypeDict} from '/@/dict/menu/index.js';
+import {actionIsLinkEnum, actionTypeDict, isConfirmDict} from '/@/dict/menu/index.js';
 import {menuApi} from '/@/api/menu';
 import {ElMessage} from 'element-plus';
 
@@ -72,20 +72,28 @@ const state = reactive({
           return getDict(actionTypeDict, scope.row?.type);
         }
       },
-      { key: 'name', colWidth: '', title: '功能名称', type: 'text', isCheck: true },
-      { key: 'isLink', colWidth: '', title: '是否为链接', type: 'text', isCheck: true,
+      { key: 'btnType', colWidth: '100', title: '按钮类型', type: 'text', isCheck: true },
+      { key: 'btnStyle', colWidth: '100', title: '按钮样式', type: 'text', isCheck: true },
+      { key: 'btnSize', colWidth: '100', title: '按钮大小', type: 'text', isCheck: true },
+      { key: 'isConfirm', colWidth: '100', title: '是否确认', type: 'text', isCheck: true,
+        render: (scope) => {
+          return getDict(isConfirmDict, scope.row?.isConfirm);
+        }
+      },
+      { key: 'name', colWidth: '100', title: '功能名称', type: 'text', isCheck: true },
+      { key: 'isLink', colWidth: '120', title: '是否为链接', type: 'text', isCheck: true,
         render: (scope) => {
           return getDict(actionIsLinkEnum, scope.row?.isLink);
         }
       },
       { key: 'sort', colWidth: '', title: '排序', type: 'text', isCheck: true },
-      {key: 'actionRoles', colWidth: '', width: '70', height: '40', title: '功能角色', isCheck: true,
+      {key: 'actionRoles', colWidth: '100', width: '', height: '40', title: '功能角色', isCheck: true,
         render: (scope) => {
           return scope.row?.actionRoles?.length > 0 ? scope.row?.actionRoles.map(item => item.name).join(',') : '';
         }
       },
-      {key: 'createdAt', colWidth: '', title: '创建时间', type: 'text', isCheck: true},
-      {key: 'updatedAt', colWidth: '', title: '更新时间', type: 'text', isCheck: true},
+      {key: 'createdAt', colWidth: '100', title: '创建时间', type: 'text', isCheck: true},
+      {key: 'updatedAt', colWidth: '100', title: '更新时间', type: 'text', isCheck: true},
     ],
     // 配置项（必传）
     config: {

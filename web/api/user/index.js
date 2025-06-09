@@ -38,6 +38,16 @@ export function userApi() {
                     value: true
                 }
             },
+            detail: {
+                name: '用户详情',
+                url: '/user/:id',
+                method: 'get',
+                params: {},
+                token: {
+                    name: 'token',
+                    value: true
+                }
+            },
             delete: {
                 name: '删除用户',
                 url: '/user/:id',

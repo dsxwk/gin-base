@@ -243,13 +243,13 @@ cache:
 package service
 
 import (
-	"gin-base/common"
+	"gin-base/common/base"
 	"gin-base/common/global"
 	"time"
 )
 
 type CacheService struct {
-	common.BaseService
+	base.BaseService
 }
 
 // SetCache 设置缓存
@@ -300,7 +300,7 @@ package service
 import (
 	"errors"
 	"gin-base/app/model"
-	"gin-base/common"
+	"gin-base/common/base"
 	"gin-base/common/global"
 	"gin-base/helper"
 	"gin-base/helper/utils"
@@ -308,7 +308,7 @@ import (
 )
 
 type LoginService struct {
-	common.BaseService
+	base.BaseService
 }
 
 // Login 登录
@@ -523,14 +523,14 @@ import (
 	"gin-base/app/model"
 	"gin-base/app/service"
 	"gin-base/app/validate"
-	"gin-base/common"
+	"gin-base/common/base"
 	"gin-base/common/global"
 	"github.com/gin-gonic/gin"
 	"strconv"
 )
 
 type ArticleController struct {
-	common.BaseController
+	base.BaseController
 }
 
 // List 列表

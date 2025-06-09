@@ -3,13 +3,13 @@ package service
 import (
 	"gin-base/app/model"
 	"gin-base/app/validate"
-	"gin-base/common"
+	"gin-base/common/base"
 	"gin-base/common/global"
 	"gin-base/helper/utils"
 )
 
 type RoleService struct {
-	common.BaseService
+	base.BaseService
 }
 
 // List 角色列表

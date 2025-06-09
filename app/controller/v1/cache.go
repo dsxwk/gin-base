@@ -3,14 +3,14 @@ package v1
 import (
 	"gin-base/app/service"
 	"gin-base/app/validate"
-	"gin-base/common"
+	"gin-base/common/base"
 	"gin-base/common/global"
 	"github.com/gin-gonic/gin"
 	"time"
 )
 
 type CacheController struct {
-	common.BaseController
+	base.BaseController
 }
 
 // SetCache 设置缓存

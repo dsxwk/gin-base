@@ -3,13 +3,13 @@ package service
 import (
 	"errors"
 	"gin-base/app/model"
-	"gin-base/common"
+	"gin-base/common/base"
 	"gin-base/common/global"
 	"gorm.io/gorm"
 )
 
 type DictService struct {
-	common.BaseService
+	base.BaseService
 }
 
 // List 列表

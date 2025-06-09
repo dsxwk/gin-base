@@ -1,14 +1,14 @@
 package service
 
 import (
-	"gin-base/common"
+	"gin-base/common/base"
 	"gin-base/common/global"
 	"gin-base/helper/utils"
 	"time"
 )
 
 type CacheService struct {
-	common.BaseService
+	base.BaseService
 }
 
 // SetCache 设置缓存

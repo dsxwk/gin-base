@@ -1,13 +1,13 @@
 package {{.Package}}
 
 import (
-    "gin-base/common"
+    "gin-base/common/base"
     "gin-base/common/global"
     "github.com/gin-gonic/gin"
 )
 
 type {{.Name}}Controller struct {
-    common.BaseController
+    base.BaseController
 }
 
 // {{.Function}} {{.Description}}

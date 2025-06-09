@@ -4,7 +4,7 @@ import (
 	"gin-base/app/model"
 	"gin-base/app/service"
 	"gin-base/app/validate"
-	"gin-base/common"
+	"gin-base/common/base"
 	"gin-base/common/global"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
@@ -12,7 +12,7 @@ import (
 )
 
 type DictController struct {
-	common.BaseController
+	base.BaseController
 }
 
 // List 列表

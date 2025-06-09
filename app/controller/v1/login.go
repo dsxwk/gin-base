@@ -4,7 +4,7 @@ import (
 	"gin-base/app/middleware"
 	"gin-base/app/service"
 	"gin-base/app/validate"
-	"gin-base/common"
+	"gin-base/common/base"
 	"gin-base/common/global"
 	"github.com/gin-gonic/gin"
 	"github.com/mojocn/base64Captcha"
@@ -12,7 +12,7 @@ import (
 )
 
 type LoginController struct {
-	common.BaseController
+	base.BaseController
 }
 
 // Login 登录

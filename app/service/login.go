@@ -3,7 +3,7 @@ package service
 import (
 	"errors"
 	"gin-base/app/model"
-	"gin-base/common"
+	"gin-base/common/base"
 	"gin-base/common/extend/event"
 	"gin-base/common/global"
 	"gin-base/helper/utils"
@@ -11,7 +11,7 @@ import (
 )
 
 type LoginService struct {
-	common.BaseService
+	base.BaseService
 }
 
 // Login 登录

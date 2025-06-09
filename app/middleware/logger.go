@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"bytes"
-	"gin-base/common"
+	"gin-base/common/base"
 	"gin-base/common/extend/context"
 	"gin-base/common/global"
 	"gin-base/config"
@@ -12,7 +12,7 @@ import (
 )
 
 type Logger struct {
-	common.BaseMiddleware
+	base.BaseMiddleware
 }
 
 // LoggerMiddleware 全局日志中间件

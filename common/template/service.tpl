@@ -1,11 +1,11 @@
 package {{.Package}}
 
 import (
-    "gin-base/common"
+    "gin-base/common/base"
 )
 
 type {{.Name}}Service struct {
-    common.BaseService
+    base.BaseService
 }
 
 // {{.Function}} {{.Description}}

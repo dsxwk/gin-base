@@ -2,11 +2,11 @@ package {{.Package}}
 
 import (
     "github.com/gin-gonic/gin"
-    "gin-base/common"
+    "gin-base/common/base"
 )
 
 type {{.Name}} struct {
-	common.BaseMiddleware
+	base.BaseMiddleware
 }
 
 // {{.Name}}Middleware {{.Description}}

@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"gin-base/common"
+	"gin-base/common/base"
 	"gin-base/common/global"
 	"gin-base/config"
 	"gin-base/helper/utils"
@@ -16,7 +16,7 @@ import (
 )
 
 type CliCommand struct {
-	common.BaseCommand
+	base.BaseCommand
 }
 
 type Options struct {

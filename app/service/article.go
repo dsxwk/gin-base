@@ -3,7 +3,7 @@ package service
 import (
 	"errors"
 	"gin-base/app/model"
-	"gin-base/common"
+	"gin-base/common/base"
 	"gin-base/common/global"
 	"gin-base/helper/utils"
 	"gorm.io/gorm"
@@ -11,7 +11,7 @@ import (
 )
 
 type ArticleService struct {
-	common.BaseService
+	base.BaseService
 }
 
 // List 列表

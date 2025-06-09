@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"fmt"
-	"gin-base/common"
+	"gin-base/common/base"
 	"gin-base/common/global"
 	"gin-base/config"
 	"github.com/dgrijalva/jwt-go"
@@ -11,7 +11,7 @@ import (
 )
 
 type Jwt struct {
-	common.BaseMiddleware
+	base.BaseMiddleware
 }
 
 var (

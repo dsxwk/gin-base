@@ -14,7 +14,7 @@ type Cache struct {
 }
 
 // InitCache 初始化缓存
-func InitCache() cache.CacheInterface {
+func InitCache(config *Config) cache.CacheInterface {
 	var (
 		c cache.CacheInterface
 	)
@@ -24,7 +24,7 @@ func InitCache() cache.CacheInterface {
 		c = cache.NewMemoryCache(5*time.Minute, 10*time.Minute)
 	} else if config.Cache.Type == "redis" {
 		// 使用 Redis 缓存
-		c = InitRedis()
+		c = InitRedis(config)
 	} else {
 		log.Fatalf("Unsupported cache type: %s", config.Cache.Type)
 	}

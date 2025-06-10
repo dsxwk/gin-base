@@ -32,7 +32,7 @@ type Mysql struct {
 }
 
 // InitMysql 初始化数据库
-func InitMysql() *gorm.DB {
+func InitMysql(config *Config, logs *Logger) *gorm.DB {
 	var (
 		err error
 		DB  *gorm.DB
@@ -62,7 +62,7 @@ func InitMysql() *gorm.DB {
 	q.SetConnMaxLifetime(59 * time.Second)
 
 	// 日志记录慢查询
-	LogSlowQuery(DB)
+	LogSlowQuery(DB, config, logs)
 
 	return DB
 }
@@ -88,7 +88,7 @@ func GetSQLLogs() []string {
 }
 
 // LogSlowQuery 日志记录慢查询
-func LogSlowQuery(DB *gorm.DB) {
+func LogSlowQuery(DB *gorm.DB, config *Config, logs *Logger) {
 	// 注册查询前回调
 	_ = DB.Callback().Query().Before("gorm:query").Register("slowquery:begin", func(db *gorm.DB) {
 		// 记录查询开始时间

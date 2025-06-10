@@ -19,19 +19,14 @@ type Config struct {
 	Service
 }
 
-var (
-	config = InitConfig()
-	logs   = InitLogger()
-)
-
 // InitConfig 初始化配置
-func InitConfig() Config {
+func InitConfig() *Config {
 	file := filepath.Join(GetRootPath()+"/config", "config.yaml")
 	yamlFile, err := ioutil.ReadFile(file)
 	if err != nil {
 		log.Fatal(err)
 	}
-	c := Config{}
+	c := &Config{}
 	if err = yaml.Unmarshal(yamlFile, &c); err != nil {
 		log.Fatal(err)
 	}

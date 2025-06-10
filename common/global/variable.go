@@ -1,14 +1,29 @@
 package global
 
-import "gin-base/config"
+import (
+	"gin-base/common/extend/cache"
+	"gin-base/common/extend/event"
+	"gin-base/config"
+	"gorm.io/gorm"
+)
 
 // 全局变量
 var (
-	FormatDate = "2006-01-02 15:04:05" // 全局日期格式
-	DB         = config.InitMysql()    // 数据库
-	Log        = config.InitLogger()   // 日志
-	Config     = config.InitConfig()   // 配置
-	Cache      = config.InitCache()    // 缓存
-	Redis      = config.InitRedis()    // Redis
-	Event      = config.InitEvent()    // 事件
+	FormatDate string               // 全局日期格式
+	Config     *config.Config       // 配置
+	Log        *config.Logger       // 日志
+	DB         *gorm.DB             // 数据库
+	Cache      cache.CacheInterface // 缓存
+	Redis      *cache.RedisCache    // Redis
+	Event      *event.Events        // 事件
 )
+
+func init() {
+	FormatDate = "2006-01-02 15:04:05"
+	Config = config.InitConfig()
+	Log = config.InitLogger(Config)
+	DB = config.InitMysql(Config, Log)
+	Cache = config.InitCache(Config)
+	Redis = config.InitRedis(Config)
+	Event = config.InitEvent()
+}

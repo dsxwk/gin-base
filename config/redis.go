@@ -9,6 +9,6 @@ type Redis struct {
 }
 
 // InitRedis 初始化redis
-func InitRedis() *cache.RedisCache {
+func InitRedis(config *Config) *cache.RedisCache {
 	return cache.NewRedisCache(config.Cache.Redis.Address, config.Cache.Redis.Password, config.Cache.Redis.DB)
 }

@@ -1,6 +1,9 @@
 package config
 
-import "gin-base/common/extend/cache"
+import (
+	"gin-base/common/extend/cache"
+	"sync"
+)
 
 type Redis struct {
 	Address  string `yaml:"address"`
@@ -8,7 +11,20 @@ type Redis struct {
 	DB       int    `yaml:"db"`
 }
 
+var (
+	redisOnce  sync.Once
+	redisCache *cache.RedisCache
+)
+
 // InitRedis 初始化redis
 func InitRedis(config *Config) *cache.RedisCache {
-	return cache.NewRedisCache(config.Cache.Redis.Address, config.Cache.Redis.Password, config.Cache.Redis.DB)
+	redisOnce.Do(func() {
+		redisCache = cache.NewRedisCache(
+			config.Cache.Redis.Address,
+			config.Cache.Redis.Password,
+			config.Cache.Redis.DB,
+		)
+	})
+
+	return redisCache
 }

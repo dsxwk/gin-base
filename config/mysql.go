@@ -17,8 +17,10 @@ import (
 )
 
 var (
-	SQLRes []string
-	mu     sync.Mutex // 用于保护 SQLRes 的并发安全
+	db        *gorm.DB
+	mysqlOnce sync.Once
+	SQLRes    []string
+	mu        sync.Mutex // 用于保护 SQLRes 的并发安全
 )
 
 // Mysql mysql
@@ -33,38 +35,37 @@ type Mysql struct {
 
 // InitMysql 初始化数据库
 func InitMysql(config *Config, logs *Logger) *gorm.DB {
-	var (
-		err error
-		DB  *gorm.DB
-	)
-	DB, err = gorm.Open(mysql.Open(config.Mysql.Host), &gorm.Config{
-		// 全局关闭单数化
-		NamingStrategy: schema.NamingStrategy{
-			SingularTable: true,
-		},
-		Logger: logger.New(
-			log.New(os.Stdout, "\r\n", log.LstdFlags), // 设置log输出到控制台
-			logger.Config{
-				SlowThreshold: time.Millisecond * config.Mysql.SlowQuerySeconds, //慢SQL阈值（单位：ms）
-				LogLevel:      logger.Info,
-				// IgnoreRecordNotFoundError: true, // 忽略Record Not Found 错误
-				Colorful: true, // 给log添加颜色
+	mysqlOnce.Do(func() {
+		_db, err := gorm.Open(mysql.Open(config.Mysql.Host), &gorm.Config{
+			NamingStrategy: schema.NamingStrategy{
+				SingularTable: true, // 全局关闭表名复数化
 			},
-		),
+			Logger: logger.New(
+				log.New(os.Stdout, "\r\n", log.LstdFlags), // 输出到控制台
+				logger.Config{
+					SlowThreshold: time.Millisecond * config.Mysql.SlowQuerySeconds, // 慢 SQL 阈值
+					LogLevel:      logger.Info,
+					Colorful:      true, // 彩色日志
+					// IgnoreRecordNotFoundError: true, // 如果需要忽略 record not found
+				},
+			),
+		})
+		if err != nil {
+			logs.Error("数据库连接失败", zap.Error(err))
+			panic("数据库连接错误: " + err.Error())
+		}
+		q, err := _db.DB()
+		q.SetMaxIdleConns(10)
+		q.SetMaxOpenConns(100)
+		q.SetConnMaxLifetime(59 * time.Second)
+
+		// 日志记录慢查询
+		LogSlowQuery(_db, config, logs)
+
+		db = _db
 	})
-	if err != nil {
-		logs.Error(err.Error(), zap.Error(err))
-		panic("数据库链接错误")
-	}
-	q, err := DB.DB()
-	q.SetMaxIdleConns(10)
-	q.SetMaxOpenConns(100)
-	q.SetConnMaxLifetime(59 * time.Second)
 
-	// 日志记录慢查询
-	LogSlowQuery(DB, config, logs)
-
-	return DB
+	return db
 }
 
 // AddSQL 线程安全地追加 SQL 数据

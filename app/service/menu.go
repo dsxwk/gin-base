@@ -361,6 +361,10 @@ func (s *MenuService) ActionUpdate(m model.MenuAction) (model.MenuAction, error)
 // @param menuID int64
 // @return m model.MenuAction, err error
 func (s *MenuService) ActionDelete(id int64, menuID int64) (m model.MenuAction, err error) {
+	var (
+		detail model.MenuAction
+	)
+
 	if err = global.DB.Where("id = ?", id).First(&m).Error; err != nil {
 		if !errors.Is(err, gorm.ErrRecordNotFound) {
 			return m, err
@@ -369,6 +373,19 @@ func (s *MenuService) ActionDelete(id int64, menuID int64) (m model.MenuAction, 
 
 	if m.MenuID != menuID {
 		return m, fmt.Errorf("删除失败,该功能id【%d】不属于该菜单id【%d】", id, menuID)
+	}
+
+	err = global.DB.
+		Where("pid = ?", id).
+		First(&detail).Error
+	if err != nil {
+		if !errors.Is(err, gorm.ErrRecordNotFound) {
+			return m, err
+		}
+	}
+
+	if detail.ID > 0 {
+		return m, errors.New("存在子集，无法删除")
 	}
 
 	tx := global.DB.Begin()

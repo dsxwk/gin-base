@@ -239,6 +239,21 @@ func (s *MenuService) Delete(id int64) (m model.Menu, err error) {
 // @param menuId int64
 // @return models []model.MenuAction, err error
 func (s *MenuService) ActionList(menuId int64) (models []model.MenuAction, err error) {
+	models, err = s.GetAll(menuId)
+
+	if err != nil {
+		return models, err
+	}
+
+	models = s.GetActionTree(models, 0)
+
+	return models, nil
+}
+
+// GetAll 功能
+// @param menuId int64
+// @return models []model.MenuAction, err error
+func (s *MenuService) GetAll(menuId int64) (models []model.MenuAction, err error) {
 	err = global.DB.
 		Preload("ParentAction").
 		Preload("ActionRoles").
@@ -251,6 +266,21 @@ func (s *MenuService) ActionList(menuId int64) (models []model.MenuAction, err e
 	}
 
 	return models, nil
+}
+
+// GetActionTree 数据子集递归
+// @param rows []model.MenuAction
+// @param pid int64
+// @return tree []model.MenuAction
+func (s *MenuService) GetActionTree(rows []model.MenuAction, pid int64) (tree []model.MenuAction) {
+	for _, data := range rows {
+		if data.PID == pid {
+			children := s.GetActionTree(rows, data.ID)
+			data.Children = children
+			tree = append(tree, data)
+		}
+	}
+	return tree
 }
 
 // ActionCreate 功能创建
@@ -362,6 +392,10 @@ func (s *MenuService) ActionDelete(id int64, menuID int64) (m model.MenuAction, 
 // @param id int64
 // @m model.MenuAction, err error
 func (s *MenuService) ActionDetail(id int64) (m model.MenuAction, err error) {
+	var (
+		rows []model.MenuAction
+	)
+
 	err = global.DB.
 		Preload("ParentAction").
 		Preload("ActionRoles").
@@ -369,6 +403,14 @@ func (s *MenuService) ActionDetail(id int64) (m model.MenuAction, err error) {
 	if err != nil {
 		return m, err
 	}
+
+	rows, err = s.GetAll(m.MenuID)
+
+	if err != nil {
+		return m, err
+	}
+
+	m.Children = s.GetActionTree(rows, m.ID)
 
 	return m, nil
 }

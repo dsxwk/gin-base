@@ -8,6 +8,8 @@
             class="table-demo"
             @pageChange="onTablePageChange"
             @delRow="onTableDelRow"
+            row-key="id"
+            :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
         >
           <template #tools>
             <div class="table-tool">

@@ -25,9 +25,10 @@ type MenuAction struct {
 	Sort         int64           `gorm:"column:sort;type:int(10) unsigned;not null;comment:排序" json:"sort"`                                   // 排序
 	ActionRoles  []*ActionRoles  `gorm:"foreignKey:action_id;references:id" json:"actionRoles"`                                               // 功能角色
 	ParentAction *MenuAction     `gorm:"foreignKey:pid;references:id" json:"parentAction"`                                                    // 父级功能
-	CreatedAt    *JsonTime       `gorm:"column:created_at;type:datetime;comment:创建时间" json:"createdAt"`                                       // 创建时间
-	UpdatedAt    *JsonTime       `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updatedAt"`                                       // 更新时间
-	DeletedAt    *gorm.DeletedAt `gorm:"column:deleted_at;type:datetime;comment:删除时间" json:"deletedAt"`                                       // 删除时间
+	Children     []MenuAction    `json:"children" gorm:"-"`
+	CreatedAt    *JsonTime       `gorm:"column:created_at;type:datetime;comment:创建时间" json:"createdAt"` // 创建时间
+	UpdatedAt    *JsonTime       `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updatedAt"` // 更新时间
+	DeletedAt    *gorm.DeletedAt `gorm:"column:deleted_at;type:datetime;comment:删除时间" json:"deletedAt"` // 删除时间
 }
 
 // TableName MenuAction's table name

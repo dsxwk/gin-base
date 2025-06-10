@@ -66,9 +66,14 @@ const state = reactive({
     // 表头内容（必传，注意格式）
     header: [
       { key: 'id', colWidth: '', title: 'ID', type: 'text', isCheck: true },
-      { key: 'pid', colWidth: '', title: '父级id', type: 'text', isCheck: true },
-      { key: 'menuId', colWidth: '', title: '菜单id', type: 'text', isCheck: true },
-      { key: 'type', colWidth: '', title: '类型', type: 'text', isCheck: true,
+      { key: 'pid', colWidth: '100', title: '父级id', type: 'text', isCheck: true },
+      { key: 'parentAction', colWidth: '100', title: '父级功能', type: 'text', isCheck: true,
+        render: (scope) => {
+          return scope.row?.parentAction?.name
+        }
+      },
+      { key: 'menuId', colWidth: '100', title: '菜单id', type: 'text', isCheck: true },
+      { key: 'type', colWidth: '100', title: '类型', type: 'text', isCheck: true,
         render: (scope) => {
           return getDict(actionTypeDict, scope.row?.type);
         }

@@ -72,15 +72,15 @@ const state = reactive({
     // 表头内容（必传，注意格式）
     header: [
       {key: 'id', colWidth: '', title: 'ID', type: 'text', isCheck: true},
-      {key: 'pid', colWidth: '', title: '父级id', type: 'text', isCheck: true},
+      {key: 'pid', colWidth: '100', title: '父级id', type: 'text', isCheck: true},
       {
-        key: 'meta.title', colWidth: '', title: '菜单名称', type: 'text', isCheck: true,
+        key: 'meta.title', colWidth: '100', title: '菜单名称', type: 'text', isCheck: true,
         render: (scope) => {
           return i18n.global.t(scope.row?.meta?.title || '');
         }
       },
       {
-        key: 'meta.icon', colWidth: '', title: '菜单图标', isCheck: true,
+        key: 'meta.icon', colWidth: '100', title: '菜单图标', isCheck: true,
         render: (scope) => {
           /*return h('el-icon', {
             class: scope.row?.meta?.icon
@@ -90,30 +90,30 @@ const state = reactive({
           });
         },
       },
-      {key: 'path', colWidth: '', title: '路由路径', type: 'text', isCheck: true},
-      {key: 'name', colWidth: '', title: '路由名称', type: 'text', isCheck: true},
+      {key: 'path', colWidth: '100', title: '路由路径', type: 'text', isCheck: true},
+      {key: 'name', colWidth: '100', title: '路由名称', type: 'text', isCheck: true},
       {key: 'redirect', colWidth: '', title: '重定向', type: 'text', isCheck: true},
       {
-        key: 'isLink', colWidth: '', title: '是否外链', type: 'text', isCheck: true,
+        key: 'isLink', colWidth: '100', title: '是否外链', type: 'text', isCheck: true,
         render: (scope) => {
           return getDict(isLinkDict, scope.row?.isLink);
         }
       },
-      {key: 'component', colWidth: '', title: '组件路径', type: 'text', isCheck: true},
-      {key: 'meta.isLink', colWidth: '', width: '70', height: '40', title: '链接地址', type: 'text', isCheck: true},
+      {key: 'component', colWidth: '100', title: '组件路径', type: 'text', isCheck: true},
+      {key: 'meta.isLink', colWidth: '100', width: '70', height: '40', title: '链接地址', type: 'text', isCheck: true},
       {
-        key: 'meta.isHide', colWidth: '', width: '70', height: '40', title: '是否隐藏', type: 'select', isCheck: true,
+        key: 'meta.isHide', colWidth: '100', width: '70', height: '40', title: '是否隐藏', type: 'select', isCheck: true,
         render: (scope) => {
           return getDict(isHideDict, scope.row?.meta?.isHide);
         }
       },
-      {key: 'menuRoles', colWidth: '', width: '70', height: '40', title: '菜单角色', isCheck: true,
+      {key: 'menuRoles', colWidth: '100', width: '70', height: '40', title: '菜单角色', isCheck: true,
         render: (scope) => {
           return scope.row?.menuRoles?.length > 0 ? scope.row?.menuRoles.map(item => item.name).join(',') : '';
         }
       },
-      {key: 'createdAt', colWidth: '', title: '创建时间', type: 'text', isCheck: true},
-      {key: 'updatedAt', colWidth: '', title: '更新时间', type: 'text', isCheck: true},
+      {key: 'createdAt', colWidth: '120', title: '创建时间', type: 'text', isCheck: true},
+      {key: 'updatedAt', colWidth: '120', title: '更新时间', type: 'text', isCheck: true},
     ],
     // 配置项（必传）
     config: {

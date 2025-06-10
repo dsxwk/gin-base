@@ -63,31 +63,31 @@ const state = reactive({
     // 表头内容（必传，注意格式）
     header: [
       {key: 'id', colWidth: '', title: 'ID', type: 'text', isCheck: true},
-      {key: 'fullName', colWidth: '', title: '姓名', type: 'text', isCheck: true},
-      {key: 'avatar', colWidth: '', title: '头像', type: 'image', isCheck: true},
-      {key: 'username', colWidth: '', title: '用户名', type: 'text', isCheck: true},
-      {key: 'email', colWidth: '', title: '邮箱', type: 'text', isCheck: true},
-      {key: 'password', colWidth: '', title: '密码', type: 'text', isCheck: true},
-      {key: 'nickname', colWidth: '', title: '昵称', type: 'text', isCheck: true},
+      {key: 'fullName', colWidth: '100', title: '姓名', type: 'text', isCheck: true},
+      {key: 'avatar', colWidth: '100', title: '头像', type: 'image', isCheck: true},
+      {key: 'username', colWidth: '100', title: '用户名', type: 'text', isCheck: true},
+      {key: 'email', colWidth: '100', title: '邮箱', type: 'text', isCheck: true},
+      {key: 'password', colWidth: '100', title: '密码', type: 'text', isCheck: true},
+      {key: 'nickname', colWidth: '100', title: '昵称', type: 'text', isCheck: true},
       {
-        key: 'gender', colWidth: '', title: '性别', type: 'text', isCheck: true,
+        key: 'gender', colWidth: '100', title: '性别', type: 'text', isCheck: true,
         render: (scope) => {
           return getDict(genderDict, scope.row?.gender);
         }
       },
-      {key: 'age', colWidth: '', width: '70', height: '40', title: '年龄', type: 'text', isCheck: true},
-      {key: 'status', colWidth: '', width: '70', height: '40', title: '状态', isCheck: true,
+      {key: 'age', colWidth: '100', width: '70', height: '40', title: '年龄', type: 'text', isCheck: true},
+      {key: 'status', colWidth: '100', width: '70', height: '40', title: '状态', isCheck: true,
         render: (scope) => {
           return getDict(statusDict, scope.row?.status);
         }
       },
-      {key: 'userRoles', colWidth: '', width: '70', height: '40', title: '用户角色', isCheck: true,
+      {key: 'userRoles', colWidth: '100', width: '70', height: '40', title: '用户角色', isCheck: true,
         render: (scope) => {
           return scope.row?.userRoles?.length > 0 ? scope.row?.userRoles.map(item => item.name).join(',') : '';
         }
       },
-      {key: 'createdAt', colWidth: '', title: '创建时间', type: 'text', isCheck: true},
-      {key: 'updatedAt', colWidth: '', title: '更新时间', type: 'text', isCheck: true},
+      {key: 'createdAt', colWidth: '120', title: '创建时间', type: 'text', isCheck: true},
+      {key: 'updatedAt', colWidth: '120', title: '更新时间', type: 'text', isCheck: true},
     ],
     // 配置项（必传）
     config: {

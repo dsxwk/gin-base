@@ -240,6 +240,8 @@ func (s *MenuService) Delete(id int64) (m model.Menu, err error) {
 // @return models []model.MenuAction, err error
 func (s *MenuService) ActionList(menuId int64) (models []model.MenuAction, err error) {
 	err = global.DB.
+		Preload("ParentAction").
+		Preload("ActionRoles").
 		Where("menu_id = ?", menuId).
 		Order("sort asc").
 		Find(&models).
@@ -361,6 +363,7 @@ func (s *MenuService) ActionDelete(id int64, menuID int64) (m model.MenuAction, 
 // @m model.MenuAction, err error
 func (s *MenuService) ActionDetail(id int64) (m model.MenuAction, err error) {
 	err = global.DB.
+		Preload("ParentAction").
 		Preload("ActionRoles").
 		First(&m, id).Error
 	if err != nil {

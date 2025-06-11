@@ -12,23 +12,23 @@ const TableNameMenuAction = "menu_action"
 
 // MenuAction 菜单功能表
 type MenuAction struct {
-	ID           int64           `gorm:"column:id;type:int(10) unsigned;primaryKey;autoIncrement:true;comment:ID" json:"id"`                  // ID
-	PID          int64           `gorm:"column:pid;type:int(10) unsigned;not null;comment:菜单id" json:"pid"`                                   // 父级id
-	MenuID       int64           `gorm:"column:menu_id;type:int(10) unsigned;not null;comment:菜单id" json:"menuId"`                            // 菜单id
-	Type         int64           `gorm:"column:type;type:tinyint(3) unsigned;not null;default:1;comment:类型 1=header 2=operation" json:"type"` // 类型 1=header 2=operation
-	BtnType      string          `gorm:"column:btn_type;type:varchar(20);not null;default:btn;comment:按钮类型 text|btn" json:"btnType"`          // 按钮类型 text|btn
-	BtnStyle     string          `gorm:"column:btn_style;type:varchar(20);not null;default:primary;comment:按钮样式" json:"btnStyle"`             // 按钮样式
-	BtnSize      string          `gorm:"column:btn_size;type:varchar(20);not null;default:small;comment:按钮尺寸" json:"btnSize"`                 // 按钮尺寸
-	IsConfirm    int64           `gorm:"column:is_confirm;type:tinyint(3) unsigned;not null;default:2;comment:是否确认 1=是 2=否" json:"isConfirm"` // 是否确认 1=是 2=否
-	Name         string          `gorm:"column:name;type:varchar(30);not null;comment:功能名称" json:"name"`                                      // 功能名称
-	IsLink       BoolInt64       `gorm:"column:is_link;type:tinyint(3) unsigned;not null;default:2;comment:是否为链接 1=是 2=否" json:"isLink"`      // 是否为链接 1=是 2=否
-	Sort         int64           `gorm:"column:sort;type:int(10) unsigned;not null;comment:排序" json:"sort"`                                   // 排序
-	ActionRoles  []*ActionRoles  `gorm:"foreignKey:action_id;references:id" json:"actionRoles"`                                               // 功能角色
-	ParentAction *MenuAction     `gorm:"foreignKey:pid;references:id" json:"parentAction"`                                                    // 父级功能
-	Children     []MenuAction    `json:"children" gorm:"-"`
-	CreatedAt    *JsonTime       `gorm:"column:created_at;type:datetime;comment:创建时间" json:"createdAt"` // 创建时间
-	UpdatedAt    *JsonTime       `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updatedAt"` // 更新时间
-	DeletedAt    *gorm.DeletedAt `gorm:"column:deleted_at;type:datetime;comment:删除时间" json:"deletedAt"` // 删除时间
+	ID          int64           `gorm:"column:id;type:int(10) unsigned;primaryKey;autoIncrement:true;comment:ID" json:"id"`                  // ID
+	PID         int64           `gorm:"column:pid;type:int(10) unsigned;not null;comment:菜单id" json:"pid"`                                   // 父级id
+	MenuID      int64           `gorm:"column:menu_id;type:int(10) unsigned;not null;comment:菜单id" json:"menuId"`                            // 菜单id
+	Type        int64           `gorm:"column:type;type:tinyint(3) unsigned;not null;default:1;comment:类型 1=header 2=operation" json:"type"` // 类型 1=header 2=operation
+	BtnType     string          `gorm:"column:btn_type;type:varchar(20);not null;default:btn;comment:按钮类型 text|btn" json:"btnType"`          // 按钮类型 text|btn
+	BtnStyle    string          `gorm:"column:btn_style;type:varchar(20);not null;default:primary;comment:按钮样式" json:"btnStyle"`             // 按钮样式
+	BtnSize     string          `gorm:"column:btn_size;type:varchar(20);not null;default:small;comment:按钮尺寸" json:"btnSize"`                 // 按钮尺寸
+	IsConfirm   int64           `gorm:"column:is_confirm;type:tinyint(3) unsigned;not null;default:2;comment:是否确认 1=是 2=否" json:"isConfirm"` // 是否确认 1=是 2=否
+	Name        string          `gorm:"column:name;type:varchar(30);not null;comment:功能名称" json:"name"`                                      // 功能名称
+	IsLink      BoolInt64       `gorm:"column:is_link;type:tinyint(3) unsigned;not null;default:2;comment:是否为链接 1=是 2=否" json:"isLink"`      // 是否为链接 1=是 2=否
+	Sort        int64           `gorm:"column:sort;type:int(10) unsigned;not null;comment:排序" json:"sort"`                                   // 排序
+	ActionRoles []*ActionRoles  `gorm:"foreignKey:action_id;references:id" json:"actionRoles"`                                               // 功能角色
+	Parent      *MenuAction     `gorm:"foreignKey:pid;references:id" json:"parent"`                                                          // 父级功能
+	Children    []MenuAction    `json:"children" gorm:"-"`
+	CreatedAt   *JsonTime       `gorm:"column:created_at;type:datetime;comment:创建时间" json:"createdAt"` // 创建时间
+	UpdatedAt   *JsonTime       `gorm:"column:updated_at;type:datetime;comment:更新时间" json:"updatedAt"` // 更新时间
+	DeletedAt   *gorm.DeletedAt `gorm:"column:deleted_at;type:datetime;comment:删除时间" json:"deletedAt"` // 删除时间
 }
 
 // TableName MenuAction's table name

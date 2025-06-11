@@ -255,7 +255,7 @@ func (s *MenuService) ActionList(menuId int64) (models []model.MenuAction, err e
 // @return models []model.MenuAction, err error
 func (s *MenuService) GetAll(menuId int64) (models []model.MenuAction, err error) {
 	err = global.DB.
-		Preload("ParentAction").
+		Preload("Parent").
 		Preload("ActionRoles").
 		Where("menu_id = ?", menuId).
 		Order("sort asc").
@@ -414,7 +414,7 @@ func (s *MenuService) ActionDetail(id int64) (m model.MenuAction, err error) {
 	)
 
 	err = global.DB.
-		Preload("ParentAction").
+		Preload("Parent").
 		Preload("ActionRoles").
 		First(&m, id).Error
 	if err != nil {

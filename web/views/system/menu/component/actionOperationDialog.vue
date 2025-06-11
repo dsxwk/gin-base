@@ -23,11 +23,12 @@
   </div>
 </template>
 <script setup name="systemMenuActionOperationDialog">
-import {computed, nextTick, onMounted, reactive, ref} from 'vue';
+import {computed, markRaw, nextTick, onMounted, reactive, ref} from 'vue';
 import {ElMessage} from 'element-plus';
 import ConfigForm from "/@/components/form/index.vue";
 import {actionTypeDict, btnSizeDict, btnStyleDict, btnTypeDict, isConfirmDict} from '/@/dict/menu';
 import {menuApi} from '/@/api/menu';
+import CascaderLabel from "/@/components/form/CascaderLabel.vue";
 
 const api = menuApi();
 const props = defineProps({
@@ -45,8 +46,8 @@ const state = reactive({
   roles: [],
   selectedRoleIds: [],
   ruleForm: {
-    superior: [], // 上级
     pid: 0, // 父级id
+    superior: [], // 父级
     menuId: "", // 菜单id
     type: "", // 类型 1=header 2=operation
     btnType: "", // 按钮类型 text|btn
@@ -58,6 +59,7 @@ const state = reactive({
     sort: 0, // 排序
     actionRoles: [], // 功能角色
   },
+  superiorData: [], // 父级选项
   dialog: {
     isShowDialog: false,
     type: '',
@@ -67,6 +69,23 @@ const state = reactive({
 });
 
 const formData = computed(() => [
+  {
+    label: '上级功能',
+    prop: 'superior',
+    type: 'cascader',
+    options: () => state.superiorData,
+    props: {
+      checkStrictly: true,
+      value: 'id',
+      label: 'name',
+    },
+    attrs: {
+      placeholder: '请选择上级功能',
+      clearable: true,
+      class: 'w100',
+    },
+    slotDefault: markRaw(CascaderLabel),
+  },
   {
     label: "菜单id",
     prop: "menuId",
@@ -246,8 +265,15 @@ const emit = defineEmits(['refresh']);
 const dialogFormRef = ref();
 // 打开弹窗
 const openDialog = async (type, row) => {
+  const actionRes = await api.actionList({menuId: props.menuId});
+  state.superiorData = actionRes.data?.map(item => ({
+    id: item.id,
+    name: item.name,
+    title: item.name
+  })); // 父级选项
   state.ruleForm = {
     pid: 0, // 父级id
+    superior: [], // 父级
     menuId: props.menuId, // 菜单id
     type: "", // 类型 1=header 2=operation
     btnType: "", // 按钮类型 text|btn
@@ -266,6 +292,7 @@ const openDialog = async (type, row) => {
         state.ruleForm[key] = data[key];
       }
     });
+    state.ruleForm.superior = [data.pid];
     // 设置角色 ID 数组用于 select 默认选中
     state.selectedRoleIds = state.ruleForm.actionRoles?.map(item => item.roleId) || [];
     state.dialog.title = '修改功能';
@@ -301,6 +328,12 @@ const onSubmit = async () => {
       name: role ? role.name : ''
     };
   }) ?? [];
+
+  if (state.ruleForm.parent && state.ruleForm.parent.length > 0) {
+    state.ruleForm.pid = state.ruleForm.parent[0];
+  } else {
+    state.ruleForm.pid = 0;
+  }
 
   dialogFormRef.value.validate(async (valid) => {
     if (!valid) return;

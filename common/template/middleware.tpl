@@ -10,7 +10,7 @@ type {{.Name}} struct {
 }
 
 // {{.Name}}Middleware {{.Description}}
-func {{.Name}}Middleware() gin.HandlerFunc {
+func (s {{.Name}}) {{.Name}}Middleware() gin.HandlerFunc {
     return func(c *gin.Context) {
         // Define your middleware logic here
         c.Next()

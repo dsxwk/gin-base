@@ -9,6 +9,7 @@ import (
 
 // Response 公共响应
 type Response struct {
+	TraceID string      `json:"traceId"`
 	Code    int64       `json:"code"`
 	Message string      `json:"msg"`
 	Data    interface{} `json:"data"`
@@ -17,6 +18,8 @@ type Response struct {
 // ApiResponse api统一返回
 func ApiResponse(ctx *gin.Context, errorCode ErrorCode, optionalParams ...interface{}) {
 	var response Response
+
+	response.TraceID = ctx.GetString("traceId")
 
 	response.Code = errorCode.Code
 

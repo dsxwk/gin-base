@@ -47,6 +47,7 @@ func GetLogFields(fields []zap.Field) []zap.Field {
 
 	// 添加日志字段
 	fields = append(fields,
+		zap.String("traceId", c.GetString("traceId")),
 		zap.String("ip", c.ClientIP()),
 		zap.String("method", c.Request.Method),
 		zap.String("path", c.Request.URL.Path),

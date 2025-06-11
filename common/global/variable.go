@@ -13,7 +13,7 @@ var (
 	Config     *config.Config       // 配置
 	Log        *config.Logger       // 日志
 	DB         *gorm.DB             // 数据库
-	Cache      cache.CacheInterface // 缓存
+	Cache      cache.InterfaceCache // 缓存
 	Redis      *cache.RedisCache    // Redis
 	Event      *event.Events        // 事件
 )

@@ -9,8 +9,8 @@ import (
 	"time"
 )
 
-// CacheInterface Cache 接口,所有缓存类型都实现这个接口
-type CacheInterface interface {
+// InterfaceCache Cache 接口
+type InterfaceCache interface {
 	SetCache(key string, value interface{}, expire time.Duration) error
 	GetCache(key string) (interface{}, bool)
 	DeleteCache(key string) error
@@ -96,7 +96,7 @@ func (r *RedisCache) Lock(lockKey string, expire time.Duration) (bool, error) {
 func (r *RedisCache) UnLock(lockKey string) error {
 	// 获取锁
 	_, err := r.client.Get(r.ctx, lockKey).Result()
-	if err == redis.Nil {
+	if errors.Is(err, redis.Nil) {
 		return errors.New("lock does not exist")
 	} else if err != nil {
 		return fmt.Errorf("failed to get lock: %v", err)

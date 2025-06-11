@@ -14,9 +14,9 @@ type Cache struct {
 }
 
 // InitCache 初始化缓存
-func InitCache(config *Config) cache.CacheInterface {
+func InitCache(config *Config) cache.InterfaceCache {
 	var (
-		c cache.CacheInterface
+		c cache.InterfaceCache
 	)
 
 	// 没有配置缓存类型,默认使用内存缓存

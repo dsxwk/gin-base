@@ -28,7 +28,6 @@ export default async function request(path, config) {
         NextLoading.done();
         err.code = response.status;
         err.msg = response.statusText;
-        errorHandler(err);
 
         return Promise.reject(err);
     }
@@ -37,7 +36,6 @@ export default async function request(path, config) {
         res = await response?.json();
     } catch (error) {
         NextLoading.done();
-        errorHandler(error);
 
         return Promise.reject(error);
     }

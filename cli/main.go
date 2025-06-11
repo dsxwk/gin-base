@@ -314,7 +314,7 @@ func (s CliCommand) modelHooks(table string, file string, fileName string) {
 		fmt.Printf("File %s does not exist, skipping rename.\n", oldFilePath)
 	} else {
 		// 重命名文件
-		err := os.Rename(oldFilePath, newFilePath)
+		err = os.Rename(oldFilePath, newFilePath)
 		if err != nil {
 			fmt.Printf("Failed to rename file: %v\n", err)
 		} else {
@@ -481,6 +481,49 @@ func (b *BoolInt64) Scan(value interface{}) error {
 
 	*b = v == 1
 	return nil
+}
+
+// JsonTime
+func (t *JsonTime) String() string {
+	if t == nil {
+		return ""
+	}
+	return time.Time(*t).Format("2006-01-02 15:04:05")
+}
+
+// JsonString
+func (j JsonString) String() string {
+	b, err := json.Marshal(j)
+	if err != nil {
+		return "[]"
+	}
+	return string(b)
+}
+
+// JsonInt64
+func (j JsonInt64) String() string {
+	b, err := json.Marshal(j)
+	if err != nil {
+		return "[]"
+	}
+	return string(b)
+}
+
+// BoolInt64
+func (b BoolInt64) String() string {
+	if b {
+		return "true"
+	}
+	return "false"
+}
+
+// JsonMap
+func (j JsonMap) String() string {
+	b, err := json.Marshal(j)
+	if err != nil {
+		return "{}"
+	}
+	return string(b)
 }
 `
 		err = os.WriteFile(gormFilePath, []byte(content), 0644)

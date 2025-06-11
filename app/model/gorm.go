@@ -164,3 +164,46 @@ func (j JsonMap) Value() (driver.Value, error) {
 	}
 	return json.Marshal(j)
 }
+
+// JsonTime
+func (t *JsonTime) String() string {
+	if t == nil {
+		return ""
+	}
+	return time.Time(*t).Format("2006-01-02 15:04:05")
+}
+
+// JsonString
+func (j JsonString) String() string {
+	b, err := json.Marshal(j)
+	if err != nil {
+		return "[]"
+	}
+	return string(b)
+}
+
+// JsonInt64
+func (j JsonInt64) String() string {
+	b, err := json.Marshal(j)
+	if err != nil {
+		return "[]"
+	}
+	return string(b)
+}
+
+// BoolInt64
+func (b BoolInt64) String() string {
+	if b {
+		return "true"
+	}
+	return "false"
+}
+
+// JsonMap
+func (j JsonMap) String() string {
+	b, err := json.Marshal(j)
+	if err != nil {
+		return "{}"
+	}
+	return string(b)
+}

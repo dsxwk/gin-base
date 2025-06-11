@@ -198,6 +198,10 @@ func getSQL(sql string, vars []interface{}) string {
 			} else {
 				formattedValue = "NULL"
 			}
+		case *gorm.DeletedAt:
+			if value == nil {
+				formattedValue = "NULL"
+			}
 		default:
 			formattedValue = fmt.Sprintf("%v", value)
 		}

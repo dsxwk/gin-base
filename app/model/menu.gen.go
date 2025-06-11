@@ -70,3 +70,12 @@ func (m *Meta) Scan(value interface{}) error {
 	}
 	return json.Unmarshal(data, m)
 }
+
+// Meta
+func (m Meta) String() string {
+	b, err := json.Marshal(m)
+	if err != nil {
+		return "{}"
+	}
+	return string(b)
+}

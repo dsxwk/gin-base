@@ -1,7 +1,6 @@
 package global
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"reflect"
@@ -29,7 +28,6 @@ func ApiResponse(ctx *gin.Context, errorCode ErrorCode, optionalParams ...interf
 	// 默认数据
 	response.Data = []string{}
 
-	fmt.Printf("%v\n", optionalParams)
 	// 解析可选参数,当第一个参数为字符串时默认为message否则为data
 	if len(optionalParams) > 0 {
 		if msg, ok := optionalParams[0].(string); ok {

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"gin-base/app/model"
+	"gin-base/app/validate"
 	"gin-base/common/base"
 	"gin-base/common/global"
 	"gin-base/helper/utils"
@@ -15,9 +16,10 @@ type MenuService struct {
 }
 
 // List 列表
+// @param search validate.MenuSearch
 // @return models []model.Menu, err error
-func (s *MenuService) List() (models []model.Menu, err error) {
-	models, err = s.All()
+func (s *MenuService) List(search validate.MenuSearch) (models []model.Menu, err error) {
+	models, err = s.All(search.RoleIds)
 
 	if err != nil {
 		return models, err
@@ -29,9 +31,19 @@ func (s *MenuService) List() (models []model.Menu, err error) {
 }
 
 // All 获取所有菜单
+// @param search validate.MenuSearch
 // @return models []model.Menu, err error
-func (s *MenuService) All() (models []model.Menu, err error) {
-	err = global.DB.
+func (s *MenuService) All(roleIds string) (models []model.Menu, err error) {
+	var (
+		roleIdsArr []int64
+	)
+
+	if roleIds != "" {
+		roleIds = `[` + roleIds + `]`
+		roleIdsArr = utils.ConvertToArr[int64](&roleIds)
+	}
+
+	db := global.DB.
 		Preload("MenuRoles").
 		Preload("MenuAction", func(db *gorm.DB) *gorm.DB {
 			return db.Preload("ActionRoles").
@@ -39,9 +51,15 @@ func (s *MenuService) All() (models []model.Menu, err error) {
 				Select("id,menu_id,type,name,is_link,sort,created_at,updated_at")
 		}).
 		Preload("MenuAction.ActionRoles").
+		Joins("LEFT JOIN menu_roles ON menu_roles.menu_id = menu.id").
 		Order("sort asc").
-		Find(&models).Error
+		Group("menu.id")
 
+	if roleIds != "" {
+		db = db.Where("menu_roles.role_id IN ?", roleIdsArr)
+	}
+
+	err = db.Find(&models).Error
 	if err != nil {
 		return models, err
 	}
@@ -143,10 +161,11 @@ func (s *MenuService) Update(m model.Menu) (model.Menu, error) {
 // @return m model.Menu, err error
 func (s *MenuService) Detail(id int64) (m model.Menu, err error) {
 	var (
-		menus []model.Menu
+		menus  []model.Menu
+		search validate.MenuSearch
 	)
 
-	menus, err = s.All()
+	menus, err = s.All(search.RoleIds)
 
 	if err != nil {
 		return m, err

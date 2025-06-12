@@ -20,9 +20,18 @@ type MenuController struct {
 func (s *MenuController) List(c *gin.Context) {
 	var (
 		menuService service.MenuService
+		search      validate.MenuSearch
 	)
 
-	data, err := menuService.List()
+	// 搜索
+	err := c.ShouldBindQuery(&search)
+	if err != nil {
+		global.Log.Error(err.Error())
+		s.ApiResponse(c, global.SystemError, err.Error())
+		return
+	}
+
+	data, err := menuService.List(search)
 	if err != nil {
 		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())

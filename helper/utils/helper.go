@@ -186,8 +186,8 @@ func ToCamelCase(s string) string {
 }
 
 // ConvertToArr 泛型方法 *string 转 []T
-// 示例1 arr1 := ConvertXStringToArr[int64](str)    // *string 转 []int64
-// 示例2 arr2 := ConvertXStringToArr[string](str)   // *string 转 []string
+// 示例1 arr1 := ConvertToArr[int64](str)    // *string 转 []int64
+// 示例2 arr2 := ConvertToArr[string](str)   // *string 转 []string
 func ConvertToArr[T any](str *string) []T {
 	var data []T
 	if str != nil {

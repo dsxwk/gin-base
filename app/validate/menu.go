@@ -28,6 +28,10 @@ type Menu struct {
 	Meta     Meta   `json:"meta" validate:"required" label:"元数据"`
 }
 
+type MenuSearch struct {
+	RoleIds string `form:"roleIds"`
+}
+
 // GetValidate 请求验证
 func (s Menu) GetValidate(data Menu, scene string) error {
 	v := validator.Struct(data, scene)

@@ -7,12 +7,13 @@ import (
 
 // MenuAction 菜单功能请求验证
 type MenuAction struct {
-	ID     int64  `json:"id" validate:"required" label:"ID"`
-	MenuID int64  `json:"menu_id" validate:"required" label:"菜单ID"`
-	Type   int64  `json:"type" validate:"required" label:"类型 1=header 2=operation"`
-	Name   string `json:"name" validate:"required" label:"功能名称"`
-	IsLink string `json:"isLink" validate:"required" label:"是否为链接 1=是 2=否"`
-	Sort   string `json:"sort" validate:"required" label:"排序"`
+	ID        int64  `json:"id" validate:"required" label:"ID"`
+	MenuID    int64  `json:"menu_id" validate:"required" label:"菜单ID"`
+	Type      int64  `json:"type" validate:"required" label:"类型 1=header 2=operation"`
+	Label     string `json:"label" validate:"required" label:"功能名称"`
+	AuthValue string `json:"authValue" validate:"required" label:"权限标识"`
+	IsLink    string `json:"isLink" validate:"required" label:"是否为链接 1=是 2=否"`
+	Sort      string `json:"sort" validate:"required" label:"排序"`
 }
 
 // GetValidate 请求验证
@@ -31,8 +32,8 @@ func (s MenuAction) GetValidate(data MenuAction, scene string) error {
 func (s MenuAction) ConfigValidation(v *validator.Validation) {
 	v.WithScenes(validator.SValues{
 		"list":   []string{"MenuID"},
-		"create": []string{"MenuID", "Type", "Name", "IsLink", "Sort"},
-		"update": []string{"ID", "MenuID", "Type", "Name", "IsLink", "Sort"},
+		"create": []string{"MenuID", "Type", "Label", "AuthValue", "IsLink", "Sort"},
+		"update": []string{"ID", "MenuID", "Type", "Label", "AuthValue", "IsLink", "Sort"},
 		"delete": []string{"ID"},
 	})
 }
@@ -48,11 +49,12 @@ func (s MenuAction) Messages() map[string]string {
 // Translates 你可以自定义字段翻译
 func (s MenuAction) Translates() map[string]string {
 	return validator.MS{
-		"ID":     "ID",
-		"MenuID": "菜单ID",
-		"Type":   "类型",
-		"Name":   "功能名称",
-		"IsLink": "是否为链接",
-		"Sort":   "排序",
+		"ID":        "ID",
+		"MenuID":    "菜单ID",
+		"Type":      "类型",
+		"Label":     "功能名称",
+		"AuthValue": "权限标识",
+		"IsLink":    "是否为链接",
+		"Sort":      "排序",
 	}
 }

@@ -21,8 +21,8 @@ export const isHideDict = [
  * @type {[{label: string, value: number},{label: string, value: number}]}
  */
 export const actionIsLinkEnum = [
-    { label: '是', value: 1 },
-    { label: '否', value: 2 }
+    { label: '是', value: true },
+    { label: '否', value: false }
 ];
 
 /**

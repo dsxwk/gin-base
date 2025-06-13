@@ -69,9 +69,11 @@ const state = reactive({
     header: [
       { key: 'id', colWidth: '', title: 'ID', type: 'text', isCheck: true },
       { key: 'pid', colWidth: '100', title: '父级id', type: 'text', isCheck: true },
-      { key: 'parentAction', colWidth: '100', title: '父级功能', type: 'text', isCheck: true,
+      { key: 'label', colWidth: '100', title: '功能名称', type: 'text', isCheck: true },
+      { key: 'valueAuth', colWidth: '120', title: '权限标识', type: 'text', isCheck: true },
+      { key: 'parent', colWidth: '100', title: '父级功能', type: 'text', isCheck: true,
         render: (scope) => {
-          return scope.row?.parentAction?.name
+          return scope.row?.parent?.label
         }
       },
       { key: 'menuId', colWidth: '100', title: '菜单id', type: 'text', isCheck: true },
@@ -88,7 +90,6 @@ const state = reactive({
           return getDict(isConfirmDict, scope.row?.isConfirm);
         }
       },
-      { key: 'name', colWidth: '100', title: '功能名称', type: 'text', isCheck: true },
       { key: 'isLink', colWidth: '120', title: '是否为链接', type: 'text', isCheck: true,
         render: (scope) => {
           return getDict(actionIsLinkEnum, scope.row?.isLink);

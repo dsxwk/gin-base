@@ -45,11 +45,7 @@ func (s *MenuService) All(roleIds string) (models []model.Menu, err error) {
 
 	db := global.DB.
 		Preload("MenuRoles").
-		Preload("MenuAction", func(db *gorm.DB) *gorm.DB {
-			return db.Preload("ActionRoles").
-				Order("sort asc").
-				Select("id,menu_id,type,name,is_link,sort,created_at,updated_at")
-		}).
+		Preload("MenuAction").
 		Preload("MenuAction.ActionRoles").
 		Joins("LEFT JOIN menu_roles ON menu_roles.menu_id = menu.id").
 		Order("sort asc").
@@ -173,11 +169,7 @@ func (s *MenuService) Detail(id int64) (m model.Menu, err error) {
 
 	err = global.DB.
 		Preload("MenuRoles").
-		Preload("MenuAction", func(db *gorm.DB) *gorm.DB {
-			return db.Preload("ActionRoles").
-				Order("sort asc").
-				Select("id,menu_id,type,name,is_link,sort,created_at,updated_at")
-		}).
+		Preload("MenuAction").
 		Preload("MenuAction.ActionRoles").
 		First(&m, id).Error
 	if err != nil {
@@ -293,7 +285,7 @@ func (s *MenuService) GetAll(menuId int64) (models []model.MenuAction, err error
 // @return tree []model.MenuAction
 func (s *MenuService) GetActionTree(rows []model.MenuAction, pid int64) (tree []model.MenuAction) {
 	for _, data := range rows {
-		if data.PID == pid {
+		if data.Pid == pid {
 			children := s.GetActionTree(rows, data.ID)
 			data.Children = children
 			tree = append(tree, data)

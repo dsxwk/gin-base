@@ -54,7 +54,8 @@ const state = reactive({
     btnStyle: "", // 按钮样式
     btnSize: "", // 按钮尺寸
     isConfirm: 2, // 是否确认
-    name: "", // 功能名称
+    label: "", // 功能名称
+    authValue: "", // 权限标识
     isLink: false, // 是否为链接 1=是 2=否
     sort: 0, // 排序
     actionRoles: [], // 功能角色
@@ -69,23 +70,6 @@ const state = reactive({
 });
 
 const formData = computed(() => [
-  {
-    label: '上级功能',
-    prop: 'superior',
-    type: 'cascader',
-    options: () => state.superiorData,
-    props: {
-      checkStrictly: true,
-      value: 'id',
-      label: 'name',
-    },
-    attrs: {
-      placeholder: '请选择上级功能',
-      clearable: true,
-      class: 'w100',
-    },
-    slotDefault: markRaw(CascaderLabel),
-  },
   {
     label: "菜单id",
     prop: "menuId",
@@ -102,6 +86,55 @@ const formData = computed(() => [
         trigger: "blur"
       },
     ],
+  },
+  {
+    label: "功能名称",
+    prop: "label",
+    type: "input",
+    attrs: {
+      placeholder: "请输入功能名称",
+      clearable: true
+    },
+    rules: [
+      {
+        required: true,
+        message: "请输入功能名称",
+        trigger: "blur"
+      },
+    ],
+  },
+  {
+    label: "权限标识",
+    prop: "authValue",
+    type: "input",
+    attrs: {
+      placeholder: "请输入权限标识",
+      clearable: true
+    },
+    rules: [
+      {
+        required: true,
+        message: "请输入权限标识",
+        trigger: "blur"
+      },
+    ],
+  },
+  {
+    label: '上级功能',
+    prop: 'superior',
+    type: 'cascader',
+    options: () => state.superiorData,
+    props: {
+      checkStrictly: true,
+      value: 'id',
+      label: 'label',
+    },
+    attrs: {
+      placeholder: '请选择上级功能',
+      clearable: true,
+      class: 'w100',
+    },
+    slotDefault: markRaw(CascaderLabel),
   },
   {
     label: "类型",
@@ -197,22 +230,6 @@ const formData = computed(() => [
     ],
   },
   {
-    label: "功能名称",
-    prop: "name",
-    type: "input",
-    attrs: {
-      placeholder: "请输入功能名称",
-      clearable: true
-    },
-    rules: [
-      {
-        required: true,
-        message: "请输入功能名称",
-        trigger: "blur"
-      },
-    ],
-  },
-  {
     label: "是否为链接",
     prop: "isLink",
     type: "switch",
@@ -268,8 +285,8 @@ const openDialog = async (type, row) => {
   const actionRes = await api.actionList({menuId: props.menuId});
   state.superiorData = actionRes.data?.map(item => ({
     id: item.id,
-    name: item.name,
-    title: item.name
+    label: item.label,
+    title: item.label
   })); // 父级选项
   state.ruleForm = {
     pid: 0, // 父级id
@@ -280,7 +297,8 @@ const openDialog = async (type, row) => {
     btnStyle: "", // 按钮样式
     btnSize: "", // 按钮尺寸
     isConfirm: 2, // 是否确认
-    name: "", // 功能名称
+    label: "", // 功能名称
+    authValue: "", // 权限标识
     isLink: false, // 是否为链接 1=是 2=否
     sort: 0, // 排序
     actionRoles: [],

@@ -11,7 +11,7 @@
  Target Server Version : 80012
  File Encoding         : 65001
 
- Date: 13/06/2025 10:38:09
+ Date: 13/06/2025 17:25:41
 */
 
 SET NAMES utf8mb4;
@@ -35,10 +35,10 @@ CREATE TABLE `action_roles`  (
 -- ----------------------------
 -- Records of action_roles
 -- ----------------------------
-INSERT INTO `action_roles` VALUES (1, 1, 1, 'admin', '2025-05-26 17:48:41', '2025-05-26 17:48:43', NULL);
-INSERT INTO `action_roles` VALUES (2, 2, 1, 'admin', '2025-05-26 17:48:41', '2025-05-26 17:48:41', NULL);
-INSERT INTO `action_roles` VALUES (3, 3, 1, 'admin', '2025-05-26 17:48:41', '2025-05-26 17:48:41', NULL);
-INSERT INTO `action_roles` VALUES (4, 4, 1, 'admin', '2025-05-26 17:48:41', '2025-05-26 17:48:41', NULL);
+INSERT INTO `action_roles` VALUES (1, 1, 1, 'admin', '2025-05-26 17:48:41', '2025-05-26 17:48:43', '2025-06-13 16:26:48');
+INSERT INTO `action_roles` VALUES (2, 2, 1, 'admin', '2025-05-26 17:48:41', '2025-05-26 17:48:41', '2025-06-13 16:27:31');
+INSERT INTO `action_roles` VALUES (3, 3, 1, 'admin', '2025-05-26 17:48:41', '2025-05-26 17:48:41', '2025-06-13 16:27:43');
+INSERT INTO `action_roles` VALUES (4, 4, 1, 'admin', '2025-05-26 17:48:41', '2025-05-26 17:48:41', '2025-06-13 16:27:51');
 INSERT INTO `action_roles` VALUES (5, 6, 1, 'admin', '2025-06-11 11:46:16', '2025-06-11 11:46:16', '2025-06-11 11:51:53');
 INSERT INTO `action_roles` VALUES (6, 6, 1, 'admin', '2025-06-11 11:46:16', '2025-06-11 11:46:16', '2025-06-11 11:51:53');
 INSERT INTO `action_roles` VALUES (7, 6, 1, 'admin', '2025-06-11 14:13:56', '2025-06-11 14:13:56', '2025-06-11 14:13:56');
@@ -46,7 +46,29 @@ INSERT INTO `action_roles` VALUES (8, 6, 1, 'admin', '2025-06-11 14:13:56', '202
 INSERT INTO `action_roles` VALUES (9, 6, 2, 'test', '2025-06-11 14:14:18', '2025-06-11 14:14:18', '2025-06-11 14:14:18');
 INSERT INTO `action_roles` VALUES (10, 6, 2, 'test', '2025-06-11 14:14:18', '2025-06-11 14:14:18', '2025-06-11 14:14:25');
 INSERT INTO `action_roles` VALUES (11, 6, 1, 'admin', '2025-06-11 14:14:25', '2025-06-11 14:14:25', '2025-06-11 14:14:25');
-INSERT INTO `action_roles` VALUES (12, 6, 1, 'admin', '2025-06-11 14:14:25', '2025-06-11 14:14:25', NULL);
+INSERT INTO `action_roles` VALUES (12, 6, 1, 'admin', '2025-06-11 14:14:25', '2025-06-11 14:14:25', '2025-06-13 16:28:07');
+INSERT INTO `action_roles` VALUES (13, 1, 1, 'admin', '2025-06-13 16:26:48', '2025-06-13 16:26:48', '2025-06-13 16:26:48');
+INSERT INTO `action_roles` VALUES (14, 1, 1, 'admin', '2025-06-13 16:26:48', '2025-06-13 16:26:48', NULL);
+INSERT INTO `action_roles` VALUES (15, 2, 1, 'admin', '2025-06-13 16:27:31', '2025-06-13 16:27:31', '2025-06-13 16:27:31');
+INSERT INTO `action_roles` VALUES (16, 2, 1, 'admin', '2025-06-13 16:27:31', '2025-06-13 16:27:31', '2025-06-13 16:50:04');
+INSERT INTO `action_roles` VALUES (17, 3, 1, 'admin', '2025-06-13 16:27:43', '2025-06-13 16:27:43', '2025-06-13 16:27:43');
+INSERT INTO `action_roles` VALUES (18, 3, 1, 'admin', '2025-06-13 16:27:43', '2025-06-13 16:27:43', NULL);
+INSERT INTO `action_roles` VALUES (19, 4, 1, 'admin', '2025-06-13 16:27:51', '2025-06-13 16:27:51', '2025-06-13 16:27:51');
+INSERT INTO `action_roles` VALUES (20, 4, 1, 'admin', '2025-06-13 16:27:51', '2025-06-13 16:27:51', NULL);
+INSERT INTO `action_roles` VALUES (21, 6, 1, 'admin', '2025-06-13 16:28:07', '2025-06-13 16:28:07', '2025-06-13 16:28:07');
+INSERT INTO `action_roles` VALUES (22, 6, 1, 'admin', '2025-06-13 16:28:07', '2025-06-13 16:28:07', NULL);
+INSERT INTO `action_roles` VALUES (23, 2, 1, 'admin', '2025-06-13 16:50:04', '2025-06-13 16:50:04', '2025-06-13 16:50:04');
+INSERT INTO `action_roles` VALUES (24, 2, 1, 'admin', '2025-06-13 16:50:04', '2025-06-13 16:50:04', '2025-06-13 16:56:30');
+INSERT INTO `action_roles` VALUES (25, 2, 1, 'admin', '2025-06-13 16:56:30', '2025-06-13 16:56:30', '2025-06-13 16:56:30');
+INSERT INTO `action_roles` VALUES (26, 2, 1, 'admin', '2025-06-13 16:56:30', '2025-06-13 16:56:30', '2025-06-13 17:01:21');
+INSERT INTO `action_roles` VALUES (27, 2, 1, 'admin', '2025-06-13 17:01:21', '2025-06-13 17:01:21', '2025-06-13 17:01:21');
+INSERT INTO `action_roles` VALUES (28, 2, 1, 'admin', '2025-06-13 17:01:21', '2025-06-13 17:01:21', '2025-06-13 17:02:12');
+INSERT INTO `action_roles` VALUES (29, 2, 1, 'admin', '2025-06-13 17:02:12', '2025-06-13 17:02:12', '2025-06-13 17:02:12');
+INSERT INTO `action_roles` VALUES (30, 2, 1, 'admin', '2025-06-13 17:02:12', '2025-06-13 17:02:12', '2025-06-13 17:07:48');
+INSERT INTO `action_roles` VALUES (31, 2, 1, 'admin', '2025-06-13 17:07:48', '2025-06-13 17:07:48', '2025-06-13 17:07:48');
+INSERT INTO `action_roles` VALUES (32, 2, 1, 'admin', '2025-06-13 17:07:48', '2025-06-13 17:07:48', '2025-06-13 17:17:32');
+INSERT INTO `action_roles` VALUES (33, 2, 1, 'admin', '2025-06-13 17:17:32', '2025-06-13 17:17:32', '2025-06-13 17:17:32');
+INSERT INTO `action_roles` VALUES (34, 2, 1, 'admin', '2025-06-13 17:17:32', '2025-06-13 17:17:32', NULL);
 
 -- ----------------------------
 -- Table structure for article
@@ -145,7 +167,7 @@ CREATE TABLE `menu`  (
 -- ----------------------------
 -- Records of menu
 -- ----------------------------
-INSERT INTO `menu` VALUES (1, 0, 'home', '/home', '', 'home/index', 2, 1, 0, '{\"icon\": \"iconfont icon-shouye\", \"roles\": [1], \"title\": \"message.router.home\", \"isHide\": false, \"isLink\": \"\", \"isAffix\": true, \"isIframe\": false, \"isKeepAlive\": true}', '2025-05-23 15:37:03', '2025-05-28 08:40:42', NULL);
+INSERT INTO `menu` VALUES (1, 0, 'home', '/home', '', 'home/index', 2, 1, 0, '{\"icon\": \"iconfont icon-shouye\", \"roles\": [1], \"title\": \"message.router.home\", \"isHide\": false, \"isLink\": \"\", \"isAffix\": true, \"isIframe\": false, \"isKeepAlive\": true}', '2025-05-23 15:37:03', '2025-06-13 11:10:18', NULL);
 INSERT INTO `menu` VALUES (2, 0, 'system', '/system', '/system/menu', 'layouts/routerView/parent', 2, 1, 0, '{\"icon\": \"iconfont icon-xitongshezhi\", \"roles\": [1], \"title\": \"message.router.system\", \"isHide\": false, \"isLink\": \"\", \"isAffix\": false, \"isIframe\": false, \"isKeepAlive\": true}', '2025-05-23 15:39:37', '2025-05-27 16:49:52', NULL);
 INSERT INTO `menu` VALUES (3, 2, 'systemMenu', '/system/menu', '', 'system/menu/index', 2, 1, 0, '{\"icon\": \"iconfont icon-caidan\", \"roles\": [1], \"title\": \"message.router.systemMenu\", \"isHide\": false, \"isLink\": \"\", \"isAffix\": false, \"isIframe\": false, \"isKeepAlive\": true}', '2025-05-23 15:41:38', '2025-06-11 17:17:14', NULL);
 INSERT INTO `menu` VALUES (4, 2, 'systemUser', '/system/user', '', 'system/user/index', 2, 1, 0, '{\"icon\": \"iconfont icon-icon-\", \"roles\": [1], \"title\": \"message.router.systemUser\", \"isHide\": false, \"isLink\": \"\", \"isAffix\": false, \"isIframe\": false, \"isKeepAlive\": true}', '2025-05-23 23:26:38', '2025-06-11 17:17:29', NULL);
@@ -179,12 +201,14 @@ CREATE TABLE `menu_action`  (
 -- ----------------------------
 -- Records of menu_action
 -- ----------------------------
-INSERT INTO `menu_action` VALUES (1, 0, 3, 1, 'btn', 'primary', 'small', 2, '新增菜单', '', 2, 0, '2025-05-21 10:24:14', '2025-06-03 16:54:37', NULL);
-INSERT INTO `menu_action` VALUES (2, 0, 3, 2, 'btn', 'primary', 'small', 2, '编辑', '', 2, 0, '2025-05-21 10:30:24', '2025-05-21 10:30:24', NULL);
-INSERT INTO `menu_action` VALUES (3, 0, 3, 2, 'btn', 'primary', 'small', 2, '功能', '', 2, 0, '2025-05-21 10:30:37', '2025-05-21 10:30:37', NULL);
-INSERT INTO `menu_action` VALUES (4, 0, 3, 2, 'btn', 'danger', 'small', 1, '删除', '', 2, 0, '2025-05-21 10:30:49', '2025-05-21 10:30:49', NULL);
+INSERT INTO `menu_action` VALUES (1, 0, 3, 1, 'btn', 'primary', 'small', 2, '新增菜单', 'sys.menu.add', 2, 0, '2025-05-21 10:24:14', '2025-06-13 16:26:48', NULL);
+INSERT INTO `menu_action` VALUES (2, 0, 3, 2, 'btn', 'primary', 'small', 2, '编辑', 'sys.menu.edit', 2, 0, '2025-05-21 10:30:24', '2025-06-13 17:17:32', NULL);
+INSERT INTO `menu_action` VALUES (3, 0, 3, 2, 'btn', 'primary', 'small', 2, '功能', 'sys.menu.action', 2, 0, '2025-05-21 10:30:37', '2025-06-13 16:27:43', NULL);
+INSERT INTO `menu_action` VALUES (4, 0, 3, 2, 'btn', 'danger', 'small', 1, '删除', 'sys.menu.del', 2, 0, '2025-05-21 10:30:49', '2025-06-13 16:27:51', NULL);
 INSERT INTO `menu_action` VALUES (5, 0, 3, 1, 'btn', 'primary', 'small', 2, '测试', '', 2, 0, '2025-06-03 16:48:56', '2025-06-03 16:48:56', '2025-06-03 16:55:38');
-INSERT INTO `menu_action` VALUES (6, 3, 3, 1, 'btn', 'primary', 'small', 2, '新增功能', '', 2, 0, '2025-06-11 11:46:16', '2025-06-11 14:14:25', NULL);
+INSERT INTO `menu_action` VALUES (6, 3, 3, 1, 'btn', 'primary', 'small', 2, '新增功能', 'sys.menu.action.add', 2, 0, '2025-06-11 11:46:16', '2025-06-13 16:28:07', NULL);
+INSERT INTO `menu_action` VALUES (7, 3, 3, 2, 'btn', 'primary', 'small', 2, '编辑', 'sys.menu.action.edit', 2, 0, '2025-06-13 11:36:56', '2025-06-13 16:28:14', NULL);
+INSERT INTO `menu_action` VALUES (8, 3, 3, 2, 'btn', 'danger', 'small', 2, '删除', 'sys.menu.action.del', 2, 0, '2025-06-13 11:37:07', '2025-06-13 16:28:21', NULL);
 
 -- ----------------------------
 -- Table structure for menu_roles
@@ -226,6 +250,8 @@ INSERT INTO `menu_roles` VALUES (29, 5, 1, 'admin', '2025-06-11 17:17:36', '2025
 INSERT INTO `menu_roles` VALUES (30, 5, 1, 'admin', '2025-06-11 17:17:36', '2025-06-11 17:17:36', NULL);
 INSERT INTO `menu_roles` VALUES (31, 6, 1, 'admin', '2025-06-11 17:17:42', '2025-06-11 17:17:42', '2025-06-11 17:17:42');
 INSERT INTO `menu_roles` VALUES (32, 6, 1, 'admin', '2025-06-11 17:17:42', '2025-06-11 17:17:42', NULL);
+INSERT INTO `menu_roles` VALUES (33, 1, 1, 'admin', '2025-06-13 11:10:18', '2025-06-13 11:10:18', '2025-06-13 11:10:18');
+INSERT INTO `menu_roles` VALUES (34, 1, 1, 'admin', '2025-06-13 11:10:18', '2025-06-13 11:10:18', NULL);
 
 -- ----------------------------
 -- Table structure for roles

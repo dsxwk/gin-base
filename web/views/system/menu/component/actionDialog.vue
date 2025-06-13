@@ -70,7 +70,7 @@ const state = reactive({
       { key: 'id', colWidth: '', title: 'ID', type: 'text', isCheck: true },
       { key: 'pid', colWidth: '100', title: '父级id', type: 'text', isCheck: true },
       { key: 'label', colWidth: '100', title: '功能名称', type: 'text', isCheck: true },
-      { key: 'valueAuth', colWidth: '120', title: '权限标识', type: 'text', isCheck: true },
+      { key: 'authValue', colWidth: '120', title: '权限标识', type: 'text', isCheck: true },
       { key: 'parent', colWidth: '100', title: '父级功能', type: 'text', isCheck: true,
         render: (scope) => {
           return scope.row?.parent?.label

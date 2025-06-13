@@ -13,7 +13,7 @@
           :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
       >
         <template #tools>
-          <div class="table-tool" v-auths="metaAuthBtnList">
+          <div class="table-tool">
             <el-button size="default" type="primary" @click="onOpenAddMenu('add')">
               <el-icon>
                 <ele-FolderAdd/>
@@ -23,7 +23,7 @@
           </div>
         </template>
         <template #operation="{row}">
-          <div class="flex items-center" v-auths="metaAuthBtnList">
+          <div class="flex items-center">
             <el-button type="primary" size="small" @click="onOpenEditMenu('edit', row)">编辑</el-button>
             <el-button type="primary" size="small" @click="onOpenMenuAction(row)">功能</el-button>
             <el-popconfirm title="确定删除吗？" @confirm="onTableDelRow(row)">
@@ -63,6 +63,7 @@ const route = useRoute();
 const metaAuthBtnList = route.meta?.authBtnList?.map(item => {
   return item?.authValue
 }).filter(Boolean) || [];
+console.log(metaAuthBtnList);
 const api = menuApi();
 // 定义变量内容
 const tableRef = ref();

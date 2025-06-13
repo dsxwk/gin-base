@@ -11,7 +11,7 @@ type MenuAction struct {
 	MenuID    int64  `json:"menu_id" validate:"required" label:"菜单ID"`
 	Type      int64  `json:"type" validate:"required" label:"类型 1=header 2=operation"`
 	Label     string `json:"label" validate:"required" label:"功能名称"`
-	AuthValue string `json:"authValue" label:"权限标识"`
+	AuthValue string `json:"authValue" validate:"required" label:"权限标识"`
 	IsLink    string `json:"isLink" validate:"required" label:"是否为链接 1=是 2=否"`
 	Sort      string `json:"sort" validate:"required" label:"排序"`
 }

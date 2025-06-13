@@ -7,8 +7,8 @@ import (
 
 type Meta struct {
 	Title       string  `json:"title" validate:"required" label:"菜单名称"`
-	Icon        string  `json:"icon:icon" validate:"required" label:"菜单图标"`
-	IsHide      bool    `json:"isHide:isHide" validate:"required" label:"是否隐藏"`
+	Icon        string  `json:"icon" validate:"required" label:"菜单图标"`
+	IsHide      bool    `json:"isHide" validate:"required" label:"是否隐藏"`
 	IsKeepAlive bool    `json:"isKeepAlive" validate:"required" label:"是否缓存"`
 	IsAffix     bool    `json:"isAffix" validate:"required" label:"是否固定"`
 	IsLink      string  `json:"isLink" validate:"required" label:"外链/内嵌时链接地址"` // 外链/内嵌时链接地址（http:xxx.com），开启外链条件，`1、isLink: 链接地址不为空`
@@ -24,7 +24,7 @@ type Menu struct {
 	Path     string `json:"path" validate:"required" label:"路由路径"`
 	Redirect string `json:"redirect" validate:"required" label:"重定向"`
 	IsLink   bool   `json:"isLink" validate:"required" label:"是否外链"`
-	Sort     string `json:"sort" validate:"required" label:"排序"`
+	Sort     int64  `json:"sort" validate:"required" label:"排序"`
 	Meta     Meta   `json:"meta" validate:"required" label:"元数据"`
 }
 

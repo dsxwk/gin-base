@@ -57,7 +57,7 @@ func (s *MenuController) Create(c *gin.Context) {
 		return
 	}
 
-	err = copier.Copy(&menuValidate, &req)
+	err = copier.CopyWithOption(&menuValidate, &req, copier.Option{DeepCopy: true})
 	if err != nil {
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
@@ -110,7 +110,8 @@ func (s *MenuController) Update(c *gin.Context) {
 
 	req.ID = id
 	menuValidate.ID = id
-	err = copier.Copy(&menuValidate, &req)
+
+	err = copier.CopyWithOption(&menuValidate, &req, copier.Option{DeepCopy: true})
 	if err != nil {
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return

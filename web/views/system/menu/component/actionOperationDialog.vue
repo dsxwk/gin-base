@@ -111,13 +111,7 @@ const formData = computed(() => [
       placeholder: "请输入权限标识",
       clearable: true
     },
-    rules: [
-      {
-        required: true,
-        message: "请输入权限标识",
-        trigger: "blur"
-      },
-    ],
+    rules: [],
   },
   {
     label: '上级功能',

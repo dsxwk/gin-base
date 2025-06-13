@@ -60,6 +60,10 @@ func (s *MenuService) All(roleIds string) (models []model.Menu, err error) {
 		return models, err
 	}
 
+	for k, _ := range models {
+		models[k].Meta.AuthBtnList = models[k].MenuAction
+	}
+
 	return models, nil
 }
 

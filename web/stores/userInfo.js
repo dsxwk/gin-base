@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia';
-import Cookies from 'js-cookie';
+// import Cookies from 'js-cookie';
 import {Session} from '/@/utils/storage';
 
 /**

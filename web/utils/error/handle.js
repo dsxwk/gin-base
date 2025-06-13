@@ -4,6 +4,8 @@ import pnotifyConfirm from '/@/utils/pnotify/confirm.js';
 import {Session} from '/@/utils/storage';
 import {ElMessage} from 'element-plus';
 
+const recentErrors = new Map();
+
 /**
  * 全局代码错误捕捉
  *
@@ -12,6 +14,7 @@ import {ElMessage} from 'element-plus';
  */
 const errorHandler = (error) => {
     console.log(error);
+
     // 过滤 HTTP 请求错误
     if (error.status || error.status === 0) {
         return false;
@@ -24,32 +27,26 @@ const errorHandler = (error) => {
         RangeError: '使用内置对象时，参数超范围',
         SyntaxError: '语法错误',
         EvalError: '错误的使用了Eval',
-        URIError: 'URI错误'
+        URIError: 'URI错误',
+        400: '请求错误',
+        401: '请求未授权',
+        403: '禁止访问',
+        404: '请求未找到',
+        500: 'System Error',
     };
 
-    if (error && error.code) {
-        switch (error.code) {
-            case 400:
-                errorMap[error.code] = '请求错误';
-                break;
-            case 401:
-                errorMap[error.code] = '请求未授权';
-                break;
-            case 403:
-                errorMap[error.code] = '禁止访问';
-                break;
-            case 404:
-                errorMap[error.code] = '请求未找到';
-                break;
-            case 500:
-                errorMap[error.code] = 'System Error';
-                break;
-            default:
-                break;
-        }
-    }
+    const code = error?.code || error?.name || 'unknown';
+    const msg = typeof error === 'string' ? error : error?.msg || '未知错误';
+    const errorKey = `${code}-${msg}`;
 
-    let errorName = errorMap[error.name] || errorMap[error.code] || '未知错误';
+    // 短时间内重复错误，直接忽略
+    if (recentErrors.has(errorKey)) return false;
+
+    recentErrors.set(errorKey, true);
+    // 允许再次弹出同类错误
+    setTimeout(() => recentErrors.delete(errorKey), 1);
+
+    const errorName = errorMap[error.name] || errorMap[error.code] || '未知错误';
 
     pnotify.error(
         typeof error === 'string' ? error : error?.msg ? error?.msg : '未知错误',

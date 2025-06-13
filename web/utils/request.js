@@ -42,7 +42,7 @@ export default async function request(path, config) {
 
     if (res?.code !== 0) {
         NextLoading.done();
-
+        errorHandler(res);
         // throw new Error(res?.msg)
         return Promise.reject(res);
     }

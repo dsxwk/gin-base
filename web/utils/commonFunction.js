@@ -68,3 +68,54 @@ export default function () {
 export function sprintf(template, ...args) {
 	return template.replace(/%s/g, () => args.shift());
 }
+
+export function arrayColumnDeep(array, valueKey = null, indexKey = null, unique = false) {
+	const result = [];
+
+	for (const item of array) {
+		const values = valueKey !== null ? getDeepValues(item, valueKey.split('.')) : [item];
+		const key = indexKey !== null ? getNestedValue(item, indexKey) : null;
+
+		if (indexKey !== null && (typeof key === 'string' || typeof key === 'number')) {
+			result[key] = values;
+		} else {
+			result.push(...values);
+		}
+	}
+
+	return unique ? [...new Set(result.flat(Infinity))] : result;
+}
+
+function getNestedValue(obj, path) {
+	const keys = typeof path === 'string' ? path.split('.') : path;
+	let current = obj;
+	for (const key of keys) {
+		if (current && typeof current === 'object' && key in current) {
+			current = current[key];
+		} else {
+			return undefined;
+		}
+	}
+	return current;
+}
+
+function getDeepValues(obj, pathParts) {
+	const key = pathParts[0];
+	const rest = pathParts.slice(1);
+
+	if (Array.isArray(obj)) {
+		return obj.flatMap(o => getDeepValues(o, pathParts));
+	}
+
+	if (typeof obj !== 'object' || obj === null) return [];
+
+	if (!(key in obj)) return [];
+
+	const sub = obj[key];
+
+	if (rest.length === 0) {
+		return Array.isArray(sub) ? sub : [sub];
+	}
+
+	return getDeepValues(sub, rest);
+}

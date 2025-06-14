@@ -13,21 +13,21 @@
       >
         <template #tools>
           <div class="table-tool">
-            <el-button size="default" type="primary" @click="onOpenAddUser('add')">
+            <el-button v-auth="'sys.user.add'" size="default" type="primary" @click="onOpenAddUser('add')">
               <el-icon>
                 <ele-FolderAdd/>
               </el-icon>
               新增用户
             </el-button>
-            <el-button size="default" type="danger" @click="batchDelete">批量删除</el-button>
+            <el-button v-auth="'sys.user.batchDel'" size="default" type="danger" @click="batchDelete">批量删除</el-button>
           </div>
         </template>
         <template #operation="{row}">
           <div class="flex items-center">
-            <el-button :disabled="row.id === 1" size="small" type="primary" @click="onOpenEditUser('edit', row)">编辑</el-button>
+            <el-button v-auth="'sys.user.edit'" :disabled="row.id === 1" size="small" type="primary" @click="onOpenEditUser('edit', row)">编辑</el-button>
             <el-popconfirm title="确定删除吗？" @confirm="onTableDelRow(row)">
               <template #reference>
-                <el-button :disabled="row.id === 1" size="small" type="danger">删除</el-button>
+                <el-button v-auth="'sys.user.del'" :disabled="row.id === 1" size="small" type="danger">删除</el-button>
               </template>
             </el-popconfirm>
           </div>

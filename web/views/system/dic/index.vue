@@ -14,7 +14,7 @@
       >
         <template #tools>
           <div class="table-tool">
-            <el-button size="default" type="primary" @click="onOpenAddDict('add')">
+            <el-button v-auth="'sys.dic.add'" size="default" type="primary" @click="onOpenAddDict('add')">
               <el-icon>
                 <ele-FolderAdd/>
               </el-icon>
@@ -24,10 +24,10 @@
         </template>
         <template #operation="{row}">
           <div class="flex items-center">
-            <el-button type="primary" size="small" @click="onOpenEditDict('edit', row)">编辑</el-button>
+            <el-button v-auth="'sys.dic.edit'" type="primary" size="small" @click="onOpenEditDict('edit', row)">编辑</el-button>
             <el-popconfirm title="确定删除吗？" @confirm="onTableDelRow(row)">
               <template #reference>
-                <el-button size="small" type="danger">删除</el-button>
+                <el-button v-auth="'sys.dic.del'" size="small" type="danger">删除</el-button>
               </template>
             </el-popconfirm>
           </div>

@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"gin-base/app/model"
-	"gin-base/app/validate"
 	"gin-base/common/base"
 	"gin-base/common/global"
 	"gin-base/helper/utils"
@@ -16,10 +15,9 @@ type MenuService struct {
 }
 
 // List 列表
-// @param search validate.MenuSearch
 // @return models []model.Menu, err error
-func (s *MenuService) List(search validate.MenuSearch) (models []model.Menu, err error) {
-	models, err = s.All(search.RoleIds)
+func (s *MenuService) List() (models []model.Menu, err error) {
+	models, err = s.All()
 
 	if err != nil {
 		return models, err
@@ -30,10 +28,10 @@ func (s *MenuService) List(search validate.MenuSearch) (models []model.Menu, err
 	return models, nil
 }
 
-// All 获取所有菜单
-// @param search validate.MenuSearch
+// RoleMenu 角色菜单
+// @param roleIds string
 // @return models []model.Menu, err error
-func (s *MenuService) All(roleIds string) (models []model.Menu, err error) {
+func (s *MenuService) RoleMenu(roleIds string) (models []model.Menu, err error) {
 	var (
 		roleIdsArr []int64
 	)
@@ -41,27 +39,71 @@ func (s *MenuService) All(roleIds string) (models []model.Menu, err error) {
 	if roleIds != "" {
 		roleIds = `[` + roleIds + `]`
 		roleIdsArr = utils.ConvertToArr[int64](&roleIds)
+	} else {
+		// 空角色
+		return []model.Menu{}, nil
 	}
 
-	db := global.DB.
+	err = global.DB.
 		Preload("MenuRoles").
 		Preload("MenuAction").
-		Preload("MenuAction.ActionRoles").
+		Preload("MenuAction.ActionRoles", "role_id IN ?", roleIdsArr).
 		Joins("LEFT JOIN menu_roles ON menu_roles.menu_id = menu.id").
+		Where("menu_roles.role_id IN ?", roleIdsArr).
 		Order("sort asc").
-		Group("menu.id")
+		Group("menu.id").
+		Find(&models).Error
 
-	if roleIds != "" {
-		db = db.Where("menu_roles.role_id IN ?", roleIdsArr)
-	}
-
-	err = db.Find(&models).Error
 	if err != nil {
 		return models, err
 	}
 
-	for k, _ := range models {
+	// 处理 MenuAction 权限
+	for k, menu := range models {
+		var (
+			filteredActions []*model.MenuAction
+		)
+
+		for _, action := range menu.MenuAction {
+			hasRole := false
+			for _, role := range action.ActionRoles {
+				for _, rid := range roleIdsArr {
+					if role.RoleID == rid {
+						hasRole = true
+						break
+					}
+				}
+				if hasRole {
+					break
+				}
+			}
+
+			if hasRole {
+				filteredActions = append(filteredActions, action)
+			}
+		}
+
+		models[k].MenuAction = filteredActions
 		models[k].Meta.AuthBtnList = models[k].MenuAction
+	}
+
+	models = s.GetTree(models, 0)
+
+	return models, nil
+}
+
+// All 获取所有菜单
+// @param search validate.MenuSearch
+// @return models []model.Menu, err error
+func (s *MenuService) All() (models []model.Menu, err error) {
+	err = global.DB.
+		Preload("MenuRoles").
+		Preload("MenuAction").
+		Preload("MenuAction.ActionRoles").
+		Order("sort asc").
+		Group("menu.id").Find(&models).Error
+	if err != nil {
+		return models, err
 	}
 
 	return models, nil
@@ -161,11 +203,10 @@ func (s *MenuService) Update(m model.Menu) (model.Menu, error) {
 // @return m model.Menu, err error
 func (s *MenuService) Detail(id int64) (m model.Menu, err error) {
 	var (
-		menus  []model.Menu
-		search validate.MenuSearch
+		menus []model.Menu
 	)
 
-	menus, err = s.All(search.RoleIds)
+	menus, err = s.All()
 
 	if err != nil {
 		return m, err

@@ -20,10 +20,26 @@ type MenuController struct {
 func (s *MenuController) List(c *gin.Context) {
 	var (
 		menuService service.MenuService
+	)
+
+	data, err := menuService.List()
+	if err != nil {
+		global.Log.Error(err.Error())
+		s.ApiResponse(c, global.SystemError, err.Error())
+		return
+	}
+
+	s.ApiResponse(c, global.Success, data)
+}
+
+// RoleMenu 角色菜单
+// @Router /api/v1/menu/role-menu [get]
+func (s *MenuController) RoleMenu(c *gin.Context) {
+	var (
+		menuService service.MenuService
 		search      validate.MenuSearch
 	)
 
-	// 搜索
 	err := c.ShouldBindQuery(&search)
 	if err != nil {
 		global.Log.Error(err.Error())
@@ -31,7 +47,7 @@ func (s *MenuController) List(c *gin.Context) {
 		return
 	}
 
-	data, err := menuService.List(search)
+	data, err := menuService.RoleMenu(search.RoleIds)
 	if err != nil {
 		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())

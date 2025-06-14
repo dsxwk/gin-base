@@ -18,6 +18,17 @@ export function menuApi() {
                     value: true
                 }
             },
+            // 角色菜单
+            roleMenu: {
+                name: '角色菜单',
+                url: '/menu/role-menu',
+                method: 'get',
+                params: {},
+                token: {
+                    name: 'token',
+                    value: true
+                }
+            },
             create: {
                 name: '创建菜单',
                 url: '/menu',

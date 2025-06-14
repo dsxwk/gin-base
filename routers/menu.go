@@ -16,6 +16,9 @@ func (r MenuRouter) RegisterRoutes(routerGroup *gin.RouterGroup) {
 	// 列表
 	routerGroup.GET("/menu", controller.List)
 
+	// 角色菜单
+	routerGroup.GET("/menu/role-menu", controller.RoleMenu)
+
 	// 创建
 	routerGroup.POST("/menu", controller.Create)
 

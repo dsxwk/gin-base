@@ -6,6 +6,7 @@ package model
 
 import (
 	"gorm.io/gorm"
+	"time"
 )
 
 const TableNameUser = "user"
@@ -31,4 +32,12 @@ type User struct {
 // TableName User's table name
 func (User) TableName() string {
 	return TableNameUser
+}
+
+// BeforeUpdate 更新之前
+func (u *User) BeforeUpdate(tx *gorm.DB) (err error) {
+	now := JsonTime(time.Now())
+	u.UpdatedAt = &now
+
+	return nil
 }

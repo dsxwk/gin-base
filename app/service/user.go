@@ -107,13 +107,20 @@ func (s *UserService) Update(m model.User) (model.User, error) {
 		})
 	}
 
+	data := utils.StructToMapFilter(m, []string{
+		"createdAt", "updatedAt", "deletedAt", "password", "userRoles",
+	})
+
 	tx := global.DB.Begin()
-	err := tx.Updates(&m).Error
+	err := tx.Model(&m).
+		Where("id = ?", m.ID).
+		Updates(data).Error
 	if err != nil {
 		return m, err
 	}
 
-	err = tx.Where("user_id", m.ID).Delete(&model.UserRoles{}).Error
+	err = tx.Where("user_id", m.ID).
+		Delete(&model.UserRoles{}).Error
 	if err != nil {
 		return m, err
 	}

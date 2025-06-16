@@ -6,10 +6,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"gin-base/common/global"
+	"github.com/fatih/structs"
 	"golang.org/x/crypto/bcrypt"
 	"log"
 	"math/rand"
 	"reflect"
+	"slices"
 	"strings"
 	"time"
 )
@@ -309,4 +311,23 @@ func BatchUpdateSql(table string, data []map[string]interface{}, primaryKey stri
 	sql := fmt.Sprintf("UPDATE `%s` SET %s WHERE %s", table, setClause, whereClause)
 
 	return sql, values
+}
+
+// StructToMapFilter 将结构体转换为map并过滤指定的字段
+func StructToMapFilter(data interface{}, excludeFields []string) map[string]interface{} {
+	s := structs.New(data)
+	s.TagName = "json"
+	val := s.Map()
+	// val := structs.Map(data)
+
+	m := make(map[string]interface{})
+	for k, v := range val {
+		if slices.Contains(excludeFields, k) {
+			continue
+		}
+
+		m[CamelToSnake(k)] = v
+	}
+
+	return m
 }

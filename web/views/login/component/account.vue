@@ -119,13 +119,13 @@ const onLogin = async () => {
     response.data.user.roles = response.data.userRoles.map(item => item.name);
   }
   await useUserInfo().setUserInfos(response?.data?.user);
-  if (themeConfig.value.isRequestRoutes) {
+  // if (themeConfig.value.isRequestRoutes) {
     // 模拟后端控制路由，isRequestRoutes 为 true，则开启后端控制路由
     // 添加完动态路由，再进行 router 跳转，否则可能报错 No match found for location with path "/"
     const isNoPower = await initBackEndControlRoutes();
     // 执行完 initBackEndControlRoutes，再执行 loginSuccess
     loginSuccess(isNoPower);
-  }
+  // }
 };
 // 登录成功后的跳转
 const loginSuccess = (isNoPower) => {

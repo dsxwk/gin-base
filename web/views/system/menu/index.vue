@@ -44,7 +44,6 @@
 
 <script setup name="systemMenu">
 import {defineAsyncComponent, h, onMounted, reactive, ref} from 'vue';
-import {useRoute} from 'vue-router';
 import {ElMessage} from 'element-plus';
 import {menuApi} from '/@/api/menu';
 import SvgIcon from '/@/components/svgIcon/index.vue';
@@ -58,12 +57,6 @@ const Table = defineAsyncComponent(() => import('/@/components/table/index.vue')
 const TableSearch = defineAsyncComponent(() => import('/@/components/table/component/search.vue'));
 const MenuDialog = defineAsyncComponent(() => import('/@/views/system/menu/component/dialog.vue'));
 const ActionDialog = defineAsyncComponent(() => import('/@/views/system/menu/component/actionDialog.vue'));
-
-const route = useRoute();
-console.log('route', route);
-const metaAuthBtnList = route.meta?.authBtnList?.map(item => {
-  return item?.authValue
-}).filter(Boolean) || [];
 
 const api = menuApi();
 // 定义变量内容

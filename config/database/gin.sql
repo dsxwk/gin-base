@@ -11,7 +11,7 @@
  Target Server Version : 80012
  File Encoding         : 65001
 
- Date: 13/06/2025 17:25:41
+ Date: 16/06/2025 09:17:29
 */
 
 SET NAMES utf8mb4;
@@ -30,7 +30,7 @@ CREATE TABLE `action_roles`  (
   `updated_at` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `deleted_at` datetime NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '功能角色表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 35 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '功能角色表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of action_roles
@@ -69,6 +69,19 @@ INSERT INTO `action_roles` VALUES (31, 2, 1, 'admin', '2025-06-13 17:07:48', '20
 INSERT INTO `action_roles` VALUES (32, 2, 1, 'admin', '2025-06-13 17:07:48', '2025-06-13 17:07:48', '2025-06-13 17:17:32');
 INSERT INTO `action_roles` VALUES (33, 2, 1, 'admin', '2025-06-13 17:17:32', '2025-06-13 17:17:32', '2025-06-13 17:17:32');
 INSERT INTO `action_roles` VALUES (34, 2, 1, 'admin', '2025-06-13 17:17:32', '2025-06-13 17:17:32', NULL);
+INSERT INTO `action_roles` VALUES (35, 7, 1, 'admin', '2025-06-16 08:53:37', '2025-06-16 08:53:37', NULL);
+INSERT INTO `action_roles` VALUES (36, 8, 1, 'admin', '2025-06-16 08:53:37', '2025-06-16 08:53:37', NULL);
+INSERT INTO `action_roles` VALUES (37, 9, 1, 'admin', '2025-06-16 08:53:37', '2025-06-16 08:53:37', NULL);
+INSERT INTO `action_roles` VALUES (38, 10, 1, 'admin', '2025-06-16 08:53:37', '2025-06-16 08:53:37', NULL);
+INSERT INTO `action_roles` VALUES (39, 11, 1, 'admin', '2025-06-16 08:53:37', '2025-06-16 08:53:37', NULL);
+INSERT INTO `action_roles` VALUES (40, 12, 1, 'admin', '2025-06-16 08:53:37', '2025-06-16 08:53:37', NULL);
+INSERT INTO `action_roles` VALUES (41, 13, 1, 'admin', '2025-06-16 08:53:37', '2025-06-16 08:53:37', NULL);
+INSERT INTO `action_roles` VALUES (42, 14, 1, 'admin', '2025-06-16 08:53:37', '2025-06-16 08:53:37', NULL);
+INSERT INTO `action_roles` VALUES (43, 15, 1, 'admin', '2025-06-16 08:53:37', '2025-06-16 08:53:37', NULL);
+INSERT INTO `action_roles` VALUES (44, 16, 1, 'admin', '2025-06-16 08:53:37', '2025-06-16 08:53:37', NULL);
+INSERT INTO `action_roles` VALUES (45, 17, 1, 'admin', '2025-06-16 08:53:37', '2025-06-16 08:53:37', NULL);
+INSERT INTO `action_roles` VALUES (46, 18, 1, 'admin', '2025-06-16 08:53:37', '2025-06-16 08:53:37', NULL);
+INSERT INTO `action_roles` VALUES (47, 19, 1, 'admin', '2025-06-16 08:53:37', '2025-06-16 08:53:37', NULL);
 
 -- ----------------------------
 -- Table structure for article
@@ -87,7 +100,7 @@ CREATE TABLE `article`  (
   `updated_at` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `deleted_at` datetime NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '文章表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '文章表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of article
@@ -106,7 +119,7 @@ CREATE TABLE `category`  (
   `updated_at` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `deleted_at` datetime NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '分类表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '分类表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of category
@@ -133,7 +146,7 @@ CREATE TABLE `dict`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_pid`(`pid`) USING BTREE,
   INDEX `idx_name`(`name`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '字典表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '字典表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of dict
@@ -196,7 +209,7 @@ CREATE TABLE `menu_action`  (
   `deleted_at` datetime NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_menu_id`(`menu_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '菜单功能表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '菜单功能表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of menu_action
@@ -209,6 +222,17 @@ INSERT INTO `menu_action` VALUES (5, 0, 3, 1, 'btn', 'primary', 'small', 2, '测
 INSERT INTO `menu_action` VALUES (6, 3, 3, 1, 'btn', 'primary', 'small', 2, '新增功能', 'sys.menu.action.add', 2, 0, '2025-06-11 11:46:16', '2025-06-13 16:28:07', NULL);
 INSERT INTO `menu_action` VALUES (7, 3, 3, 2, 'btn', 'primary', 'small', 2, '编辑', 'sys.menu.action.edit', 2, 0, '2025-06-13 11:36:56', '2025-06-13 16:28:14', NULL);
 INSERT INTO `menu_action` VALUES (8, 3, 3, 2, 'btn', 'danger', 'small', 2, '删除', 'sys.menu.action.del', 2, 0, '2025-06-13 11:37:07', '2025-06-13 16:28:21', NULL);
+INSERT INTO `menu_action` VALUES (9, 0, 4, 1, 'btn', 'primary', 'small', 2, '新增用户', 'sys.user.add', 2, 0, '2025-06-16 08:57:04', '2025-06-16 08:57:04', NULL);
+INSERT INTO `menu_action` VALUES (10, 0, 4, 1, 'btn', 'danger', 'small', 2, '批量删除', 'sys.user.batchDel', 2, 0, '2025-06-16 08:57:04', '2025-06-16 08:57:04', NULL);
+INSERT INTO `menu_action` VALUES (11, 0, 4, 2, 'btn', 'primary', 'small', 2, '编辑', 'sys.user.edit', 2, 0, '2025-06-16 08:57:04', '2025-06-16 08:57:04', NULL);
+INSERT INTO `menu_action` VALUES (12, 0, 4, 2, 'btn', 'danger', 'small', 2, '删除', 'sys.user.del', 2, 0, '2025-06-16 08:57:04', '2025-06-16 08:57:04', NULL);
+INSERT INTO `menu_action` VALUES (13, 0, 5, 1, 'btn', 'danger', 'small', 2, '批量删除', 'sys.role.batchDel', 2, 0, '2025-06-16 08:57:04', '2025-06-16 08:57:04', NULL);
+INSERT INTO `menu_action` VALUES (14, 0, 5, 1, 'btn', 'primary', 'small', 2, '新增角色', 'sys.role.add', 2, 0, '2025-06-16 08:57:04', '2025-06-16 08:57:04', NULL);
+INSERT INTO `menu_action` VALUES (15, 0, 5, 2, 'btn', 'primary', 'small', 2, '编辑', 'sys.role.edit', 2, 0, '2025-06-16 08:57:04', '2025-06-16 08:57:04', NULL);
+INSERT INTO `menu_action` VALUES (16, 0, 5, 2, 'btn', 'danger', 'small', 2, '删除', 'sys.role.del', 2, 0, '2025-06-16 08:57:04', '2025-06-16 08:57:04', NULL);
+INSERT INTO `menu_action` VALUES (17, 0, 6, 1, 'btn', 'primary', 'small', 2, '新增字典', 'sys.dic.add', 2, 0, '2025-06-16 08:57:04', '2025-06-16 08:57:04', NULL);
+INSERT INTO `menu_action` VALUES (18, 0, 6, 2, 'btn', 'primary', 'small', 2, '编辑', 'sys.dic.edit', 2, 0, '2025-06-16 08:57:04', '2025-06-16 08:57:04', NULL);
+INSERT INTO `menu_action` VALUES (19, 0, 6, 2, 'btn', 'danger', 'small', 2, '删除', 'sys.dic.del', 2, 0, '2025-06-16 08:57:04', '2025-06-16 08:57:04', NULL);
 
 -- ----------------------------
 -- Table structure for menu_roles
@@ -223,7 +247,7 @@ CREATE TABLE `menu_roles`  (
   `updated_at` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `deleted_at` datetime NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 32 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '菜单角色表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 35 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '菜单角色表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of menu_roles
@@ -266,7 +290,7 @@ CREATE TABLE `roles`  (
   `updated_at` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `deleted_at` datetime NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '角色表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '角色表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of roles
@@ -292,7 +316,7 @@ CREATE TABLE `system_config`  (
   `deleted_at` datetime NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uni_en_name`(`en_name`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '系统配置表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '系统配置表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of system_config
@@ -335,7 +359,7 @@ CREATE TABLE `user`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uniq_idx_username`(`username`) USING BTREE,
   UNIQUE INDEX `uniq_idx_email`(`email`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 37 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '用户表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 38 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '用户表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of user
@@ -385,7 +409,7 @@ CREATE TABLE `user_roles`  (
   `updated_at` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `deleted_at` datetime NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '用户角色表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '用户角色表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of user_roles

@@ -100,7 +100,11 @@ export async function setAddRoute() {
 export async function getBackEndControlRoutes() {
     // 模拟 admin 与 test
     const userInfo = Session.get("userInfo");
-    const roles = userInfo.userRoles?.map((item) => item.roleId);
+    if (!userInfo) {
+        Session.clear();
+        window.location.reload();
+    }
+    const roles = userInfo?.userRoles?.map((item) => item.roleId);
     return await api.roleMenu({roleIds: roles.join(',')});
 }
 

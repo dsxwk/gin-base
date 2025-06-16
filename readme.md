@@ -110,15 +110,17 @@ Project Address: https://gitee.com/lyt-top/vue-next-admin
 #### Backend
 ```bash
 # Backend Run Port:8080 Address:127.0.0.1:8080/api/v1/...
-cd path/to/your/backend
-go mod download
-go mod tidy vendor
-go run main.go # OR air
+cd path/gin-base
+go env -w GO111MODULE=on
+go env -w GOPROXY=https://goproxy.cn,direct
+go get -u
+go mod tidy
+go mod vendor # OR air
 ```
 #### Frontend
 ```bash
 # Frontend Run Port:3000 Address:127.0.0.1:3000
-cd path/to/your/frontend
+cd path/gin-base/web
 npm install
 npm run dev
 ```

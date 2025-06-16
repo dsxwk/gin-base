@@ -113,15 +113,17 @@ Golang Gin 是一个轻量级且高效的 Golang Web 框架。它具有高性能
 
 ```bash
 # 后端运行 端口8080 接口地址:127.0.0.1:8080/api/v1/...
-cd path/to/your/backend
-go mod download
-go mod tidy vendor
-go run main.go # 或 air
+cd path/gin-base
+go env -w GO111MODULE=on
+go env -w GOPROXY=https://goproxy.cn,direct
+go get -u
+go mod tidy
+go mod vendor # OR air
 ```
 
 ```bash
 # 前端运行 端口3000 访问地址:127.0.0.1:3000
-cd path/to/your/frontend
+cd path/gin-base/web
 npm install
 npm run dev
 ```

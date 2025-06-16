@@ -11,7 +11,7 @@
  Target Server Version : 80012
  File Encoding         : 65001
 
- Date: 16/06/2025 09:17:29
+ Date: 16/06/2025 16:46:24
 */
 
 SET NAMES utf8mb4;
@@ -82,6 +82,9 @@ INSERT INTO `action_roles` VALUES (44, 16, 1, 'admin', '2025-06-16 08:53:37', '2
 INSERT INTO `action_roles` VALUES (45, 17, 1, 'admin', '2025-06-16 08:53:37', '2025-06-16 08:53:37', NULL);
 INSERT INTO `action_roles` VALUES (46, 18, 1, 'admin', '2025-06-16 08:53:37', '2025-06-16 08:53:37', NULL);
 INSERT INTO `action_roles` VALUES (47, 19, 1, 'admin', '2025-06-16 08:53:37', '2025-06-16 08:53:37', NULL);
+INSERT INTO `action_roles` VALUES (48, 20, 1, 'admin', '2025-06-16 08:53:37', '2025-06-16 08:53:37', NULL);
+INSERT INTO `action_roles` VALUES (49, 21, 1, 'admin', '2025-06-16 08:53:37', '2025-06-16 08:53:37', NULL);
+INSERT INTO `action_roles` VALUES (50, 22, 1, 'admin', '2025-06-16 08:53:37', '2025-06-16 08:53:37', NULL);
 
 -- ----------------------------
 -- Table structure for article
@@ -186,6 +189,7 @@ INSERT INTO `menu` VALUES (3, 2, 'systemMenu', '/system/menu', '', 'system/menu/
 INSERT INTO `menu` VALUES (4, 2, 'systemUser', '/system/user', '', 'system/user/index', 2, 1, 0, '{\"icon\": \"iconfont icon-icon-\", \"roles\": [1], \"title\": \"message.router.systemUser\", \"isHide\": false, \"isLink\": \"\", \"isAffix\": false, \"isIframe\": false, \"isKeepAlive\": true}', '2025-05-23 23:26:38', '2025-06-11 17:17:29', NULL);
 INSERT INTO `menu` VALUES (5, 2, 'systemRole', '/system/role', '', 'system/role/index', 2, 1, 0, '{\"icon\": \"fa fa-user-circle-o\", \"roles\": [1], \"title\": \"message.router.systemRole\", \"isHide\": false, \"isLink\": \"\", \"isAffix\": false, \"isIframe\": false, \"isKeepAlive\": true}', '2025-05-25 14:37:04', '2025-06-11 17:17:36', NULL);
 INSERT INTO `menu` VALUES (6, 2, 'systemDic', '/system/dic', '', 'system/dic/index', 2, 1, 0, '{\"icon\": \"ele-Collection\", \"roles\": [1], \"title\": \"message.router.systemDic\", \"isHide\": false, \"isLink\": \"\", \"isAffix\": false, \"isIframe\": false, \"isKeepAlive\": true}', '2025-05-25 14:54:04', '2025-06-11 17:17:42', NULL);
+INSERT INTO `menu` VALUES (10, 0, 'article', '/article', '', 'article/index', 2, 1, 0, '{\"icon\": \"ele-Collection\", \"roles\": [1], \"title\": \"message.article.title\", \"isHide\": false, \"isLink\": \"\", \"isAffix\": false, \"isIframe\": false, \"authBtnList\": null, \"isKeepAlive\": true}', '2025-06-16 15:34:11', '2025-06-16 15:34:11', NULL);
 
 -- ----------------------------
 -- Table structure for menu_action
@@ -233,6 +237,9 @@ INSERT INTO `menu_action` VALUES (16, 0, 5, 2, 'btn', 'danger', 'small', 2, '删
 INSERT INTO `menu_action` VALUES (17, 0, 6, 1, 'btn', 'primary', 'small', 2, '新增字典', 'sys.dic.add', 2, 0, '2025-06-16 08:57:04', '2025-06-16 08:57:04', NULL);
 INSERT INTO `menu_action` VALUES (18, 0, 6, 2, 'btn', 'primary', 'small', 2, '编辑', 'sys.dic.edit', 2, 0, '2025-06-16 08:57:04', '2025-06-16 08:57:04', NULL);
 INSERT INTO `menu_action` VALUES (19, 0, 6, 2, 'btn', 'danger', 'small', 2, '删除', 'sys.dic.del', 2, 0, '2025-06-16 08:57:04', '2025-06-16 08:57:04', NULL);
+INSERT INTO `menu_action` VALUES (20, 0, 10, 1, 'btn', 'primary', 'small', 2, '新增文章', 'article.add', 2, 0, '2025-06-16 08:57:04', '2025-06-16 08:57:04', NULL);
+INSERT INTO `menu_action` VALUES (21, 0, 10, 2, 'btn', 'primary', 'small', 2, '编辑', 'article.edit', 2, 0, '2025-06-16 08:57:04', '2025-06-16 08:57:04', NULL);
+INSERT INTO `menu_action` VALUES (22, 0, 10, 2, 'btn', 'danger', 'small', 2, '删除', 'article.del', 2, 0, '2025-06-16 08:57:04', '2025-06-16 08:57:04', NULL);
 
 -- ----------------------------
 -- Table structure for menu_roles
@@ -276,6 +283,8 @@ INSERT INTO `menu_roles` VALUES (31, 6, 1, 'admin', '2025-06-11 17:17:42', '2025
 INSERT INTO `menu_roles` VALUES (32, 6, 1, 'admin', '2025-06-11 17:17:42', '2025-06-11 17:17:42', NULL);
 INSERT INTO `menu_roles` VALUES (33, 1, 1, 'admin', '2025-06-13 11:10:18', '2025-06-13 11:10:18', '2025-06-13 11:10:18');
 INSERT INTO `menu_roles` VALUES (34, 1, 1, 'admin', '2025-06-13 11:10:18', '2025-06-13 11:10:18', NULL);
+INSERT INTO `menu_roles` VALUES (35, 10, 1, 'admin', '2025-06-16 15:34:11', '2025-06-16 15:34:11', NULL);
+INSERT INTO `menu_roles` VALUES (36, 10, 1, 'admin', '2025-06-16 15:34:11', '2025-06-16 15:34:11', NULL);
 
 -- ----------------------------
 -- Table structure for roles
@@ -365,7 +374,7 @@ CREATE TABLE `user`  (
 -- Records of user
 -- ----------------------------
 INSERT INTO `user` VALUES (1, 'https://cdn.qitx.net/local/myblog/user_header_image/20230517/577a53d123bc4c4f19db0cb2c6c980a8.jpg', 'admin', '超级管理员', 'dsx.emil@qq.com', '$2a$10$OcSkSCBe8D5tGL2ulmJhTe0Xboy/fzwS1H7AdmkJjpQZfeGUHr5S6', '大师兄', 1, 31, 1, '2023-09-05 17:29:36', '2023-09-12 14:47:48', NULL);
-INSERT INTO `user` VALUES (2, '', 'test2', '李四1', 'ls@qq.com', '$2a$10$kycb2DM8CnubeoWABNPA1O2b0MrQQDqGsEZg8EuqK4G0a63EYDr.2', '昵称', 1, 1, 1, '2023-09-06 11:38:50', '2025-05-30 15:59:51', NULL);
+INSERT INTO `user` VALUES (2, '', 'test2', '李四1', 'ls@qq.com', '$2a$10$kycb2DM8CnubeoWABNPA1O2b0MrQQDqGsEZg8EuqK4G0a63EYDr.2', '昵称', 1, 1, 1, '2023-09-06 11:38:50', '2025-06-16 14:32:14', NULL);
 INSERT INTO `user` VALUES (4, '', 'test1', '测试1', 'test1@qq.com', '$2a$10$Ww.IvYhlDpNt6Uq07X5W0OswksocMpae9dmaE2TaHclINQoBUF3Fq', '昵称', 1, 22, 1, '2023-09-07 17:48:39', '2023-09-12 09:52:47', '2023-09-12 09:53:12');
 INSERT INTO `user` VALUES (10, '', 'dsx', '大师兄', 'dsx@qq.com', '$2a$10$Y2FUvgUMpMlJ5h/oooH7OOdInCZgheFQaiVkKu0Wx6YcXhiylAT3a', '大师兄1', 1, 0, 1, '2024-07-22 17:34:36', '2025-05-29 14:37:18', NULL);
 INSERT INTO `user` VALUES (11, '', 'admin1', '张三1', 'zs1@qq.com', '$2a$10$OcSkSCBe8D5tGL2ulmJhTe0Xboy/fzwS1H7AdmkJjpQZfeGUHr5S6', 'dsx', 1, 28, 1, '2023-09-05 17:29:36', '2023-09-12 14:47:48', NULL);
@@ -426,6 +435,14 @@ INSERT INTO `user_roles` VALUES (9, 10, 2, 'test', '2025-05-29 11:18:12', '2025-
 INSERT INTO `user_roles` VALUES (10, 10, 2, 'test', '2025-05-29 14:37:18', '2025-05-29 14:37:18', '2025-05-29 14:37:18');
 INSERT INTO `user_roles` VALUES (11, 10, 2, 'test', '2025-05-29 14:37:18', '2025-05-29 14:37:18', NULL);
 INSERT INTO `user_roles` VALUES (12, 2, 2, 'test', '2025-05-30 15:59:51', '2025-05-30 15:59:51', '2025-05-30 15:59:51');
-INSERT INTO `user_roles` VALUES (13, 2, 2, 'test', '2025-05-30 15:59:51', '2025-05-30 15:59:51', NULL);
+INSERT INTO `user_roles` VALUES (13, 2, 2, 'test', '2025-05-30 15:59:51', '2025-05-30 15:59:51', '2025-06-16 10:02:05');
+INSERT INTO `user_roles` VALUES (14, 2, 2, 'test', '2025-06-16 10:02:05', '2025-06-16 10:02:05', '2025-06-16 10:02:05');
+INSERT INTO `user_roles` VALUES (15, 2, 2, 'test', '2025-06-16 10:02:05', '2025-06-16 10:02:05', '2025-06-16 14:31:39');
+INSERT INTO `user_roles` VALUES (16, 2, 2, 'test', '2025-06-16 14:31:39', '2025-06-16 14:31:39', '2025-06-16 14:31:39');
+INSERT INTO `user_roles` VALUES (17, 2, 2, 'test', '2025-06-16 14:31:39', '2025-06-16 14:31:39', '2025-06-16 14:32:08');
+INSERT INTO `user_roles` VALUES (18, 2, 2, 'test', '2025-06-16 14:32:08', '2025-06-16 14:32:08', '2025-06-16 14:32:08');
+INSERT INTO `user_roles` VALUES (19, 2, 2, 'test', '2025-06-16 14:32:08', '2025-06-16 14:32:08', '2025-06-16 14:32:14');
+INSERT INTO `user_roles` VALUES (20, 2, 2, 'test', '2025-06-16 14:32:14', '2025-06-16 14:32:14', '2025-06-16 14:32:14');
+INSERT INTO `user_roles` VALUES (21, 2, 2, 'test', '2025-06-16 14:32:14', '2025-06-16 14:32:14', NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;

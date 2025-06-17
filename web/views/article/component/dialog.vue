@@ -1,6 +1,7 @@
 <template>
   <div class="system-menu-dialog-container">
-    <el-dialog :title="state.dialog.title" v-if="state.dialog.isShowDialog" v-model="state.dialog.isShowDialog" width="769px">
+    <el-dialog :title="state.dialog.title" v-if="state.dialog.isShowDialog" v-model="state.dialog.isShowDialog"
+               width="769px">
       <ConfigForm
           ref="dialogFormRef"
           v-model:model="state.ruleForm"
@@ -97,9 +98,15 @@ const getFormData = () => {
     {
       label: '内容',
       prop: 'content',
-      type: 'textarea',
+      type: 'editor',
       span: 24,
       attrs: {
+        style: {
+          'font-size': '16px',
+          'line-height': '1.6',
+          color: '#bbb',
+        },
+        disabled: false,
         placeholder: '请输入内容',
         clearable: true
       },

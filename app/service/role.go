@@ -21,14 +21,7 @@ func (s *RoleService) List(pageData global.PageData, search validate.RoleSearch)
 		models []model.Roles
 	)
 
-	// 获取where条件和参数
-	where, args := utils.BuildWhereClause(search, "form")
-
-	db := global.DB.Model(&model.Roles{}).Find(&models)
-	// 根据 where 子句添加条件
-	if where != "" {
-		db = db.Where(where, args...)
-	}
+	db := global.DB.Model(&model.Roles{}).Scopes(model.Search(search)).Find(&models)
 
 	// 获取总记录数
 	err := db.Count(&pageData.Total).Error

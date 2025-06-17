@@ -8,7 +8,6 @@ import (
 	"gin-base/common/global"
 	"github.com/fatih/structs"
 	"golang.org/x/crypto/bcrypt"
-	"log"
 	"math/rand"
 	"reflect"
 	"slices"
@@ -123,55 +122,6 @@ func FilterStructToMap(req map[string]interface{}, filterStruct interface{}) (re
 	}
 
 	return result
-}
-
-// BuildWhereClause 构建查询条件
-// @param: filters interface{}, tag string 获取的标签 json、form 等
-// @return: string, []interface{}
-func BuildWhereClause(filters interface{}, tag string) (string, []interface{}) {
-	var (
-		clauses []string
-		args    []interface{}
-		clause  string
-	)
-
-	val := reflect.ValueOf(filters)
-	if val.Kind() != reflect.Struct {
-		log.Fatalf("filters should be a struct, got %s", val.Kind())
-	}
-
-	typ := val.Type()
-	for i := 0; i < val.NumField(); i++ {
-		field := typ.Field(i)
-		value := val.Field(i)
-
-		// 忽略零值字段
-		if !value.IsZero() {
-			// 使用 json 标签作为列名
-			columnName := field.Tag.Get(tag)
-			if columnName == "" {
-				columnName = field.Name
-			}
-
-			// 将驼峰命名转换为蛇形命名
-			columnName = CamelToSnake(columnName)
-
-			// 根据字段类型构建查询条件
-			switch value.Kind() {
-			case reflect.String:
-				clause = fmt.Sprintf("%s LIKE ?", columnName)
-				args = append(args, "%"+value.String()+"%")
-			default:
-				clause = fmt.Sprintf("%s = ?", columnName)
-				args = append(args, value.Interface())
-			}
-
-			clauses = append(clauses, clause)
-		}
-	}
-
-	whereClause := strings.Join(clauses, " AND ")
-	return whereClause, args
 }
 
 // ToCamelCase 将下划线分隔的字段名转换为驼峰命名

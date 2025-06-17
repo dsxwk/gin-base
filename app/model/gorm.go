@@ -5,7 +5,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"gin-base/helper/utils"
+	"gorm.io/gorm"
+	"reflect"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -18,6 +22,40 @@ type JsonInt64 []int64
 type BoolInt64 bool
 
 type JsonMap map[string]interface{}
+
+// Search 公共搜索 示例：global.DB.Model(&model.User{}).Scopes(model.Search(search)).Find(&models)
+func Search(filters interface{}) func(*gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		val := reflect.ValueOf(filters)
+		if val.Kind() == reflect.Ptr {
+			val = val.Elem()
+		}
+		typ := val.Type()
+
+		for i := 0; i < val.NumField(); i++ {
+			fieldStruct := typ.Field(i)
+			value := val.Field(i)
+			if value.IsZero() {
+				continue
+			}
+			// 优先 form
+			tag := fieldStruct.Tag.Get("form")
+			if tag == "" {
+				tag = fieldStruct.Tag.Get("json")
+			}
+			tag = utils.CamelToSnake(tag)
+			if strings.Contains(tag, ".") {
+				parts := strings.Split(tag, ".")
+				baseField := parts[0]
+				jsonPath := "$." + strings.Join(parts[1:], ".")
+				db = db.Where(baseField+"->>'"+jsonPath+"' LIKE ?", value.Interface())
+			} else {
+				db = db.Where(tag+" LIKE ?", value.Interface())
+			}
+		}
+		return db
+	}
+}
 
 // MarshalJSON 模型时间格式化公共方法
 func (t *JsonTime) MarshalJSON() ([]byte, error) {

@@ -194,36 +194,36 @@ func (*Article) TableName() string {
 ## Setter and Getter
 ```go
 type Meta struct {
-Title       string  `gorm:"column:title;type:json;comment:菜单名称" json:"title"`
-Icon        string  `gorm:"column:icon;type:json;comment:菜单图标" json:"icon"`
-IsHide      bool    `gorm:"column:isHide;type:json;comment:是否隐藏" json:"isHide"`
-IsKeepAlive bool    `gorm:"column:isKeepAlive;type:json;comment:是否缓存" json:"isKeepAlive"`
-IsAffix     bool    `gorm:"column:isAffix;type:json;comment:是否固定" json:"isAffix"`
-IsLink      string  `gorm:"column:isLink;type:json;comment:外链/内嵌时链接地址" json:"isLink"` // 外链/内嵌时链接地址（http:xxx.com），开启外链条件，`1、isLink: 链接地址不为空`
-IsIframe    bool    `gorm:"column:isIframe;type:json;comment:是否内嵌" json:"isIframe"`   // 是否内嵌，开启条件，`1、isIframe:true 2、isLink：链接地址不为空`
-Roles       []int64 `gorm:"column:roles;type:json;comment:菜单角色" json:"roles"`         // 权限标识，取角色管理
+    Title       string  `gorm:"column:title;type:json;comment:菜单名称" json:"title"`
+    Icon        string  `gorm:"column:icon;type:json;comment:菜单图标" json:"icon"`
+    IsHide      bool    `gorm:"column:isHide;type:json;comment:是否隐藏" json:"isHide"`
+    IsKeepAlive bool    `gorm:"column:isKeepAlive;type:json;comment:是否缓存" json:"isKeepAlive"`
+    IsAffix     bool    `gorm:"column:isAffix;type:json;comment:是否固定" json:"isAffix"`
+    IsLink      string  `gorm:"column:isLink;type:json;comment:外链/内嵌时链接地址" json:"isLink"` // 外链/内嵌时链接地址（http:xxx.com），开启外链条件，`1、isLink: 链接地址不为空`
+    IsIframe    bool    `gorm:"column:isIframe;type:json;comment:是否内嵌" json:"isIframe"`   // 是否内嵌，开启条件，`1、isIframe:true 2、isLink：链接地址不为空`
+    Roles       []int64 `gorm:"column:roles;type:json;comment:菜单角色" json:"roles"`         // 权限标识，取角色管理
 }
 
 func (m Meta) Value() (driver.Value, error) {
-return json.Marshal(m)
+    return json.Marshal(m)
 }
 
 // Implement the sql.Scanner interface (for reading from the database)
 func (m *Meta) Scan(value interface{}) error {
-if value == nil {
-*m = Meta{}
-return nil
-}
-var data []byte
-switch v := value.(type) {
-case string:
-data = []byte(v)
-case []byte:
-data = v
-default:
-return fmt.Errorf("cannot scan type %T into Meta", value)
-}
-return json.Unmarshal(data, m)
+    if value == nil {
+        *m = Meta{}
+        return nil
+    }
+    var data []byte
+    switch v := value.(type) {
+    case string:
+    data = []byte(v)
+    case []byte:
+    data = v
+    default:
+        return fmt.Errorf("cannot scan type %T into Meta", value)
+    }
+    return json.Unmarshal(data, m)
 }
 ```
 

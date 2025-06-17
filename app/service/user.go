@@ -21,17 +21,9 @@ func (s *UserService) List(pageData global.PageData, search validate.UserSearch)
 		models []model.User
 	)
 
-	// 获取where条件和参数
-	where, args := utils.BuildWhereClause(search, "form")
-
 	// 获取分页默认为第一页，每页10条记录
 	offset, limit := utils.Pagination(pageData.Page, pageData.PageSize)
-
-	db := global.DB.Model(&model.User{}).Find(&models)
-	// 根据 where 子句添加条件
-	if where != "" {
-		db = db.Where(where, args...)
-	}
+	db := global.DB.Model(&model.User{}).Scopes(model.Search(search)).Find(&models)
 
 	// 获取总记录数
 	err := db.Count(&pageData.Total).Error

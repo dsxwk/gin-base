@@ -3,6 +3,7 @@ import {computed, defineAsyncComponent, ref} from 'vue';
 import {cloneDeep, get, set} from 'lodash-es';
 
 const IconSelector = defineAsyncComponent(() => import('/@/components/iconSelector/index.vue'));
+const Editor = defineAsyncComponent(() => import('/@/components/wangEditor/index.vue'));
 const props = defineProps({
   model: {
     type: Object,
@@ -53,6 +54,7 @@ const resolveComponent = (item) => {
     time: 'el-time-picker',
     upload: 'el-upload',
     icon: IconSelector,
+    editor: Editor,
   };
 
   return map[item.type] || 'el-input';
@@ -129,6 +131,7 @@ const emit = defineEmits(['update:model'])
                 v-if="!item.slot"
                 :is="resolveComponent(item)"
                 v-model="computedMap[parseFiled(item.prop)]"
+                v-model:getHtml="computedMap[parseFiled(item.prop)]"
                 :props="item.props"
                 :options="item.type === 'cascader' ? getOptions(item) : undefined"
                 v-bind="getAttrs(item)"

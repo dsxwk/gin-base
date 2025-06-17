@@ -30,6 +30,10 @@ const props = defineProps({
 		type: String,
 		default: () => '请输入内容...',
 	},
+  MENU_CONF: {
+    type: Object,
+    default: () => {},
+  },
 	// https://www.wangeditor.com/v5/getting-started.html#mode-%E6%A8%A1%E5%BC%8F
 	// 模式，可选 <default|simple>，默认 default
 	mode: {
@@ -55,6 +59,7 @@ const editorRef = shallowRef();
 const state = reactive({
 	editorConfig: {
 		placeholder: props.placeholder,
+    MENU_CONF: props.MENU_CONF,
 	},
 	editorVal: props.getHtml,
 });

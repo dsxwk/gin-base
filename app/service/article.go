@@ -1,13 +1,11 @@
 package service
 
 import (
-	"errors"
 	"gin-base/app/model"
 	"gin-base/common/base"
 	"gin-base/common/global"
 	"gin-base/helper/utils"
 	"gorm.io/gorm"
-	"time"
 )
 
 type ArticleService struct {
@@ -71,26 +69,27 @@ func (s *ArticleService) Create(m model.Article) (model.Article, error) {
 // @param m model.Article
 // @return model.Article, error
 func (this *ArticleService) Update(m model.Article) (model.Article, error) {
-	ok, err := global.Redis.Lock("test:lock", 20*time.Second)
+	//idString := strconv.FormatInt(m.ID, 10)
+	//ok, err := global.Redis.Lock("article:"+idString+"lock", 20*time.Second)
+	//if err != nil {
+	//	return m, err
+	//}
+	//if !ok {
+	//	return m, errors.New("请稍后尝试")
+	//}
+	//
+	//// 模拟耗时
+	//time.Sleep(3 * time.Second)
+
+	err := global.DB.Updates(&m).Error
 	if err != nil {
 		return m, err
 	}
-	if !ok {
-		return m, errors.New("请稍后尝试")
-	}
 
-	// 模拟耗时
-	time.Sleep(3 * time.Second)
-
-	err = global.DB.Updates(&m).Error
-	if err != nil {
-		return m, err
-	}
-
-	err = global.Redis.UnLock("test:lock")
-	if err != nil {
-		return m, err
-	}
+	//err = global.Redis.UnLock("article:" + idString + "lock")
+	//if err != nil {
+	//	return m, err
+	//}
 
 	return m, nil
 }

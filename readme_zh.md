@@ -230,6 +230,111 @@ func (m *Meta) Scan(value interface{}) error {
 }
 ```
 
+## 模型动态筛选
+### 结构体筛选
+```go
+package validate
+
+...
+// UserSearchQuery 用户搜索 query
+type UserSearchQuery struct {
+	Username string `form:"username" validate:"required" label:"用户名"`
+	FullName string `form:"fullName" validate:"required" label:"姓名"`
+	Nickname string `form:"nickname" validate:"required" label:"昵称"`
+	Gender   int64  `form:"gender" validate:"required|int" label:"性别"`
+	// json字段 如user是数据库的json字段, user = {gender:1,age:18}
+	UserGender string `form:"user.gender" validate:"required" label:"性别"`
+}
+
+// UserSearchBody 用户搜索 body
+type UserSearchBody struct {
+	Username string `json:"username" validate:"required" label:"用户名"`
+	FullName string `json:"fullName" validate:"required" label:"姓名"`
+	Nickname string `json:"nickname" validate:"required" label:"昵称"`
+	Gender   int    `json:"gender" validate:"required|int" label:"性别"`
+	// json字段 如user是数据库的json字段, user = {gender:1,age:18}
+	UserGender string `json:"user.gender" validate:"required" label:"性别"`
+}
+
+...
+package service
+import (
+    "gin-base/app/model"
+)
+
+...
+var (
+	models []model.user
+)
+
+data := global.DB.Scopes(model.Search(search)).Find(&models) 
+fmt.Printf("data:%v",data)
+...
+```
+### map筛选 建议复杂筛选使用post放body请求, get需自行组装前端数据
+```json
+// operator: >,<, >=, <=, =, !=, in, not in, between, not between, is null, is not null, like, not like, left like, right like
+// 前端请求
+//	__search: {
+//	   "field": {"operator": ">", "value": 10},
+//	   "field": {"operator": "<", "value": 10},
+//	   "field": {"operator": ">=", "value": 10},
+//	   "field": {"operator": "<=", "value": 10},
+//	   "field": {"operator": "=", "value": 10},
+//	   "field": {"operator": "!=", "value": 10},
+//	   "field": {"operator": "in", "value": [1,2,3]},
+//	   "field": {"operator": "not in", "value": [1,2,3]},
+//	   "field": {"operator": "between", "value": [1,2]},
+//	   "field": {"operator": "not between", "value": [1,2]},
+//	   "field": {"operator": "is null"},
+//	   "field": {"operator": "is not null"},
+//	   "field": {"operator": "like", "value": "admin"},
+//	   "field": {"operator": "left like", "value": "test"},
+//	   "field": {"operator": "right like", "value": "138"},
+//	   "jsonField.field": {"operator": ">", "value": 10},
+//	   ...
+//	}
+__search: {
+  "username": {
+    "operator": "like", 
+    "value": "admin"
+  },
+  "fullName": {
+    "operator": "=",
+    "value": "张三"  
+  },
+  "nickname": {
+    "operator": "=",
+    "value": "昵称"   
+  },
+  "gender": {
+    "operator": "=",
+    "value": 1
+  },
+  // json字段 如user是数据库的json字段 user = {gender:1,age:18}
+  "user.age": {
+    "operator": ">",
+    "value": 18
+  }
+}
+```
+
+```go
+package service
+
+...
+var (
+	search map[string]interface{}
+	models []model.user
+)
+
+...
+data := global.DB.Scopes(model.SearchMap(search)).Find(&models)
+fmt.Printf("data:%v",data)
+
+...
+```
+
 ## 缓存使用 支持内存缓存和redis缓存需要在yaml当中指定
 ```yaml
 # 缓存

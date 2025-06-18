@@ -226,6 +226,110 @@ func (m *Meta) Scan(value interface{}) error {
     return json.Unmarshal(data, m)
 }
 ```
+## Model Dynamic Filtering
+### Structure Filtering
+```go
+package validate
+
+...
+// UserSearchQuery query
+type UserSearchQuery struct {
+	Username string `form:"username" validate:"required" label:"用户名"`
+	FullName string `form:"fullName" validate:"required" label:"姓名"`
+	Nickname string `form:"nickname" validate:"required" label:"昵称"`
+	Gender   int64  `form:"gender" validate:"required|int" label:"性别"`
+	// JSON fields such as 'user' is JSON field in the database, user = {gender:1,age:18}
+	UserGender string `form:"user.gender" validate:"required" label:"性别"`
+}
+
+// UserSearchBody body
+type UserSearchBody struct {
+	Username string `json:"username" validate:"required" label:"用户名"`
+	FullName string `json:"fullName" validate:"required" label:"姓名"`
+	Nickname string `json:"nickname" validate:"required" label:"昵称"`
+	Gender   int    `json:"gender" validate:"required|int" label:"性别"`
+	// JSON fields such as 'user' is JSON field in the database, user = {gender:1,age:18}
+	UserGender string `json:"user.gender" validate:"required" label:"性别"`
+}
+
+...
+package service
+import (
+    "gin-base/app/model"
+)
+
+...
+var (
+	models []model.user
+)
+
+data := global.DB.Scopes(model.Search(search)).Find(&models) 
+fmt.Printf("data:%v",data)
+...
+```
+### Map filtering suggests using post to place body requests for complex filtering, while getting requires assembling front-end data by oneself
+```json
+// operator: >,<, >=, <=, =, !=, in, not in, between, not between, is null, is not null, like, not like, left like, right like
+// Front end request 
+//	__search: {
+//	   "field": {"operator": ">", "value": 10},
+//	   "field": {"operator": "<", "value": 10},
+//	   "field": {"operator": ">=", "value": 10},
+//	   "field": {"operator": "<=", "value": 10},
+//	   "field": {"operator": "=", "value": 10},
+//	   "field": {"operator": "!=", "value": 10},
+//	   "field": {"operator": "in", "value": [1,2,3]},
+//	   "field": {"operator": "not in", "value": [1,2,3]},
+//	   "field": {"operator": "between", "value": [1,2]},
+//	   "field": {"operator": "not between", "value": [1,2]},
+//	   "field": {"operator": "is null"},
+//	   "field": {"operator": "is not null"},
+//	   "field": {"operator": "like", "value": "admin"},
+//	   "field": {"operator": "left like", "value": "test"},
+//	   "field": {"operator": "right like", "value": "138"},
+//	   "jsonField.field": {"operator": ">", "value": 10},
+//	   ...
+//	}
+__search: {
+  "username": {
+    "operator": "like", 
+    "value": "admin"
+  },
+  "fullName": {
+    "operator": "=",
+    "value": "zhangsan"  
+  },
+  "nickname": {
+    "operator": "=",
+    "value": "nickname"   
+  },
+  "gender": {
+    "operator": "=",
+    "value": 1
+  },
+  // JSON fields such as 'user' is JSON field in the database, user = {gender:1,age:18}
+  "user.age": {
+    "operator": ">",
+    "value": 18
+  }
+}
+```
+
+```go
+package service
+
+...
+var (
+	search map[string]interface{}
+	models []model.user
+)
+
+...
+data := global.DB.Scopes(model.SearchMap(search)).Find(&models)
+fmt.Printf("data:%v",data)
+
+...
+```
 
 ## Cache usage Support for memory caching and Redis caching needs to be specified in YAML
 ```yaml

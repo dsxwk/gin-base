@@ -23,7 +23,18 @@ type BoolInt64 bool
 
 type JsonMap map[string]interface{}
 
-// Search 公共搜索 示例：global.DB.Model(&model.User{}).Scopes(model.Search(search)).Find(&models)
+// Search struct公共搜索
+// 注：会过滤零值
+// 用例：global.DB.Scopes(model.Search(search)).Find(&models)
+// 示例值：
+// UserSearch 用户搜索
+//
+//	type UserSearch struct {
+//		Username string `form:"username" label:"用户名"`
+//		FullName string `form:"fullName" label:"姓名"`
+//		Nickname string `form:"nickname" label:"昵称"`
+//		Gender   int    `form:"gender" label:"性别"`
+//	}
 func Search(filters interface{}) func(*gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		val := reflect.ValueOf(filters)
@@ -51,6 +62,107 @@ func Search(filters interface{}) func(*gorm.DB) *gorm.DB {
 				db = db.Where(baseField+"->>'"+jsonPath+"' LIKE ?", value.Interface())
 			} else {
 				db = db.Where(tag+" LIKE ?", value.Interface())
+			}
+		}
+		return db
+	}
+}
+
+// SearchMap map公共搜索
+// 用例：global.DB.Scopes(model.SearchMap(search)).Find(&models)
+// 示例值: 如前端传值到 __search{} 中, __search示例：
+// operator: >,<, >=, <=, =, !=, in, not in, between, not between, is null, is not null, like, not like, left like, right like
+//
+//	__search: {
+//	   "field": {"operator": ">", "value": 10},
+//	   "field": {"operator": "<", "value": 10},
+//	   "field": {"operator": ">=", "value": 10},
+//	   "field": {"operator": "<=", "value": 10},
+//	   "field": {"operator": "=", "value": 10},
+//	   "field": {"operator": "!=", "value": 10},
+//	   "field": {"operator": "in", "value": [1,2,3]},
+//	   "field": {"operator": "not in", "value": [1,2,3]},
+//	   "field": {"operator": "between", "value": [1,2]},
+//	   "field": {"operator": "not between", "value": [1,2]},
+//	   "field": {"operator": "is null"},
+//	   "field": {"operator": "is not null"},
+//	   "field": {"operator": "like", "value": "admin"},
+//	   "field": {"operator": "left like", "value": "test"},
+//	   "field": {"operator": "right like", "value": "138"},
+//	   "jsonField.field": {"operator": ">", "value": 10},
+//	   ...
+//	}
+func SearchMap(filters map[string]interface{}) func(*gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		for key, raw := range filters {
+			var (
+				op    = "="
+				valIf interface{}
+			)
+			if m, ok := raw.(map[string]interface{}); ok {
+				if v, ok := m["operator"].(string); ok {
+					op = strings.ToLower(v)
+				}
+				valIf = m["value"]
+			} else {
+				valIf = raw
+			}
+
+			var (
+				field string
+			)
+			if strings.Contains(key, ".") {
+				parts := strings.Split(key, ".")
+				baseField := parts[0]
+				jsonPath := "$." + strings.Join(parts[1:], ".")
+				field = fmt.Sprintf("%s->>'%s'", baseField, jsonPath)
+			} else {
+				field = key
+			}
+
+			switch op {
+			case "=":
+				db = db.Where(fmt.Sprintf("%s = ?", field), valIf)
+			case "!=", "<>":
+				db = db.Where(fmt.Sprintf("%s <> ?", field), valIf)
+			case ">":
+				db = db.Where(fmt.Sprintf("%s > ?", field), valIf)
+			case "<":
+				db = db.Where(fmt.Sprintf("%s < ?", field), valIf)
+			case ">=":
+				db = db.Where(fmt.Sprintf("%s >= ?", field), valIf)
+			case "<=":
+				db = db.Where(fmt.Sprintf("%s <= ?", field), valIf)
+			case "in":
+				db = db.Where(fmt.Sprintf("%s IN (?)", field), valIf)
+			case "not in":
+				db = db.Where(fmt.Sprintf("%s NOT IN (?)", field), valIf)
+			case "like":
+				db = db.Where(fmt.Sprintf("%s LIKE ?", field), "%"+fmt.Sprint(valIf)+"%")
+			case "left like":
+				db = db.Where(fmt.Sprintf("%s LIKE ?", field), fmt.Sprint(valIf)+"%")
+			case "right like":
+				db = db.Where(fmt.Sprintf("%s LIKE ?", field), "%"+fmt.Sprint(valIf))
+			case "not like":
+				db = db.Where(fmt.Sprintf("%s NOT LIKE ?", field), "%"+fmt.Sprint(valIf)+"%")
+			case "not left like":
+				db = db.Where(fmt.Sprintf("%s NOT LIKE ?", field), fmt.Sprint(valIf)+"%")
+			case "not right like":
+				db = db.Where(fmt.Sprintf("%s NOT LIKE ?", field), "%"+fmt.Sprint(valIf))
+			case "between":
+				if vals, ok := valIf.([]interface{}); ok && len(vals) == 2 {
+					db = db.Where(fmt.Sprintf("%s BETWEEN ? AND ?", field), vals[0], vals[1])
+				}
+			case "not between":
+				if vals, ok := valIf.([]interface{}); ok && len(vals) == 2 {
+					db = db.Where(fmt.Sprintf("%s NOT BETWEEN ? AND ?", field), vals[0], vals[1])
+				}
+			case "is null":
+				db = db.Where(fmt.Sprintf("%s IS NULL", field))
+			case "is not null":
+				db = db.Where(fmt.Sprintf("%s IS NOT NULL", field))
+			default:
+				db = db.Where(fmt.Sprintf("%s %s ?", field, op), valIf)
 			}
 		}
 		return db

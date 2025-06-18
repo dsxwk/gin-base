@@ -17,6 +17,15 @@
                   v-else-if="val.type === 'date'"
                   style="width: 100%"
               />
+              <el-date-picker
+                  v-model="state.form[val.rangeProp ? val.rangeProp.join('_') : val.prop]"
+                  type="daterange"
+                  :start-placeholder="'开始日期'"
+                  :end-placeholder="'结束日期'"
+                  v-if="val.type === 'daterange'"
+                  style="width: 100%"
+                  value-format="YYYY-MM-DD"
+              />
               <el-select v-model="state.form[val.prop]" :placeholder="val.placeholder" v-else-if="val.type === 'select'" style="width: 100%">
                 <el-option v-for="item in val.options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
               </el-select>
@@ -90,7 +99,14 @@ const onReset = (formEl) => {
 // 初始化 form 字段，取自父组件 search.prop
 const initFormField = () => {
   if (props.search.length <= 0) return false;
-  props.search.forEach((v) => (state.form[v.prop] = ''));
+  // props.search.forEach((v) => (state.form[v.prop] = ''));
+  props.search.forEach((v) => {
+    if (v.type === 'daterange' && v.rangeProp) {
+      state.form[v.rangeProp.join('_')] = [];
+    } else {
+      state.form[v.prop] = '';
+    }
+  });
 };
 // 页面加载时
 onMounted(() => {

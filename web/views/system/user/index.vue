@@ -119,9 +119,10 @@ const state = reactive({
       {
         label: '创建时间',
         prop: 'createdAt',
+        rangeProp: ['createdAtStart', 'createdAtEnd'],
         placeholder: '请选择',
         required: false,
-        type: 'date',
+        type: 'daterange',
       },
     ],
     // 搜索参数（不用传，用于分页、搜索时传给后台的值，`getTableData` 中使用）
@@ -153,7 +154,11 @@ const getTableData = async (param) => {
 const onSearch = (data) => {
   Object.entries(data).forEach(([key, value]) => {
     if (value !== undefined) {
-      state.tableData.param[key] = value;
+      if (key === 'createdAtStart_createdAtEnd') {
+        state.tableData.param.createdAt = value;
+      } else {
+        state.tableData.param[key] = value;
+      }
     } else {
       delete state.tableData.param[key];
     }

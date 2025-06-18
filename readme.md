@@ -287,6 +287,18 @@ fmt.Printf("data:%v",data)
 //	   "field": {"operator": "like", "value": "admin"},
 //	   "field": {"operator": "left like", "value": "test"},
 //	   "field": {"operator": "right like", "value": "138"},
+//     "or":    [
+//    		"field": {"operator": ">", "value": 10},
+//	   		"field": {"operator": "<", "value": 10},
+//	   		"field": {"operator": ">=", "value": 10},
+//          ...
+//     ]
+//     "and":   [
+//    		"field": {"operator": ">", "value": 10},
+//	   		"field": {"operator": "<", "value": 10},
+//	   		"field": {"operator": ">=", "value": 10},
+//          ...
+//     ]
 //	   "jsonField.field": {"operator": ">", "value": 10},
 //	   ...
 //	}

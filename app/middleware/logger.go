@@ -7,6 +7,7 @@ import (
 	"gin-base/common/global"
 	"gin-base/config"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"io/ioutil"
 	"net/http"
 )
@@ -21,6 +22,11 @@ func (s Logger) LoggerMiddleware() gin.HandlerFunc {
 		var (
 			params string
 		)
+
+		traceId := uuid.New().String()
+		c.Set("traceId", traceId)
+		// 响应头返回
+		c.Writer.Header().Set("X-Trace-Id", traceId)
 		if c.Request.Method == http.MethodPost || c.Request.Method == http.MethodPut || c.Request.Method == http.MethodPatch {
 			bodyBytes, err := c.GetRawData()
 			if err == nil {

@@ -9,14 +9,15 @@ import { useThemeConfig } from '/@/stores/themeConfig';
  * 说明：
  * 须在 pages 下新建文件夹（建议 `要国际化界面目录` 与 `i18n 目录` 相同，方便查找），
  * 注意国际化定义的字段，不要与原有的定义字段相同。
- * 1、/src/i18n/lang 下的 ts 为框架的国际化内容
- * 2、/src/i18n/pages 下的 ts 为各界面的国际化内容
+ * 1、/static/i18n/lang 下的 ts 为框架的国际化内容
+ * 2、/static/i18n/pages 下的 ts 为各界面的国际化内容
  */
 
 // element plus 自带国际化
 import enLocale from 'element-plus/dist/locale/en';
 import zhcnLocale from 'element-plus/dist/locale/zh-cn';
 import zhtwLocale from 'element-plus/dist/locale/zh-tw';
+import {Local} from "/@/utils/storage.js";
 
 // 定义变量内容
 const messages = {};
@@ -62,6 +63,35 @@ for (const key in itemize) {
 // 读取 pinia 默认语言
 const stores = useThemeConfig(pinia);
 const { themeConfig } = storeToRefs(stores);
+
+/**
+ * 获取翻译的键
+ * @param value
+ * @param lang
+ * @returns {*[]}
+ */
+function getTranslateKeyByValue(value, lang) {
+	const result = [];
+	if (!lang) {
+		lang = Local.get('themeConfig').globalI18n;
+	}
+	function traverse(obj, path = []) {
+		for (const key in obj) {
+			if (typeof obj[key] === 'object' && obj[key] !== null) {
+				traverse(obj[key], path.concat(key));
+			} else if (
+				typeof obj[key] === 'string' &&
+				obj[key].toLowerCase().includes(value.toLowerCase())
+			) {
+				result.push(path.concat(key).join('.'));
+			}
+		}
+	}
+	if (messages[lang] && messages[lang].message) {
+		traverse(messages[lang].message);
+	}
+	return result;
+}
 
 // 导出语言国际化
 // https://vue-i18n.intlify.dev/guide/essentials/fallback.html#explicit-fallback-with-one-locale

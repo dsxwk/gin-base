@@ -16,7 +16,16 @@ type UserController struct {
 }
 
 // List 列表
+// @Tags 用户管理
+// @Summary 列表
+// @Description 用户列表
+// @Param token header string true "认证Token"
+// @Param page query string true "页码"
+// @Param pageSize query string true "分页大小"
 // @Router /api/v1/user [get]
+// @Success 200 {object} global.Response{global.Success} "成功返回" Example({"code":0,"msg":"Success","data":[]})
+// @Failure 400 {object} global.Response{global.ArgsError} "参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+// @Failure 500 {object} global.Response{global.SystemError} "系统错误" Example({"code":500,"msg":"系统错误","data":[]})
 func (s *UserController) List(c *gin.Context) {
 	var (
 		userService  service.UserService
@@ -64,7 +73,15 @@ func (s *UserController) List(c *gin.Context) {
 }
 
 // Create 创建
+// @Tags 用户管理
+// @Summary 创建
+// @Description 用户创建
+// @Param token header string true "认证Token"
+// @Param data body object true "创建参数" SchemaExample({"username":"用户名","fullName":"姓名","password":"密码"})
 // @Router /api/v1/user [post]
+// @Success 200 {object} global.Response{global.Success} "成功返回" Example({"code":0,"msg":"Success","data":[]})
+// @Failure 400 {object} global.Response{global.ArgsError} "参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+// @Failure 500 {object} global.Response{global.SystemError} "系统错误" Example({"code":500,"msg":"系统错误","data":[]})
 func (s *UserController) Create(c *gin.Context) {
 	var (
 		userService  service.UserService
@@ -103,7 +120,16 @@ func (s *UserController) Create(c *gin.Context) {
 }
 
 // Update 更新
+// @Tags 用户管理
+// @Summary 更新
+// @Description 用户更新
+// @Param token header string true "认证Token"
+// @Param id path int true "用户ID"
+// @Param data body object true "更新参数" SchemaExample({"username":"用户名","fullName":"姓名","password":"密码"})
 // @Router /api/v1/user/{id} [put]
+// @Success 200 {object} global.Response{global.Success} "成功返回" Example({"code":0,"msg":"Success","data":[]})
+// @Failure 400 {object} global.Response{global.ArgsError} "参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+// @Failure 500 {object} global.Response{global.SystemError} "系统错误" Example({"code":500,"msg":"系统错误","data":[]})
 func (s *UserController) Update(c *gin.Context) {
 	var (
 		userService  service.UserService
@@ -156,7 +182,15 @@ func (s *UserController) Update(c *gin.Context) {
 }
 
 // Detail 详情
+// @Tags 用户管理
+// @Summary 详情
+// @Description 用户详情
+// @Param token header string true "认证Token"
+// @Param id path int true "用户ID"
 // @Router /api/v1/user/{id} [get]
+// @Success 200 {object} global.Response{global.Success} "成功返回" Example({"code":0,"msg":"Success","data":[]})
+// @Failure 400 {object} global.Response{global.ArgsError} "参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+// @Failure 500 {object} global.Response{global.SystemError} "系统错误" Example({"code":500,"msg":"系统错误","data":[]})
 func (s *UserController) Detail(c *gin.Context) {
 	var (
 		userService service.UserService
@@ -185,7 +219,15 @@ func (s *UserController) Detail(c *gin.Context) {
 }
 
 // Delete 删除
+// @Tags 用户管理
+// @Summary 删除
+// @Description 用户删除
+// @Param token header string true "认证Token"
+// @Param id path int true "用户ID"
 // @Router /v1/user/{id} [delete]
+// @Success 200 {object} global.Response{global.Success} "成功返回" Example({"code":0,"msg":"Success","data":[]})
+// @Failure 400 {object} global.Response{global.ArgsError} "参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+// @Failure 500 {object} global.Response{global.SystemError} "系统错误" Example({"code":500,"msg":"系统错误","data":[]})
 func (s *UserController) Delete(c *gin.Context) {
 	var (
 		userService service.UserService

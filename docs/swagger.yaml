@@ -6,6 +6,24 @@ definitions:
       data: {}
       msg:
         type: string
+      traceId:
+        type: string
+    type: object
+  validate.Login:
+    properties:
+      captchaId:
+        type: string
+      code:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - captchaId
+    - code
+    - password
+    - username
     type: object
 host: 127.0.0.1:8080
 info:
@@ -13,50 +31,451 @@ info:
     email: 25076778@qq.com
     name: API Support
     url: http://www.swagger.io/support
-  description: API 文档示例
+  description: Gin-base API 文档
   termsOfService: http://swagger.io/terms/
-  title: Swagger Example API
+  title: Gin-base Swagger API
   version: "2.0"
 paths:
   /api/v1/article:
     get:
-      responses: {}
+      description: 文章列表
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: 分页大小
+        in: query
+        name: pageSize
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 列表
+      tags:
+      - 文章管理
     post:
-      responses: {}
+      consumes:
+      - application/json
+      description: 文章创建
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 创建参数
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 创建
+      tags:
+      - 文章管理
   /api/v1/article/{id}:
     delete:
-      responses: {}
+      description: 文章删除
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 文章ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 删除
+      tags:
+      - 文章管理
     get:
-      responses: {}
+      description: 文章详情
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 文章ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 详情
+      tags:
+      - 文章管理
     put:
-      responses: {}
+      description: 文章更新
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 文章ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 更新参数
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 更新
+      tags:
+      - 文章管理
   /api/v1/cache:
     delete:
-      responses: {}
+      description: 删除缓存
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 缓存键
+        in: query
+        name: key
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 删除缓存
+      tags:
+      - 缓存管理
     get:
-      responses: {}
+      description: 获取缓存
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 缓存键
+        in: query
+        name: key
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 获取缓存
+      tags:
+      - 缓存管理
     post:
-      responses: {}
+      consumes:
+      - application/json
+      description: 设置缓存
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 创建参数
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 设置缓存
+      tags:
+      - 缓存管理
+  /api/v1/captcha:
+    get:
+      consumes:
+      - application/json
+      description: 获取验证码
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 获取验证码
+      tags:
+      - 登录相关
+    post:
+      description: 校验验证码
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 校验验证码
+      tags:
+      - 登录相关
+  /api/v1/dict:
+    get:
+      description: 字典列表
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 列表
+      tags:
+      - 字典管理
+    post:
+      description: 字典创建
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 创建参数
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 创建
+      tags:
+      - 字典管理
+  /api/v1/dict/{id}:
+    delete:
+      description: 字典删除
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 字典ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 删除
+      tags:
+      - 字典管理
+    get:
+      description: 字典详情
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 字典ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 详情
+      tags:
+      - 字典管理
+    put:
+      description: 字典更新
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 字典ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 更新参数
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 更新
+      tags:
+      - 字典管理
   /api/v1/login:
     post:
       consumes:
       - application/json
       description: 用户登录
       parameters:
-      - description: 用户名
+      - description: 登录参数
         in: body
-        name: username
+        name: data
         required: true
         schema:
-          example: '"admin"'
-          type: string
-      - description: 密码
-        in: body
-        name: password
-        required: true
-        schema:
-          example: '"123456"'
-          type: string
+          $ref: '#/definitions/validate.Login'
       produces:
       - application/json
       responses:
@@ -74,21 +493,757 @@ paths:
             $ref: '#/definitions/global.Response'
       summary: 登录
       tags:
-      - 登录
+      - 登录相关
+  /api/v1/menu:
+    get:
+      description: 菜单列表
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 更新参数
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 列表
+      tags:
+      - 菜单管理
+    post:
+      description: 菜单创建
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 创建参数
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      - description: 更新参数
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 创建
+      tags:
+      - 菜单管理
+  /api/v1/menu/{id}:
+    delete:
+      description: 菜单删除
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 菜单ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 更新参数
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 删除
+      tags:
+      - 菜单管理
+    get:
+      description: 菜单详情
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 菜单ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 更新参数
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 详情
+      tags:
+      - 菜单管理
+    put:
+      description: 菜单更新
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 菜单ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 更新参数
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      - description: 更新参数
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 更新
+      tags:
+      - 菜单管理
+  /api/v1/menu/{id}/action:
+    get:
+      description: 菜单功能列表
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 菜单ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 更新参数
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 功能列表
+      tags:
+      - 菜单管理
+    post:
+      description: 菜单功能创建
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 菜单ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 创建参数
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      - description: 更新参数
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 功能创建
+      tags:
+      - 菜单管理
+  /api/v1/menu/{id}/action/{actionId}:
+    delete:
+      description: 菜单功能删除
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 菜单ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 功能ID
+        in: path
+        name: actionId
+        required: true
+        type: integer
+      - description: 更新参数
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 功能删除
+      tags:
+      - 菜单管理
+    get:
+      description: 菜单功能详情
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 菜单ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 功能ID
+        in: path
+        name: actionId
+        required: true
+        type: integer
+      - description: 更新参数
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 功能详情
+      tags:
+      - 菜单管理
+    put:
+      description: 菜单功能创建
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 菜单ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 功能ID
+        in: path
+        name: actionId
+        required: true
+        type: integer
+      - description: 更新参数
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      - description: 更新参数
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 功能创建
+      tags:
+      - 菜单管理
+  /api/v1/menu/role-menu:
+    get:
+      description: 角色菜单
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 角色ids
+        in: query
+        name: roleIds
+        required: true
+        type: string
+      - description: 更新参数
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 角色菜单
+      tags:
+      - 菜单管理
+  /api/v1/role:
+    get:
+      description: 角色列表
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: 分页大小
+        in: query
+        name: pageSize
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 列表
+      tags:
+      - 角色管理
+    post:
+      description: 角色创建
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 创建参数
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 创建
+      tags:
+      - 角色管理
+  /api/v1/role/{id}:
+    get:
+      description: 角色详情
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 角色ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 详情
+      tags:
+      - 角色管理
+    put:
+      description: 角色更新
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 角色ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 更新参数
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 更新
+      tags:
+      - 角色管理
   /api/v1/send:
     post:
-      responses: {}
+      description: http请求日志记录测试
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: http请求日志记录测试
+      tags:
+      - 缓存管理
   /api/v1/user:
     get:
-      responses: {}
+      description: 用户列表
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: 分页大小
+        in: query
+        name: pageSize
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 列表
+      tags:
+      - 用户管理
     post:
-      responses: {}
+      description: 用户创建
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 创建参数
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 创建
+      tags:
+      - 用户管理
   /api/v1/user/{id}:
     get:
-      responses: {}
+      description: 用户详情
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 用户ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 详情
+      tags:
+      - 用户管理
     put:
-      responses: {}
+      description: 用户更新
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 用户ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 更新参数
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 更新
+      tags:
+      - 用户管理
+  /v1/role/{id}:
+    delete:
+      description: 角色删除
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 角色ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 删除
+      tags:
+      - 角色管理
   /v1/user/{id}:
     delete:
-      responses: {}
+      description: 用户删除
+      parameters:
+      - description: 认证Token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 用户ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: 成功返回" Example({"code":0,"msg":"Success","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "400":
+          description: 参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+        "500":
+          description: 系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+          schema:
+            $ref: '#/definitions/global.Response'
+      summary: 删除
+      tags:
+      - 用户管理
 swagger: "2.0"

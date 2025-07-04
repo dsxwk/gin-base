@@ -1,8 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "API 文档示例",
-        "title": "Swagger Example API",
+        "description": "Gin-base API 文档",
+        "title": "Gin-base Swagger API",
         "termsOfService": "http://swagger.io/terms/",
         "contact": {
             "name": "API Support",
@@ -15,32 +15,642 @@
     "paths": {
         "/api/v1/article": {
             "get": {
-                "responses": {}
+                "description": "文章列表",
+                "tags": [
+                    "文章管理"
+                ],
+                "summary": "列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "分页大小",
+                        "name": "pageSize",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
             },
             "post": {
-                "responses": {}
+                "description": "文章创建",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "文章管理"
+                ],
+                "summary": "创建",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "创建参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
             }
         },
         "/api/v1/article/{id}": {
             "get": {
-                "responses": {}
+                "description": "文章详情",
+                "tags": [
+                    "文章管理"
+                ],
+                "summary": "详情",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "文章ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
             },
             "put": {
-                "responses": {}
+                "description": "文章更新",
+                "tags": [
+                    "文章管理"
+                ],
+                "summary": "更新",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "文章ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "更新参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
             },
             "delete": {
-                "responses": {}
+                "description": "文章删除",
+                "tags": [
+                    "文章管理"
+                ],
+                "summary": "删除",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "文章ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
             }
         },
         "/api/v1/cache": {
             "get": {
-                "responses": {}
+                "description": "获取缓存",
+                "tags": [
+                    "缓存管理"
+                ],
+                "summary": "获取缓存",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "缓存键",
+                        "name": "key",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
             },
             "post": {
-                "responses": {}
+                "description": "设置缓存",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "缓存管理"
+                ],
+                "summary": "设置缓存",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "创建参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
             },
             "delete": {
-                "responses": {}
+                "description": "删除缓存",
+                "tags": [
+                    "缓存管理"
+                ],
+                "summary": "删除缓存",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "缓存键",
+                        "name": "key",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/captcha": {
+            "get": {
+                "description": "获取验证码",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "登录相关"
+                ],
+                "summary": "获取验证码",
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "校验验证码",
+                "tags": [
+                    "登录相关"
+                ],
+                "summary": "校验验证码",
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dict": {
+            "get": {
+                "description": "字典列表",
+                "tags": [
+                    "字典管理"
+                ],
+                "summary": "列表",
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "字典创建",
+                "tags": [
+                    "字典管理"
+                ],
+                "summary": "创建",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "创建参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dict/{id}": {
+            "get": {
+                "description": "字典详情",
+                "tags": [
+                    "字典管理"
+                ],
+                "summary": "详情",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "字典ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "字典更新",
+                "tags": [
+                    "字典管理"
+                ],
+                "summary": "更新",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "字典ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "更新参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "字典删除",
+                "tags": [
+                    "字典管理"
+                ],
+                "summary": "删除",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "字典ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
             }
         },
         "/api/v1/login": {
@@ -53,28 +663,824 @@
                     "application/json"
                 ],
                 "tags": [
-                    "登录"
+                    "登录相关"
                 ],
                 "summary": "登录",
                 "parameters": [
                     {
-                        "description": "用户名",
-                        "name": "username",
+                        "description": "登录参数",
+                        "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "string",
-                            "example": "\"admin\""
+                            "$ref": "#/definitions/validate.Login"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/menu": {
+            "get": {
+                "description": "菜单列表",
+                "tags": [
+                    "菜单管理"
+                ],
+                "summary": "列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "更新参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "菜单创建",
+                "tags": [
+                    "菜单管理"
+                ],
+                "summary": "创建",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "创建参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
                         }
                     },
                     {
-                        "description": "密码",
-                        "name": "password",
+                        "description": "更新参数",
+                        "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "string",
-                            "example": "\"123456\""
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/menu/role-menu": {
+            "get": {
+                "description": "角色菜单",
+                "tags": [
+                    "菜单管理"
+                ],
+                "summary": "角色菜单",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "角色ids",
+                        "name": "roleIds",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "更新参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/menu/{id}": {
+            "get": {
+                "description": "菜单详情",
+                "tags": [
+                    "菜单管理"
+                ],
+                "summary": "详情",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "菜单ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "更新参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "菜单更新",
+                "tags": [
+                    "菜单管理"
+                ],
+                "summary": "更新",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "菜单ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "更新参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    {
+                        "description": "更新参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "菜单删除",
+                "tags": [
+                    "菜单管理"
+                ],
+                "summary": "删除",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "菜单ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "更新参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/menu/{id}/action": {
+            "get": {
+                "description": "菜单功能列表",
+                "tags": [
+                    "菜单管理"
+                ],
+                "summary": "功能列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "菜单ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "更新参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "菜单功能创建",
+                "tags": [
+                    "菜单管理"
+                ],
+                "summary": "功能创建",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "菜单ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "创建参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    {
+                        "description": "更新参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/menu/{id}/action/{actionId}": {
+            "get": {
+                "description": "菜单功能详情",
+                "tags": [
+                    "菜单管理"
+                ],
+                "summary": "功能详情",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "菜单ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "功能ID",
+                        "name": "actionId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "更新参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "菜单功能创建",
+                "tags": [
+                    "菜单管理"
+                ],
+                "summary": "功能创建",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "菜单ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "功能ID",
+                        "name": "actionId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "更新参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    {
+                        "description": "更新参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "菜单功能删除",
+                "tags": [
+                    "菜单管理"
+                ],
+                "summary": "功能删除",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "菜单ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "功能ID",
+                        "name": "actionId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "更新参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/role": {
+            "get": {
+                "description": "角色列表",
+                "tags": [
+                    "角色管理"
+                ],
+                "summary": "列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "分页大小",
+                        "name": "pageSize",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "角色创建",
+                "tags": [
+                    "角色管理"
+                ],
+                "summary": "创建",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "创建参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/role/{id}": {
+            "get": {
+                "description": "角色详情",
+                "tags": [
+                    "角色管理"
+                ],
+                "summary": "详情",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "角色ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "角色更新",
+                "tags": [
+                    "角色管理"
+                ],
+                "summary": "更新",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "角色ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "更新参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
                         }
                     }
                 ],
@@ -102,28 +1508,318 @@
         },
         "/api/v1/send": {
             "post": {
-                "responses": {}
+                "description": "http请求日志记录测试",
+                "tags": [
+                    "缓存管理"
+                ],
+                "summary": "http请求日志记录测试",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
             }
         },
         "/api/v1/user": {
             "get": {
-                "responses": {}
+                "description": "用户列表",
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "分页大小",
+                        "name": "pageSize",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
             },
             "post": {
-                "responses": {}
+                "description": "用户创建",
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "创建",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "创建参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
             }
         },
         "/api/v1/user/{id}": {
             "get": {
-                "responses": {}
+                "description": "用户详情",
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "详情",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "用户ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
             },
             "put": {
-                "responses": {}
+                "description": "用户更新",
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "更新",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "用户ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "更新参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/role/{id}": {
+            "delete": {
+                "description": "角色删除",
+                "tags": [
+                    "角色管理"
+                ],
+                "summary": "删除",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "角色ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
             }
         },
         "/v1/user/{id}": {
             "delete": {
-                "responses": {}
+                "description": "用户删除",
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "删除",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "认证Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "用户ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
             }
         }
     },
@@ -136,6 +1832,32 @@
                 },
                 "data": {},
                 "msg": {
+                    "type": "string"
+                },
+                "traceId": {
+                    "type": "string"
+                }
+            }
+        },
+        "validate.Login": {
+            "type": "object",
+            "required": [
+                "captchaId",
+                "code",
+                "password",
+                "username"
+            ],
+            "properties": {
+                "captchaId": {
+                    "type": "string"
+                },
+                "code": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "username": {
                     "type": "string"
                 }
             }

@@ -24,6 +24,7 @@ Golang Gin is a lightweight and efficient Golang web framework. It is widely use
 ![img.png](./img.png)
 ![img_1.png](./img_1.png)
 ![img_2.png](./img_2.png)
+![img_3.png](./img_3.png)
 
 ## Introduction to the Gin-Base Project
 - Command line generation for quick creation of model, controller, service, validator, middleware
@@ -649,7 +650,16 @@ type ArticleController struct {
 }
 
 // List List
-// @Router /v1/article [get]
+// @Tags Article
+// @Summary List
+// @Description Article Lisy
+// @Param token header string true "Auth Token"
+// @Param page query string true "Page"
+// @Param pageSize query string true "Page Size"
+// @Success 200 {object} global.Response{global.Success} "SUCCESS" Example({"code":0,"msg":"Success","data":[]})
+// @Failure 400 {object} global.Response{global.ArgsError} "Arg Error" Example({"code":400,"msg":"Arg Error","data":[]})
+// @Failure 500 {object} global.Response{global.SystemError} "Sys Error" Example({"code":500,"msg":"Sys Error","data":[]})
+// @Router /api/v1/article [get]
 func (s *ArticleController) List(c *gin.Context) {
 	var (
 		articleService  service.ArticleService
@@ -804,8 +814,10 @@ func Test() {
 }
 ```
 
-## Swagger Document generation note: Currently, only login is required. If you need to expand all documents, you can do so yourself
+## Swagger Document generation
 ```bash
 # Quickly generate document command
-swag init -g main.go --exclude cli
+go install github.com/swaggo/swag/cmd/swag@latest
+swag init -g main.go --exclude cli,app/service
 ```
+![img_3.png](./img_3.png)

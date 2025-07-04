@@ -16,17 +16,16 @@ type LoginController struct {
 }
 
 // Login 登录
+// @Tags 登录相关
 // @Summary 登录
 // @Description 用户登录
-// @Tags 登录
 // @Accept json
 // @Produce json
-// @Param username body string true "用户名" SchemaExample("admin")
-// @Param password body string true "密码" SchemaExample("123456")
+// @Param data body validate.Login true "登录参数"
+// @Router /api/v1/login [post]
 // @Success 200 {object} global.Response{global.Success} "成功返回" Example({"code":0,"msg":"Success","data":[]})
 // @Failure 400 {object} global.Response{global.ArgsError} "参数错误" Example({"code":400,"msg":"参数错误","data":[]})
 // @Failure 500 {object} global.Response{global.SystemError} "系统错误" Example({"code":500,"msg":"系统错误","data":[]})
-// @Router /api/v1/login [post]
 func (s *LoginController) Login(c *gin.Context) {
 	var (
 		loginService  service.LoginService
@@ -99,7 +98,14 @@ func (s *LoginController) generateCharset() string {
 }
 
 // GetCaptcha 获取验证码
+// @Tags 登录相关
+// @Summary 获取验证码
+// @Description 获取验证码
+// @Accept json
+// @Produce json
 // @Router /api/v1/captcha [get]
+// @Success 200 {object} global.Response{global.Success} "成功返回" Example({"code":0,"msg":"Success","data":[]})
+// @Failure 400 {object} global.Response{global.ArgsError} "参数错误" Example({"code":400,"msg":"参数错误","data":[]})
 func (s *LoginController) GetCaptcha(c *gin.Context) {
 	// 配置验证码
 	driver := base64Captcha.NewDriverString(
@@ -129,7 +135,12 @@ func (s *LoginController) GetCaptcha(c *gin.Context) {
 }
 
 // CheckCaptcha 校验验证码
+// @Tags 登录相关
+// @Summary 校验验证码
+// @Description 校验验证码
 // @Router /api/v1/captcha [post]
+// @Success 200 {object} global.Response{global.Success} "成功返回" Example({"code":0,"msg":"Success","data":[]})
+// @Failure 400 {object} global.Response{global.ArgsError} "参数错误" Example({"code":400,"msg":"参数错误","data":[]})
 func (s *LoginController) CheckCaptcha(c *gin.Context) {
 	var (
 		loginValidate validate.Login

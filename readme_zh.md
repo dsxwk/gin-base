@@ -26,6 +26,7 @@ Golang Gin 是一个轻量级且高效的 Golang Web 框架。它具有高性能
 ![img.png](./img.png)
 ![img_1.png](./img_1.png)
 ![img_2.png](./img_2.png)
+![img_3.png](./img_3.png)
 
 ## Gin-Base项目介绍
 - 命令行生成快捷创建模型、控制器、服务、验证器、中间件
@@ -653,7 +654,16 @@ type ArticleController struct {
 }
 
 // List 列表
-// @Router /v1/article [get]
+// @Tags 文章管理
+// @Summary 列表
+// @Description 文章列表
+// @Param token header string true "认证Token"
+// @Param page query string true "页码"
+// @Param pageSize query string true "分页大小"
+// @Success 200 {object} global.Response{global.Success} "成功返回" Example({"code":0,"msg":"Success","data":[]})
+// @Failure 400 {object} global.Response{global.ArgsError} "参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+// @Failure 500 {object} global.Response{global.SystemError} "系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+// @Router /api/v1/article [get]
 func (s *ArticleController) List(c *gin.Context) {
 	var (
 		articleService  service.ArticleService
@@ -802,8 +812,10 @@ func Test() {
 }
 ```
 
-## Swagger 文档生成 注：目前只有登录如需要全部文档自行扩展
+## Swagger 文档生成
 ```bash
 # 快速生成文档命令
-swag init -g main.go --exclude cli
+go install github.com/swaggo/swag/cmd/swag@latest
+swag init -g main.go --exclude cli,app/service
 ```
+![img_3.png](./img_3.png)

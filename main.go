@@ -23,9 +23,9 @@ import (
 //go:generate go mod download
 //go:generate go mod vendor
 
-// @title Swagger Example API
+// @title Gin-base Swagger API
 // @version 2.0
-// @description API 文档示例
+// @description Gin-base API 文档
 // @termsOfService http://swagger.io/terms/
 // @contact.name API Support
 // @contact.url http://www.swagger.io/support

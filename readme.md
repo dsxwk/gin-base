@@ -69,16 +69,18 @@ Project Address: https://gitee.com/lyt-top/vue-next-admin
 │   ├── middleware                      # Middleware
 ├── cli                                 # Command
 ├── common                              # Common Module
+│   ├── base                            # Base
 │   ├── extend                          # Extend
 │   ├──├── cache                        # Cache
 │   ├──├── event                        # Event
 │   ├── global                          # Global
 │   ├── template                        # Template
 ├── config                              # Configuration
-│   ├── database                        # Database
+├── database                            # Database
 ├── docs                                # Documents
 ├── helper                              # Utils
-├── log                                 # Log
+├── storage                             # Storage
+│   ├── logs                            # Logs
 ├── resource                            # Resource
 ├── web                                 # Web Service
 ├── routers                             # Router
@@ -419,7 +421,7 @@ import (
 	"gin-base/common/base"
 	"gin-base/common/global"
 	"gin-base/helper"
-	"gin-base/helper/utils"
+	"gin-base/helper"
 	"gorm.io/gorm"
 )
 
@@ -438,7 +440,7 @@ func (s *LoginService) Login(username string, password string) (m model.User, er
 		}
 	}
 
-	check := utils.BcryptCheck(password, m.Password)
+	check := helper.BcryptCheck(password, m.Password)
 	if !check {
 		return m, errors.New("Login password error")
 	}
@@ -571,7 +573,6 @@ watching common\template
 watching config
 watching database
 watching helper
-watching helper\utils
 watching log
 watching resource
 watching resource\images

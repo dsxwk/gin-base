@@ -3,7 +3,7 @@ package service
 import (
 	"gin-base/common/base"
 	"gin-base/common/global"
-	"gin-base/helper/utils"
+	"gin-base/helper"
 	"time"
 )
 
@@ -52,7 +52,7 @@ func (s *CacheService) DeleteCache(key string) (bool, error) {
 // Send http请求测试
 // @return interface{}
 func (s *CacheService) Send() (interface{}, error) {
-	res, err := utils.HttpRequest("put", "http://127.0.0.1:8080/api/v1/article/1", map[string]string{
+	res, err := helper.HttpRequest("put", "http://127.0.0.1:8080/api/v1/article/1", map[string]string{
 		"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDAwNTAwNzAsImlkIjoxfQ.rsULvvOvFb2YO8D5hOHY6eCU9NxfNbYrNmG1VZQx0aw",
 	}, map[string]interface{}{
 		"title": "title1",

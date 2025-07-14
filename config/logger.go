@@ -140,7 +140,7 @@ func (l *Logger) Fatal(msg string, fields ...zap.Field) {
 // InitLogger 初始化日志
 func InitLogger(config *Config) *Logger {
 	// 设置日志文件输出路径和文件年月日
-	logPath := "log/" + time.Now().Format("2006-01-02") + ".log"
+	logPath := "storage/logs/" + time.Now().Format("2006-01") + ".log"
 
 	// 配置 Lumberjack 日志轮转
 	lumberJackLogger := &lumberjack.Logger{

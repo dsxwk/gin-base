@@ -1,25 +1,54 @@
-package utils
+package helper
 
 import (
 	"crypto/md5"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"gin-base/common/global"
 	"github.com/fatih/structs"
 	"golang.org/x/crypto/bcrypt"
 	"math/rand"
-	"reflect"
 	"slices"
+	"strconv"
 	"strings"
 	"time"
 )
 
-// FormatTime 格式化时间
-// @param: t *time.Time
+// FormatTime 泛型方法，支持 *time.Time、time.Time、int/int64（unix秒）、string（时间字符串）、float64（unix秒）
+// @param: t
 // @return: string
-func FormatTime(t *time.Time) string {
-	return t.Format("2006-01-02 15:04:05")
+func FormatTime[T any](t T) string {
+	switch v := any(t).(type) {
+	case *time.Time:
+		if v == nil {
+			return ""
+		}
+		return v.Format("2006-01-02 15:04:05")
+	case time.Time:
+		return v.Format("2006-01-02 15:04:05")
+	case int64:
+		return time.Unix(v, 0).Format("2006-01-02 15:04:05")
+	case int:
+		return time.Unix(int64(v), 0).Format("2006-01-02 15:04:05")
+	case float64:
+		return time.Unix(int64(v), 0).Format("2006-01-02 15:04:05")
+	case string:
+		layouts := []string{
+			"2006-01-02 15:04:05",
+			"2006-01-02",
+			time.RFC3339,
+		}
+		for _, layout := range layouts {
+			if tm, err := time.Parse(layout, v); err == nil {
+				return tm.Format("2006-01-02 15:04:05")
+			}
+		}
+		if unix, err := strconv.ParseInt(v, 10, 64); err == nil {
+			return time.Unix(unix, 0).Format("2006-01-02 15:04:05")
+		}
+	}
+
+	return ""
 }
 
 // Pagination 计算分页
@@ -39,18 +68,6 @@ func Pagination(page, pageSize int) (int, int) {
 	limit := pageSize
 
 	return offset, limit
-}
-
-// GetPageData 获取分页数据
-// @param: page int, pageSize int, total int64, data interface{}
-// @return: global.PageData
-func GetPageData(page int, pageSize int, total int64, data interface{}) global.PageData {
-	return global.PageData{
-		Total:    total,
-		Page:     page,
-		PageSize: pageSize,
-		List:     data,
-	}
 }
 
 // BcryptHash 使用bcrypt对密码进行加密
@@ -81,10 +98,10 @@ func Md5(str []byte, b ...byte) string {
 	return hex.EncodeToString(h.Sum(b))
 }
 
-// KeyIsExist 检查map键名是否存在
+// HasKey 检查map键名是否存在
 // @param: data map[string]interface{}, key string
 // @return: bool
-func KeyIsExist(data map[string]interface{}, key string) bool {
+func HasKey(data map[string]interface{}, key string) bool {
 	_, exists := data[key]
 
 	return exists
@@ -101,27 +118,6 @@ func CamelToSnakeMap(data map[string]interface{}) map[string]interface{} {
 	}
 
 	return returnData
-}
-
-// FilterStructToMap 根据结构体过滤请求字段
-// @param: req map[string]interface{}, filterStruct interface{}
-// @return: result map[string]interface{}
-func FilterStructToMap(req map[string]interface{}, filterStruct interface{}) (result map[string]interface{}) {
-	req = make(map[string]interface{})
-
-	// 使用反射遍历结构体字段,只获取在结构体中定义的字段
-	value := reflect.ValueOf(filterStruct)
-
-	for i := 0; i < value.NumField(); i++ {
-		field := value.Type().Field(i)
-		column := field.Tag.Get("json")
-
-		if KeyIsExist(req, column) {
-			result[column] = req[column]
-		}
-	}
-
-	return result
 }
 
 // ToCamelCase 将下划线分隔的字段名转换为驼峰命名
@@ -165,10 +161,10 @@ func ArrayColumn[T any, R any](arr []*T, getter func(*T) R) []R {
 	return result
 }
 
-// RandomFileName 生成随机文件名
+// RandomFilename 生成随机文件名
 // @param: ext string 文件后缀
 // @return: string
-func RandomFileName(ext string) string {
+func RandomFilename(ext string) string {
 	// 获取当前时间的时间戳
 	timestamp := time.Now().UnixNano() / int64(time.Millisecond)
 
@@ -178,26 +174,22 @@ func RandomFileName(ext string) string {
 
 	// 组合时间戳和随机数生成文件名
 	fileName := fmt.Sprintf("file_%d_%d."+ext, timestamp, randomNum)
+
 	return fileName
 }
 
-// RemoveDuplicates 字符串切片去重
-// @param: input []string
-// @return: []string
-func RemoveDuplicates(input []string) []string {
-	var (
-		outputData []string
-	)
-
-	uniqueDataMap := make(map[string]bool)
-
+// RemoveDuplicates 泛型切片去重
+// @param: input []T
+// @return: []T
+func RemoveDuplicates[T comparable](input []T) []T {
+	var outputData []T
+	uniqueDataMap := make(map[T]bool)
 	for _, value := range input {
 		if !uniqueDataMap[value] {
 			uniqueDataMap[value] = true
 			outputData = append(outputData, value)
 		}
 	}
-
 	return outputData
 }
 
@@ -268,16 +260,15 @@ func StructToMapFilter(data interface{}, excludeFields []string) map[string]inte
 	s := structs.New(data)
 	s.TagName = "json"
 	val := s.Map()
-	// val := structs.Map(data)
 
-	m := make(map[string]interface{})
+	res := make(map[string]interface{})
 	for k, v := range val {
 		if slices.Contains(excludeFields, k) {
 			continue
 		}
 
-		m[CamelToSnake(k)] = v
+		res[CamelToSnake(k)] = v
 	}
 
-	return m
+	return res
 }

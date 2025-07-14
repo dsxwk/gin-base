@@ -4,7 +4,7 @@ import (
 	"gin-base/app/model"
 	"gin-base/common/base"
 	"gin-base/common/global"
-	"gin-base/helper/utils"
+	"gin-base/helper"
 	"gorm.io/gorm"
 )
 
@@ -21,7 +21,7 @@ func (s *ArticleService) List(pageData global.PageData) (global.PageData, error)
 	)
 
 	// 获取分页默认为第一页，每页10条记录
-	offset, limit := utils.Pagination(pageData.Page, pageData.PageSize)
+	offset, limit := helper.Pagination(pageData.Page, pageData.PageSize)
 
 	// join
 	// db := global.DB.Joins("LEFT JOIN user ON article.uid = user.id LEFT JOIN category ON article.category_id = category.id").Select("article.*, user.username, category.name").Find(&models)

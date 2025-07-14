@@ -5,7 +5,7 @@ import (
 	"gin-base/app/validate"
 	"gin-base/common/base"
 	"gin-base/common/global"
-	"gin-base/helper/utils"
+	"gin-base/helper"
 )
 
 type RoleService struct {
@@ -31,7 +31,7 @@ func (s *RoleService) List(pageData global.PageData, search validate.RoleSearch)
 
 	if pageData.IsPage == nil || *pageData.IsPage {
 		// 获取分页默认为第一页，每页10条记录
-		offset, limit := utils.Pagination(pageData.Page, pageData.PageSize)
+		offset, limit := helper.Pagination(pageData.Page, pageData.PageSize)
 		// 执行分页查询
 		err = db.Offset(offset).
 			Limit(limit).

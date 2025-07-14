@@ -5,7 +5,7 @@ import (
 	"gin-base/common/base"
 	"gin-base/common/global"
 	"gin-base/config"
-	"gin-base/helper/utils"
+	"gin-base/helper"
 	"github.com/spf13/pflag"
 	"gorm.io/gen"
 	"gorm.io/gorm"
@@ -280,7 +280,7 @@ func (s CliCommand) createTableStruct(table string, file string, camel bool) {
 	// 自定义JSON tag
 	if camel {
 		g.WithJSONTagNameStrategy(func(columnName string) string {
-			return utils.ToCamelCase(columnName)
+			return helper.ToCamelCase(columnName)
 		})
 	}
 
@@ -541,7 +541,7 @@ func (j JsonMap) String() string {
 //func (s CliCommand) insertHooksIntoModel(table string) {
 //	// 确保路径和文件名正确
 //	modelFilePath := filepath.Join(rootPath, "app", "model", table+".gen.go")
-//	structName := utils.ToCamelCase(table)
+//	structName := helper.ToCamelCase(table)
 //	// 首字母大写
 //	structName = strings.ToUpper(string(structName[0])) + structName[1:]
 //

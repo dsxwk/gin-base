@@ -6,7 +6,7 @@ import (
 	"gin-base/app/model"
 	"gin-base/common/base"
 	"gin-base/common/global"
-	"gin-base/helper/utils"
+	"gin-base/helper"
 	"gorm.io/gorm"
 )
 
@@ -38,7 +38,7 @@ func (s *MenuService) RoleMenu(roleIds string) (models []model.Menu, err error) 
 
 	if roleIds != "" {
 		roleIds = `[` + roleIds + `]`
-		roleIdsArr = utils.ConvertToArr[int64](&roleIds)
+		roleIdsArr = helper.ConvertToArr[int64](&roleIds)
 	} else {
 		// 空角色
 		return []model.Menu{}, nil
@@ -118,7 +118,7 @@ func (s *MenuService) GetTree(menus []model.Menu, pid int64) (tree []model.Menu)
 		if data.Pid == pid {
 			children := s.GetTree(menus, data.ID)
 			data.Children = children
-			data.Meta.Roles = utils.ArrayColumn(data.MenuRoles, func(m *model.MenuRoles) int64 { return m.RoleID })
+			data.Meta.Roles = helper.ArrayColumn(data.MenuRoles, func(m *model.MenuRoles) int64 { return m.RoleID })
 			tree = append(tree, data)
 		}
 	}

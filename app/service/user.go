@@ -5,7 +5,7 @@ import (
 	"gin-base/app/validate"
 	"gin-base/common/base"
 	"gin-base/common/global"
-	"gin-base/helper/utils"
+	"gin-base/helper"
 )
 
 type UserService struct {
@@ -22,7 +22,7 @@ func (s *UserService) List(pageData global.PageData, search validate.UserSearch)
 	)
 
 	// 获取分页默认为第一页，每页10条记录
-	offset, limit := utils.Pagination(pageData.Page, pageData.PageSize)
+	offset, limit := helper.Pagination(pageData.Page, pageData.PageSize)
 	db := global.DB.Model(&model.User{}).Scopes(model.Search(search)).Find(&models)
 
 	// 获取总记录数
@@ -55,7 +55,7 @@ func (s *UserService) Create(m model.User) (model.User, error) {
 	)
 
 	// 处理密码
-	m.Password = utils.BcryptHash(m.Password)
+	m.Password = helper.BcryptHash(m.Password)
 
 	tx := global.DB.Begin()
 	err := tx.Create(&m).Error
@@ -99,7 +99,7 @@ func (s *UserService) Update(m model.User) (model.User, error) {
 		})
 	}
 
-	data := utils.StructToMapFilter(m, []string{
+	data := helper.StructToMapFilter(m, []string{
 		"createdAt", "updatedAt", "deletedAt", "password", "userRoles",
 	})
 

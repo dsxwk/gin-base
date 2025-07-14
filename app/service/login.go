@@ -6,7 +6,7 @@ import (
 	"gin-base/common/base"
 	"gin-base/common/extend/event"
 	"gin-base/common/global"
-	"gin-base/helper/utils"
+	"gin-base/helper"
 	"gorm.io/gorm"
 )
 
@@ -28,7 +28,7 @@ func (s *LoginService) Login(username string, password string) (m model.User, er
 		}
 	}
 
-	check := utils.BcryptCheck(password, m.Password)
+	check := helper.BcryptCheck(password, m.Password)
 	if !check {
 		return m, errors.New("登录密码错误")
 	}

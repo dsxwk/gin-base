@@ -1,4 +1,4 @@
-package utils
+package helper
 
 import (
 	"errors"
@@ -28,14 +28,17 @@ func PathExists(path string) (bool, error) {
 // @param: dirs ...string
 // @return: err error
 func CreateDir(dirs ...string) (err error) {
+	var (
+		exist bool
+	)
 	for _, v := range dirs {
-		exist, err := PathExists(v)
+		exist, err = PathExists(v)
 		if err != nil {
 			return err
 		}
 		if !exist {
 			global.Log.Debug("create directory" + v)
-			if err := os.MkdirAll(v, os.ModePerm); err != nil {
+			if err = os.MkdirAll(v, os.ModePerm); err != nil {
 				global.Log.Error("create directory"+v, zap.Any(" error:", err))
 				return err
 			}

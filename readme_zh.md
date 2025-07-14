@@ -72,16 +72,18 @@ Golang Gin 是一个轻量级且高效的 Golang Web 框架。它具有高性能
 │   ├── middleware                      # 中间件
 ├── cli                                 # 命令行
 ├── common                              # 公共模块
+│   ├── base                            # 基类
 │   ├── extend                          # 扩展
 │   ├──├── cache                        # 缓存
 │   ├──├── event                        # 事件
 │   ├── global                          # 全局变量
 │   ├── template                        # 模版
 ├── config                              # 配置文件
-│   ├── database                        # 数据库测试文件
+├── database                            # 数据库测试文件
 ├── docs                                # 文档
 ├── helper                              # 工具类
-├── log                                 # 日志文件
+├── storage                             # 存储
+│   ├── logs                            # 日志
 ├── resource                            # 静态资源
 ├── web                                 # Web服务
 ├── routers                             # 路由
@@ -423,7 +425,7 @@ import (
 	"gin-base/common/base"
 	"gin-base/common/global"
 	"gin-base/helper"
-	"gin-base/helper/utils"
+	"gin-base/helper"
 	"gorm.io/gorm"
 )
 
@@ -442,7 +444,7 @@ func (s *LoginService) Login(username string, password string) (m model.User, er
 		}
 	}
 
-	check := utils.BcryptCheck(password, m.Password)
+	check := helper.BcryptCheck(password, m.Password)
 	if !check {
 		return m, errors.New("登录密码错误")
 	}
@@ -575,7 +577,6 @@ watching common\template
 watching config
 watching database
 watching helper
-watching helper\utils
 watching log
 watching resource
 watching resource\images

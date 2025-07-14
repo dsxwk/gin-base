@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"gin-base/helper/utils"
+	"gin-base/helper"
 	"gorm.io/gorm"
 	"reflect"
 	"strconv"
@@ -54,7 +54,7 @@ func Search(filters interface{}) func(*gorm.DB) *gorm.DB {
 			if tag == "" {
 				tag = fieldStruct.Tag.Get("json")
 			}
-			tag = utils.CamelToSnake(tag)
+			tag = helper.CamelToSnake(tag)
 			if strings.Contains(tag, ".") {
 				parts := strings.Split(tag, ".")
 				baseField := parts[0]

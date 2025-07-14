@@ -3,4 +3,7 @@
 /.git
 /.idea
 /tmp/*
+/.vscode
 /web/.idea
+/web/.vscode
+/storage

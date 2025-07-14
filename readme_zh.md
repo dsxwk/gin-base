@@ -424,8 +424,8 @@ import (
 	"errors"
 	"gin-base/app/model"
 	"gin-base/common/base"
+	"gin-base/common/extend/event"
 	"gin-base/common/global"
-	"gin-base/helper"
 	"gin-base/helper"
 	"gorm.io/gorm"
 )
@@ -455,14 +455,14 @@ func (s *LoginService) Login(username string, password string) (m model.User, er
 	}
 
 	// 发布事件
-	event := helper.Event{
+	e := event.Event{
 		Name: "user_login",
 		Data: map[string]interface{}{
 			"username": username,
 			"password": password,
 		},
 	}
-	global.Event.Publish(event)
+	global.Event.Publish(e)
 
 	return m, nil
 }

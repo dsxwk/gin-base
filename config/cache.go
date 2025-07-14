@@ -22,6 +22,8 @@ func InitCache(config *Config) cache.InterfaceCache {
 	// 没有配置缓存类型,默认使用内存缓存
 	if config.Cache.Type == "memory" || config.Cache.Type == "" {
 		c = cache.NewMemoryCache(5*time.Minute, 10*time.Minute)
+	} else if config.Cache.Type == "disk" {
+		c, _ = cache.NewDiskCache("storage/cache")
 	} else if config.Cache.Type == "redis" {
 		// 使用 Redis 缓存
 		c = InitRedis(config)

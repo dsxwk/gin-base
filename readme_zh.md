@@ -83,6 +83,7 @@ Golang Gin 是一个轻量级且高效的 Golang Web 框架。它具有高性能
 ├── docs                                # 文档
 ├── helper                              # 工具类
 ├── storage                             # 存储
+│   ├── cache                           # 磁盘缓存
 │   ├── logs                            # 日志
 ├── resource                            # 静态资源
 ├── web                                 # Web服务
@@ -350,11 +351,11 @@ fmt.Printf("data:%v",data)
 ...
 ```
 
-## 缓存使用 支持内存缓存和redis缓存需要在yaml当中指定
+## 缓存使用 支持内存、磁盘和redis缓存需要在yaml当中指定
 ```yaml
 # 缓存
 cache:
-  type: "redis"  # memory 或者 "redis"
+  type: "redis"  # memory|disk|redis
   redis:
     address: "127.0.0.1:6379"
     password: ""  # 密码为空则不需要

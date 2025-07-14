@@ -68,7 +68,7 @@ func (s *ArticleService) Create(m model.Article) (model.Article, error) {
 // Update 更新
 // @param m model.Article
 // @return model.Article, error
-func (this *ArticleService) Update(m model.Article) (model.Article, error) {
+func (s *ArticleService) Update(m model.Article) (model.Article, error) {
 	//idString := strconv.FormatInt(m.ID, 10)
 	//ok, err := global.Redis.Lock("article:"+idString+"lock", 20*time.Second)
 	//if err != nil {

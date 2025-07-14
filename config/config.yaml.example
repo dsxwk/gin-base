@@ -27,7 +27,7 @@ cors:
   allow-credentials: "true" # 是否允许发送cookie
 # 缓存 
 cache:
-  type: "memory"  # memory 或者 "redis"
+  type: "memory"  # memory|disk|redis # 为空默认内存缓存
   redis:
     address: "localhost:6379"
     password: ""  # 密码为空则不需要

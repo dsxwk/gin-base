@@ -80,6 +80,7 @@ Project Address: https://gitee.com/lyt-top/vue-next-admin
 ├── docs                                # Documents
 ├── helper                              # Utils
 ├── storage                             # Storage
+│   ├── cache                           # Disk Cache
 │   ├── logs                            # Logs
 ├── resource                            # Resource
 ├── web                                 # Web Service
@@ -346,11 +347,11 @@ fmt.Printf("data:%v",data)
 ...
 ```
 
-## Cache usage Support for memory caching and Redis caching needs to be specified in YAML
+## Cache usage Support for memory caching and disk caching and Redis caching needs to be specified in YAML
 ```yaml
 # Cache
 cache:
-  type: "redis"  # memory OR "redis"
+  type: "redis"  # memory|disk|redis
   redis:
     address: "127.0.0.1:6379"
     password: ""  # If the password is empty, it is not necessary

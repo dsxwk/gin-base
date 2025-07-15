@@ -17,6 +17,7 @@ type Config struct {
 	Cors
 	Cache
 	Service
+	Event
 }
 
 // InitConfig 初始化配置

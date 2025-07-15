@@ -3,7 +3,6 @@ package config
 import (
 	"errors"
 	"fmt"
-	"gin-base/common/extend/event"
 	"go.uber.org/zap"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -52,7 +51,7 @@ func InitMysql(config *Config, logs *Logger) *gorm.DB {
 		})
 		if err != nil {
 			logs.Error("数据库连接失败", zap.Error(err))
-			panic("数据库连接错误: " + err.Error())
+			panic(fmt.Sprintf("数据库连接失败: %s", err.Error()))
 		}
 		q, err := _db.DB()
 		q.SetMaxIdleConns(10)
@@ -107,10 +106,9 @@ func LogSlowQuery(DB *gorm.DB, config *Config, logs *Logger) {
 		AddSQL(sql, vars)
 
 		// 发布 SQL 事件
-		sqlEvent := event.Event{
-			Name: "sql_listen",
-			Data: SQLRes,
-		}
+		sqlEvent := config.Event
+		sqlEvent.Name = "sqlListen"
+		sqlEvent.Data = SQLRes
 		EventBus.Publish(sqlEvent)
 
 		// 获取查询开始时间
@@ -120,7 +118,7 @@ func LogSlowQuery(DB *gorm.DB, config *Config, logs *Logger) {
 			// 超过阈值则记录慢查询
 			if elapsed > time.Millisecond*config.Mysql.SlowQuerySeconds {
 				// 记录慢查询的执行时间和查询语句
-				logs.Warn("执行慢查询："+elapsed.String(), zap.Error(errors.New("执行慢查询："+elapsed.String()+" sql："+sql)))
+				logs.Warn(fmt.Sprintf("执行慢查询：%s", elapsed.String()), zap.Error(errors.New(fmt.Sprintf("执行慢查询：%s sql：%s", elapsed.String(), sql))))
 			}
 		}
 	})
@@ -136,10 +134,9 @@ func LogSlowQuery(DB *gorm.DB, config *Config, logs *Logger) {
 		AddSQL(sql, vars)
 
 		// 发布 SQL 事件
-		sqlEvent := event.Event{
-			Name: "sql_listen",
-			Data: SQLRes,
-		}
+		sqlEvent := config.Event
+		sqlEvent.Name = "sqlListen"
+		sqlEvent.Data = SQLRes
 		EventBus.Publish(sqlEvent)
 	})
 
@@ -153,10 +150,9 @@ func LogSlowQuery(DB *gorm.DB, config *Config, logs *Logger) {
 		AddSQL(sql, vars)
 
 		// 发布 SQL 事件
-		sqlEvent := event.Event{
-			Name: "sql_listen",
-			Data: SQLRes,
-		}
+		sqlEvent := config.Event
+		sqlEvent.Name = "sqlListen"
+		sqlEvent.Data = SQLRes
 		EventBus.Publish(sqlEvent)
 	})
 
@@ -170,10 +166,9 @@ func LogSlowQuery(DB *gorm.DB, config *Config, logs *Logger) {
 		AddSQL(sql, vars)
 
 		// 发布 SQL 事件
-		sqlEvent := event.Event{
-			Name: "sql_listen",
-			Data: SQLRes,
-		}
+		sqlEvent := config.Event
+		sqlEvent.Name = "sqlListen"
+		sqlEvent.Data = SQLRes
 		EventBus.Publish(sqlEvent)
 	})
 }

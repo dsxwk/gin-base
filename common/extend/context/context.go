@@ -10,15 +10,15 @@ var (
 	mu              sync.RWMutex
 )
 
-// SetGinContext 设置 gin.Context
-func SetGinContext(key string, value interface{}) {
+// SetContext 设置 Context
+func SetContext(key string, value *gin.Context) {
 	mu.Lock()
 	defer mu.Unlock()
 	ginContextStore[key] = value
 }
 
-// GetGinContext 获取 gin.Context
-func GetGinContext(key string) *gin.Context {
+// GetContext 获取 Context
+func GetContext(key string) *gin.Context {
 	mu.RLock()
 	defer mu.RUnlock()
 	if ctx, ok := ginContextStore[key]; ok {
@@ -27,8 +27,8 @@ func GetGinContext(key string) *gin.Context {
 	return nil
 }
 
-// ClearGinContext 清理 gin.Context
-func ClearGinContext(key string) {
+// ClearContext 清理 Context
+func ClearContext(key string) {
 	mu.Lock()
 	defer mu.Unlock()
 	delete(ginContextStore, key)

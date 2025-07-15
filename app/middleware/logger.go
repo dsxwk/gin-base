@@ -37,10 +37,10 @@ func (s Logger) LoggerMiddleware() gin.HandlerFunc {
 		} else if c.Request.Method == http.MethodGet || c.Request.Method == http.MethodDelete {
 			params = c.Request.URL.RawQuery
 		}
-		// 保存 params 到 gin.Context
+
 		c.Set("logParams", params)
 
-		context.SetGinContext("GinLogger", c)
+		context.SetContext("GinLogger", c)
 
 		c.Next()
 
@@ -50,6 +50,6 @@ func (s Logger) LoggerMiddleware() gin.HandlerFunc {
 			global.Log.Info("Access Log", logFields...)
 		}
 
-		context.ClearGinContext("GinLogger")
+		context.ClearContext("GinLogger")
 	}
 }

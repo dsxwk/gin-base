@@ -2,7 +2,6 @@ package global
 
 import (
 	"gin-base/common/extend/cache"
-	"gin-base/common/extend/event"
 	"gin-base/config"
 	"gorm.io/gorm"
 )
@@ -15,7 +14,7 @@ var (
 	DB         *gorm.DB             // 数据库
 	Cache      cache.InterfaceCache // 缓存
 	Redis      *cache.RedisCache    // Redis
-	Event      *event.Events        // 事件
+	Event      *config.Events       // 事件
 )
 
 func init() {

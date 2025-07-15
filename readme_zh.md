@@ -29,11 +29,31 @@ Golang Gin 是一个轻量级且高效的 Golang Web 框架。它具有高性能
 ![img_3.png](./img_3.png)
 
 ## Gin-Base项目介绍
-- 命令行生成快捷创建模型、控制器、服务、验证器、中间件
-- 验证器以及自定义验证场景
-- Jwt鉴权
+- 命令行生成
+- - 模型
+- - 控制器 
+- - 服务
+- - 验证器
+- - 中间件
+- - 路由
+- 验证器
+- - 自定义验证场景
+- 中间件
+- - 跨域
+- - JWT
+- - 日志
 - 缓存
+- - 内存缓存
+- - redis缓存
+- - 磁盘缓存
 - 事件
+- - sql事件监听
+- - http事件监听
+- 日志
+- - 错误信息记录
+- - 堆栈信息记录
+- - sql语句记录
+- - http请求记录
 - Air
 - Swagger
 - ...
@@ -44,6 +64,7 @@ Golang Gin 是一个轻量级且高效的 Golang Web 框架。它具有高性能
 - Gorm
 - Jwt
 - Mysql
+- Middleware
 - Validator
 - Cache
 - Event
@@ -75,7 +96,7 @@ Golang Gin 是一个轻量级且高效的 Golang Web 框架。它具有高性能
 │   ├── base                            # 基类
 │   ├── extend                          # 扩展
 │   ├──├── cache                        # 缓存
-│   ├──├── event                        # 事件
+│   ├──├── context                      # 上下文
 │   ├── global                          # 全局变量
 │   ├── template                        # 模版
 ├── config                              # 配置文件
@@ -424,7 +445,6 @@ import (
 	"errors"
 	"gin-base/app/model"
 	"gin-base/common/base"
-	"gin-base/common/extend/event"
 	"gin-base/common/global"
 	"gin-base/helper"
 	"gorm.io/gorm"
@@ -455,12 +475,11 @@ func (s *LoginService) Login(username string, password string) (m model.User, er
 	}
 
 	// 发布事件
-	e := event.Event{
-		Name: "user_login",
-		Data: map[string]interface{}{
-			"username": username,
-			"password": password,
-		},
+	e := global.Config.Event
+	e.Name = "userLogin"
+	e.Data = map[string]interface{}{
+		"username": username,
+		"password": password,
 	}
 	global.Event.Publish(e)
 
@@ -477,7 +496,7 @@ import (
 	"fmt"
 	"gin-base/app/middleware"
 	"gin-base/common/global"
-	"gin-base/helper"
+	"gin-base/config"
 	"gin-base/routers"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -493,7 +512,7 @@ import (
 
 func main() {
 	// 运行环境模式 debug模式, test测试模式, release生产模式, 默认是debug,根据当前配置文件读取
-	gin.SetMode(global.Config.Env.Mode)
+	gin.SetMode(global.Config.Service.Mode)
 
 	router := gin.Default()
 
@@ -511,7 +530,9 @@ func main() {
 	router.MaxMultipartMemory = 90 << 20
 
 	// 设置跨域
-	router.Use(Cors())
+	if global.Config.Cors.Enabled {
+		router.Use(middleware.Cors{}.CorsMiddleware())
+	}
 
 	// 全局日志中间件
 	router.Use(middleware.Logger{}.LoggerMiddleware())
@@ -529,28 +550,9 @@ func main() {
 }
 
 // onEventReceived 接收事件
-func onEventReceived(event helper.Event, timestamp time.Time) {
+func onEventReceived(event config.Event, timestamp time.Time) {
 	// todo 处理事件
 	fmt.Printf("Event received at %s: name: %s, data: %v\n", timestamp.Format(time.RFC3339), event.Name, event.Data)
-}
-
-// Cors 跨域请求
-func Cors() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.Header("Access-Control-Allow-Origin", global.Config.Cors.AllowOrigin)
-		c.Header("Access-Control-Allow-Headers", global.Config.Cors.AllowHeaders)
-		c.Header("Access-Control-Expose-Headers", global.Config.Cors.ExposeHeaders)
-		c.Header("Access-Control-Allow-Methods", global.Config.Cors.AllowMethods)
-		c.Header("Access-Control-Allow-Credentials", global.Config.Cors.AllowCredentials)
-
-		// 放行所有OPTIONS方法
-		if c.Request.Method == "OPTIONS" {
-			c.AbortWithStatus(http.StatusNoContent)
-		}
-
-		// 处理请求
-		c.Next()
-	}
 }
 ```
 

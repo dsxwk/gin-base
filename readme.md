@@ -27,11 +27,32 @@ Golang Gin is a lightweight and efficient Golang web framework. It is widely use
 ![img_3.png](./img_3.png)
 
 ## Introduction to the Gin-Base Project
-- Command line generation for quick creation of model, controller, service, validator, middleware
-- Validators and custom validation scenarios
+- Command line generation
+- - Model
+- - Controller
+- - Service
+- - Validate
+- - Middleware
+- - Route
+- Middleware
+- - Cors
+- - JWT
+- - Log
+- Validators
+- - custom validation scenarios
 - Jwt authentication
 - Cache
+- - Memory Cache
+- - Redis Cache
+- - Disk Cache
 - Event
+- - Sql Listener
+- - Http Listener
+- Log
+- - Error Info
+- - Trace Info
+- - Sql Record
+- - Http Record
 - Swagger
 - Air
 - …
@@ -41,6 +62,7 @@ Golang Gin is a lightweight and efficient Golang web framework. It is widely use
 - Gorm
 - Jwt
 - Mysql
+- Middleware
 - Validator
 - Cache
 - Event
@@ -72,7 +94,7 @@ Project Address: https://gitee.com/lyt-top/vue-next-admin
 │   ├── base                            # Base
 │   ├── extend                          # Extend
 │   ├──├── cache                        # Cache
-│   ├──├── event                        # Event
+│   ├──├── context                      # Context
 │   ├── global                          # Global
 │   ├── template                        # Template
 ├── config                              # Configuration
@@ -420,7 +442,6 @@ import (
 	"errors"
 	"gin-base/app/model"
 	"gin-base/common/base"
-	"gin-base/common/extend/event"
 	"gin-base/common/global"
 	"gin-base/helper"
 	"gorm.io/gorm"
@@ -451,12 +472,11 @@ func (s *LoginService) Login(username string, password string) (m model.User, er
 	}
 
 	// Publish an event
-	e := event.Event{
-		Name: "user_login",
-		Data: map[string]interface{}{
-			"username": username,
-			"password": password,
-		},
+	e := global.Config.Event
+	e.Name = "userLogin"
+	e.Data = map[string]interface{}{
+		"username": username,
+		"password": password,
 	}
 	global.Event.Publish(e)
 
@@ -473,7 +493,7 @@ import (
 	"fmt"
 	"gin-base/app/middleware"
 	"gin-base/common/global"
-	"gin-base/helper"
+	"gin-base/config"
 	"gin-base/routers"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -489,7 +509,7 @@ import (
 
 func main() {
 	// Run environment mode debug mode, Test mode, Release production mode, default is debug, read based on the current configuration file
-	gin.SetMode(global.Config.Env.Mode)
+	gin.SetMode(global.Config.Service.Mode)
 
 	router := gin.Default()
 
@@ -507,7 +527,9 @@ func main() {
 	router.MaxMultipartMemory = 90 << 20
 
 	// Set up cross domain settings
-	router.Use(Cors())
+	if global.Config.Cors.Enabled {
+		router.Use(middleware.Cors{}.CorsMiddleware())
+	}
 
 	// Global log middleware
 	router.Use(middleware.Logger{}.LoggerMiddleware())
@@ -525,28 +547,9 @@ func main() {
 }
 
 // onEventReceived Receive events
-func onEventReceived(event helper.Event, timestamp time.Time) {
+func onEventReceived(event config.Event, timestamp time.Time) {
 	// todo Process Event
 	fmt.Printf("Event received at %s: name: %s, data: %v\n", timestamp.Format(time.RFC3339), event.Name, event.Data)
-}
-
-// Cors cross-domain requests
-func Cors() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.Header("Access-Control-Allow-Origin", global.Config.Cors.AllowOrigin)
-		c.Header("Access-Control-Allow-Headers", global.Config.Cors.AllowHeaders)
-		c.Header("Access-Control-Expose-Headers", global.Config.Cors.ExposeHeaders)
-		c.Header("Access-Control-Allow-Methods", global.Config.Cors.AllowMethods)
-		c.Header("Access-Control-Allow-Credentials", global.Config.Cors.AllowCredentials)
-
-		// Release all OPTIONS methods
-		if c.Request.Method == "OPTIONS" {
-			c.AbortWithStatus(http.StatusNoContent)
-		}
-
-		// Processing requests
-		c.Next()
-	}
 }
 ```
 

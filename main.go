@@ -4,7 +4,6 @@ import (
 	"fmt"
 	_ "gin-base/app/controller/v1"
 	"gin-base/app/middleware"
-	"gin-base/common/extend/event"
 	"gin-base/common/global"
 	"gin-base/config"
 	_ "gin-base/docs"
@@ -55,7 +54,7 @@ func main() {
 
 	// 设置跨域
 	if global.Config.Cors.Enabled {
-		router.Use(Cors())
+		router.Use(middleware.Cors{}.CorsMiddleware())
 	}
 
 	// 全局日志中间件
@@ -72,29 +71,10 @@ func main() {
 }
 
 // onEventReceived 接收事件
-func onEventReceived(event event.Event, timestamp time.Time) {
+func onEventReceived(event config.Event, timestamp time.Time) {
 	// todo 处理事件
 	// fmt.Printf("Event received at %s: name: %s, data: %v\n", timestamp.Format(time.RFC3339), event.Name, event.Data)
-	if event.Name == "send_http" {
+	if event.Name == "sendHttp" {
 		config.SetHttpLog(event.Data)
-	}
-}
-
-// Cors 跨域请求
-func Cors() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.Header("Access-Control-Allow-Origin", global.Config.Cors.AllowOrigin)
-		c.Header("Access-Control-Allow-Headers", global.Config.Cors.AllowHeaders)
-		c.Header("Access-Control-Expose-Headers", global.Config.Cors.ExposeHeaders)
-		c.Header("Access-Control-Allow-Methods", global.Config.Cors.AllowMethods)
-		c.Header("Access-Control-Allow-Credentials", global.Config.Cors.AllowCredentials)
-
-		// 放行所有OPTIONS方法
-		if c.Request.Method == "OPTIONS" {
-			c.AbortWithStatus(http.StatusNoContent)
-		}
-
-		// 处理请求
-		c.Next()
 	}
 }

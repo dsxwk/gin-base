@@ -29,7 +29,7 @@ func NewLogger(zapLogger *zap.Logger) *Logger {
 
 // GetLogFields 记录字段
 func GetLogFields(fields []zap.Field) []zap.Field {
-	c := context.GetGinContext("GinLogger")
+	c := context.GetContext("GinLogger")
 	if c == nil {
 		return nil
 	}

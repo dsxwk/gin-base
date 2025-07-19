@@ -25,6 +25,7 @@ Golang Gin is a lightweight and efficient Golang web framework. It is widely use
 ![img_1.png](./img_1.png)
 ![img_2.png](./img_2.png)
 ![img_3.png](./img_3.png)
+![img_4.png](./img_4.png)
 
 ## Introduction to the Gin-Base Project
 - Command line generation
@@ -141,7 +142,8 @@ go env -w GO111MODULE=on
 go env -w GOPROXY=https://goproxy.cn,direct
 go get -u
 go mod tidy
-go mod vendor # OR air
+go mod vendor 
+go run main.go # OR air
 ```
 #### Frontend
 ```bash

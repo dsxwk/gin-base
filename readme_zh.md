@@ -27,6 +27,7 @@ Golang Gin 是一个轻量级且高效的 Golang Web 框架。它具有高性能
 ![img_1.png](./img_1.png)
 ![img_2.png](./img_2.png)
 ![img_3.png](./img_3.png)
+![img_4.png](./img_4.png)
 
 ## Gin-Base项目介绍
 - 命令行生成
@@ -143,7 +144,8 @@ go env -w GO111MODULE=on
 go env -w GOPROXY=https://goproxy.cn,direct
 go get -u
 go mod tidy
-go mod vendor # OR air
+go mod vendor 
+go run main.go # OR air
 ```
 
 ```bash

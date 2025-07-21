@@ -18,6 +18,7 @@ mysql:
 jwt:
   key: 123456789!@# # 加解密秘钥key
   exp: 7200 # 过期时间（单位秒）
+  refresh-exp: 7200 # 刷新过期时间（单位秒）
 # 跨域
 cors:
   enabled: true # 是否开启跨域

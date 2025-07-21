@@ -40,21 +40,25 @@ func (s Jwt) JwtMiddleware() gin.HandlerFunc {
 }
 
 // Encode 生成token
-func (s Jwt) Encode(id int64, exp int64) (string, int64, error) {
-	if exp == 0 {
-		exp = time.Now().Add(time.Duration(Config.Jwt.Exp) * time.Second).Unix()
+func (s Jwt) Encode(id int64, accessExp int64) (string, int64, error) {
+	var (
+		now = time.Now()
+	)
+
+	if accessExp == 0 {
+		accessExp = now.Add(time.Duration(Config.Jwt.Exp) * time.Second).Unix()
 	} else {
-		exp = time.Now().Add(time.Duration(exp) * time.Second).Unix()
+		accessExp = now.Add(time.Duration(accessExp) * time.Second).Unix()
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"id":  id,
-		"exp": exp,
+		"exp": accessExp,
 	})
 
 	jwtToken, err := token.SignedString([]byte(Config.Jwt.Key))
 
-	return jwtToken, exp, err
+	return jwtToken, accessExp, err
 }
 
 // Decode 解析token
@@ -78,4 +82,48 @@ func (s Jwt) Decode(jwtToken string) (map[string]interface{}, error) {
 	}
 
 	return nil, fmt.Errorf("无效的 token")
+}
+
+// WithRefresh 刷新token
+func (s Jwt) WithRefresh(id, accessExp, refreshExp int64) (accessToken, refreshToken string, tExp, rExp int64, err error) {
+	var (
+		now = time.Now()
+	)
+
+	if accessExp == 0 {
+		accessExp = now.Add(time.Duration(Config.Jwt.Exp) * time.Second).Unix()
+	} else {
+		accessExp = now.Add(time.Duration(accessExp) * time.Second).Unix()
+	}
+
+	if refreshExp == 0 {
+		refreshExp = now.Add(time.Duration(Config.Jwt.RefreshExp) * time.Second).Unix()
+	} else {
+		refreshExp = now.Add(time.Duration(refreshExp) * time.Second).Unix()
+	}
+
+	// Access Token
+	accessClaims := jwt.MapClaims{
+		"id":  id,
+		"exp": accessExp,
+	}
+	at := jwt.NewWithClaims(jwt.SigningMethodHS256, accessClaims)
+	accessToken, err = at.SignedString([]byte(Config.Jwt.Key))
+	if err != nil {
+		return "", "", 0, 0, err
+	}
+
+	// Refresh Token
+	refreshClaims := jwt.MapClaims{
+		"id":  id,
+		"exp": refreshExp,
+		"typ": "refresh", // 标记为 refresh token
+	}
+	rt := jwt.NewWithClaims(jwt.SigningMethodHS256, refreshClaims)
+	refreshToken, err = rt.SignedString([]byte(Config.Jwt.Key))
+	if err != nil {
+		return "", "", 0, 0, err
+	}
+
+	return accessToken, refreshToken, accessExp, refreshExp, nil
 }

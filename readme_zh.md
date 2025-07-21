@@ -736,7 +736,7 @@ func (s Article) GetValidate(data Article, scene string) error {
 func (a Article) ConfigValidation(v *validator.Validation) {
 	v.WithScenes(validator.SValues{
 		"list":   []string{"Page", "PageSize"},
-		"create": []string{"Title", "Content"}, // []string{"User.FullName", "Title"}
+		"create": []string{"Title", "Content"},
 		"update": []string{"ID", "Title", "Content"},
 		"detail": []string{"ID"},
 		"delete": []string{"ID"},
@@ -824,4 +824,4 @@ func Test() {
 go install github.com/swaggo/swag/cmd/swag@latest
 swag init -g main.go --exclude cli,app/service
 ```
-![img_3.png](./img_3.png)
+![img.png](./img.png)

@@ -16,6 +16,8 @@ func (r LoginRouter) RegisterRoutes(routerGroup *gin.RouterGroup) {
 
 	// 登录
 	routerGroup.POST("/login", login.Login)
+	// 刷新token
+	routerGroup.POST("/refresh-token", login.RefreshToken)
 	// 获取验证码
 	routerGroup.GET("/captcha", login.GetCaptcha)
 	// 校验验证码

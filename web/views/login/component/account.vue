@@ -112,7 +112,8 @@ const onLogin = async () => {
   // state.loading.login = true;
   let response = await api.login(state.ruleForm);
   // 存储 token 到浏览器缓存
-  Session.set('token', response?.data?.token);
+  Session.set('token', response?.data?.token?.accessToken);
+  Session.set('refreshToken', response?.data?.token?.refreshToken);
   // 模拟数据，对接接口时，记得删除多余代码及对应依赖的引入。用于 `/src/stores/userInfo.ts` 中不同用户登录判断（模拟数据）
   Cookies.set('username', response?.data?.user?.username);
   if (response?.data?.user && response?.data?.userRoles) {

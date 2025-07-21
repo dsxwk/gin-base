@@ -61,18 +61,62 @@ func (s *LoginController) Login(c *gin.Context) {
 		return
 	}
 
-	token, exp, err := jwt.Encode(userModel.ID, 2*60*60)
+	token, rToken, tExpire, rExpire, err := jwt.WithRefresh(userModel.ID, 2*60*60, 2*24*60*60)
 	if err != nil {
 		s.ApiResponse(c, global.ArgsError, err.Error())
 		return
 	}
 
-	res := make(map[string]interface{})
-	res["token"] = token
-	res["exp"] = exp
-	res["user"] = userModel
+	s.ApiResponse(c, global.Success, "登录成功", map[string]interface{}{
+		"token": map[string]interface{}{
+			"accessToken":   token,
+			"refreshToken":  rToken,
+			"expire":        tExpire,
+			"refreshExpire": rExpire,
+		},
+		"user": userModel,
+	})
+}
 
-	s.ApiResponse(c, global.Success, "登录成功", res)
+// RefreshToken 刷新token
+// @Tags 登录相关
+// @Summary 刷新token
+// @Description 刷新token
+// @Accept json
+// @Produce json
+// @Param token header string true "刷新Token"
+// @Router /api/v1/refresh-token [post]
+// @Success 200 {object} global.Response{global.Success} "成功返回" Example({"code":0,"msg":"Success","data":[]})
+// @Failure 400 {object} global.Response{global.ArgsError} "参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+// @Failure 500 {object} global.Response{global.SystemError} "系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+func (s *LoginController) RefreshToken(c *gin.Context) {
+	token := c.Request.Header.Get("token")
+	if token == "" || token == "null" {
+		global.Log.Error(global.ArgsError.Message)
+		s.ApiResponse(c, global.ArgsError)
+		return
+	}
+
+	j := middleware.Jwt{}
+	claims, err := j.Decode(token)
+	if err != nil || claims["typ"] != "refresh" {
+		global.ApiResponse(c, global.Unauthorized, "无效的refresh token")
+		return
+	}
+
+	uid := int64(claims["id"].(float64))
+	aToken, rToken, tExpire, rExpire, err := j.WithRefresh(uid, 2*60*60, 2*24*60*60)
+	if err != nil {
+		global.ApiResponse(c, global.SystemError)
+		return
+	}
+
+	s.ApiResponse(c, global.Success, map[string]interface{}{
+		"accessToken":   aToken,
+		"refreshToken":  rToken,
+		"expire":        tExpire,
+		"refreshExpire": rExpire,
+	})
 }
 
 // generateCharset 生成字符串

@@ -1,3 +1,4 @@
+English | [中文](readme_zh.md)
 # Important Notice
 This document was compiled and written by Master Brother with email 25076778@qq.com. Unauthorized reproduction is strictly prohibited.
 This project is prohibited from being used for illegal businesses such as viruses, trojans, pornography, gambling, fraud, prohibited items, counterfeit products, false information, cryptocurrencies, finance, etc.

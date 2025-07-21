@@ -1319,6 +1319,50 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/refresh-token": {
+            "post": {
+                "description": "刷新token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "登录相关"
+                ],
+                "summary": "刷新token",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "刷新Token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回\" Example({\"code\":0,\"msg\":\"Success\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误\" Example({\"code\":400,\"msg\":\"参数错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "系统错误\" Example({\"code\":500,\"msg\":\"系统错误\",\"data\":[]})",
+                        "schema": {
+                            "$ref": "#/definitions/global.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/role": {
             "get": {
                 "description": "角色列表",

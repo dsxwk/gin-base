@@ -2,6 +2,9 @@ package validate
 
 import (
 	"errors"
+	"fmt"
+	"gin-base/common/extend/i18n"
+	"github.com/gin-gonic/gin"
 	validator "github.com/gookit/validate"
 )
 
@@ -14,8 +17,16 @@ type Login struct {
 }
 
 // GetValidate 请求验证
-func (s Login) GetValidate(data Login, scene string) error {
+func (s Login) GetValidate(c *gin.Context, data Login, scene string) error {
 	v := validator.Struct(data, scene)
+	v.AddTranslates(validator.MS{
+		"CaptchaID": i18n.T(c, "login.captchaId", nil),
+		"Code":      i18n.T(c, "login.code", nil),
+	})
+	v.WithMessages(validator.MS{
+		"required": fmt.Sprintf("%s {field} %s", i18n.T(c, "login.field", nil), i18n.T(c, "login.required", nil)),
+	})
+
 	if !v.Validate(scene) {
 		return errors.New(v.Errors.One())
 	}

@@ -1,0 +1,22 @@
+[
+  {
+    "id": "errcode.Success",
+    "translation": "Success"
+  },
+  {
+    "id": "errcode.SystemError",
+    "translation": "System Error"
+  },
+  {
+    "id": "errcode.ArgsError",
+    "translation": "Arguments Error"
+  },
+  {
+    "id": "errcode.NotFound",
+    "translation": "404 Not Found"
+  },
+  {
+    "id": "errcode.Unauthorized",
+    "translation": "Unauthorized"
+  }
+]

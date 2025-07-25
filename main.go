@@ -4,6 +4,7 @@ import (
 	"fmt"
 	_ "gin-base/app/controller/v1"
 	"gin-base/app/middleware"
+	"gin-base/common/extend/i18n"
 	"gin-base/common/global"
 	"gin-base/config"
 	_ "gin-base/docs"
@@ -33,6 +34,9 @@ import (
 func main() {
 	// 运行环境模式 debug模式, test测试模式, release生产模式, 默认是debug,根据当前配置文件读取
 	gin.SetMode(global.Config.Service.Mode)
+
+	// 初始化 i18n（使用 embed）
+	i18n.Init(true)
 
 	router := gin.Default()
 

@@ -5,6 +5,7 @@ import (
 	"gin-base/app/service"
 	"gin-base/app/validate"
 	"gin-base/common/base"
+	"gin-base/common/extend/i18n"
 	"gin-base/common/global"
 	"github.com/gin-gonic/gin"
 	"github.com/mojocn/base64Captcha"
@@ -41,7 +42,7 @@ func (s *LoginController) Login(c *gin.Context) {
 	}
 
 	// 验证
-	err = validate.Login{}.GetValidate(loginValidate, "login")
+	err = validate.Login{}.GetValidate(c, loginValidate, "login")
 	if err != nil {
 		s.ApiResponse(c, global.ArgsError, err.Error())
 		return
@@ -50,7 +51,7 @@ func (s *LoginController) Login(c *gin.Context) {
 	// 验证码校验
 	b := s.verify(loginValidate.CaptchaID, loginValidate.Code)
 	if !b {
-		s.ApiResponse(c, global.ArgsError, "验证码错误")
+		s.ApiResponse(c, global.ArgsError, i18n.T(c, "login.codeErr", nil))
 		return
 	}
 
@@ -67,7 +68,9 @@ func (s *LoginController) Login(c *gin.Context) {
 		return
 	}
 
-	s.ApiResponse(c, global.Success, "登录成功", map[string]interface{}{
+	s.ApiResponse(c, global.Success, i18n.T(c, "login.codeErr", map[string]interface{}{
+		"name": userModel.Username,
+	}), map[string]interface{}{
 		"token": map[string]interface{}{
 			"accessToken":   token,
 			"refreshToken":  rToken,
@@ -198,7 +201,7 @@ func (s *LoginController) CheckCaptcha(c *gin.Context) {
 	}
 
 	// 验证
-	err = validate.Login{}.GetValidate(loginValidate, "verify")
+	err = validate.Login{}.GetValidate(c, loginValidate, "verify")
 	if err != nil {
 		s.ApiResponse(c, global.ArgsError, err.Error())
 		return

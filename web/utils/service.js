@@ -1,7 +1,13 @@
 import request from '/@/utils/request.js';
-import {Session} from '/@/utils/storage';
+import {Session, Local} from '/@/utils/storage';
 
 export default function createService(module, headers = {}) {
+    const themeConfig = Local.get('themeConfig');
+    let lang = themeConfig.globalI18n ?? 'zh-Cn'
+    if (lang.startsWith('en')) {
+        lang = 'en-US';
+    }
+    headers['Accept-Language'] = lang;
     const service = {};
     let hds = {
         'Accept': 'application/json',

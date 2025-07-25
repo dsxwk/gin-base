@@ -1,0 +1,38 @@
+[
+  {
+    "id": "login.required",
+    "translation": "Is Required"
+  },
+  {
+    "id": "login.field",
+    "translation": "Field"
+  },
+  {
+    "id": "login.code",
+    "translation": "Code"
+  },
+  {
+    "id": "login.captchaId",
+    "translation": "Captcha ID"
+  },
+  {
+    "id": "login.accountErr",
+    "translation": "Login Account Error"
+  },
+  {
+    "id": "login.codeErr",
+    "translation": "Code Error"
+  },
+  {
+    "id": "login.pwdErr",
+    "translation": "Login Password Error"
+  },
+  {
+    "id": "login.success",
+    "translation": "{{.name}},Login Success"
+  },
+  {
+    "id": "login.accountDisabled",
+    "translation": "Account has been disabled"
+  }
+]

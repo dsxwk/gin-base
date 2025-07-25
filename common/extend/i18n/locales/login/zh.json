@@ -1,0 +1,38 @@
+[
+  {
+    "id": "login.required",
+    "translation": "必填"
+  },
+  {
+    "id": "login.field",
+    "translation": "字段"
+  },
+  {
+    "id": "login.code",
+    "translation": "验证码"
+  },
+  {
+    "id": "login.captchaId",
+    "translation": "验证码ID"
+  },
+  {
+    "id": "login.accountErr",
+    "translation": "登录账号错误"
+  },
+  {
+    "id": "login.codeErr",
+    "translation": "验证码错误"
+  },
+  {
+    "id": "login.pwdErr",
+    "translation": "登录密码错误"
+  },
+  {
+    "id": "login.success",
+    "translation": "{{.name}},登录成功"
+  },
+  {
+    "id": "login.accountDisabled",
+    "translation": "账号已被禁用"
+  }
+]

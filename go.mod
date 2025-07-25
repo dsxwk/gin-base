@@ -15,6 +15,7 @@ require (
 	github.com/gookit/validate v1.5.5
 	github.com/jinzhu/copier v0.4.0
 	github.com/mojocn/base64Captcha v1.3.8
+	github.com/nicksnyder/go-i18n/v2 v2.6.0
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/spf13/pflag v1.0.6
 	github.com/swaggo/files v1.0.1

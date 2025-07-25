@@ -23,17 +23,17 @@ func (s *LoginService) Login(username string, password string) (m model.User, er
 		Preload("UserRoles").
 		First(&m).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return m, errors.New("登录账号错误")
+			return m, errors.New("login.accountErr")
 		}
 	}
 
 	check := helper.BcryptCheck(password, m.Password)
 	if !check {
-		return m, errors.New("登录密码错误")
+		return m, errors.New("login.pwdErr")
 	}
 
 	if m.Status != 1 {
-		return m, errors.New("账号已被禁用")
+		return m, errors.New("login.accountDisabled")
 	}
 
 	// 发布事件

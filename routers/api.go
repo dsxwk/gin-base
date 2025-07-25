@@ -6,7 +6,8 @@ import (
 )
 
 var (
-	jwtMiddleware = middleware.Jwt{}.JwtMiddleware()
+	jwtMiddleware  = middleware.Jwt{}.JwtMiddleware()
+	I18nMiddleware = middleware.I18n{}.I18nMiddleware()
 )
 
 // Router 路由接口
@@ -29,10 +30,10 @@ func LoadRouters(router *gin.Engine) {
 	)
 
 	// 登录
-	login.RegisterRoutes(v1.Group("")) // new(LoginRouter).RegisterRoutes(v1)
+	login.RegisterRoutes(v1.Group("", I18nMiddleware)) // new(LoginRouter).RegisterRoutes(v1)
 
 	// 需要权限
-	auth := v1.Group("", jwtMiddleware)
+	auth := v1.Group("", I18nMiddleware, jwtMiddleware)
 	{
 		// 用户
 		user.RegisterRoutes(auth)

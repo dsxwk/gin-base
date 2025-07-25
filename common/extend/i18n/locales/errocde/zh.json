@@ -1,0 +1,22 @@
+[
+  {
+    "id": "Success",
+    "translation": "成功"
+  },
+  {
+    "id": "SystemError",
+    "translation": "系统错误"
+  },
+  {
+    "id": "ArgsError",
+    "translation": "参数错误"
+  },
+  {
+    "id": "NotFound",
+    "translation": "请求未找到"
+  },
+  {
+    "id": "Unauthorized",
+    "translation": "请求未授权"
+  }
+]

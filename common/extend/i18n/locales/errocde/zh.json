@@ -1,22 +1,26 @@
 [
   {
-    "id": "Success",
+    "id": "errcode.success",
     "translation": "成功"
   },
   {
-    "id": "SystemError",
+    "id": "errcode.redirect",
+    "translation": "数据已被重定向"
+  },
+  {
+    "id": "errcode.systemError",
     "translation": "系统错误"
   },
   {
-    "id": "ArgsError",
+    "id": "errcode.argsError",
     "translation": "参数错误"
   },
   {
-    "id": "NotFound",
+    "id": "errcode.notFound",
     "translation": "请求未找到"
   },
   {
-    "id": "Unauthorized",
+    "id": "errcode.unauthorized",
     "translation": "请求未授权"
   }
 ]

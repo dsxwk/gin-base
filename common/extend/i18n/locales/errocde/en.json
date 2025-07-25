@@ -1,22 +1,26 @@
 [
   {
-    "id": "errcode.Success",
+    "id": "errcode.success",
     "translation": "Success"
   },
   {
-    "id": "errcode.SystemError",
+    "id": "errcode.redirect",
+    "translation": "Login Error"
+  },
+  {
+    "id": "errcode.systemError",
     "translation": "System Error"
   },
   {
-    "id": "errcode.ArgsError",
+    "id": "errcode.argsError",
     "translation": "Arguments Error"
   },
   {
-    "id": "errcode.NotFound",
+    "id": "errcode.notFound",
     "translation": "404 Not Found"
   },
   {
-    "id": "errcode.Unauthorized",
+    "id": "errcode.unauthorized",
     "translation": "Unauthorized"
   }
 ]

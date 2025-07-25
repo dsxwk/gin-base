@@ -56,6 +56,8 @@ Golang Gin 是一个轻量级且高效的 Golang Web 框架。它具有高性能
 - - 堆栈信息记录
 - - sql语句记录
 - - http请求记录
+- 多语言
+- - 目前只有登录相关模块有案例,只支持中英文,如需其他模块或语言自行扩展
 - Air
 - Swagger
 - ...
@@ -556,6 +558,86 @@ func main() {
 func onEventReceived(event config.Event, timestamp time.Time) {
 	// todo 处理事件
 	fmt.Printf("Event received at %s: name: %s, data: %v\n", timestamp.Format(time.RFC3339), event.Name, event.Data)
+}
+```
+
+## 多语言
+```go
+package v1
+
+import (
+    "gin-base/app/middleware"
+    "gin-base/app/service"
+    "gin-base/app/validate"
+    "gin-base/common/base"
+    "gin-base/common/extend/i18n"
+    "gin-base/common/global"
+    "github.com/gin-gonic/gin"
+)
+
+// Login 登录
+// @Tags 登录相关
+// @Summary 登录
+// @Description 用户登录
+// @Accept json
+// @Produce json
+// @Param data body validate.Login true "登录参数"
+// @Router /api/v1/login [post]
+// @Success 200 {object} global.Response{global.Success} "成功返回" Example({"code":0,"msg":"Success","data":[]})
+// @Failure 400 {object} global.Response{global.ArgsError} "参数错误" Example({"code":400,"msg":"参数错误","data":[]})
+// @Failure 500 {object} global.Response{global.SystemError} "系统错误" Example({"code":500,"msg":"系统错误","data":[]})
+func (s *LoginController) Login(c *gin.Context) {
+    var (
+        loginService  service.LoginService
+        loginValidate validate.Login
+        jwt           middleware.Jwt
+    )
+    
+    err := c.ShouldBind(&loginValidate)
+    if err != nil {
+        global.Log.Error(err.Error())
+        s.ApiResponse(c, global.SystemError, err.Error())
+        return
+    }
+    
+    // 验证
+    err = validate.Login{}.GetValidate(c, loginValidate, "login")
+        if err != nil {
+        s.ApiResponse(c, global.ArgsError, err.Error())
+        return
+    }
+    
+    // 验证码校验
+    b := s.verify(loginValidate.CaptchaID, loginValidate.Code)
+    if !b {
+        s.ApiResponse(c, global.ArgsError, i18n.T(c, "login.codeErr", nil))
+        return
+    }
+    
+    userModel, err := loginService.Login(loginValidate.Username, loginValidate.Password)
+    if err != nil {
+        global.Log.Error(err.Error())
+        s.ApiResponse(c, global.ArgsError, err.Error())
+        return
+    }
+    
+    token, rToken, tExpire, rExpire, err := jwt.WithRefresh(userModel.ID, 2*60*60, 2*24*60*60)
+    if err != nil {
+        s.ApiResponse(c, global.ArgsError, err.Error())
+        return
+    }
+
+	s.ApiResponse(c, global.Success, i18n.T(c, "login.codeErr", map[string]interface{}{
+		"name": userModel.Username,
+	}), map[string]interface{}{
+		"token": map[string]interface{}{
+			"accessToken":   token,
+			"refreshToken":  rToken,
+			"expire":        tExpire,
+			"refreshExpire": rExpire,
+		},
+		"user": userModel,
+	})
 }
 ```
 

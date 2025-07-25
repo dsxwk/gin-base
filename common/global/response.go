@@ -1,6 +1,7 @@
 package global
 
 import (
+	"gin-base/common/extend/i18n"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"reflect"
@@ -23,7 +24,7 @@ func ApiResponse(ctx *gin.Context, errorCode ErrorCode, optionalParams ...interf
 	response.Code = errorCode.Code
 
 	// 默认消息
-	response.Message = errorCode.Message
+	response.Message = i18n.T(ctx, errorCode.Message, nil)
 
 	// 默认数据
 	response.Data = []string{}

@@ -38,6 +38,7 @@ Golang Gin is a lightweight and efficient Golang web framework. It is widely use
 - - Route
 - Middleware
 - - Cors
+- - Language
 - - JWT
 - - Log
 - Validators
@@ -99,6 +100,8 @@ Project Address: https://gitee.com/lyt-top/vue-next-admin
 │   ├── extend                          # Extend
 │   ├──├── cache                        # Cache
 │   ├──├── context                      # Context
+│   ├──├── i18n                         # Language
+│   ├──├──├── locales                   # Translate Files
 │   ├── global                          # Global
 │   ├── template                        # Template
 ├── config                              # Configuration

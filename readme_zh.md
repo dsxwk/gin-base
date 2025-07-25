@@ -42,6 +42,7 @@ Golang Gin 是一个轻量级且高效的 Golang Web 框架。它具有高性能
 - - 自定义验证场景
 - 中间件
 - - 跨域
+- - 多语言
 - - JWT
 - - 日志
 - 缓存
@@ -101,6 +102,8 @@ Golang Gin 是一个轻量级且高效的 Golang Web 框架。它具有高性能
 │   ├── extend                          # 扩展
 │   ├──├── cache                        # 缓存
 │   ├──├── context                      # 上下文
+│   ├──├── i18n                         # 多语言
+│   ├──├──├── locales                   # 翻译文件
 │   ├── global                          # 全局变量
 │   ├── template                        # 模版
 ├── config                              # 配置文件

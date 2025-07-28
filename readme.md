@@ -536,11 +536,11 @@ func main() {
 
 	// Set up cross domain settings
 	if global.Config.Cors.Enabled {
-		router.Use(middleware.Cors{}.CorsMiddleware())
+		router.Use(middleware.Cors{}.Handle())
 	}
 
 	// Global log middleware
-	router.Use(middleware.Logger{}.LoggerMiddleware())
+	router.Use(middleware.Logger{}.Handle())
 
 	// Register all events
 	global.Event.RegisterAllEvent(onEventReceived)

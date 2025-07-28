@@ -18,8 +18,8 @@ var (
 	Config = config.InitConfig()
 )
 
-// JwtMiddleware jwt中间件
-func (s Jwt) JwtMiddleware() gin.HandlerFunc {
+// Handle jwt中间件
+func (s Jwt) Handle() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.Request.Header.Get("token")
 		if token == "" || token == "null" {

@@ -58,11 +58,11 @@ func main() {
 
 	// 设置跨域
 	if global.Config.Cors.Enabled {
-		router.Use(middleware.Cors{}.CorsMiddleware())
+		router.Use(middleware.Cors{}.Handle())
 	}
 
 	// 全局日志中间件
-	router.Use(middleware.Logger{}.LoggerMiddleware())
+	router.Use(middleware.Logger{}.Handle())
 
 	// 注册所有事件
 	global.Event.RegisterAllEvent(onEventReceived)

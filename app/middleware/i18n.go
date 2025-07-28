@@ -10,8 +10,8 @@ type I18n struct {
 	base.BaseMiddleware
 }
 
-// I18nMiddleware 多语言翻译
-func (s I18n) I18nMiddleware() gin.HandlerFunc {
+// Handle 多语言翻译
+func (s I18n) Handle() gin.HandlerFunc {
 	var (
 		lang string
 	)

@@ -6,8 +6,8 @@ import (
 )
 
 var (
-	jwtMiddleware  = middleware.Jwt{}.JwtMiddleware()
-	I18nMiddleware = middleware.I18n{}.I18nMiddleware()
+	jwtMiddleware  = middleware.Jwt{}.Handle()
+	I18nMiddleware = middleware.I18n{}.Handle()
 )
 
 // Router 路由接口

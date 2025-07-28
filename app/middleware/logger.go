@@ -16,8 +16,8 @@ type Logger struct {
 	base.BaseMiddleware
 }
 
-// LoggerMiddleware 全局日志中间件
-func (s Logger) LoggerMiddleware() gin.HandlerFunc {
+// Handle 全局日志中间件
+func (s Logger) Handle() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var (
 			params string

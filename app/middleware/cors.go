@@ -11,8 +11,8 @@ type Cors struct {
 	base.BaseMiddleware
 }
 
-// CorsMiddleware 跨域请求
-func (s Cors) CorsMiddleware() gin.HandlerFunc {
+// Handle 跨域请求
+func (s Cors) Handle() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Header("Access-Control-Allow-Origin", global.Config.Cors.AllowOrigin)
 		c.Header("Access-Control-Allow-Headers", global.Config.Cors.AllowHeaders)

@@ -9,8 +9,8 @@ type {{.Name}} struct {
 	base.BaseMiddleware
 }
 
-// {{.Name}}Middleware {{.Description}}
-func (s {{.Name}}) {{.Name}}Middleware() gin.HandlerFunc {
+// Handle {{.Description}}
+func (s {{.Name}}) Handle() gin.HandlerFunc {
     return func(c *gin.Context) {
         // Define your middleware logic here
         c.Next()

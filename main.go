@@ -67,6 +67,11 @@ func main() {
 	// 注册所有事件
 	global.Event.RegisterAllEvent(onEventReceived)
 
+	// redis 订阅
+	_ = global.Redis.Subscribe("userLogin", func(channel, payload string) {
+		fmt.Printf("收到 %s 消息：%s\n", channel, payload)
+	})
+
 	// 加载路由
 	routers.LoadRouters(router)
 
@@ -77,7 +82,7 @@ func main() {
 // onEventReceived 接收事件
 func onEventReceived(event config.Event, timestamp time.Time) {
 	// todo 处理事件
-	// fmt.Printf("Event received at %s: name: %s, data: %v\n", timestamp.Format(time.RFC3339), event.Name, event.Data)
+	fmt.Printf("Event received at %s: name: %s, data: %v\n", timestamp.Format(time.RFC3339), event.Name, event.Data)
 	if event.Name == "sendHttp" {
 		config.SetHttpLog(event.Data)
 	}

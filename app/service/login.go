@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"fmt"
 	"gin-base/app/model"
 	"gin-base/common/base"
 	"gin-base/common/global"
@@ -44,6 +45,9 @@ func (s *LoginService) Login(username string, password string) (m model.User, er
 		"password": password,
 	}
 	global.Event.Publish(e)
+
+	// redis 发布消息
+	_ = global.Redis.Publish("userLogin", fmt.Sprintf("redis event for user login: %s", username))
 
 	return m, nil
 }

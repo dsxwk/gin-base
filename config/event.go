@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/google/uuid"
 	"sync"
 	"time"
 )
@@ -21,14 +22,14 @@ type Event struct {
 
 // Events 事件
 type Events struct {
-	handlers []func(event Event, timestamp time.Time)
 	lock     sync.RWMutex
+	handlers map[string]func(event Event, timestamp time.Time)
 }
 
 // NewEvents 创建新的事件
 func NewEvents() *Events {
 	return &Events{
-		handlers: make([]func(event Event, timestamp time.Time), 0),
+		handlers: make(map[string]func(event Event, timestamp time.Time)),
 	}
 }
 
@@ -44,10 +45,21 @@ func (e *Events) Publish(event Event) {
 	}
 }
 
-// RegisterAllEvent 注册所有事件
-func (e *Events) RegisterAllEvent(handler func(event Event, timestamp time.Time)) {
+// Subscribe 订阅事件
+func (e *Events) Subscribe(handler func(event Event, timestamp time.Time)) string {
 	e.lock.Lock()
 	defer e.lock.Unlock()
 
-	e.handlers = append(e.handlers, handler)
+	eventId := uuid.NewString()
+	e.handlers[eventId] = handler
+
+	return eventId
+}
+
+// Unsubscribe 取消订阅
+func (e *Events) Unsubscribe(eventId string) {
+	e.lock.Lock()
+	defer e.lock.Unlock()
+
+	delete(e.handlers, eventId)
 }

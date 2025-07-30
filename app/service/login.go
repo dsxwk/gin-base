@@ -6,6 +6,7 @@ import (
 	"gin-base/app/model"
 	"gin-base/common/base"
 	"gin-base/common/global"
+	"gin-base/config"
 	"gin-base/helper"
 	"gorm.io/gorm"
 )
@@ -38,13 +39,13 @@ func (s *LoginService) Login(username string, password string) (m model.User, er
 	}
 
 	// 发布事件
-	e := global.Config.Event
-	e.Name = "userLogin"
-	e.Data = map[string]interface{}{
-		"username": username,
-		"password": password,
-	}
-	global.Event.Publish(e)
+	global.Event.Publish(config.Event{
+		Name: "userLogin",
+		Data: map[string]interface{}{
+			"username": username,
+			"password": password,
+		},
+	})
 
 	// redis 发布消息
 	_ = global.Redis.Publish("userLogin", fmt.Sprintf("redis event for user login: %s", username))

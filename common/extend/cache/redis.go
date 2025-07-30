@@ -1,7 +1,6 @@
 package cache
 
 import (
-	"errors"
 	"fmt"
 	"github.com/go-redis/redis/v8"
 	"golang.org/x/net/context"
@@ -31,35 +30,37 @@ func NewRedisCache(address, password string, db int) *RedisCache {
 }
 
 // Lock 获取 Redis 锁
-func (r *RedisCache) Lock(lockKey string, expire time.Duration) (bool, error) {
+func (r *RedisCache) Lock(key string, value string, expire time.Duration) error {
 	// 使用 SETNX 命令尝试设置锁
-	result, err := r.client.SetNX(r.ctx, lockKey, 1, expire).Result()
+	result, err := r.client.SetNX(r.ctx, key, value, expire).Result()
 	if err != nil {
-		return false, fmt.Errorf("failed to acquire lock: %v", err)
-	}
-	if !result {
-		// 如果返回 false,表示锁已存在
-		return false, fmt.Errorf("lock already exists")
+		return fmt.Errorf("failed to acquire lock: %v", err)
 	}
 
-	// 锁获取成功
-	return true, nil
+	if !result {
+		// 如果返回 false,表示锁已存在
+		return fmt.Errorf("lock already exists")
+	}
+
+	return nil
 }
 
 // UnLock 释放 Redis 锁
-func (r *RedisCache) UnLock(lockKey string) error {
-	// 获取锁
-	_, err := r.client.Get(r.ctx, lockKey).Result()
-	if errors.Is(err, redis.Nil) {
-		return errors.New("lock does not exist")
-	} else if err != nil {
-		return fmt.Errorf("failed to get lock: %v", err)
+func (r *RedisCache) UnLock(key string, value string) error {
+	script := `
+	if redis.call("get", KEYS[1]) == ARGV[1] then
+		return redis.call("del", KEYS[1])
+	else
+		return 0
+	end`
+	// 使用 EVAL 命令执行 Lua 脚本
+	status, err := r.client.Eval(r.ctx, script, []string{key}, value).Int()
+	if err != nil {
+		return fmt.Errorf("failed to unlock: %v", err)
 	}
 
-	// 删除该锁
-	err = r.client.Del(r.ctx, lockKey).Err()
-	if err != nil {
-		return fmt.Errorf("failed to release lock: %v", err)
+	if status == 0 {
+		return fmt.Errorf("unlock failed: lock not owned or already released")
 	}
 
 	return nil

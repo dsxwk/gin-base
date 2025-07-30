@@ -23,7 +23,6 @@ type Config struct {
 // InitConfig 初始化配置
 func InitConfig() *Config {
 	file := filepath.Join(GetRootPath()+"/config", "config.yaml")
-	log.Printf("Loading config from: %s", file)
 	yamlFile, err := ioutil.ReadFile(file)
 	if err != nil {
 		log.Fatal(err)

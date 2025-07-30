@@ -64,8 +64,8 @@ func main() {
 	// 全局日志中间件
 	router.Use(middleware.Logger{}.Handle())
 
-	// 注册所有事件
-	global.Event.RegisterAllEvent(onEventReceived)
+	// 订阅事件
+	global.Event.Subscribe(onReceived)
 
 	// redis 订阅
 	_ = global.Redis.Subscribe("userLogin", func(channel, payload string) {
@@ -79,8 +79,8 @@ func main() {
 	_ = router.Run(`:` + global.Config.Service.Port)
 }
 
-// onEventReceived 接收事件
-func onEventReceived(event config.Event, timestamp time.Time) {
+// onReceived 接收事件
+func onReceived(event config.Event, timestamp time.Time) {
 	// todo 处理事件
 	fmt.Printf("Event received at %s: name: %s, data: %v\n", timestamp.Format(time.RFC3339), event.Name, event.Data)
 	if event.Name == "sendHttp" {

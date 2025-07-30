@@ -69,24 +69,10 @@ func (s *ArticleService) Create(m model.Article) (model.Article, error) {
 // @param m model.Article
 // @return model.Article, error
 func (s *ArticleService) Update(m model.Article) (model.Article, error) {
-	//idString := strconv.FormatInt(m.ID, 10)
-	//ok, err := global.Redis.Lock("article:"+idString+"lock", 20*time.Second)
-	//if err != nil {
-	//	return m, err
-	//}
-	//
-	//// 模拟耗时
-	//time.Sleep(3 * time.Second)
-
 	err := global.DB.Updates(&m).Error
 	if err != nil {
 		return m, err
 	}
-
-	//err = global.Redis.UnLock("article:" + idString + "lock")
-	//if err != nil {
-	//	return m, err
-	//}
 
 	return m, nil
 }

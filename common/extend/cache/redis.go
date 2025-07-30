@@ -39,7 +39,7 @@ func (r *RedisCache) Lock(lockKey string, expire time.Duration) (bool, error) {
 	}
 	if !result {
 		// 如果返回 false,表示锁已存在
-		return false, nil
+		return false, fmt.Errorf("lock already exists")
 	}
 
 	// 锁获取成功

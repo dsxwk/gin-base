@@ -595,7 +595,6 @@ func (s *LoginController) Login(c *gin.Context) {
     
     err := c.ShouldBind(&loginValidate)
     if err != nil {
-        global.Log.Error(err.Error())
         s.ApiResponse(c, global.SystemError, err.Error())
         return
     }
@@ -616,7 +615,6 @@ func (s *LoginController) Login(c *gin.Context) {
     
     userModel, err := loginService.Login(loginValidate.Username, loginValidate.Password)
     if err != nil {
-        global.Log.Error(err.Error())
         s.ApiResponse(c, global.ArgsError, err.Error())
         return
     }
@@ -761,7 +759,6 @@ func (s *ArticleController) List(c *gin.Context) {
 
 	err := c.ShouldBindQuery(&articleValidate)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -775,7 +772,6 @@ func (s *ArticleController) List(c *gin.Context) {
 
 	pageData, err := articleService.List(articleValidate)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}

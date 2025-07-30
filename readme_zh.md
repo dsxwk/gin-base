@@ -61,6 +61,7 @@ Golang Gin 是一个轻量级且高效的 Golang Web 框架。它具有高性能
 - - 目前只有登录相关模块有案例,只支持中英文,如需其他模块或语言自行扩展
 - Air
 - Swagger
+- 测试用例
 - ...
 
 ## 后端使用技术
@@ -110,13 +111,14 @@ Golang Gin 是一个轻量级且高效的 Golang Web 框架。它具有高性能
 ├── database                            # 数据库测试文件
 ├── docs                                # 文档
 ├── helper                              # 工具类
+├── resource                            # 静态资源
+├── routers                             # 路由
 ├── storage                             # 存储
 │   ├── cache                           # 磁盘缓存
 │   ├── logs                            # 日志
-├── resource                            # 静态资源
-├── web                                 # Web服务
-├── routers                             # 路由
+├── tests                               # 测试用例
 ├── vendor                              # 依赖包
+├── web                                 # Web服务
 ```
 
 ## web目录结构
@@ -454,6 +456,7 @@ import (
 	"gin-base/app/model"
 	"gin-base/common/base"
 	"gin-base/common/global"
+	"gin-base/config"
 	"gin-base/helper"
 	"gorm.io/gorm"
 )
@@ -483,13 +486,13 @@ func (s *LoginService) Login(username string, password string) (m model.User, er
 	}
 
 	// 发布事件
-	e := global.Config.Event
-	e.Name = "userLogin"
-	e.Data = map[string]interface{}{
-		"username": username,
-		"password": password,
-	}
-	global.Event.Publish(e)
+	global.Event.Publish(config.Event{
+		Name: "userLogin",
+		Data: map[string]interface{}{
+			"username": username,
+			"password": password,
+		},
+	})
 
 	return m, nil
 }
@@ -907,3 +910,8 @@ go install github.com/swaggo/swag/cmd/swag@latest
 swag init -g main.go --exclude cli,app/service
 ```
 ![img.png](./img.png)
+
+## 测试用例
+```bash
+go test -v ./tests/
+```

@@ -60,6 +60,7 @@ Golang Gin is a lightweight and efficient Golang web framework. It is widely use
 - - At present, only login related modules have cases, supporting only Chinese and English. If you need other modules or languages, please expand them yourself
 - Swagger
 - Air
+- Test Case
 - …
 
 ## Backend Technologies Used
@@ -108,12 +109,13 @@ Project Address: https://gitee.com/lyt-top/vue-next-admin
 ├── database                            # Database
 ├── docs                                # Documents
 ├── helper                              # Utils
+├── resource                            # Resource
+├── routers                             # Router
 ├── storage                             # Storage
 │   ├── cache                           # Disk Cache
 │   ├── logs                            # Logs
-├── resource                            # Resource
+├── tests                               # Test Cases
 ├── web                                 # Web Service
-├── routers                             # Router
 ├── vendor                              # Vendor
 ```
 
@@ -451,6 +453,7 @@ import (
 	"gin-base/app/model"
 	"gin-base/common/base"
 	"gin-base/common/global"
+	"gin-base/config"
 	"gin-base/helper"
 	"gorm.io/gorm"
 )
@@ -480,13 +483,13 @@ func (s *LoginService) Login(username string, password string) (m model.User, er
 	}
 
 	// Publish an event
-	e := global.Config.Event
-	e.Name = "userLogin"
-	e.Data = map[string]interface{}{
-		"username": username,
-		"password": password,
-	}
-	global.Event.Publish(e)
+	global.Event.Publish(config.Event{
+		Name: "userLogin",
+		Data: map[string]interface{}{
+			"username": username,
+			"password": password,
+		},
+	})
 
 	return m, nil
 }
@@ -910,3 +913,8 @@ go install github.com/swaggo/swag/cmd/swag@latest
 swag init -g main.go --exclude cli,app/service
 ```
 ![img.png](./img.png)
+
+## Test Case
+```bash
+go test -v ./tests/
+```

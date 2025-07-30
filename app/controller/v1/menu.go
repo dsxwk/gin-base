@@ -31,7 +31,6 @@ func (s *MenuController) List(c *gin.Context) {
 
 	data, err := menuService.List()
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -57,14 +56,12 @@ func (s *MenuController) RoleMenu(c *gin.Context) {
 
 	err := c.ShouldBindQuery(&search)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
 
 	data, err := menuService.RoleMenu(search.RoleIds)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -92,7 +89,6 @@ func (s *MenuController) Create(c *gin.Context) {
 
 	err := c.ShouldBind(&req)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -112,7 +108,6 @@ func (s *MenuController) Create(c *gin.Context) {
 
 	data, err := menuService.Create(req)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -153,7 +148,6 @@ func (s *MenuController) Update(c *gin.Context) {
 
 	err = c.ShouldBind(&req)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -176,7 +170,6 @@ func (s *MenuController) Update(c *gin.Context) {
 
 	data, err := menuService.Update(req)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -214,7 +207,6 @@ func (s *MenuController) Detail(c *gin.Context) {
 
 	data, err := menuService.Detail(id)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -252,7 +244,6 @@ func (s *MenuController) Delete(c *gin.Context) {
 
 	data, err := menuService.Delete(id)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -290,7 +281,6 @@ func (s *MenuController) ActionList(c *gin.Context) {
 
 	data, err := menuService.ActionList(menuID)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -331,7 +321,6 @@ func (s *MenuController) ActionCreate(c *gin.Context) {
 
 	err = c.ShouldBind(&req)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -352,7 +341,6 @@ func (s *MenuController) ActionCreate(c *gin.Context) {
 
 	data, err := menuService.ActionCreate(req)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 	}
 
@@ -405,7 +393,6 @@ func (s *MenuController) ActionUpdate(c *gin.Context) {
 
 	err = c.ShouldBind(&req)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -426,7 +413,6 @@ func (s *MenuController) ActionUpdate(c *gin.Context) {
 
 	data, err := menuService.ActionUpdate(req)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -477,7 +463,6 @@ func (s *MenuController) ActionDelete(c *gin.Context) {
 
 	data, err := menuService.ActionDelete(ID, menuID)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -516,7 +501,6 @@ func (s *MenuController) ActionDetail(c *gin.Context) {
 
 	data, err := menuService.ActionDetail(id)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}

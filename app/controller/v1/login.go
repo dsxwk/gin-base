@@ -36,7 +36,6 @@ func (s *LoginController) Login(c *gin.Context) {
 
 	err := c.ShouldBind(&loginValidate)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -57,7 +56,6 @@ func (s *LoginController) Login(c *gin.Context) {
 
 	userModel, err := loginService.Login(loginValidate.Username, loginValidate.Password)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.ArgsError, err.Error())
 		return
 	}
@@ -95,7 +93,6 @@ func (s *LoginController) Login(c *gin.Context) {
 func (s *LoginController) RefreshToken(c *gin.Context) {
 	token := c.Request.Header.Get("token")
 	if token == "" || token == "null" {
-		global.Log.Error(global.ArgsError.Message)
 		s.ApiResponse(c, global.ArgsError)
 		return
 	}
@@ -195,7 +192,6 @@ func (s *LoginController) CheckCaptcha(c *gin.Context) {
 
 	err := c.ShouldBind(&loginValidate)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -203,7 +199,6 @@ func (s *LoginController) CheckCaptcha(c *gin.Context) {
 	// 验证
 	err = validate.Login{}.GetValidate(c, loginValidate, "verify")
 	if err != nil {
-		s.ApiResponse(c, global.ArgsError, err.Error())
 		return
 	}
 

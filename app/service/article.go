@@ -74,9 +74,6 @@ func (s *ArticleService) Update(m model.Article) (model.Article, error) {
 	//if err != nil {
 	//	return m, err
 	//}
-	//if !ok {
-	//	return m, errors.New("请稍后尝试")
-	//}
 	//
 	//// 模拟耗时
 	//time.Sleep(3 * time.Second)

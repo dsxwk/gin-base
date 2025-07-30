@@ -29,7 +29,6 @@ func (s *DictController) List(c *gin.Context) {
 
 	data, err := dictService.List()
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -56,7 +55,6 @@ func (s *DictController) Create(c *gin.Context) {
 
 	err := c.ShouldBind(&req)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -76,7 +74,6 @@ func (s *DictController) Create(c *gin.Context) {
 
 	data, err := dictService.Create(req)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -116,7 +113,6 @@ func (s *DictController) Update(c *gin.Context) {
 
 	err = c.ShouldBind(&req)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -138,7 +134,6 @@ func (s *DictController) Update(c *gin.Context) {
 
 	data, err := dictService.Update(req)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -175,7 +170,6 @@ func (s *DictController) Detail(c *gin.Context) {
 
 	data, err := dictService.Detail(id)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -212,7 +206,6 @@ func (s *DictController) Delete(c *gin.Context) {
 
 	data, err := dictService.Delete(id)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}

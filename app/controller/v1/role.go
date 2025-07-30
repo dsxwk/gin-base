@@ -36,7 +36,6 @@ func (s *RoleController) List(c *gin.Context) {
 
 	err := c.ShouldBindQuery(&roleValidate)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -44,7 +43,6 @@ func (s *RoleController) List(c *gin.Context) {
 	// 搜索
 	err = c.ShouldBindQuery(&search)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -58,13 +56,11 @@ func (s *RoleController) List(c *gin.Context) {
 
 	err = copier.Copy(&pageData, &roleValidate)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 	}
 
 	data, err := roleService.List(pageData, search)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -91,7 +87,6 @@ func (s *RoleController) Create(c *gin.Context) {
 
 	err := c.ShouldBind(&req)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -111,7 +106,6 @@ func (s *RoleController) Create(c *gin.Context) {
 
 	roleModel, err := roleService.Create(req)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, nil, err.Error())
 		return
 	}
@@ -151,7 +145,6 @@ func (s *RoleController) Update(c *gin.Context) {
 
 	err = c.ShouldBind(&req)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -173,7 +166,6 @@ func (s *RoleController) Update(c *gin.Context) {
 
 	roleModel, err := roleService.Update(req)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -210,7 +202,6 @@ func (s *RoleController) Detail(c *gin.Context) {
 
 	role, err := roleService.Detail(id)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -247,7 +238,6 @@ func (s *RoleController) Delete(c *gin.Context) {
 
 	roleModel, err := roleService.Delete(id)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}

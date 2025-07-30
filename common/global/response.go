@@ -55,6 +55,10 @@ func ApiResponse(ctx *gin.Context, errorCode ErrorCode, optionalParams ...interf
 		}
 	}
 
+	if errorCode.Code != 0 {
+		Log.Error(response.Message)
+	}
+
 	ctx.JSON(http.StatusOK, response)
 	ctx.Abort()
 }

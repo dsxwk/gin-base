@@ -35,7 +35,6 @@ func (s *ArticleController) List(c *gin.Context) {
 
 	err := c.ShouldBindQuery(&articleValidate)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -49,13 +48,11 @@ func (s *ArticleController) List(c *gin.Context) {
 
 	err = copier.Copy(&pageData, &articleValidate)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 	}
 
 	pageData, err = articleService.List(pageData)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -84,7 +81,6 @@ func (s *ArticleController) Create(c *gin.Context) {
 
 	err := c.ShouldBind(&req)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -105,7 +101,6 @@ func (s *ArticleController) Create(c *gin.Context) {
 
 	articleModel, err := articleService.Create(req)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -145,7 +140,6 @@ func (s *ArticleController) Update(c *gin.Context) {
 
 	err = c.ShouldBind(&req)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -166,7 +160,6 @@ func (s *ArticleController) Update(c *gin.Context) {
 
 	articleModel, err := articleService.Update(req)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -203,7 +196,6 @@ func (s *ArticleController) Detail(c *gin.Context) {
 
 	article, err := articleService.Detail(id)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}
@@ -240,7 +232,6 @@ func (s *ArticleController) Delete(c *gin.Context) {
 
 	articleModel, err := articleService.Delete(id)
 	if err != nil {
-		global.Log.Error(err.Error())
 		s.ApiResponse(c, global.SystemError, err.Error())
 		return
 	}

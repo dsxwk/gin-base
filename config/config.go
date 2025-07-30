@@ -4,8 +4,8 @@ import (
 	"gopkg.in/yaml.v3"
 	"io/ioutil"
 	"log"
-	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 )
 
@@ -23,6 +23,7 @@ type Config struct {
 // InitConfig 初始化配置
 func InitConfig() *Config {
 	file := filepath.Join(GetRootPath()+"/config", "config.yaml")
+	log.Printf("Loading config from: %s", file)
 	yamlFile, err := ioutil.ReadFile(file)
 	if err != nil {
 		log.Fatal(err)
@@ -35,13 +36,23 @@ func InitConfig() *Config {
 }
 
 // GetRootPath 获取根目录
-func GetRootPath() string {
-	pwd, err := os.Getwd()
-	if err != nil {
-		panic(err)
-		os.Exit(1)
-	}
-	adsPath := strings.Replace(pwd, "\\", "/", -1)
+//func GetRootPath() string {
+//	pwd, err := os.Getwd()
+//	if err != nil {
+//		panic(err)
+//		os.Exit(1)
+//	}
+//	adsPath := strings.Replace(pwd, "\\", "/", -1)
+//
+//	return adsPath
+//}
 
-	return adsPath
+// GetRootPath 获取项目根路径
+func GetRootPath() string {
+	_, b, _, _ := runtime.Caller(0)
+	basePath := filepath.Dir(b)
+	rootPath := filepath.Join(basePath, "..")
+	rootPath, _ = filepath.Abs(rootPath)
+
+	return strings.ReplaceAll(rootPath, "\\", "/")
 }

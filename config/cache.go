@@ -9,7 +9,7 @@ import (
 
 // Cache 缓存
 type Cache struct {
-	Driver string `yaml:"type"`
+	Driver string `yaml:"driver"`
 	Redis  Redis
 }
 

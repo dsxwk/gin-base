@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"gin-base/common/global"
+	"gin-base/config"
 	"github.com/go-resty/resty/v2"
 	"strings"
 )
@@ -29,16 +30,16 @@ func HttpRequest(method, url string, headers map[string]string, body interface{}
 	}
 
 	// 发布事件
-	e := global.Config.Event
-	e.Name = "sendHttp"
-	e.Data = map[string]interface{}{
-		"method": strings.ToUpper(method),
-		"uri":    url,
-		"header": headers,
-		"agent":  userAgent,
-		"body":   body,
-	}
-	global.Event.Publish(e)
+	global.Event.Publish(config.Event{
+		Name: "sendHttp",
+		Data: map[string]interface{}{
+			"method": strings.ToUpper(method),
+			"uri":    url,
+			"header": headers,
+			"agent":  userAgent,
+			"body":   body,
+		},
+	})
 
 	switch strings.ToUpper(method) {
 	case "GET":

@@ -7,9 +7,8 @@ import (
 
 // User 用户请求验证
 type User struct {
-	ID       int64  `json:"id" validate:"required|int|gt:0" label:"ID"`
-	Page     int    `form:"page" validate:"required|int|gt:0" label:"页码"`
-	PageSize int    `form:"pageSize" validate:"required|int|gt:0" label:"每页数量"`
+	ID int64 `json:"id" validate:"required|int|gt:0" label:"ID"`
+	PageValidate
 	Username string `json:"username" validate:"required" label:"用户名"`
 	FullName string `json:"fullName" validate:"required" label:"姓名"`
 	Nickname string `json:"nickname" validate:"required" label:"昵称"`

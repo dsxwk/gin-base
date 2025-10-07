@@ -7,11 +7,10 @@ import (
 
 // Article 文章请求验证
 type Article struct {
-	Page     int    `form:"page" validate:"required|int|gt:0" label:"页码"`
-	PageSize int    `form:"pageSize" validate:"required|int|gt:0" label:"每页数量"`
-	ID       int64  `json:"id" validate:"required" label:"ID"`
-	Title    string `json:"title" validate:"required" label:"标题"`
-	Content  string `json:"content" validate:"required" label:"内容"`
+	PageValidate
+	ID      int64  `json:"id" validate:"required" label:"ID"`
+	Title   string `json:"title" validate:"required" label:"标题"`
+	Content string `json:"content" validate:"required" label:"内容"`
 }
 
 // GetValidate 请求验证

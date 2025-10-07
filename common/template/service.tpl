@@ -9,9 +9,6 @@ type {{.Name}}Service struct {
 }
 
 // {{.Function}} {{.Description}}
-// @param YourParam string
-// @return bool
-func (s *{{.Name}}Service) {{.Function}}(YourParam string) bool {
-    // Define your service function here
-	return true
+func (s *{{.Name}}Service) {{.Function}}() {
+    // todo
 }

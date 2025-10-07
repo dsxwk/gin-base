@@ -7,9 +7,7 @@ import (
 
 // {{.Name}} {{.Description}}
 type {{.Name}} struct {
-    Page     int    `form:"page" validate:"required|int|gt:0" label:"页码"`
-    PageSize int    `form:"pageSize" validate:"required|int|gt:0" label:"每页数量"`
-    ID       int64  `json:"id" validate:"required" label:"ID"`
+    PageValidate
 }
 
 // GetValidate 请求验证

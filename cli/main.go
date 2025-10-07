@@ -190,11 +190,11 @@ func (s CliCommand) generateFile(templateFile string, opts Options) error {
 		Description string
 	}{
 		Package:     packageName,                             // 提取的包名
-		Name:        strings.Title(filepath.Base(opts.File)), // 控制器名称（首字母大写）
-		Function:    opts.Function,                           // 如果为空，使用默认值
-		Router:      opts.Router,                             // 如果为空，使用默认值
-		Method:      opts.Method,                             // 如果为空，使用默认值
-		Description: opts.Description,                        // 如果为空，使用默认值
+		Name:        strings.Title(filepath.Base(opts.File)), // 模块名称(首字母大写)
+		Function:    opts.Function,                           // 如果为空,使用默认值
+		Router:      opts.Router,                             // 如果为空,使用默认值
+		Method:      opts.Method,                             // 如果为空,使用默认值
+		Description: opts.Description,                        // 如果为空,使用默认值
 	}
 
 	// 执行模板并写入文件
@@ -204,6 +204,10 @@ func (s CliCommand) generateFile(templateFile string, opts Options) error {
 		return err
 	} else {
 		fmt.Println("Template executed and content written to file.")
+	}
+
+	if opts.Make == "validate" {
+		s.validateHooks(file)
 	}
 
 	fmt.Println(file + " 生成成功!")
@@ -302,6 +306,70 @@ func (s CliCommand) createTableStruct(table string, file string, camel bool) {
 	}
 
 	_ = os.RemoveAll(outPath)
+}
+
+func (s CliCommand) validateHooks(file string) {
+	// 根路径
+	baseDir := filepath.Join(rootPath, "app", "validate")
+
+	// 确保 file 是相对路径（防止传入绝对路径）
+	if filepath.IsAbs(file) {
+		rel, err := filepath.Rel(baseDir, file)
+		if err == nil {
+			file = rel
+		} else {
+			file = strings.TrimPrefix(file, rootPath)
+			file = strings.TrimPrefix(file, "app/validate/")
+		}
+	}
+
+	// 标准化路径
+	file = strings.ReplaceAll(file, "\\", "/")
+	file = strings.Trim(file, "/")
+
+	// 计算校验文件目录
+	var checkDir string
+	if file == "" {
+		checkDir = baseDir
+	} else {
+		parts := strings.Split(file, "/")
+		if len(parts) == 1 {
+			checkDir = baseDir
+		} else {
+			checkDir = filepath.Join(baseDir, strings.Join(parts[:len(parts)-1], "/"))
+		}
+	}
+	commonValidateFilePath := filepath.Join(checkDir, "common.go")
+
+	// 判断是否存在
+	if _, err := os.Stat(commonValidateFilePath); os.IsNotExist(err) {
+		packageName := filepath.Base(checkDir)
+		if packageName == "validate" {
+			packageName = "validate"
+		}
+
+		if err = os.MkdirAll(checkDir, 0755); err != nil {
+			fmt.Printf("❌ 创建目录失败: %v\n", err)
+			return
+		}
+
+		content := fmt.Sprintf(`package %s
+
+type PageValidate struct {
+	Page     int   `+"`form:\"page\" validate:\"required|int|gt:0\" label:\"页码\"`"+`
+	PageSize int   `+"`form:\"pageSize\" validate:\"required|int|gt:0\" label:\"每页数量\"`"+`
+	IsPage   *bool `+"`form:\"isPage\" validate:\"required|bool\" label:\"是否分页\"`"+`
+}
+`, packageName)
+
+		if err = os.WriteFile(commonValidateFilePath, []byte(content), 0644); err != nil {
+			fmt.Printf("❌ 创建文件失败 %s: %v\n", commonValidateFilePath, err)
+		} else {
+			fmt.Printf("✅ 已创建 %s\n", commonValidateFilePath)
+		}
+	} else {
+		fmt.Printf("⏩ 文件已存在，跳过创建: %s\n", commonValidateFilePath)
+	}
 }
 
 // modelHooks 修改文件名以及更新模型
